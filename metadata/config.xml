@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//OpenMRS//DTD OpenMRS Config 1.0//EN" "http://resources.openmrs.org/doctype/config-1.0.dtd">
+
+<module configVersion="1.0">
+	
+	<!-- logic Module Properties -->
+	<id>logic</id>
+	<name>Logic Module</name>
+	<version>1.0</version>
+	<package>org.openmrs.@MODULE_ID@</package>
+	<author>nribeka</author>
+	<description>
+			
+	</description>
+	<activator>@MODULE_PACKAGE@.LogicModuleActivator</activator>
+    <extension>
+        <point>org.openmrs.admin.list</point>
+        <class>org.openmrs.logic.extension.html.AdminList</class>
+    </extension>
+	<messages>
+		<lang>en</lang>
+		<file>messages.properties</file>
+	</messages>
+	<mappingFiles>
+		LogicRuleToken.hbm.xml
+	</mappingFiles>
+	<!-- /logic Module Properties -->
+	
+</module>

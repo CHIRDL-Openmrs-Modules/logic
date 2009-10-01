@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:util="http://www.springframework.org/schema/util"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans 
+           http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+           http://www.springframework.org/schema/context
+           http://www.springframework.org/schema/context/spring-context-2.5.xsd
+           http://www.springframework.org/schema/util
+           http://www.springframework.org/schema/util/spring-util-2.0.xsd">
+           
+    <context:component-scan base-package="@MODULE_PACKAGE@" />
+
+	<bean id="logicObsDAO" class="org.openmrs.logic.db.hibernate.HibernateLogicObsDAO">
+		<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
+	</bean>
+	<bean id="logicPersonDAO" class="org.openmrs.logic.db.hibernate.HibernateLogicPersonDAO">
+		<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
+	</bean>
+	<bean id="logicEncounterDAO" class="org.openmrs.logic.db.hibernate.HibernateLogicEncounterDAO">
+		<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
+	</bean>
+	<bean id="logicObsDataSource" class="org.openmrs.logic.datasource.ObsDataSource">
+		<property name="logicObsDAO"><ref bean="logicObsDAO"></ref></property>
+	</bean>
+	<bean id="logicPersonDataSource" class="org.openmrs.logic.datasource.PersonDataSource">
+		<property name="logicPersonDAO"><ref bean="logicPersonDAO"></ref></property>
+	</bean>
+	<bean id="logicEncounterDataSource" class="org.openmrs.logic.datasource.EncounterDataSource">
+		<property name="logicEncounterDAO"><ref bean="logicEncounterDAO"></ref></property>
+	</bean>
+	<bean id="logicProgramDataSource" class="org.openmrs.logic.datasource.ProgramDataSource" />
+	<bean id="logicRuleTokenTarget" class="org.openmrs.logic.db.hibernate.HibernateLogicRuleTokenDAO">
+		<property name="sessionFactory"><ref bean="sessionFactory" /></property>
+	</bean>
+	<bean id="logicRuleTokenDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
+		<property name="proxyInterfaces"><value>org.openmrs.logic.db.LogicRuleTokenDAO</value></property>
+		<property name="target"><ref local="logicRuleTokenTarget"/></property>
+		<property name="interceptorNames">
+			<list>
+				<value>requiredDataInterceptor</value>
+			</list>
+		</property>
+	</bean>
+	<bean id="ruleFactory" class="org.openmrs.logic.impl.RuleFactory">
+		<property name="logicRuleTokenDAO"><ref bean="logicRuleTokenDAO" /></property>
+	</bean>
+	<bean id="logicServiceTarget" class="org.openmrs.logic.impl.LogicServiceImpl">
+		<property name="ruleFactory"><ref bean="ruleFactory" /></property>
+		<property name="logicDataSources">
+			<map>
+				<entry key="encounter"><ref bean="logicEncounterDataSource" /></entry>
+				<entry key="obs"><ref bean="logicObsDataSource" /></entry>
+				<entry key="person"><ref bean="logicPersonDataSource" /></entry>
+				<entry key="program"><ref bean="logicProgramDataSource" /></entry>
+			</map>
+		</property>
+	</bean>
+	<bean id="logicService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+		<property name="transactionManager"><ref bean="transactionManager"/></property>
+		<property name="target"><ref local="logicServiceTarget"/></property>
+		<property name="preInterceptors">
+			<ref bean="serviceInterceptors" />
+		</property>
+		<property name="transactionAttributeSource"><ref bean="transactionAttributeSource" /></property>
+	</bean>
+	<bean parent="serviceContext">
+		<property name="logicService"><ref bean="logicService"/></property>
+	</bean>
+</beans>

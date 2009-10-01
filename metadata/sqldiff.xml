@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqldiff PUBLIC "-//OpenMRS//DTD OpenMRS SQL Diff Config 1.0//EN" "http://resources.openmrs.org/doctype/sqldiff-1.0.dtd">
+
+<sqldiff version="1.0">
+	<diff>
+		<version>1.0.0</version>
+		<author>Nyoman Ribeka</author>
+		<date>August 21, 2009</date>
+		<description>
+			New table to store token
+		</description>
+		<sql>
+			DROP TABLE IF EXISTS logic_rule_token_tag;
+			
+			DROP TABLE IF EXISTS logic_rule_token;
+			
+			CREATE TABLE logic_rule_token (
+			  logic_rule_token_id int(11) NOT NULL,
+			  creator int(11) NOT NULL,
+			  date_created datetime NOT NULL default '0002-11-30 00:00:00',
+			  changed_by int(11) default NULL,
+			  date_changed datetime default NULL,
+			  token varchar(512) NOT NULL,
+			  class_name varchar(512) NOT NULL,
+			  state varchar(512) default NULL,
+			  PRIMARY KEY  (logic_rule_token_id),
+			  CONSTRAINT token_creator FOREIGN KEY (creator) REFERENCES person (person_id),
+			  CONSTRAINT token_changed_by FOREIGN KEY (changed_by) REFERENCES person (person_id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			
+			CREATE TABLE logic_rule_token_tag (
+			  logic_rule_token_id int(11) NOT NULL,
+			  tag varchar(512) NOT NULL,
+			  CONSTRAINT token_tag FOREIGN KEY (logic_rule_token_id) REFERENCES logic_rule_token (logic_rule_token_id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+		</sql>
+	</diff>
+</sqldiff>
