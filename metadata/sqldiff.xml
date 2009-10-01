@@ -15,7 +15,7 @@
 			DROP TABLE IF EXISTS logic_rule_token;
 			
 			CREATE TABLE logic_rule_token (
-			  logic_rule_token_id int(11) NOT NULL,
+			  logic_rule_token_id int(11) NOT NULL AUTO_INCREMENT,
 			  creator int(11) NOT NULL,
 			  date_created datetime NOT NULL default '0002-11-30 00:00:00',
 			  changed_by int(11) default NULL,
