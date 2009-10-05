@@ -39,6 +39,11 @@ import org.openmrs.logic.LogicExpression;
 import org.openmrs.logic.LogicExpressionBinary;
 import org.openmrs.logic.LogicTransform;
 import org.openmrs.logic.db.LogicObsDAO;
+import org.openmrs.logic.op.Operand;
+import org.openmrs.logic.op.OperandConcept;
+import org.openmrs.logic.op.OperandDate;
+import org.openmrs.logic.op.OperandNumeric;
+import org.openmrs.logic.op.OperandText;
 import org.openmrs.logic.op.Operator;
 
 /**
@@ -68,8 +73,8 @@ public class HibernateLogicObsDAO implements LogicObsDAO {
 	
 	private Criterion getCriterion(LogicExpression logicExpression, Date indexDate) throws LogicException {
 		Operator operator = logicExpression.getOperator();
-		Object rightOperand = logicExpression.getRightOperand();
-		Object leftOperand = null;
+		Operand rightOperand = logicExpression.getRightOperand();
+		Operand leftOperand = null;
 		if (logicExpression instanceof LogicExpressionBinary) {
 			leftOperand = ((LogicExpressionBinary) logicExpression).getLeftOperand();
 		}
@@ -92,10 +97,10 @@ public class HibernateLogicObsDAO implements LogicObsDAO {
 		}
 		
 		if (operator == Operator.BEFORE) {
-			criterion.add(Restrictions.lt("obsDatetime", rightOperand));
+			criterion.add(Restrictions.lt("obsDatetime", ((OperandDate) rightOperand).asDate()));
 			
 		} else if (operator == Operator.AFTER) {
-			criterion.add(Restrictions.gt("obsDatetime", rightOperand));
+			criterion.add(Restrictions.gt("obsDatetime", ((OperandDate) rightOperand).asDate()));
 			
 		} else if (operator == Operator.AND || operator == Operator.OR) {
 			
@@ -134,92 +139,82 @@ public class HibernateLogicObsDAO implements LogicObsDAO {
 			// BY" concept, stashed inside the concept's valueCoded member
 			// variable. for example:
 			// new LogicCriteria("PROBLEM ADDED").contains("HIV INFECTED");
-			
-			if (rightOperand instanceof Float) {
-				concept = Context.getConceptService().getConcept(((Float) rightOperand).intValue());
+			if (rightOperand instanceof OperandNumeric) {
+				concept = Context.getConceptService().getConcept(((OperandNumeric) rightOperand).asInteger());
+				criterion.add(Restrictions.eq("valueCoded", concept));
+			} else if (rightOperand instanceof OperandText) {
+				concept = Context.getConceptService().getConcept((String) ((OperandText) rightOperand).asString());
 				criterion.add(Restrictions.eq("valueCoded", concept));
 				
-			}
-			if (rightOperand instanceof Double) {
-				concept = Context.getConceptService().getConcept(((Double) rightOperand).intValue());
-				criterion.add(Restrictions.eq("valueCoded", concept));
-			} else if (rightOperand instanceof Integer) {
-				concept = Context.getConceptService().getConcept((Integer) rightOperand);
-				criterion.add(Restrictions.eq("valueCoded", concept));
-				
-			} else if (rightOperand instanceof String) {
-				concept = Context.getConceptService().getConcept((String) rightOperand);
-				criterion.add(Restrictions.eq("valueCoded", concept));
-				
-			} else if (rightOperand instanceof Concept) {
-				criterion.add(Restrictions.eq("valueCoded", rightOperand));
+			} else if (rightOperand instanceof OperandConcept) {
+				criterion.add(Restrictions.eq("valueCoded", ((OperandConcept) rightOperand).asConcept()));
 				
 			} else
 				log.error("Invalid operand value for CONTAINS operation");
 		} else if (operator == Operator.EQUALS) {
 			if (rootToken.equalsIgnoreCase(COMPONENT_ENCOUNTER_ID)) {
 				EncounterService encounterService = Context.getEncounterService();
-				Encounter encounter = encounterService.getEncounter((Integer) rightOperand);
+				Encounter encounter = encounterService.getEncounter(((OperandNumeric) rightOperand).asInteger());
 				criterion.add(Restrictions.eq("encounter", encounter));
-			} else if (rightOperand instanceof Float || rightOperand instanceof Integer || rightOperand instanceof Double)
-				criterion.add(Restrictions.eq("valueNumeric", Double.parseDouble(rightOperand.toString())));
-			else if (rightOperand instanceof String)
-				criterion.add(Restrictions.eq("valueText", rightOperand));
-			else if (rightOperand instanceof Date)
-				if (leftOperand instanceof String && leftOperand.equals(COMPONENT_OBS_DATETIME)) {
-					criterion.add(Restrictions.eq(COMPONENT_OBS_DATETIME, rightOperand));
+			} else if (rightOperand instanceof OperandNumeric)
+				criterion.add(Restrictions.eq("valueNumeric", ((OperandNumeric) rightOperand).asDouble()));
+			else if (rightOperand instanceof OperandText)
+				criterion.add(Restrictions.eq("valueText", ((OperandText) rightOperand).asString()));
+			else if (rightOperand instanceof OperandDate)
+				if (leftOperand instanceof OperandText && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
+					criterion.add(Restrictions.eq(COMPONENT_OBS_DATETIME, ((OperandDate) rightOperand).asDate()));
 				} else {
-					criterion.add(Restrictions.eq("valueDatetime", rightOperand));
+					criterion.add(Restrictions.eq("valueDatetime", ((OperandDate) rightOperand).asDate()));
 				}
-			else if (rightOperand instanceof Concept)
-				criterion.add(Restrictions.eq("valueCoded", rightOperand));
+			else if (rightOperand instanceof OperandConcept)
+				criterion.add(Restrictions.eq("valueCoded", ((OperandConcept) rightOperand).asConcept()));
 			else
 				log.error("Invalid operand value for EQUALS operation");
 			
 		} else if (operator == Operator.LTE) {
-			if (rightOperand instanceof Float || rightOperand instanceof Integer || rightOperand instanceof Double)
-				criterion.add(Restrictions.le("valueNumeric", Double.parseDouble(rightOperand.toString())));
-			else if (rightOperand instanceof Date)
-				if (leftOperand instanceof String && leftOperand.equals(COMPONENT_OBS_DATETIME)) {
-					criterion.add(Restrictions.le(COMPONENT_OBS_DATETIME, rightOperand));
+			if (rightOperand instanceof OperandNumeric)
+				criterion.add(Restrictions.le("valueNumeric", ((OperandNumeric) rightOperand).asDouble()));
+			else if (rightOperand instanceof OperandDate)
+				if (leftOperand instanceof OperandText && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
+					criterion.add(Restrictions.le(COMPONENT_OBS_DATETIME, ((OperandDate) rightOperand).asDate()));
 				} else {
-					criterion.add(Restrictions.le("valueDatetime", rightOperand));
+					criterion.add(Restrictions.le("valueDatetime", ((OperandDate) rightOperand).asDate()));
 				}
 			else
 				log.error("Invalid operand value for LESS THAN EQUAL operation");
 			
 		} else if (operator == Operator.GTE) {
-			if (rightOperand instanceof Float || rightOperand instanceof Integer || rightOperand instanceof Double)
-				criterion.add(Restrictions.ge("valueNumeric", Double.parseDouble(rightOperand.toString())));
-			else if (rightOperand instanceof Date)
-				if (leftOperand instanceof String && leftOperand.equals(COMPONENT_OBS_DATETIME)) {
-					criterion.add(Restrictions.ge(COMPONENT_OBS_DATETIME, rightOperand));
+			if (rightOperand instanceof OperandNumeric)
+				criterion.add(Restrictions.ge("valueNumeric", ((OperandNumeric) rightOperand).asDouble()));
+			else if (rightOperand instanceof OperandDate)
+				if (leftOperand instanceof OperandText && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
+					criterion.add(Restrictions.ge(COMPONENT_OBS_DATETIME,  ((OperandDate) rightOperand).asDate()));
 				} else {
-					criterion.add(Restrictions.ge("valueDatetime", rightOperand));
+					criterion.add(Restrictions.ge("valueDatetime",  ((OperandDate) rightOperand).asDate()));
 				}
 			else
 				log.error("Invalid operand value for GREATER THAN EQUAL operation");
 			
 		} else if (operator == Operator.LT) {
-			if (rightOperand instanceof Float || rightOperand instanceof Integer || rightOperand instanceof Double)
-				criterion.add(Restrictions.lt("valueNumeric", Double.parseDouble(rightOperand.toString())));
-			else if (rightOperand instanceof Date)
-				if (leftOperand instanceof String && leftOperand.equals(COMPONENT_OBS_DATETIME)) {
-					criterion.add(Restrictions.lt(COMPONENT_OBS_DATETIME, rightOperand));
+			if (rightOperand instanceof OperandNumeric)
+				criterion.add(Restrictions.lt("valueNumeric", ((OperandNumeric) rightOperand).asDouble()));
+			else if (rightOperand instanceof OperandDate)
+				if (leftOperand instanceof OperandText && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
+					criterion.add(Restrictions.lt(COMPONENT_OBS_DATETIME, ((OperandDate) rightOperand).asDate()));
 				} else {
-					criterion.add(Restrictions.lt("valueDatetime", rightOperand));
+					criterion.add(Restrictions.lt("valueDatetime", ((OperandDate) rightOperand).asDate()));
 				}
 			else
 				log.error("Invalid operand value for LESS THAN operation");
 			
 		} else if (operator == Operator.GT) {
-			if (rightOperand instanceof Float || rightOperand instanceof Integer || rightOperand instanceof Double)
-				criterion.add(Restrictions.gt("valueNumeric", Double.parseDouble(rightOperand.toString())));
-			else if (rightOperand instanceof Date)
-				if (leftOperand instanceof String && leftOperand.equals(COMPONENT_OBS_DATETIME)) {
-					criterion.add(Restrictions.gt(COMPONENT_OBS_DATETIME, rightOperand));
+			if (rightOperand instanceof OperandNumeric)
+				criterion.add(Restrictions.gt("valueNumeric", ((OperandNumeric) rightOperand).asDouble()));
+			else if (rightOperand instanceof OperandDate)
+				if (leftOperand instanceof OperandText && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
+					criterion.add(Restrictions.gt(COMPONENT_OBS_DATETIME, ((OperandDate) rightOperand).asDate()));
 				} else {
-					criterion.add(Restrictions.gt("valueDatetime", rightOperand));
+					criterion.add(Restrictions.gt("valueDatetime", ((OperandDate) rightOperand).asDate()));
 				}
 			else
 				log.error("Invalid operand value for GREATER THAN operation");
@@ -228,8 +223,8 @@ public class HibernateLogicObsDAO implements LogicObsDAO {
 			// EXISTS can be handled on the higher level (above
 			// LogicService, even) by coercing the Result into a Boolean for
 			// each patient
-		} else if (operator == Operator.ASOF && rightOperand instanceof Date) {
-			indexDate = (Date) rightOperand;
+		} else if (operator == Operator.ASOF && rightOperand instanceof OperandDate) {
+			indexDate = ((OperandDate) rightOperand).asDate();
 			criterion.add(Restrictions.le("obsDatetime", indexDate));
 			
 		} else if (operator == Operator.WITHIN && rightOperand instanceof Duration) {

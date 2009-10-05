@@ -15,6 +15,7 @@ package org.openmrs.logic;
 
 import java.util.ArrayList;
 
+import org.openmrs.logic.op.Operand;
 import org.openmrs.logic.op.Operator;
 
 /**
@@ -22,13 +23,13 @@ import org.openmrs.logic.op.Operator;
  */
 public class LogicExpressionUnary implements LogicExpression {
 	
-	private Object operand = null;
+	private Operand operand = null;
 	
 	private Operator operator = null;
 	
 	private LogicTransform transform = null;
 	
-	public LogicExpressionUnary(Object operand, Operator operator) {
+	public LogicExpressionUnary(Operand operand, Operator operator) {
 		this.operand = operand;
 		this.operator = operator;
 	}
@@ -106,15 +107,15 @@ public class LogicExpressionUnary implements LogicExpression {
 		return result;
 	}
 	
-	public Object getOperand() {
+	public Operand getOperand() {
 		return operand;
 	}
 	
 	/**
 	 * @see org.openmrs.logic.LogicExpressionBinary#getOperands()
 	 */
-	public ArrayList<Object> getOperands() {
-		ArrayList<Object> operands = new ArrayList<Object>();
+	public ArrayList<Operand> getOperands() {
+		ArrayList<Operand> operands = new ArrayList<Operand>();
 		operands.add(this.operand);
 		return operands;
 	}
@@ -122,7 +123,7 @@ public class LogicExpressionUnary implements LogicExpression {
 	/**
 	 * @see org.openmrs.logic.LogicExpression#getRightOperand()
 	 */
-	public Object getRightOperand() {
+	public Operand getRightOperand() {
 		return this.operand;
 	}
 	

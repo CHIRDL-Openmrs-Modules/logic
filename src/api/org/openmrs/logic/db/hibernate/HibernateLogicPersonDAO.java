@@ -33,6 +33,7 @@ import org.openmrs.logic.LogicExpression;
 import org.openmrs.logic.LogicExpressionBinary;
 import org.openmrs.logic.LogicTransform;
 import org.openmrs.logic.db.LogicPersonDAO;
+import org.openmrs.logic.op.OperandDate;
 import org.openmrs.logic.op.Operator;
 
 /**
@@ -86,10 +87,10 @@ public class HibernateLogicPersonDAO implements LogicPersonDAO {
 		}
 		
 		if (operator == Operator.BEFORE || operator == Operator.LT) {
-			criterion.add(Restrictions.lt(attr, rightOperand));
+			criterion.add(Restrictions.lt(attr, ((OperandDate) rightOperand).asDate()));
 			
 		} else if (operator == Operator.AFTER || operator == Operator.GT) {
-			criterion.add(Restrictions.gt(attr, rightOperand));
+			criterion.add(Restrictions.gt(attr, ((OperandDate) rightOperand).asDate()));
 			
 		} else if (operator == Operator.AND || operator == Operator.OR) {
 			
