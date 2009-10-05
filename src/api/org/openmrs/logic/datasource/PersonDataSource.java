@@ -33,7 +33,7 @@ import org.openmrs.logic.datasource.LogicDataSource;
  * <ul>
  * <li><strong>gender</strong> &mdash; text result of "M" or "F"</li>
  * <li><strong>birthdate</strong> &mdash; date result with patient's birthdate</li>
- * <li><strong>birthdate_estimated</strong> &mdash; boolean result (true if patient's birthdate is
+ * <li><strong>birthdate estimated</strong> &mdash; boolean result (true if patient's birthdate is
  * estimated)</li>
  * <li><strong>death</strong> &mdash; a coded result containing the cause of death with the result
  * date equal to the death date. If the patient is not dead, then the result is null.</li>
@@ -76,9 +76,10 @@ public class PersonDataSource implements LogicDataSource {
 		// calculate
 		List<Person> personList = getLogicPersonDAO().getPersons(who.getMemberIds(), criteria);
 		
+		String token = criteria.getRootToken();
+		
 		// put in the result map
 		for (Person person : personList) {
-			String token = criteria.getRootToken();
 			if (token.equalsIgnoreCase("GENDER"))
 				resultMap.put(person.getPersonId(), new Result(person.getGender()));
 			else if (token.equalsIgnoreCase("BIRTHDATE"))

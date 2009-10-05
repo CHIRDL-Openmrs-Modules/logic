@@ -20,7 +20,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.openmrs.Cohort;
+import org.openmrs.Concept;
 import org.openmrs.Obs;
+import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicException;
@@ -96,7 +98,11 @@ public class ObsDataSource implements LogicDataSource {
 	 * @see org.openmrs.logic.datasource.LogicDataSource#hasKey(java.lang.String)
 	 */
 	public boolean hasKey(String key) {
-		return getKeys().contains(key);
+		Concept concept = Context.getConceptService().getConcept(key);
+		if (concept == null)
+			return false;
+		else
+			return true;
 	}
 	
 	public void addKey(String key) {

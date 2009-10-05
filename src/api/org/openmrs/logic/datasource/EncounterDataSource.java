@@ -15,12 +15,16 @@ package org.openmrs.logic.datasource;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.openmrs.Cohort;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterType;
+import org.openmrs.Location;
+import org.openmrs.User;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.db.LogicEncounterDAO;
@@ -30,9 +34,31 @@ import org.openmrs.logic.util.Util;
 import org.openmrs.logic.datasource.LogicDataSource;
 
 /**
- * Provides access to encounter data. The keys for this data source are the primary names of all
- * tests within the concept dictionary. Results have a result date equal to the encounter datetime
- * and a value based on the observed value.
+ * Provides access to encounter metadata.
+ * 
+ * Results have a result date equal to the encounter datetime and a value based
+ * on the key passed in.
+ * 
+ * Valid keys are:
+ * <ul>
+ *   <li>
+ *     <strong>encounterDatetime</strong> &mdash;  
+ *     date result of the {@link Encounter#getEncounterDatetime()}
+ *   </li>
+ *   <li>
+ *     <strong>encounterType</strong> &mdash; 
+ *     text result of the encounter's {@link EncounterType#getName() name}
+ *   </li>
+ *   <li>
+ *     <strong>encounterLocation</strong> &mdash; 
+ *     text result of the encounter's location's {@link Location#getName() name}
+ *   </li>
+ *   <li>
+ *     <strong>encounterProvider</strong> &mdash; 
+ *     text result of the encounter's provider's {@link User#getName() name}
+ *   </li>
+ * 
+ * </ul>
  */
 public class EncounterDataSource implements LogicDataSource {
 	
@@ -41,7 +67,12 @@ public class EncounterDataSource implements LogicDataSource {
 	private LogicEncounterDAO logicEncounterDAO;
 	
 	static {
-		String[] keyList = new String[] { "encounterDatetime" };
+        String[] keyList = new String[] { 
+        	"encounterDatetime",
+        	"encounterType",
+        	"encounterLocation",
+        	"encounterProvider"
+        };
 		
 		for (String k : keyList)
 			keys.add(k);
@@ -64,6 +95,8 @@ public class EncounterDataSource implements LogicDataSource {
 		Map<Integer, Result> finalResult = new HashMap<Integer, Result>();
 		List<Encounter> encounters = getLogicEncounterDAO().getEncounters(patients, criteria);
 		
+		String rootToken = criteria.getRootToken();
+
 		// group the received Encounters by patient and convert them to
 		// Results
 		for (Encounter encounter : encounters) {
@@ -72,6 +105,49 @@ public class EncounterDataSource implements LogicDataSource {
 			if (result == null) {
 				result = new Result();
 				finalResult.put(personId, result);
+			}Date encounterDatetime = encounter.getEncounterDatetime();
+			
+			if ("encounterDatetime".equalsIgnoreCase(rootToken)) {
+				// add the encounter date as the result
+				// (most commonly used)
+				result.add(new Result(encounterDatetime, encounterDatetime, encounter));
+			}
+			else if ("encounterType".equalsIgnoreCase(rootToken)) {
+				EncounterType type = encounter.getEncounterType();
+				String encounterTypeName = "";
+				if (type != null)
+					encounterTypeName = type.getName();
+				
+				// add the type as the result
+				result.add(new Result(encounterDatetime, encounterTypeName, type));
+			}
+			else if ("encounterLocation".equalsIgnoreCase(rootToken)) {
+				Location location = encounter.getLocation();
+				String locationName = "";
+				if (location != null)
+					locationName = location.getName();
+				
+				// add the location as the result
+				result.add(new Result(encounterDatetime, locationName, location));
+			}
+			else if ("encounterProvider".equalsIgnoreCase(rootToken)) {
+				String providerName = "";
+				User provider = encounter.getProvider();
+				
+				// check for null objects
+				if (provider == null) {
+					// TODO should this return a string like this, or just null?
+					providerName = "(no provider)";
+				}
+				else if (provider.getPersonName() == null) {
+					providerName = "(no provider name)";
+				}
+				else {
+					providerName = provider.getPersonName().getFullName();
+				}
+				
+				// add the provider as the result
+				result.add(new Result(encounterDatetime, providerName, provider));
 			}
 			
 			result.add(new Result(encounter.getEncounterDatetime(), Datatype.DATETIME, false, null, encounter

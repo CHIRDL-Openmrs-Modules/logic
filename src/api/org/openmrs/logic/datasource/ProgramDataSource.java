@@ -21,27 +21,42 @@ import java.util.Map;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
-import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
+import org.openmrs.Program;
+import org.openmrs.ProgramWorkflowState;
 import org.openmrs.api.ProgramWorkflowService;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.util.Util;
-import org.openmrs.logic.datasource.LogicDataSource;
 
 /**
  * Provides access to patient program data
+ * Valid keys are:
+ * <ul>
+ *   <li>
+ *     <strong>program enrollment</strong> &mdash;  
+ *     coded result of the program's {@link Program#getConcept() concept}.<br/>
+ *     result date is the {@link PatientProgram#getDateEnrolled() date enrolled}
+ *   </li>
+ *   <li>
+ *     <strong>program completion</strong> &mdash;  
+ *     coded result of the program's {@link Program#getConcept() concept}.<br/>
+ *     result date is the {@link PatientProgram#getDateCompleted() date completed}
+ *   </li>
+ *   <li>
+ *     <strong>current state</strong> &mdash;  
+ *     coded result of the patient program's current state's {@link ProgramWorkflowState#getConcept() concept}.<br/>
+ *     result date is the {@link PatientProgram#getDateEnrolled() date enrolled}
+ *   </li>
+ * </ul>
  */
 public class ProgramDataSource implements LogicDataSource {
 	
 	private Log log = LogFactory.getLog(ProgramDataSource.class);
 	
 	private static final Collection<String> keys = new ArrayList<String>();
-	
-	@SuppressWarnings("unused")
-    private static String PROGRAM = "PROGRAM";
 	
 	private static String PROGRAM_ENROLLMENT_KEY = "PROGRAM ENROLLMENT";
 	
@@ -59,14 +74,19 @@ public class ProgramDataSource implements LogicDataSource {
 	/**
 	 * @see {@link org.openmrs.logic.datasource.LogicDataSource#read(LogicContext, Cohort, LogicCriteria)}
 	 */
-	@SuppressWarnings("deprecation")
     public Map<Integer, Result> read(LogicContext context, Cohort patients, LogicCriteria criteria) {
 		
-		log.info("read patient programs for " + patients.size() + " patients, criteria " + criteria);
+		if (log.isInfoEnabled())
+			log.info("read patient programs for " + patients.size() + " patients, criteria " + criteria);
+		
 		Map<Integer, Result> resultSet = new HashMap<Integer, Result>();
 		
 		Collection<PatientProgram> patientPrograms = getPatientPrograms(patients, criteria);
 		
+		if (log.isDebugEnabled())
+			log.debug("found " + patientPrograms.size() + " patient programs");
+		
+		// loop over all the patient programs and create Result objects for it
 		for (PatientProgram patientProgram : patientPrograms) {
 			//log.info("PatientProgram: " + patientProgram.getDateEnrolled());
 			String token = criteria.getRootToken();
@@ -74,14 +94,14 @@ public class ProgramDataSource implements LogicDataSource {
 			
 			Result result = null;
 			
-			if (PROGRAM_ENROLLMENT_KEY.equals(token)) {
+			if (PROGRAM_ENROLLMENT_KEY.equalsIgnoreCase(token)) {
 				result = new Result(patientProgram.getProgram().getConcept());
 				result.setResultDate(patientProgram.getDateEnrolled());
-			} else if (PROGRAM_COMPLETED_KEY.equals(token)) {
+			} else if (PROGRAM_COMPLETED_KEY.equalsIgnoreCase(token)) {
 				result = new Result(patientProgram.getProgram().getConcept());
 				result.setResultDate(patientProgram.getDateCompleted());
-			} else if (CURRENT_STATE_KEY.equals(token)) {
-				result = new Result(patientProgram.getCurrentState().getState().getConcept());
+			} else if (CURRENT_STATE_KEY.equalsIgnoreCase(token)) {
+				result = new Result(patientProgram.getCurrentState(null).getState().getConcept());
 				result.setResultDate(patientProgram.getDateEnrolled());
 			}
 			
@@ -95,6 +115,9 @@ public class ProgramDataSource implements LogicDataSource {
 			}
 		}
 		
+		if (log.isDebugEnabled())
+			log.debug("applying aggregators");
+
 		Util.applyAggregators(resultSet, criteria, patients);
 		return resultSet;
 	}
@@ -121,20 +144,15 @@ public class ProgramDataSource implements LogicDataSource {
 	}
 	
 	/**
-	 * Get the <code>PatientProgram</code>s for the Patients in the Cohort
+	 * Convenience method to get the patient programs for the given patients
+	 * for this logic query 
 	 * 
-	 * @param patients Cohort of patients to search
-	 * @param criteria This is not actually used right now
-	 * @return A <code>Collection<PatientProgram></code> object
+	 * @param patients the current cohort of patients to restrict to 
+	 * @param criteria (not currently used)
+	 * @return all patient programs for all patients in the given cohort 
 	 */
-	public Collection<PatientProgram> getPatientPrograms(Cohort patients, LogicCriteria criteria) {
-		Collection<PatientProgram> patientPrograms = new ArrayList<PatientProgram>();
+	private Collection<PatientProgram> getPatientPrograms(Cohort patients, LogicCriteria criteria) {
 		ProgramWorkflowService service = Context.getProgramWorkflowService();
-		for (Integer patientId : patients.getMemberIds()) {
-			//log.info("Patient: " + patient);
-			patientPrograms.addAll(service.getPatientPrograms(new Patient(patientId), null, null, null, null, null, false));
-		}
-		//log.info("Patient programs: " + patientPrograms.size());
-		return patientPrograms;
+		return service.getPatientPrograms(patients, null); 
 	}
 }
