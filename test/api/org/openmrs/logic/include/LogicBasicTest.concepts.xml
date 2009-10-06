@@ -3,6 +3,7 @@
   <concept concept_id="1" retired="false" datatype_id="1" class_id="1" is_set="false" creator="1" date_created="2005-01-01 00:00:00.0" uuid="5c43a33f-82c9-427d-92cd-02b3e0e3e1f9"/>
   <concept concept_id="2" retired="false" datatype_id="2" class_id="2" is_set="false" creator="1" date_created="2005-01-01 00:00:00.0" uuid="0362ad75-bf39-4958-bcd6-4ea5c0de476b"/>
   <concept concept_id="3" retired="false" datatype_id="1" class_id="1" is_set="false" creator="1" date_created="2005-01-01 00:00:00.0" uuid="bc28d511-51d6-4e57-ab82-ec047e702a2d"/>
+  <concept concept_id="88" retired="false" datatype_id="1" class_id="1" is_set="false" creator="1" date_created="2005-01-01 00:00:00.0"/>
   <concept_class concept_class_id="1" name="Finding" description="A medical discovery" creator="1" date_created="2005-01-01 00:00:00.0" retired="false" uuid="8ffbbe0d-b5b4-4a50-959f-6b80e0b8e272"/>
   <concept_class concept_class_id="2" name="Question" description="Question on a form" creator="1" date_created="2005-01-01 00:00:00.0" retired="false" uuid="7f23a539-2a40-44c6-8295-2755f9adea13"/>
   <concept_datatype concept_datatype_id="1" name="Numeric" hl7_abbreviation="NM" description="Numeric value, including integer or float" creator="1" date_created="2005-01-01 00:00:00.0" retired="false" uuid="e0787956-0b2f-4ba6-b17c-4dff2064f9fc"/>
@@ -13,6 +14,7 @@
   <concept_name concept_id="1" name="CD4 COUNT" locale="en" creator="1" date_created="2005-01-01 00:00:00.0" concept_name_id="1" voided="false" uuid="d4784150-3fdd-4e7f-a41e-7eb4ec8bd6fd"/>
   <concept_name concept_id="2" name="CURRENT ANTIRETROVIRAL DRUGS USED FOR TREATMENT" locale="en" creator="1" date_created="2005-01-01 00:00:00.0" concept_name_id="2" voided="false" uuid="ceb058e2-f636-47ea-acd0-b6906c7f4401"/>
   <concept_name concept_id="3" name="WEIGHT (KG)" locale="en" creator="1" date_created="2005-01-01 00:00:00.0" concept_name_id="3" voided="false" uuid="0586cb3c-9115-4e77-8329-f5455e1c641e"/>
+  <concept_name concept_id="88" name="ASPIRIN" locale="en" creator="1" date_created="2005-01-01 00:00:00.0" concept_name_id="88" voided="false"/>
   <concept_name_tag concept_name_tag_id="4" tag="preferred" description="preferred name in a language" creator="1" date_created="2007-05-01 00:00:00.0" voided="false" uuid="54d67a06-62d9-426b-a2e5-e3cccbff10f9"/>
   <concept_name_tag_map concept_name_id="1" concept_name_tag_id="4"/>
   <concept_name_tag_map concept_name_id="2" concept_name_tag_id="4"/>

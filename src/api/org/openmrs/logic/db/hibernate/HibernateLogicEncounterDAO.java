@@ -44,12 +44,13 @@ import org.openmrs.logic.db.LogicEncounterDAO;
 import org.openmrs.logic.op.OperandDate;
 import org.openmrs.logic.op.OperandText;
 import org.openmrs.logic.op.Operator;
+import org.openmrs.logic.util.LogicExpressionToCriterion;
 
 /**
  * This class builds the hibernate statements needed to execute logic evaluations for the
  * EncounterDatasource
  */
-public class HibernateLogicEncounterDAO implements LogicEncounterDAO {
+public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion implements LogicEncounterDAO {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
@@ -75,7 +76,7 @@ public class HibernateLogicEncounterDAO implements LogicEncounterDAO {
 	 * @param criteria Criteria object so that certain expressions can add aliases, etc
 	 * @return Criterion to be added to the Criteria 
 	 */
-	private Criterion getCriterion(LogicExpression logicExpression, Date indexDate, Criteria criteria) throws LogicException {
+	public Criterion getCriterion(LogicExpression logicExpression, Date indexDate, Criteria criteria) {
 		Operator operator = logicExpression.getOperator();
 		Object rightOperand = logicExpression.getRightOperand();
 		Object leftOperand = null;

@@ -45,11 +45,12 @@ import org.openmrs.logic.op.OperandDate;
 import org.openmrs.logic.op.OperandNumeric;
 import org.openmrs.logic.op.OperandText;
 import org.openmrs.logic.op.Operator;
+import org.openmrs.logic.util.LogicExpressionToCriterion;
 
 /**
  *
  */
-public class HibernateLogicObsDAO implements LogicObsDAO {
+public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements LogicObsDAO {
 	
 	private static final String COMPONENT_ENCOUNTER_ID = "encounterId";
 	
@@ -71,7 +72,7 @@ public class HibernateLogicObsDAO implements LogicObsDAO {
 		this.sessionFactory = sessionFactory;
 	}
 	
-	private Criterion getCriterion(LogicExpression logicExpression, Date indexDate, Criteria criteria) throws LogicException {
+	public Criterion getCriterion(LogicExpression logicExpression, Date indexDate, Criteria criteria) {
 		Operator operator = logicExpression.getOperator();
 		Operand rightOperand = logicExpression.getRightOperand();
 		Operand leftOperand = null;
