@@ -66,7 +66,7 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 		try {
 			Result r = logicService.eval(new Patient(2), "CD4 COUNT");
 			Assert.assertNotNull(r);
-			Assert.assertEquals(1, r.size());
+			Assert.assertEquals(0, r.size());
 			
 			result = logicService.eval(patients, "CD4 COUNT");
 			Assert.assertNotNull(result);
@@ -240,7 +240,7 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 			log.error("Error generated", e);
 		}
 	}
-
+ 	
 	/**
      * @see {@link LogicService#addRule(String,Rule)}
      * 
@@ -356,6 +356,7 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
     	
     	Assert.assertEquals(similarTags.length, tags.size());
     }
+
 
 	/**
      * @see {@link LogicService#findToken(String)}

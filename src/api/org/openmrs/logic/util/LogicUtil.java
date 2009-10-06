@@ -52,19 +52,19 @@ public class LogicUtil {
 	 * @param finalResult result map of patient id to result list
 	 * @param criteria provides type of transform
 	 */
-	public static void applyAggregators(Map<Integer, Result> finalResult,
-			LogicCriteria criteria,Cohort patients) {
+	public static void applyAggregators(Map<Integer, Result> finalResult, LogicCriteria criteria,Cohort patients) {
 		Set<Integer> personIds = finalResult.keySet();
 		LogicTransform transform = criteria.getExpression().getTransform();
 		
 		// finalResult is empty so populate it with empty counts/averages
 		if (personIds.size() == 0) {
-
 			for (Integer personId : patients.getMemberIds()) {
-				if (transform != null
-				        && (transform.getTransformOperator() == Operator.COUNT || transform.getTransformOperator() == Operator.AVERAGE)) {
+				if (transform != null && transform.getTransformOperator() == Operator.COUNT) {
 					Result newResult = new Result();
-					newResult.setValueNumeric(0);
+					newResult.add(new Result(0));
+					finalResult.put(personId, newResult);
+				} else if (transform != null && transform.getTransformOperator() == Operator.AVERAGE) {
+					Result newResult = Result.emptyResult();
 					finalResult.put(personId, newResult);
 				}
 			}
@@ -76,14 +76,11 @@ public class LogicUtil {
 			// instead of the objects
 			
 			Result r = finalResult.get(personId);
-			if (transform != null
-			        && transform.getTransformOperator() == Operator.COUNT) {
+			if (transform != null && transform.getTransformOperator() == Operator.COUNT) {
 				Result newResult = new Result();
-				newResult.setValueNumeric(r.size());
+				newResult.add(new Result(r.size()));
 				finalResult.put(personId, newResult);
-			} else if (transform != null
-			        && transform.getTransformOperator() == Operator.AVERAGE) {
-
+			} else if (transform != null && transform.getTransformOperator() == Operator.AVERAGE) {
 				int count = 0;
 				double sum = 0;
 				for (Result currResult : r) {
@@ -97,7 +94,7 @@ public class LogicUtil {
 					average = sum / count;
 				}
 				Result newResult = new Result();
-				newResult.setValueNumeric(average);
+				newResult.add(new Result(average));
 				finalResult.put(personId, newResult);
 			}
 		}

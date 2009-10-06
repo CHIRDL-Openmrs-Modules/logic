@@ -52,6 +52,31 @@ public class ObsDataSource implements LogicDataSource {
 	
 	/**
 	 * @throws LogicException
+     * 
+     * @should get all obs
+	 * @should get first obs
+	 * @should get last obs
+	 * @should get obs gt value
+	 * @should get obs ge value
+	 * @should get obs lt value
+	 * @should get obs le value
+	 * @should get obs eq value
+	 * @should get last obs if it is lt value
+	 * @should get last obs of those lt value
+ 	 * @should get obs before date
+	 * @should get obs after date
+	 * @should get obs gt value after date
+	 * @should get last obs if it is before date
+	 * @should get last obs of those before date
+	 * @should get first n obs
+	 * @should get last n obs
+	 * @should get not of a clause
+	 * @should get and of two clauses
+	 * @should get or of two clauses
+	 * @should get average of obs
+	 * @should get average of null when no obs
+	 * @should get count of obs when obs
+	 * @should get count of zero when no obs
 	 * @see org.openmrs.logic.datasource.LogicDataSource#read(org.openmrs.logic.LogicContext,
 	 *      org.openmrs.Cohort, org.openmrs.logic.LogicCriteria)
 	 */

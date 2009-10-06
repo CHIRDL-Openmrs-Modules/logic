@@ -71,7 +71,7 @@ public class HibernateLogicObsDAO implements LogicObsDAO {
 		this.sessionFactory = sessionFactory;
 	}
 	
-	private Criterion getCriterion(LogicExpression logicExpression, Date indexDate) throws LogicException {
+	private Criterion getCriterion(LogicExpression logicExpression, Date indexDate, Criteria criteria) throws LogicException {
 		Operator operator = logicExpression.getOperator();
 		Operand rightOperand = logicExpression.getRightOperand();
 		Operand leftOperand = null;
@@ -108,10 +108,10 @@ public class HibernateLogicObsDAO implements LogicObsDAO {
 			Criterion rightCriteria = null;
 			
 			if (leftOperand instanceof LogicExpression) {
-				leftCriteria = this.getCriterion((LogicExpression) leftOperand, indexDate);
+				leftCriteria = this.getCriterion((LogicExpression) leftOperand, indexDate, criteria);
 			}
 			if (rightOperand instanceof LogicExpression) {
-				rightCriteria = this.getCriterion((LogicExpression) rightOperand, indexDate);
+				rightCriteria = this.getCriterion((LogicExpression) rightOperand, indexDate, criteria);
 			}
 			
 			if (leftCriteria != null && rightCriteria != null) {
@@ -127,7 +127,7 @@ public class HibernateLogicObsDAO implements LogicObsDAO {
 			Criterion rightCriteria = null;
 			
 			if (rightOperand instanceof LogicExpression) {
-				rightCriteria = this.getCriterion((LogicExpression) rightOperand, indexDate);
+				rightCriteria = this.getCriterion((LogicExpression) rightOperand, indexDate, criteria);
 			}
 			
 			if (rightCriteria != null) {
@@ -152,12 +152,14 @@ public class HibernateLogicObsDAO implements LogicObsDAO {
 			} else
 				log.error("Invalid operand value for CONTAINS operation");
 		} else if (operator == Operator.EQUALS) {
-			if (rootToken.equalsIgnoreCase(COMPONENT_ENCOUNTER_ID)) {
-				EncounterService encounterService = Context.getEncounterService();
-				Encounter encounter = encounterService.getEncounter(((OperandNumeric) rightOperand).asInteger());
-				criterion.add(Restrictions.eq("encounter", encounter));
-			} else if (rightOperand instanceof OperandNumeric)
+			if (rightOperand instanceof OperandNumeric){
+				if (rootToken.equalsIgnoreCase(COMPONENT_ENCOUNTER_ID)) {
+					EncounterService encounterService = Context.getEncounterService();
+					Encounter encounter = encounterService.getEncounter(((OperandNumeric) rightOperand).asInteger());
+					criterion.add(Restrictions.eq("encounter", encounter));
+				} else
 				criterion.add(Restrictions.eq("valueNumeric", ((OperandNumeric) rightOperand).asDouble()));
+			}
 			else if (rightOperand instanceof OperandText)
 				criterion.add(Restrictions.eq("valueText", ((OperandText) rightOperand).asString()));
 			else if (rightOperand instanceof OperandDate)
@@ -296,7 +298,7 @@ public class HibernateLogicObsDAO implements LogicObsDAO {
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
 		}
 		
-		Criterion c = this.getCriterion(expression, indexDate);
+		Criterion c = this.getCriterion(expression, indexDate, criteria);
 		if (c != null) {
 			criteria.add(c);
 		}

@@ -79,7 +79,7 @@ public class LogicBasicTest extends BaseModuleContextSensitiveTest {
 		Patient patient = Context.getPatientService().getPatient(3);
 		Result result = Context.getLogicService().eval(patient, new LogicCriteriaImpl("CD4 COUNT").last().lt(350));
 		assertTrue(result.exists());
-		assertEquals(125.0, result.toNumber(), 0);
+		assertEquals(100.0, result.toNumber(), 0);
 	}
 	
 	/**
@@ -92,7 +92,7 @@ public class LogicBasicTest extends BaseModuleContextSensitiveTest {
 	public void shouldFilterByNumericResultWithVoidedObs() throws Exception {
 		executeDataSet("org/openmrs/logic/include/LogicBasicTest.concepts.xml");
 		// Result = LAST CD4 COUNT < 350
-		Patient patient = Context.getPatientService().getPatient(2);
+		Patient patient = Context.getPatientService().getPatient(3);
 		Result result = Context.getLogicService().eval(patient, new LogicCriteriaImpl("CD4 COUNT").last().lt(350));
 		assertTrue("A result should exist", result.exists());
 		assertEquals(100.0, result.toNumber().doubleValue(), 0);
