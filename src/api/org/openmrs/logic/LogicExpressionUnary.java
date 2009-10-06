@@ -15,6 +15,7 @@ package org.openmrs.logic;
 
 import java.util.ArrayList;
 
+import org.openmrs.logic.op.ComparisonOperator;
 import org.openmrs.logic.op.Operand;
 import org.openmrs.logic.op.Operator;
 
@@ -140,4 +141,11 @@ public class LogicExpressionUnary implements LogicExpression {
 	public void setTransform(LogicTransform transform) {
 		this.transform = transform;
 	}
+
+	/**
+     * @see org.openmrs.logic.op.Operand#supports(org.openmrs.logic.op.ComparisonOperator)
+     */
+    public boolean supports(ComparisonOperator operator) {
+	    return true;
+    }
 }

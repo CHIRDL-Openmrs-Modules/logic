@@ -13,15 +13,38 @@
  */
 package org.openmrs.logic.op;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
- *
+ * Operand for dates in the logic service.  This Operand is slightly
+ * different from other Operands in that it extends Date and so can
+ * be casted and used directly as a Date object
+ * 
+ * @see Operand
  */
 public class OperandDate extends Date implements Operand {
 
     private static final long serialVersionUID = 2726925287599642390L;
-    
+	
+	/**
+	 * The Operators that this Operand {@link #supports(ComparisonOperator)}
+	 */
+	private static List<ComparisonOperator> validOperators = new ArrayList<ComparisonOperator>();
+	
+	static {
+		validOperators.add(ComparisonOperator.CONTAINS);
+		validOperators.add(ComparisonOperator.EQUALS);
+		validOperators.add(ComparisonOperator.LT);
+		validOperators.add(ComparisonOperator.GT);
+		validOperators.add(ComparisonOperator.LTE);
+		validOperators.add(ComparisonOperator.GTE);
+		validOperators.add(ComparisonOperator.BEFORE);
+		validOperators.add(ComparisonOperator.AFTER);
+		validOperators.add(ComparisonOperator.WITHIN);
+	}
+	
 	/**
 	 * Copies the value of the given date into
 	 * this OperandDate object.  The original date 
@@ -33,5 +56,12 @@ public class OperandDate extends Date implements Operand {
 	public OperandDate(Date date) {
 		this.setTime(date.getTime());
 	}
-	
+
+	/**
+     * @see org.openmrs.logic.op.Operand#supports(org.openmrs.logic.op.ComparisonOperator)
+     */
+    public boolean supports(ComparisonOperator operator) {
+	    return validOperators.contains(operator);
+    }
+    
 }

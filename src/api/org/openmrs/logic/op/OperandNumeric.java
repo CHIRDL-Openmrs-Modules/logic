@@ -13,12 +13,29 @@
  */
 package org.openmrs.logic.op;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  */
 public class OperandNumeric implements Operand {
 
 	private Double value;
+	
+	/**
+	 * The Operators that this Operand {@link #supports(ComparisonOperator)}
+	 */
+	private static List<ComparisonOperator> validOperators = new ArrayList<ComparisonOperator>();
+	
+	static {
+		validOperators.add(ComparisonOperator.CONTAINS);
+		validOperators.add(ComparisonOperator.EQUALS);
+		validOperators.add(ComparisonOperator.LT);
+		validOperators.add(ComparisonOperator.GT);
+		validOperators.add(ComparisonOperator.LTE);
+		validOperators.add(ComparisonOperator.GTE);
+	}
 	
     public OperandNumeric(Double value) {
     	this.value = value;
@@ -44,8 +61,17 @@ public class OperandNumeric implements Operand {
     	return value == null ? null : value.intValue();
     }
     
+    /**
+     * @see java.lang.Object#toString()
+     */
     public String toString() {
 		return value == null ? "null" : value.toString();
 	}
-	
+
+	/**
+     * @see org.openmrs.logic.op.Operand#supports(org.openmrs.logic.op.ComparisonOperator)
+     */
+    public boolean supports(ComparisonOperator operator) {
+	    return validOperators.contains(operator);
+    }
 }
