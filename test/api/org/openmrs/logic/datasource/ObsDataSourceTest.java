@@ -14,6 +14,7 @@ import org.openmrs.logic.LogicCriteriaImpl;
 import org.openmrs.logic.result.Result;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
+import org.openmrs.test.TestUtil;
 
 @SkipBaseSetup
 public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
@@ -296,6 +297,111 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
     	criteria = new LogicCriteriaImpl("CD4 COUNT").gt(900).after(Context.getDateFormat().parse("01/01/2007"));
     	result = context.read(who, criteria);
     	Assert.assertEquals("Wrong number of CD4s returned", 1, result.size());
+    }
+
+    /**
+     * @verifies {@link ObsDataSource#read(LogicContext,Cohort,LogicCriteria)}
+     * test = should get first n obs
+     */
+    @Test
+    public void read_shouldGetFirstNObs() throws Exception {
+    	Patient who = Context.getPatientService().getPatient(4);
+    	LogicContext context = new LogicContextImpl(who);
+        TestUtil.printOutTableContents(getConnection(), "obs");
+    	LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").first(3);
+    	Result result = context.read(who, criteria);
+    	Assert.assertEquals("Wrong number of CD4s returned", 3, result.size());
+    	Assert.assertEquals("Result incorrectly ordered", Double.valueOf(100d), result.get(0).toNumber());
+    	Assert.assertEquals("Result incorrectly ordered", Double.valueOf(300d), result.get(1).toNumber());
+    	Assert.assertEquals("Result incorrectly ordered", Double.valueOf(200d), result.get(2).toNumber());
+    	
+    	// there are only 4
+    	criteria = new LogicCriteriaImpl("CD4 COUNT").first(5);
+    	result = context.read(who, criteria);
+    	Assert.assertEquals("Wrong number of CD4s returned", 4, result.size());
+    }
+
+    /**
+     * @verifies {@link ObsDataSource#read(LogicContext,Cohort,LogicCriteria)}
+     * test = should get last n obs
+     */
+    @Test
+    public void read_shouldGetLastNObs() throws Exception {
+    	Patient who = Context.getPatientService().getPatient(4);
+    	LogicContext context = new LogicContextImpl(who);
+        
+    	LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").last(3);
+    	Result result = context.read(who, criteria);
+    	Assert.assertEquals("Wrong number of CD4s returned", 3, result.size());
+    	Assert.assertEquals("Result incorrectly ordered", Double.valueOf(400d), result.get(0).toNumber());
+    	Assert.assertEquals("Result incorrectly ordered", Double.valueOf(200d), result.get(1).toNumber());
+    	Assert.assertEquals("Result incorrectly ordered", Double.valueOf(300d), result.get(2).toNumber());
+    	
+    	// there are only 4
+    	criteria = new LogicCriteriaImpl("CD4 COUNT").last(5);
+    	result = context.read(who, criteria);
+    	Assert.assertEquals("Wrong number of CD4s returned", 4, result.size());
+    }
+
+    /**
+     * @verifies {@link ObsDataSource#read(LogicContext,Cohort,LogicCriteria)}
+     * test = should get first n obs if they are lt value
+     */
+    @Test
+    public void read_shouldGetFirstNObsIfTheyAreLtValue() throws Exception {
+    	Patient who = Context.getPatientService().getPatient(4);
+    	LogicContext context = new LogicContextImpl(who);
+        
+    	LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").first(2).lt(400);
+    	Result result = context.read(who, criteria);
+    	Assert.assertEquals("Wrong number of CD4s returned", 3, result.size());
+    	Assert.assertEquals("Result incorrectly ordered", Double.valueOf(100d), result.get(0).toNumber());
+    }
+
+    /**
+     * @verifies {@link ObsDataSource#read(LogicContext,Cohort,LogicCriteria)}
+     * test = should get first n obs of those lt value
+     */
+    @Test
+    public void read_shouldGetFirstNObsOfThoseLtValue() throws Exception {
+    	Patient who = Context.getPatientService().getPatient(4);
+    	LogicContext context = new LogicContextImpl(who);
+        
+    	LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").lt(250).first(2);
+    	Result result = context.read(who, criteria);
+    	Assert.assertEquals("Wrong number of CD4s returned", 2, result.size());
+    	Assert.assertEquals("Result incorrectly ordered", Double.valueOf(100d), result.get(0).toNumber());
+    	Assert.assertEquals("Result incorrectly ordered", Double.valueOf(200d), result.get(1).toNumber());
+    }
+
+    /**
+     * @verifies {@link ObsDataSource#read(LogicContext,Cohort,LogicCriteria)}
+     * test = should get last obs if it is before date
+     */
+    @Test
+    public void read_shouldGetLastObsIfItIsBeforeDate() throws Exception {
+    	Patient who = Context.getPatientService().getPatient(4);
+    	LogicContext context = new LogicContextImpl(who);
+        
+    	LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").last().before(Context.getDateFormat().parse("01/01/2005"));
+    	Result result = context.read(who, criteria);
+    	Assert.assertEquals("Wrong number of CD4s returned", 0, result.size());
+    }
+
+    /**
+     * @verifies {@link ObsDataSource#read(LogicContext,Cohort,LogicCriteria)}
+     * test = should get last obs of those before date
+     */
+    @Test
+    public void read_shouldGetLastObsOfThoseBeforeDate() throws Exception {
+    	Patient who = Context.getPatientService().getPatient(4);
+    	LogicContext context = new LogicContextImpl(who);
+        
+    	LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").before(Context.getDateFormat().parse("01/01/2007")).last();
+    	Result result = context.read(who, criteria);
+    	Assert.assertEquals("Wrong number of CD4s returned", 1, result.size());
+    	Assert.assertEquals("Result incorrectly ordered", Double.valueOf(300d), result.toNumber());
+
     }
     
 }

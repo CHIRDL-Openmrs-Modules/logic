@@ -70,6 +70,8 @@ public class ObsDataSource implements LogicDataSource {
 	 * @should get last obs of those before date
 	 * @should get first n obs
 	 * @should get last n obs
+	 * @should get first n obs of those lt value
+	 * @should get first n obs if they are lt value
 	 * @should get not of a clause
 	 * @should get and of two clauses
 	 * @should get or of two clauses
