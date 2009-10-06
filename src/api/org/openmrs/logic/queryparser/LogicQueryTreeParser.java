@@ -7,6 +7,7 @@ import java.util.GregorianCalendar;
 
 import org.openmrs.logic.LogicCriteriaImpl;
 import org.openmrs.logic.LogicCriteria;
+import org.openmrs.logic.op.OperandDate;
 import org.openmrs.logic.op.Operator;
 
 import antlr.NoViableAltException;
@@ -223,7 +224,7 @@ public class LogicQueryTreeParser extends antlr.TreeParser implements LogicQuery
 													b = dateAST(_t, gc);
 													_t = _retTree;
 													
-													lc.appendExpression(temporal_op, gc.getTime());
+													lc.appendExpression(temporal_op, new OperandDate(gc.getTime()));
 													//lc_return = lc.applyTransform(transform);
 													lcFormed = true;
 													
@@ -263,7 +264,7 @@ public class LogicQueryTreeParser extends antlr.TreeParser implements LogicQuery
 										_t = _retTree;
 										
 										lc = new LogicCriteriaImpl(null, a);
-										lc.appendExpression(temporal_op, gc.getTime());
+										lc.appendExpression(temporal_op, new OperandDate(gc.getTime()));
 										//lc_return = lc.applyTransform(transform);
 										lcFormed = true;
 										

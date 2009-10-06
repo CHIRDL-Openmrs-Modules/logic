@@ -18,20 +18,20 @@ import java.util.Date;
 /**
  *
  */
-public class OperandDate implements Operand {
+public class OperandDate extends Date implements Operand {
 
-	private Date date;
-	
+    private static final long serialVersionUID = 2726925287599642390L;
+    
+	/**
+	 * Copies the value of the given date into
+	 * this OperandDate object.  The original date 
+	 * object is not referenced after turning into
+	 * an OpenrandDate object
+	 * 
+	 * @param date the Date for this OperandDate
+	 */
 	public OperandDate(Date date) {
-		this.date = date;
-	}
-
-	public Date asDate() {
-    	return date;
-    }
-	
-	public String toString() {
-		return date == null ? "null" : date.toString();
+		this.setTime(date.getTime());
 	}
 	
 }

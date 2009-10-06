@@ -13,7 +13,6 @@
  */
 package org.openmrs.report;
 
-import java.util.Date;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -22,10 +21,7 @@ import org.junit.Test;
 import org.openmrs.Cohort;
 import org.openmrs.api.DataSetService;
 import org.openmrs.api.context.Context;
-import org.openmrs.logic.LogicCriteria;
-import org.openmrs.logic.LogicCriteriaImpl;
 import org.openmrs.logic.result.Result;
-import org.openmrs.logic.util.LogicCriteriaBuilder;
 import org.openmrs.reporting.PatientCharacteristicFilter;
 import org.openmrs.reporting.PatientSearch;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
@@ -65,33 +61,8 @@ public class DataSetServiceTest extends BaseModuleContextSensitiveTest {
 			String token = criterion[0];
 			String operatorOperand = criterion[1];
 			log.info("Token: " + token);
-			log.info("Operand: " + LogicCriteriaBuilder.extractOperand(operatorOperand));
+			log.info("Operand: " + operatorOperand);
 		}
-	}
-	
-	/**
-	 * Auto generated method comment
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void shouldSerialize() throws Exception {
-		LogicCriteriaBuilder.serialize("TOKEN(CD4 COUNT).AFTER(04/12/2006).LAST()");
-		
-	}
-	
-	/**
-	 * Auto generated method comment
-	 * 
-	 * @throws Exception
-	 */
-	@Test
-	public void shouldDeserialize() throws Exception {
-		
-		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT");
-		criteria.after(new Date()).last();
-		
-		log.info("Deserialized: " + LogicCriteriaBuilder.deserialize(criteria));
 	}
 	
 	/**

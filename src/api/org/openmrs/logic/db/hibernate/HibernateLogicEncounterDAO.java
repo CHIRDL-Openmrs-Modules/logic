@@ -13,6 +13,10 @@
  */
 package org.openmrs.logic.db.hibernate;
 
+import static org.openmrs.logic.datasource.EncounterDataSource.ENCOUNTER_KEY;
+import static org.openmrs.logic.datasource.EncounterDataSource.LOCATION_KEY;
+import static org.openmrs.logic.datasource.EncounterDataSource.PROVIDER_KEY;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,16 +28,21 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
+import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Cohort;
 import org.openmrs.Encounter;
+import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.Duration;
+import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicExpression;
 import org.openmrs.logic.LogicExpressionBinary;
 import org.openmrs.logic.LogicTransform;
 import org.openmrs.logic.db.LogicEncounterDAO;
+import org.openmrs.logic.op.OperandDate;
+import org.openmrs.logic.op.OperandText;
 import org.openmrs.logic.op.Operator;
 
 /**
@@ -58,7 +67,15 @@ public class HibernateLogicEncounterDAO implements LogicEncounterDAO {
 		this.sessionFactory = sessionFactory;
 	}
 	
-	private Criterion getCriterion(LogicExpression logicExpression, Date indexDate) {
+	/**
+	 * Convenience method to get the list of hibernate queries for this expression
+	 * 
+	 * @param logicExpression
+	 * @param indexDate
+	 * @param criteria Criteria object so that certain expressions can add aliases, etc
+	 * @return Criterion to be added to the Criteria 
+	 */
+	private Criterion getCriterion(LogicExpression logicExpression, Date indexDate, Criteria criteria) throws LogicException {
 		Operator operator = logicExpression.getOperator();
 		Object rightOperand = logicExpression.getRightOperand();
 		Object leftOperand = null;
@@ -67,38 +84,59 @@ public class HibernateLogicEncounterDAO implements LogicEncounterDAO {
 		}
 		List<Criterion> criterion = new ArrayList<Criterion>();
 		
-		if (operator == Operator.BEFORE) {
-			criterion.add(Restrictions.lt("encounterDatetime", rightOperand));
-			
-		} else if (operator == Operator.AFTER) {
-			criterion.add(Restrictions.gt("encounterDatetime", rightOperand));
-			
+		//if the leftOperand is a String and does not match any components,
+		//see if it is a concept name and restrict accordingly
+		//a null operator implies a concept restriction
+		if (leftOperand instanceof LogicExpression){
+			// no restrictions if there is no operator
+			// TODO restrict on provider != null for encounterProvider token?
+		}
+		
+		String token = logicExpression.getRootToken();
+		
+		if (operator == null) {
+			// no restrictions if there is no operator
+			// TODO restrict on provider != null for encounterProvider token?
+		} else if (operator == Operator.BEFORE || operator == Operator.LT) {
+			if (ENCOUNTER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandDate) {
+				criterion.add(Restrictions.lt("encounterDatetime", rightOperand));
+			} else {
+				throw new LogicException("'before' is not a valid operator on " + token + " and " + rightOperand);
+			}
+		} else if (operator == Operator.AFTER || operator == Operator.GT) {
+			if (ENCOUNTER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandDate) {
+				criterion.add(Restrictions.gt("encounterDatetime", rightOperand));
+			} else {
+				throw new LogicException("'after' is not a valid operator on " + token + " and " + rightOperand);
+			}
 		} else if (operator == Operator.AND || operator == Operator.OR) {
-			
-			Criterion leftCriteria = null;
-			Criterion rightCriteria = null;
-			
-			if (leftOperand instanceof LogicExpression) {
-				leftCriteria = this.getCriterion((LogicExpression) leftOperand, indexDate);
-			}
-			if (rightOperand instanceof LogicExpression) {
-				rightCriteria = this.getCriterion((LogicExpression) rightOperand, indexDate);
-			}
-			
-			if (leftCriteria != null && rightCriteria != null) {
-				if (operator == Operator.AND) {
-					criterion.add(Restrictions.and(leftCriteria, rightCriteria));
+			if (ENCOUNTER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandDate) {
+				Criterion leftCriteria = null;
+				Criterion rightCriteria = null;
+				if (leftOperand instanceof LogicExpression) {
+					leftCriteria = this.getCriterion((LogicExpression) leftOperand, indexDate, criteria);
 				}
-				if (operator == Operator.OR) {
-					criterion.add(Restrictions.or(leftCriteria, rightCriteria));
+				if (rightOperand instanceof LogicExpression) {
+					rightCriteria = this.getCriterion((LogicExpression) rightOperand, indexDate, criteria);
 				}
+				
+				if (leftCriteria != null && rightCriteria != null) {
+					if(operator == Operator.AND){
+						criterion.add(Restrictions.and(leftCriteria, rightCriteria));
+					}
+					if(operator == Operator.OR){
+						criterion.add(Restrictions.or(leftCriteria, rightCriteria));
+					}
+				}
+			} else {
+				throw new LogicException("'and/or' are not valid operators on " + token + " and " + rightOperand);
 			}
 		} else if (operator == Operator.NOT) {
 			
 			Criterion rightCriteria = null;
 			
 			if (rightOperand instanceof LogicExpression) {
-				rightCriteria = this.getCriterion((LogicExpression) rightOperand, indexDate);
+				rightCriteria = this.getCriterion((LogicExpression) rightOperand, indexDate, criteria);
 			}
 			
 			if (rightCriteria != null) {
@@ -106,37 +144,61 @@ public class HibernateLogicEncounterDAO implements LogicEncounterDAO {
 			}
 			
 		} else if (operator == Operator.CONTAINS) {
-
-			//Not supported
+			if (ENCOUNTER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
+				criteria.createAlias("encounterType", "encounterType");
+				criterion.add(Expression.eq("encounterType.name", ((OperandText)rightOperand).asString()));
+			}
+			else if (LOCATION_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
+				criteria.createAlias("location", "location");
+				criterion.add(Restrictions.eq("location.name", ((OperandText)rightOperand).asString()));
+			}
+			else if (PROVIDER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
+				criteria.createAlias("provider", "provider");
+				criterion.add(Restrictions.eq("provider.systemId", ((OperandText)rightOperand).asString()));
+			}
+			else {
+				throw new LogicException("'contains' is not a valid operator on " + token + " and " + rightOperand);
+			}
 		} else if (operator == Operator.EQUALS) {
-			if (rightOperand instanceof Date)
+			if (ENCOUNTER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandDate) {
 				criterion.add(Restrictions.eq("encounterDatetime", rightOperand));
-			else
-				log.error("Invalid operand value for EQUALS operation");
-			
+			}
+			else if (ENCOUNTER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
+				criteria.createAlias("encounterType", "encounterType");
+				criterion.add(Restrictions.eq("encounterType.name", ((OperandText)rightOperand).asString()));
+			}
+			else if (LOCATION_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
+				criteria.createAlias("location", "location");
+				criterion.add(Restrictions.eq("location.name", ((OperandText)rightOperand).asString()));
+			}
+			else if (PROVIDER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
+				criteria.createAlias("provider", "provider");
+				criterion.add(Restrictions.eq("provider.systemId", ((OperandText)rightOperand).asString()));
+			}
+			else {
+				throw new LogicException ("'equals' is not a valid operator on " + token + " and " + rightOperand);
+			}
 		} else if (operator == Operator.LTE) {
-			if (rightOperand instanceof Date)
+			if (rightOperand instanceof OperandDate)
 				criterion.add(Restrictions.le("encounterDatetime", rightOperand));
 			else
-				log.error("Invalid operand value for LESS THAN EQUAL operation");
-			
+				throw new LogicException("'less than or equals' is not a valid operator on " + token + " and " + rightOperand);
 		} else if (operator == Operator.GTE) {
-			if (rightOperand instanceof Date)
+			if (rightOperand instanceof OperandDate)
 				criterion.add(Restrictions.ge("encounterDatetime", rightOperand));
 			else
-				log.error("Invalid operand value for GREATER THAN EQUAL operation");
-			
+				throw new LogicException("'greater than or equals' is not a valid operator on " + token + " and " + rightOperand);
 		} else if (operator == Operator.LT) {
-			if (rightOperand instanceof Date)
+			if (rightOperand instanceof OperandDate)
 				criterion.add(Restrictions.lt("encounterDatetime", rightOperand));
 			else
-				log.error("Invalid operand value for LESS THAN operation");
+				throw new LogicException("'less than' is not a valid operator on " + token + " and " + rightOperand);
 			
 		} else if (operator == Operator.GT) {
-			if (rightOperand instanceof Date)
+			if (rightOperand instanceof OperandDate)
 				criterion.add(Restrictions.gt("encounterDatetime", rightOperand));
 			else
-				log.error("Invalid operand value for GREATER THAN operation");
+				throw new LogicException("'greater than' is not a valid operator on " + token + " and " + rightOperand);
 			
 		} else if (operator == Operator.EXISTS) {
 			// EXISTS can be handled on the higher level (above
@@ -146,30 +208,33 @@ public class HibernateLogicEncounterDAO implements LogicEncounterDAO {
 			indexDate = (Date) rightOperand;
 			criterion.add(Restrictions.le("encounterDatetime", indexDate));
 			
-		} else if (operator == Operator.WITHIN && rightOperand instanceof Duration) {
-			
-			Duration duration = (Duration) rightOperand;
-			Calendar within = Calendar.getInstance();
-			within.setTime(indexDate);
-			
-			if (duration.getUnits() == Duration.Units.YEARS) {
-				within.add(Calendar.YEAR, duration.getDuration().intValue());
-			} else if (duration.getUnits() == Duration.Units.MONTHS) {
-				within.add(Calendar.MONTH, duration.getDuration().intValue());
-			} else if (duration.getUnits() == Duration.Units.WEEKS) {
-				within.add(Calendar.WEEK_OF_YEAR, duration.getDuration().intValue());
-			} else if (duration.getUnits() == Duration.Units.DAYS) {
-				within.add(Calendar.DAY_OF_YEAR, duration.getDuration().intValue());
-			} else if (duration.getUnits() == Duration.Units.MINUTES) {
-				within.add(Calendar.MINUTE, duration.getDuration().intValue());
-			} else if (duration.getUnits() == Duration.Units.SECONDS) {
-				within.add(Calendar.SECOND, duration.getDuration().intValue());
-			}
-			
-			if (indexDate.compareTo(within.getTime()) > 0) {
-				criterion.add(Restrictions.between("encounterDatetime", within.getTime(), indexDate));
+		} else if (operator == Operator.WITHIN) {
+			if (rightOperand instanceof Duration) {
+				Duration duration = (Duration) rightOperand;
+				Calendar within = Calendar.getInstance();
+				within.setTime(indexDate);
+				
+				if (duration.getUnits() == Duration.Units.YEARS) {
+					within.add(Calendar.YEAR, duration.getDuration().intValue());
+				} else if (duration.getUnits() == Duration.Units.MONTHS) {
+					within.add(Calendar.MONTH, duration.getDuration().intValue());
+				} else if (duration.getUnits() == Duration.Units.WEEKS) {
+					within.add(Calendar.WEEK_OF_YEAR, duration.getDuration().intValue());
+				} else if (duration.getUnits() == Duration.Units.DAYS) {
+					within.add(Calendar.DAY_OF_YEAR, duration.getDuration().intValue());
+				} else if (duration.getUnits() == Duration.Units.MINUTES) {
+					within.add(Calendar.MINUTE, duration.getDuration().intValue());
+				} else if (duration.getUnits() == Duration.Units.SECONDS) {
+					within.add(Calendar.SECOND, duration.getDuration().intValue());
+				}
+				
+				if (indexDate.compareTo(within.getTime()) > 0) {
+					criterion.add(Restrictions.between("encounterDatetime", within.getTime(), indexDate));
+				} else {
+					criterion.add(Restrictions.between("encounterDatetime", indexDate, within.getTime()));
+				}
 			} else {
-				criterion.add(Restrictions.between("encounterDatetime", indexDate, within.getTime()));
+				throw new LogicException("'within' is not a valid operator on " + token + " and " + rightOperand);
 			}
 		}
 		
@@ -188,10 +253,10 @@ public class HibernateLogicEncounterDAO implements LogicEncounterDAO {
 	// Helper function, converts logic service's criteria into Hibernate's
 	// criteria
 	@SuppressWarnings("unchecked")
-    private List<Encounter> logicToHibernate(LogicExpression expression, Cohort who) {
+    private List<Encounter> logicToHibernate(LogicExpression expression, Cohort who, LogicContext logicContext) throws LogicException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Encounter.class);
 		
-		Date indexDate = Calendar.getInstance().getTime();
+		Date indexDate = logicContext.getIndexDate();
 		Operator transformOperator = null;
 		LogicTransform transform = expression.getTransform();
 		Integer numResults = null;
@@ -208,15 +273,16 @@ public class HibernateLogicEncounterDAO implements LogicEncounterDAO {
 		// set the transform and evaluate the right criteria
 		// if there is any
 		if (transformOperator == Operator.LAST) {
-			criteria.addOrder(Order.desc("encounterDatetime")).addOrder(Order.desc("dateCreated")).addOrder(
-			    Order.desc("encounterId"));
+			criteria.addOrder(Order.desc("encounterDatetime")).addOrder(Order.desc("dateCreated")).addOrder(Order.desc("encounterId"));
 		} else if (transformOperator == Operator.FIRST) {
 			criteria.addOrder(Order.asc("encounterDatetime")).addOrder(Order.asc("encounterId"));
 		} else if (transformOperator == Operator.DISTINCT) {
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		} else {
+			criteria.addOrder(Order.desc("encounterDatetime"));
 		}
 		
-		Criterion c = this.getCriterion(expression, indexDate);
+		Criterion c = this.getCriterion(expression, indexDate, criteria);
 		if (c != null) {
 			criteria.add(c);
 		}
@@ -261,8 +327,8 @@ public class HibernateLogicEncounterDAO implements LogicEncounterDAO {
 	 * @see org.openmrs.api.db.EncounterDAO#getEncounters(org.openmrs.Patient, org.openmrs.Location,
 	 *      Date, Date, java.util.Collection, java.util.Collection, java.util.Collection, boolean)
 	 */
-	public List<Encounter> getEncounters(Cohort who, LogicCriteria logicCriteria) {
-		return logicToHibernate(logicCriteria.getExpression(), who);
+	public List<Encounter> getEncounters(Cohort who, LogicCriteria logicCriteria, LogicContext logicContext) throws LogicException {
+		return logicToHibernate(logicCriteria.getExpression(), who, logicContext);
 	}
 	
 }

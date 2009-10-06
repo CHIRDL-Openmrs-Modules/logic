@@ -32,8 +32,8 @@ import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.context.Context;
-import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.Duration;
+import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicExpression;
 import org.openmrs.logic.LogicExpressionBinary;
@@ -97,10 +97,10 @@ public class HibernateLogicObsDAO implements LogicObsDAO {
 		}
 		
 		if (operator == Operator.BEFORE) {
-			criterion.add(Restrictions.lt("obsDatetime", ((OperandDate) rightOperand).asDate()));
+			criterion.add(Restrictions.lt("obsDatetime", rightOperand));
 			
 		} else if (operator == Operator.AFTER) {
-			criterion.add(Restrictions.gt("obsDatetime", ((OperandDate) rightOperand).asDate()));
+			criterion.add(Restrictions.gt("obsDatetime", rightOperand));
 			
 		} else if (operator == Operator.AND || operator == Operator.OR) {
 			
@@ -162,9 +162,9 @@ public class HibernateLogicObsDAO implements LogicObsDAO {
 				criterion.add(Restrictions.eq("valueText", ((OperandText) rightOperand).asString()));
 			else if (rightOperand instanceof OperandDate)
 				if (leftOperand instanceof OperandText && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
-					criterion.add(Restrictions.eq(COMPONENT_OBS_DATETIME, ((OperandDate) rightOperand).asDate()));
+					criterion.add(Restrictions.eq(COMPONENT_OBS_DATETIME, rightOperand));
 				} else {
-					criterion.add(Restrictions.eq("valueDatetime", ((OperandDate) rightOperand).asDate()));
+					criterion.add(Restrictions.eq("valueDatetime", rightOperand));
 				}
 			else if (rightOperand instanceof OperandConcept)
 				criterion.add(Restrictions.eq("valueCoded", ((OperandConcept) rightOperand).asConcept()));
@@ -176,9 +176,9 @@ public class HibernateLogicObsDAO implements LogicObsDAO {
 				criterion.add(Restrictions.le("valueNumeric", ((OperandNumeric) rightOperand).asDouble()));
 			else if (rightOperand instanceof OperandDate)
 				if (leftOperand instanceof OperandText && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
-					criterion.add(Restrictions.le(COMPONENT_OBS_DATETIME, ((OperandDate) rightOperand).asDate()));
+					criterion.add(Restrictions.le(COMPONENT_OBS_DATETIME, rightOperand));
 				} else {
-					criterion.add(Restrictions.le("valueDatetime", ((OperandDate) rightOperand).asDate()));
+					criterion.add(Restrictions.le("valueDatetime", rightOperand));
 				}
 			else
 				log.error("Invalid operand value for LESS THAN EQUAL operation");
@@ -188,9 +188,9 @@ public class HibernateLogicObsDAO implements LogicObsDAO {
 				criterion.add(Restrictions.ge("valueNumeric", ((OperandNumeric) rightOperand).asDouble()));
 			else if (rightOperand instanceof OperandDate)
 				if (leftOperand instanceof OperandText && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
-					criterion.add(Restrictions.ge(COMPONENT_OBS_DATETIME,  ((OperandDate) rightOperand).asDate()));
+					criterion.add(Restrictions.ge(COMPONENT_OBS_DATETIME, rightOperand));
 				} else {
-					criterion.add(Restrictions.ge("valueDatetime",  ((OperandDate) rightOperand).asDate()));
+					criterion.add(Restrictions.ge("valueDatetime", rightOperand));
 				}
 			else
 				log.error("Invalid operand value for GREATER THAN EQUAL operation");
@@ -200,9 +200,9 @@ public class HibernateLogicObsDAO implements LogicObsDAO {
 				criterion.add(Restrictions.lt("valueNumeric", ((OperandNumeric) rightOperand).asDouble()));
 			else if (rightOperand instanceof OperandDate)
 				if (leftOperand instanceof OperandText && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
-					criterion.add(Restrictions.lt(COMPONENT_OBS_DATETIME, ((OperandDate) rightOperand).asDate()));
+					criterion.add(Restrictions.lt(COMPONENT_OBS_DATETIME, rightOperand));
 				} else {
-					criterion.add(Restrictions.lt("valueDatetime", ((OperandDate) rightOperand).asDate()));
+					criterion.add(Restrictions.lt("valueDatetime", rightOperand));
 				}
 			else
 				log.error("Invalid operand value for LESS THAN operation");
@@ -212,9 +212,9 @@ public class HibernateLogicObsDAO implements LogicObsDAO {
 				criterion.add(Restrictions.gt("valueNumeric", ((OperandNumeric) rightOperand).asDouble()));
 			else if (rightOperand instanceof OperandDate)
 				if (leftOperand instanceof OperandText && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
-					criterion.add(Restrictions.gt(COMPONENT_OBS_DATETIME, ((OperandDate) rightOperand).asDate()));
+					criterion.add(Restrictions.gt(COMPONENT_OBS_DATETIME, rightOperand));
 				} else {
-					criterion.add(Restrictions.gt("valueDatetime", ((OperandDate) rightOperand).asDate()));
+					criterion.add(Restrictions.gt("valueDatetime", rightOperand));
 				}
 			else
 				log.error("Invalid operand value for GREATER THAN operation");
@@ -224,7 +224,7 @@ public class HibernateLogicObsDAO implements LogicObsDAO {
 			// LogicService, even) by coercing the Result into a Boolean for
 			// each patient
 		} else if (operator == Operator.ASOF && rightOperand instanceof OperandDate) {
-			indexDate = ((OperandDate) rightOperand).asDate();
+			indexDate = (Date)rightOperand;
 			criterion.add(Restrictions.le("obsDatetime", indexDate));
 			
 		} else if (operator == Operator.WITHIN && rightOperand instanceof Duration) {

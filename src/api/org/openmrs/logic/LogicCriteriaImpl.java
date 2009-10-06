@@ -21,7 +21,6 @@ import org.openmrs.logic.op.OperandDate;
 import org.openmrs.logic.op.OperandNumeric;
 import org.openmrs.logic.op.OperandText;
 import org.openmrs.logic.op.Operator;
-import org.openmrs.logic.LogicCriteria;
 
 /**
  * Used to create a hierarchical representation of a criteria (e.g., similar to a parse tree).
@@ -103,10 +102,6 @@ public class LogicCriteriaImpl implements LogicCriteria {
     
     public LogicCriteria appendExpression(Operator operator, double operand) {
     	return appendExpression(operator, new OperandNumeric(operand));
-    }
-    
-    public LogicCriteria appendExpression(Operator operator, Date operand) {
-    	return appendExpression(operator, new OperandDate(operand));
     }
 	
 	private LogicCriteria appendExpression(Operator operator, LogicExpression expression) {

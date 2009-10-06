@@ -17,10 +17,12 @@ import java.util.List;
 
 import org.openmrs.Cohort;
 import org.openmrs.Encounter;
+import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
+import org.openmrs.logic.LogicException;
 
 /**
- *
+ * @see EncounterDataSource
  */
 public interface LogicEncounterDAO {
 	
@@ -28,6 +30,6 @@ public interface LogicEncounterDAO {
 	 * @see org.openmrs.api.db.hibernate.HibernateObsDAO#getObservations(List, List, List, List,
 	 *      List, List, List, Integer, Integer, java.util.Date, java.util.Date, boolean)
 	 */
-	public List<Encounter> getEncounters(Cohort who, LogicCriteria logicCriteria);
+	public List<Encounter> getEncounters(Cohort who, LogicCriteria logicCriteria, LogicContext context) throws LogicException;
 	
 }

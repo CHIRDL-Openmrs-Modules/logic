@@ -30,4 +30,6 @@
   <!-- A "med" for patient #2 -->
   <obs obs_id="4" person_id="2" concept_id="2" obs_datetime="2006-02-10 00:00:00.0" location_id="1" value_coded="1" creator="1"  date_created="2006-02-11 15:57:35.0" voided="false" uuid="5385823a-f748-4a24-9388-8b03c354952b"/>
   
+  <!-- A malaria diagnosis for patient 3 -->
+  <obs obs_id="5" person_id="3" concept_id="4" obs_datetime="2006-02-10 00:00:00.0" location_id="1" value_coded="5" creator="1"  date_created="2006-02-11 15:57:35.0" voided="false"/>
 </dataset>
