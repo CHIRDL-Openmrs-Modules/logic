@@ -361,7 +361,7 @@ public class LogicQueryParser {
 	}
 	
 	/**
-	 * � Internal method for parsing date strings into an equivalent Java object. Accepts "TODAY"
+	 * Internal method for parsing date strings into an equivalent Java object. Accepts "TODAY"
 	 * for today's date.
 	 */
 	private static Date parseDate(String dateText) {

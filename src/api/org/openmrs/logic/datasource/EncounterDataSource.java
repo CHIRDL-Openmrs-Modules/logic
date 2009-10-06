@@ -30,7 +30,7 @@ import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.db.LogicEncounterDAO;
 import org.openmrs.logic.result.Result;
-import org.openmrs.logic.util.Util;
+import org.openmrs.logic.util.LogicUtil;
 
 /**
  * Provides access to encounter metadata.
@@ -159,7 +159,7 @@ public class EncounterDataSource implements LogicDataSource {
 				result.add(new Result(encounterDatetime, providerSystemId, provider));
 			}
 		}
-		Util.applyAggregators(finalResult, criteria, patients);
+		LogicUtil.applyAggregators(finalResult, criteria, patients);
 		
 		return finalResult;
 	}

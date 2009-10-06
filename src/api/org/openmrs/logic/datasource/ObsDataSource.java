@@ -28,7 +28,7 @@ import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.db.LogicObsDAO;
 import org.openmrs.logic.result.Result;
-import org.openmrs.logic.util.Util;
+import org.openmrs.logic.util.LogicUtil;
 import org.openmrs.logic.datasource.LogicDataSource;
 
 /**
@@ -75,7 +75,7 @@ public class ObsDataSource implements LogicDataSource {
 			result.add(new Result(ob));
 		}
 		
-		Util.applyAggregators(finalResult, criteria, patients);
+		LogicUtil.applyAggregators(finalResult, criteria, patients);
 		
 		return finalResult;
 	}

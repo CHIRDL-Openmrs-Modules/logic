@@ -25,7 +25,7 @@ import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.db.LogicPersonDAO;
 import org.openmrs.logic.result.Result;
-import org.openmrs.logic.util.Util;
+import org.openmrs.logic.util.LogicUtil;
 import org.openmrs.logic.datasource.LogicDataSource;
 
 /**
@@ -101,7 +101,7 @@ public class PersonDataSource implements LogicDataSource {
 			// TODO more keys to be added
 		}
 		
-		Util.applyAggregators(resultMap, criteria, who);
+		LogicUtil.applyAggregators(resultMap, criteria, who);
 		return resultMap;
 	}
 	

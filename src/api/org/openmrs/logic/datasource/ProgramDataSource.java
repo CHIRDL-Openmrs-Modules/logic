@@ -29,7 +29,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.result.Result;
-import org.openmrs.logic.util.Util;
+import org.openmrs.logic.util.LogicUtil;
 
 /**
  * Provides access to patient program data
@@ -118,7 +118,7 @@ public class ProgramDataSource implements LogicDataSource {
 		if (log.isDebugEnabled())
 			log.debug("applying aggregators");
 
-		Util.applyAggregators(resultSet, criteria, patients);
+		LogicUtil.applyAggregators(resultSet, criteria, patients);
 		return resultSet;
 	}
 	
