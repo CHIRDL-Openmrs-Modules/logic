@@ -74,7 +74,7 @@ public class ProgramDataSource implements LogicDataSource {
 	/**
 	 * @see {@link org.openmrs.logic.datasource.LogicDataSource#read(LogicContext, Cohort, LogicCriteria)}
 	 */
-    public Map<Integer, Result> read(LogicContext context, Cohort patients, LogicCriteria criteria) {
+	public Map<Integer, Result> read(LogicContext context, Cohort patients, LogicCriteria criteria) {
 		
 		if (log.isInfoEnabled())
 			log.info("read patient programs for " + patients.size() + " patients, criteria " + criteria);
@@ -117,7 +117,7 @@ public class ProgramDataSource implements LogicDataSource {
 		
 		if (log.isDebugEnabled())
 			log.debug("applying aggregators");
-
+		
 		LogicUtil.applyAggregators(resultSet, criteria, patients);
 		return resultSet;
 	}
@@ -144,15 +144,14 @@ public class ProgramDataSource implements LogicDataSource {
 	}
 	
 	/**
-	 * Convenience method to get the patient programs for the given patients
-	 * for this logic query 
+	 * Convenience method to get the patient programs for the given patients for this logic query
 	 * 
-	 * @param patients the current cohort of patients to restrict to 
+	 * @param patients the current cohort of patients to restrict to
 	 * @param criteria (not currently used)
-	 * @return all patient programs for all patients in the given cohort 
+	 * @return all patient programs for all patients in the given cohort
 	 */
 	private Collection<PatientProgram> getPatientPrograms(Cohort patients, LogicCriteria criteria) {
 		ProgramWorkflowService service = Context.getProgramWorkflowService();
-		return service.getPatientPrograms(patients, null); 
+		return service.getPatientPrograms(patients, null);
 	}
 }

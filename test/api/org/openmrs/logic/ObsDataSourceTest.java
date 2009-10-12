@@ -34,7 +34,7 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	
 	@SuppressWarnings("unused")
-    private Log log = LogFactory.getLog(this.getClass());
+	private Log log = LogFactory.getLog(this.getClass());
 	
 	@Before
 	public void runBeforeEachTest() throws Exception {

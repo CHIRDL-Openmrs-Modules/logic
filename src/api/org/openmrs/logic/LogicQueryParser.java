@@ -88,7 +88,9 @@ import org.openmrs.logic.LogicCriteria;
  * example, the following two criteria would be functionally the same:
  * 
  * <pre>
+ * 
  * LogicCriteria crit1 = LogicCriteria.parse(&quot;LAST {CD4 COUNT} &lt; 200&quot;);
+ * 
  * LogicCriteria crit2 = new LogicCriteria(&quot;CD4 COUNT&quot;).lt(200).last();
  * </pre>
  * 
@@ -361,8 +363,8 @@ public class LogicQueryParser {
 	}
 	
 	/**
-	 * Internal method for parsing date strings into an equivalent Java object. Accepts "TODAY"
-	 * for today's date.
+	 * Internal method for parsing date strings into an equivalent Java object. Accepts "TODAY" for
+	 * today's date.
 	 */
 	private static Date parseDate(String dateText) {
 		if (dateText.equalsIgnoreCase("TODAY"))

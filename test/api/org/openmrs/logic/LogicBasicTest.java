@@ -129,8 +129,11 @@ public class LogicBasicTest extends BaseModuleContextSensitiveTest {
 		executeDataSet("org/openmrs/logic/include/LogicBasicTest.concepts.xml");
 		// LAST CD4 COUNT < 350 AND NO ACTIVE MEDICATIONS
 		Patient patient = Context.getPatientService().getPatient(2);
-		Result result = Context.getLogicService().eval(patient,
-		    new LogicCriteriaImpl("CD4 COUNT").last().lt(350).and(new LogicCriteriaImpl("%%orders.ACTIVE MEDS").notExists()));
+		Result result = Context.getLogicService()
+		        .eval(
+		            patient,
+		            new LogicCriteriaImpl("CD4 COUNT").last().lt(350).and(
+		                new LogicCriteriaImpl("%%orders.ACTIVE MEDS").notExists()));
 		Assert.assertTrue(result.exists());
 	}
 	

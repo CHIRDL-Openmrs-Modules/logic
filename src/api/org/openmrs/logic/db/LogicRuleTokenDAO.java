@@ -22,8 +22,8 @@ import org.openmrs.logic.LogicRuleToken;
 import org.openmrs.logic.LogicService;
 
 /**
- * LogicRuleToken specific function definition. The function is not meant to be used directly.
- * Use methods available in the LogicService instead.
+ * LogicRuleToken specific function definition. The function is not meant to be used directly. Use
+ * methods available in the LogicService instead.
  * 
  * @see {@link LogicService}
  * @see {@link Context}
@@ -71,10 +71,8 @@ public interface LogicRuleTokenDAO {
 	/**
 	 * Get a list of tags matching an input tag. The list will also contains partially matched tags
 	 * from all know tags for the registered token. Example: - hiv will match "hiv positive",
-	 * "hiv negative", "positive hiv"
-	 * 
-	 * This search method will be useful to get a group of token related to a certain tag,
-	 * assuming the user put a correct tag to the token.
+	 * "hiv negative", "positive hiv" This search method will be useful to get a group of token
+	 * related to a certain tag, assuming the user put a correct tag to the token.
 	 * 
 	 * @param partialTag
 	 * @return

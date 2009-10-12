@@ -123,7 +123,8 @@ public class LogicCriteriaTest extends BaseModuleContextSensitiveTest {
 		
 		assertEquals("CD4 COUNT", criteria.getRootToken());
 		
-		criteria = new LogicCriteriaImpl("CD4 COUNT").last().lt(350).and(new LogicCriteriaImpl("%%orders.ACTIVE MEDS").notExists());
+		criteria = new LogicCriteriaImpl("CD4 COUNT").last().lt(350).and(
+		    new LogicCriteriaImpl("%%orders.ACTIVE MEDS").notExists());
 		assertEquals("CD4 COUNT", criteria.getRootToken());
 		criteria = new LogicCriteriaImpl("CD4 COUNT").last().before(cal.getTime());
 		assertEquals("CD4 COUNT", criteria.getRootToken());

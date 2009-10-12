@@ -18,15 +18,14 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Operand for dates in the logic service.  This Operand is slightly
- * different from other Operands in that it extends Date and so can
- * be casted and used directly as a Date object
+ * Operand for dates in the logic service. This Operand is slightly different from other Operands in
+ * that it extends Date and so can be casted and used directly as a Date object
  * 
  * @see Operand
  */
 public class OperandDate extends Date implements Operand {
-
-    private static final long serialVersionUID = 2726925287599642390L;
+	
+	private static final long serialVersionUID = 2726925287599642390L;
 	
 	/**
 	 * The Operators that this Operand {@link #supports(ComparisonOperator)}
@@ -46,22 +45,20 @@ public class OperandDate extends Date implements Operand {
 	}
 	
 	/**
-	 * Copies the value of the given date into
-	 * this OperandDate object.  The original date 
-	 * object is not referenced after turning into
-	 * an OpenrandDate object
+	 * Copies the value of the given date into this OperandDate object. The original date object is
+	 * not referenced after turning into an OpenrandDate object
 	 * 
 	 * @param date the Date for this OperandDate
 	 */
 	public OperandDate(Date date) {
 		this.setTime(date.getTime());
 	}
-
+	
 	/**
-     * @see org.openmrs.logic.op.Operand#supports(org.openmrs.logic.op.ComparisonOperator)
-     */
-    public boolean supports(ComparisonOperator operator) {
-	    return validOperators.contains(operator);
-    }
-    
+	 * @see org.openmrs.logic.op.Operand#supports(org.openmrs.logic.op.ComparisonOperator)
+	 */
+	public boolean supports(ComparisonOperator operator) {
+		return validOperators.contains(operator);
+	}
+	
 }

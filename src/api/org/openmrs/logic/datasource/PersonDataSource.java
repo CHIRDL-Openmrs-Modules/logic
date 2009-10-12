@@ -68,14 +68,13 @@ public class PersonDataSource implements LogicDataSource {
 	
 	/**
 	 * @see org.openmrs.logic.datasource.LogicDataSource#read(LogicContext, Cohort, LogicCriteria)
-     *      
-     * @should get gender
-     * @should get gender equals value
-     * @should get birthdate
-     * @should get birthdate_estimated
-     * @should get dead
-     * @should get death_date
-     * @should get cause_of_death
+	 * @should get gender
+	 * @should get gender equals value
+	 * @should get birthdate
+	 * @should get birthdate_estimated
+	 * @should get dead
+	 * @should get death_date
+	 * @should get cause_of_death
 	 */
 	public Map<Integer, Result> read(LogicContext context, Cohort who, LogicCriteria criteria) {
 		

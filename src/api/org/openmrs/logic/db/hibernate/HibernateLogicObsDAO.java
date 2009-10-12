@@ -153,18 +153,18 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 			} else
 				log.error("Invalid operand value for CONTAINS operation");
 		} else if (operator == Operator.EQUALS) {
-			if (rightOperand instanceof OperandNumeric){
+			if (rightOperand instanceof OperandNumeric) {
 				if (rootToken.equalsIgnoreCase(COMPONENT_ENCOUNTER_ID)) {
 					EncounterService encounterService = Context.getEncounterService();
 					Encounter encounter = encounterService.getEncounter(((OperandNumeric) rightOperand).asInteger());
 					criterion.add(Restrictions.eq("encounter", encounter));
 				} else
-				criterion.add(Restrictions.eq("valueNumeric", ((OperandNumeric) rightOperand).asDouble()));
-			}
-			else if (rightOperand instanceof OperandText)
+					criterion.add(Restrictions.eq("valueNumeric", ((OperandNumeric) rightOperand).asDouble()));
+			} else if (rightOperand instanceof OperandText)
 				criterion.add(Restrictions.eq("valueText", ((OperandText) rightOperand).asString()));
 			else if (rightOperand instanceof OperandDate)
-				if (leftOperand instanceof OperandText && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
+				if (leftOperand instanceof OperandText
+				        && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
 					criterion.add(Restrictions.eq(COMPONENT_OBS_DATETIME, rightOperand));
 				} else {
 					criterion.add(Restrictions.eq("valueDatetime", rightOperand));
@@ -178,7 +178,8 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 			if (rightOperand instanceof OperandNumeric)
 				criterion.add(Restrictions.le("valueNumeric", ((OperandNumeric) rightOperand).asDouble()));
 			else if (rightOperand instanceof OperandDate)
-				if (leftOperand instanceof OperandText && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
+				if (leftOperand instanceof OperandText
+				        && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
 					criterion.add(Restrictions.le(COMPONENT_OBS_DATETIME, rightOperand));
 				} else {
 					criterion.add(Restrictions.le("valueDatetime", rightOperand));
@@ -190,7 +191,8 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 			if (rightOperand instanceof OperandNumeric)
 				criterion.add(Restrictions.ge("valueNumeric", ((OperandNumeric) rightOperand).asDouble()));
 			else if (rightOperand instanceof OperandDate)
-				if (leftOperand instanceof OperandText && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
+				if (leftOperand instanceof OperandText
+				        && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
 					criterion.add(Restrictions.ge(COMPONENT_OBS_DATETIME, rightOperand));
 				} else {
 					criterion.add(Restrictions.ge("valueDatetime", rightOperand));
@@ -202,7 +204,8 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 			if (rightOperand instanceof OperandNumeric)
 				criterion.add(Restrictions.lt("valueNumeric", ((OperandNumeric) rightOperand).asDouble()));
 			else if (rightOperand instanceof OperandDate)
-				if (leftOperand instanceof OperandText && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
+				if (leftOperand instanceof OperandText
+				        && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
 					criterion.add(Restrictions.lt(COMPONENT_OBS_DATETIME, rightOperand));
 				} else {
 					criterion.add(Restrictions.lt("valueDatetime", rightOperand));
@@ -214,7 +217,8 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 			if (rightOperand instanceof OperandNumeric)
 				criterion.add(Restrictions.gt("valueNumeric", ((OperandNumeric) rightOperand).asDouble()));
 			else if (rightOperand instanceof OperandDate)
-				if (leftOperand instanceof OperandText && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
+				if (leftOperand instanceof OperandText
+				        && ((OperandText) leftOperand).asString().equals(COMPONENT_OBS_DATETIME)) {
 					criterion.add(Restrictions.gt(COMPONENT_OBS_DATETIME, rightOperand));
 				} else {
 					criterion.add(Restrictions.gt("valueDatetime", rightOperand));
@@ -227,7 +231,7 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 			// LogicService, even) by coercing the Result into a Boolean for
 			// each patient
 		} else if (operator == Operator.ASOF && rightOperand instanceof OperandDate) {
-			indexDate = (Date)rightOperand;
+			indexDate = (Date) rightOperand;
 			criterion.add(Restrictions.le("obsDatetime", indexDate));
 			
 		} else if (operator == Operator.WITHIN && rightOperand instanceof Duration) {
@@ -272,7 +276,7 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 	// Helper function, converts logic service's criteria into Hibernate's
 	// criteria
 	@SuppressWarnings("unchecked")
-    private List<Obs> logicToHibernate(LogicExpression expression, Cohort who) throws LogicException {
+	private List<Obs> logicToHibernate(LogicExpression expression, Cohort who) throws LogicException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Obs.class);
 		
 		Date indexDate = Calendar.getInstance().getTime();

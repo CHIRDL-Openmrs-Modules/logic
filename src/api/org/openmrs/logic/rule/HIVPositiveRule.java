@@ -33,7 +33,7 @@ import org.openmrs.logic.result.Result.Datatype;
 public class HIVPositiveRule implements Rule {
 	
 	@SuppressWarnings("unused")
-    private Log log = LogFactory.getLog(this.getClass());
+	private Log log = LogFactory.getLog(this.getClass());
 	
 	/**
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, org.openmrs.Patient,

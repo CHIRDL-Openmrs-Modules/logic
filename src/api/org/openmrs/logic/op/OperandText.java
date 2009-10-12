@@ -14,46 +14,43 @@
 package org.openmrs.logic.op;
 
 /**
- * 
  * @see Operand
  */
 public class OperandText implements Operand {
-
+	
 	private String string;
 	
-    /**
-     * Constructor to create this Operand with the
-     * String backing object.  A pointer to the String is
-     * kept.
-     * 
-     * @param string the backing String
-     */
-    public OperandText(String string) {
-    	this.string = string;
-    }
-    
-    /**
-     * Return the String object that is behind this Operand
-     * 
-     * @return the backing String object
-     */
-    public String asString() {
-    	return string;
-    }
-    
-    /**
-     * @see java.lang.Object#toString()
-     */
-    public String toString() {
+	/**
+	 * Constructor to create this Operand with the String backing object. A pointer to the String is
+	 * kept.
+	 * 
+	 * @param string the backing String
+	 */
+	public OperandText(String string) {
+		this.string = string;
+	}
+	
+	/**
+	 * Return the String object that is behind this Operand
+	 * 
+	 * @return the backing String object
+	 */
+	public String asString() {
+		return string;
+	}
+	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
 		return string == null ? "null" : string.toString();
 	}
-
+	
 	/**
-     * @see org.openmrs.logic.op.Operand#supports(org.openmrs.logic.op.ComparisonOperator)
-     */
-    public boolean supports(ComparisonOperator operator) {
-	    return (ComparisonOperator.EQUALS.equals(operator) || 
-	    		ComparisonOperator.CONTAINS.equals(operator));
-    }
-    
+	 * @see org.openmrs.logic.op.Operand#supports(org.openmrs.logic.op.ComparisonOperator)
+	 */
+	public boolean supports(ComparisonOperator operator) {
+		return (ComparisonOperator.EQUALS.equals(operator) || ComparisonOperator.CONTAINS.equals(operator));
+	}
+	
 }

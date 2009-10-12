@@ -23,8 +23,8 @@ public class InvalidReferenceRuleException extends LogicException {
 	/**
      * 
      */
-    private static final long serialVersionUID = 4674001309936851685L;
-
+	private static final long serialVersionUID = 4674001309936851685L;
+	
 	public InvalidReferenceRuleException() {
 		super();
 	}

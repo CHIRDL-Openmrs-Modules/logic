@@ -61,16 +61,15 @@ public class EncounterDataSource implements LogicDataSource {
 	private static final Collection<String> keys = new ArrayList<String>();
 	
 	private LogicEncounterDAO logicEncounterDAO;
+	
 	public static final String ENCOUNTER_KEY = "encounter";
+	
 	public static final String LOCATION_KEY = "encounterLocation";
+	
 	public static final String PROVIDER_KEY = "encounterProvider";
 	
 	static {
-        String[] keyList = new String[] { 
-        		ENCOUNTER_KEY,
-        		LOCATION_KEY,
-        		PROVIDER_KEY
-        };
+		String[] keyList = new String[] { ENCOUNTER_KEY, LOCATION_KEY, PROVIDER_KEY };
 		
 		for (String k : keyList)
 			keys.add(k);
@@ -85,11 +84,11 @@ public class EncounterDataSource implements LogicDataSource {
 	}
 	
 	/**
-	 * @see org.openmrs.logic.datasource.LogicDataSource#read(org.openmrs.logic.LogicContext, org.openmrs.Cohort, org.openmrs.logic.LogicCriteria)
-	 * 
+	 * @see org.openmrs.logic.datasource.LogicDataSource#read(org.openmrs.logic.LogicContext,
+	 *      org.openmrs.Cohort, org.openmrs.logic.LogicCriteria)
 	 * @should return text result for encounter key
-	 * @should return text result for encounterlocation key
-	 * @should return text result for encounterprovider key
+	 * @should return text result for encounter location key
+	 * @should return text result for encounter provider key
 	 * @should not fail with null encounter type
 	 * @should return text result for encounter key and before operator
 	 * @should return text result for encounter key and after operator
@@ -109,7 +108,7 @@ public class EncounterDataSource implements LogicDataSource {
 		List<Encounter> encounters = getLogicEncounterDAO().getEncounters(patients, criteria, context);
 		
 		String rootToken = criteria.getRootToken();
-
+		
 		// group the received Encounters by patient and convert them to
 		// Results
 		for (Encounter encounter : encounters) {
@@ -132,8 +131,7 @@ public class EncounterDataSource implements LogicDataSource {
 				
 				// add the type as the result
 				result.add(new Result(encounterDatetime, encounterTypeName, encounter));
-			}
-			else if (LOCATION_KEY.equalsIgnoreCase(rootToken)) {
+			} else if (LOCATION_KEY.equalsIgnoreCase(rootToken)) {
 				Location location = encounter.getLocation();
 				String locationName = "";
 				if (location != null)
@@ -141,8 +139,7 @@ public class EncounterDataSource implements LogicDataSource {
 				
 				// add the location as the result
 				result.add(new Result(encounterDatetime, locationName, location));
-			}
-			else if (PROVIDER_KEY.equalsIgnoreCase(rootToken)) {
+			} else if (PROVIDER_KEY.equalsIgnoreCase(rootToken)) {
 				String providerSystemId = "";
 				User provider = encounter.getProvider();
 				
@@ -150,8 +147,7 @@ public class EncounterDataSource implements LogicDataSource {
 				if (provider == null) {
 					// TODO should this return a string like this, or just null?
 					providerSystemId = "(no provider)";
-				}
-				else {
+				} else {
 					providerSystemId = provider.getSystemId();
 				}
 				

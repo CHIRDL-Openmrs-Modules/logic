@@ -52,8 +52,7 @@ public class ObsDataSource implements LogicDataSource {
 	
 	/**
 	 * @throws LogicException
-     * 
-     * @should get all obs
+	 * @should get all obs
 	 * @should get first obs
 	 * @should get last obs
 	 * @should get obs gt value
@@ -63,7 +62,7 @@ public class ObsDataSource implements LogicDataSource {
 	 * @should get obs eq value
 	 * @should get last obs if it is lt value
 	 * @should get last obs of those lt value
- 	 * @should get obs before date
+	 * @should get obs before date
 	 * @should get obs after date
 	 * @should get obs gt value after date
 	 * @should get last obs if it is before date

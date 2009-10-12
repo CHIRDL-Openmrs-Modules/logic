@@ -60,7 +60,7 @@ public class LogicContextImpl implements LogicContext {
 	 * context; otherwise, this is null
 	 */
 	@SuppressWarnings("unused")
-    private LogicContext parentContext = null;
+	private LogicContext parentContext = null;
 	
 	/**
 	 * Patients being processed within this logic context
@@ -98,22 +98,24 @@ public class LogicContextImpl implements LogicContext {
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicContext#eval(org.openmrs.Patient, java.lang.String)
-     */
+	 * @see org.openmrs.logic.LogicContext#eval(org.openmrs.Patient, java.lang.String)
+	 */
 	public Result eval(Patient patient, String token) throws LogicException {
 		return eval(patient, new LogicCriteriaImpl(token), null);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicContext#eval(org.openmrs.Patient, java.lang.String, java.util.Map)
-     */
+	 * @see org.openmrs.logic.LogicContext#eval(org.openmrs.Patient, java.lang.String,
+	 *      java.util.Map)
+	 */
 	public Result eval(Patient patient, String token, Map<String, Object> parameters) throws LogicException {
 		return eval(patient, new LogicCriteriaImpl(token), parameters);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicContext#eval(org.openmrs.Patient, org.openmrs.logic.LogicCriteria, java.util.Map)
-     */
+	 * @see org.openmrs.logic.LogicContext#eval(org.openmrs.Patient,
+	 *      org.openmrs.logic.LogicCriteria, java.util.Map)
+	 */
 	public Result eval(Patient patient, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
 		Result result = getCache().get(patient, criteria, parameters);
 		PatientService patientService = Context.getPatientService();
@@ -157,22 +159,23 @@ public class LogicContextImpl implements LogicContext {
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicContext#getLogicDataSource(java.lang.String)
-     */
+	 * @see org.openmrs.logic.LogicContext#getLogicDataSource(java.lang.String)
+	 */
 	public LogicDataSource getLogicDataSource(String name) {
 		return Context.getLogicService().getLogicDataSource(name);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicContext#read(org.openmrs.Patient, org.openmrs.logic.datasource.LogicDataSource, java.lang.String)
-     */
+	 * @see org.openmrs.logic.LogicContext#read(org.openmrs.Patient,
+	 *      org.openmrs.logic.datasource.LogicDataSource, java.lang.String)
+	 */
 	public Result read(Patient patient, LogicDataSource dataSource, String key) throws LogicException {
 		return read(patient, dataSource, new LogicCriteriaImpl(key));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicContext#read(org.openmrs.Patient, java.lang.String)
-     */
+	 * @see org.openmrs.logic.LogicContext#read(org.openmrs.Patient, java.lang.String)
+	 */
 	public Result read(Patient patient, String key) throws LogicException {
 		
 		LogicService logicService = Context.getLogicService();
@@ -181,8 +184,9 @@ public class LogicContextImpl implements LogicContext {
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicContext#read(org.openmrs.Patient, org.openmrs.logic.LogicCriteria)
-     */
+	 * @see org.openmrs.logic.LogicContext#read(org.openmrs.Patient,
+	 *      org.openmrs.logic.LogicCriteria)
+	 */
 	public Result read(Patient patient, LogicCriteria criteria) throws LogicException {
 		LogicService logicService = Context.getLogicService();
 		LogicDataSource dataSource = logicService.getLogicDataSource("obs");
@@ -190,8 +194,9 @@ public class LogicContextImpl implements LogicContext {
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicContext#read(org.openmrs.Patient, org.openmrs.logic.datasource.LogicDataSource, org.openmrs.logic.LogicCriteria)
-     */
+	 * @see org.openmrs.logic.LogicContext#read(org.openmrs.Patient,
+	 *      org.openmrs.logic.datasource.LogicDataSource, org.openmrs.logic.LogicCriteria)
+	 */
 	public Result read(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
 		Result result = getCache().get(patient, dataSource, criteria);
 		log
@@ -208,43 +213,43 @@ public class LogicContextImpl implements LogicContext {
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicContext#setIndexDate(java.util.Date)
-     */
+	 * @see org.openmrs.logic.LogicContext#setIndexDate(java.util.Date)
+	 */
 	public void setIndexDate(Date indexDate) {
 		this.indexDate = indexDate;
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicContext#getIndexDate()
-     */
+	 * @see org.openmrs.logic.LogicContext#getIndexDate()
+	 */
 	public Date getIndexDate() {
 		return indexDate;
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicContext#today()
-     */
+	 * @see org.openmrs.logic.LogicContext#today()
+	 */
 	public Date today() {
 		return getIndexDate();
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicContext#setGlobalParameter(java.lang.String, java.lang.Object)
-     */
+	 * @see org.openmrs.logic.LogicContext#setGlobalParameter(java.lang.String, java.lang.Object)
+	 */
 	public Object setGlobalParameter(String id, Object value) {
 		return globalParameters.put(id, value);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicContext#getGlobalParameter(java.lang.String)
-     */
+	 * @see org.openmrs.logic.LogicContext#getGlobalParameter(java.lang.String)
+	 */
 	public Object getGlobalParameter(String id) {
 		return globalParameters.get(id);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicContext#getGlobalParameters()
-     */
+	 * @see org.openmrs.logic.LogicContext#getGlobalParameters()
+	 */
 	public Collection<String> getGlobalParameters() {
 		return globalParameters.keySet();
 	}

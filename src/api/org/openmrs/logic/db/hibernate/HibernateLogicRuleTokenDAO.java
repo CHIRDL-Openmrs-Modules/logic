@@ -31,8 +31,8 @@ import org.openmrs.logic.LogicService;
 import org.openmrs.logic.db.LogicRuleTokenDAO;
 
 /**
- * Implementation of methods defined in the {@link RuleTokenDAO}. The function is not meant to be used directly.
- * Use methods available in the LogicService instead.
+ * Implementation of methods defined in the {@link RuleTokenDAO}. The function is not meant to be
+ * used directly. Use methods available in the LogicService instead.
  * 
  * @see {@link LogicService}
  * @see {@link Context}

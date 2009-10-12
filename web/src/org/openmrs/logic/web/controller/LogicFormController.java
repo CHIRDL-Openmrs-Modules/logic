@@ -18,26 +18,26 @@ public class LogicFormController {
 	public void showLogicResult(ModelMap model) {
 		
 		model.addAttribute("authenticatedUser", Context.getAuthenticatedUser());
-
+		
 		try {
 			// get a simple rule for testing
 			
 			LogicService logicService = Context.getLogicService();
-	        Rule rule = logicService.getRule("%%person.birthdate");
-	        
-	        // register the rule
-	        logicService.addRule("birthdate", rule);
-	        
-	        // get a sample person
-	        Patient patient = Context.getPatientService().getPatient(2);
-	        
-	        Result result = logicService.eval(patient, new LogicCriteriaImpl("birthdate"));
-	        
-	        model.addAttribute("result", result);
-        	model.addAttribute("error", "-N/A-");
-        }
-        catch (LogicException e) {
-        	model.addAttribute("error", "Failed to load birthdate rule ...");
-        }
+			Rule rule = logicService.getRule("%%person.birthdate");
+			
+			// register the rule
+			logicService.addRule("birthdate", rule);
+			
+			// get a sample person
+			Patient patient = Context.getPatientService().getPatient(2);
+			
+			Result result = logicService.eval(patient, new LogicCriteriaImpl("birthdate"));
+			
+			model.addAttribute("result", result);
+			model.addAttribute("error", "-N/A-");
+		}
+		catch (LogicException e) {
+			model.addAttribute("error", "Failed to load birthdate rule ...");
+		}
 	}
 }

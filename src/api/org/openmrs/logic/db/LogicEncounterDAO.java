@@ -30,6 +30,7 @@ public interface LogicEncounterDAO {
 	 * @see org.openmrs.api.db.hibernate.HibernateObsDAO#getObservations(List, List, List, List,
 	 *      List, List, List, Integer, Integer, java.util.Date, java.util.Date, boolean)
 	 */
-	public List<Encounter> getEncounters(Cohort who, LogicCriteria logicCriteria, LogicContext context) throws LogicException;
+	public List<Encounter> getEncounters(Cohort who, LogicCriteria logicCriteria, LogicContext context)
+	                                                                                                   throws LogicException;
 	
 }

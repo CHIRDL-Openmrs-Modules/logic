@@ -20,11 +20,10 @@ import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
 
 /**
- * 
  * @see Operand
  */
 public class OperandConcept implements Operand {
-
+	
 	private Concept concept;
 	
 	/**
@@ -37,36 +36,36 @@ public class OperandConcept implements Operand {
 		validOperators.add(ComparisonOperator.EQUALS);
 	}
 	
-    /**
-     * Holds a pointer of the given concept as this Operand
-     * 
-     * @param concept the {@link Concept} to act on
-     */
-    public OperandConcept(Concept concept) {
-	    this.concept = concept;
-    }
-    
-    /**
-     * Get the {@link Concept} pointer behind this Operand
-     * 
-     * @return Concept
-     */
-    public Concept asConcept() {
-    	return concept;
-    }
-    
-    /**
-     * @see java.lang.Object#toString()
-     */
-    public String toString() {
+	/**
+	 * Holds a pointer of the given concept as this Operand
+	 * 
+	 * @param concept the {@link Concept} to act on
+	 */
+	public OperandConcept(Concept concept) {
+		this.concept = concept;
+	}
+	
+	/**
+	 * Get the {@link Concept} pointer behind this Operand
+	 * 
+	 * @return Concept
+	 */
+	public Concept asConcept() {
+		return concept;
+	}
+	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
 		return concept == null ? "null" : concept.getBestName(Context.getLocale()).getName();
 	}
-
-    /**
-     * @see org.openmrs.logic.op.Operand#supports(org.openmrs.logic.op.ComparisonOperator)
-     */
-    public boolean supports(ComparisonOperator operator) {
-	    return validOperators.contains(operator);
-    }
-    
+	
+	/**
+	 * @see org.openmrs.logic.op.Operand#supports(org.openmrs.logic.op.ComparisonOperator)
+	 */
+	public boolean supports(ComparisonOperator operator) {
+		return validOperators.contains(operator);
+	}
+	
 }

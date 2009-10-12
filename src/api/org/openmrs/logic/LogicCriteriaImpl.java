@@ -79,8 +79,8 @@ public class LogicCriteriaImpl implements LogicCriteria {
 	}
 	
 	public LogicCriteriaImpl(Operator operator, String operand) {
-    	this(operator, new OperandText(operand));
-    }
+		this(operator, new OperandText(operand));
+	}
 	
 	public LogicCriteriaImpl(Operator operator, Operand operand, Map<String, Object> logicParameters) {
 		this(operator, operand);
@@ -88,8 +88,9 @@ public class LogicCriteriaImpl implements LogicCriteria {
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#appendExpression(org.openmrs.logic.op.Operator, java.lang.Object)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#appendExpression(org.openmrs.logic.op.Operator,
+	 *      java.lang.Object)
+	 */
 	public LogicCriteria appendExpression(Operator operator, Operand operand) {
 		this.expression = new LogicExpressionBinary(this.expression, operand, operator);
 		
@@ -97,12 +98,12 @@ public class LogicCriteriaImpl implements LogicCriteria {
 	}
 	
 	public LogicCriteria appendExpression(Operator operator, String operand) {
-    	return appendExpression(operator, new OperandText(operand));
-    }
-    
-    public LogicCriteria appendExpression(Operator operator, double operand) {
-    	return appendExpression(operator, new OperandNumeric(operand));
-    }
+		return appendExpression(operator, new OperandText(operand));
+	}
+	
+	public LogicCriteria appendExpression(Operator operator, double operand) {
+		return appendExpression(operator, new OperandNumeric(operand));
+	}
 	
 	private LogicCriteria appendExpression(Operator operator, LogicExpression expression) {
 		if (expression != null) {
@@ -129,8 +130,8 @@ public class LogicCriteriaImpl implements LogicCriteria {
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#applyTransform(org.openmrs.logic.op.Operator)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#applyTransform(org.openmrs.logic.op.Operator)
+	 */
 	public LogicCriteria applyTransform(Operator operator) {
 		if (operator == Operator.LAST) {
 			return last();
@@ -152,58 +153,59 @@ public class LogicCriteriaImpl implements LogicCriteria {
 	
 	// --Logic Operators joining criteria
 	/**
-     * @see org.openmrs.logic.LogicCriteria#appendCriteria(org.openmrs.logic.op.Operator, org.openmrs.logic.LogicCriteria)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#appendCriteria(org.openmrs.logic.op.Operator,
+	 *      org.openmrs.logic.LogicCriteria)
+	 */
 	public LogicCriteria appendCriteria(Operator operator, LogicCriteria logicCriteria) {
 		return appendExpression(operator, logicCriteria.getExpression());
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#and(org.openmrs.logic.LogicCriteria)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#and(org.openmrs.logic.LogicCriteria)
+	 */
 	public LogicCriteria and(LogicCriteria logicCriteria) {
 		return appendExpression(Operator.AND, logicCriteria.getExpression());
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#or(org.openmrs.logic.LogicCriteria)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#or(org.openmrs.logic.LogicCriteria)
+	 */
 	public LogicCriteria or(LogicCriteria logicCriteria) {
 		return appendExpression(Operator.OR, logicCriteria.getExpression());
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#not()
-     */
+	 * @see org.openmrs.logic.LogicCriteria#not()
+	 */
 	public LogicCriteria not() {
 		return appendExpression(Operator.NOT, (Operand) null);
 	}
 	
 	//--Transform Operators
 	/**
-     * @see org.openmrs.logic.LogicCriteria#count()
-     */
+	 * @see org.openmrs.logic.LogicCriteria#count()
+	 */
 	public LogicCriteria count() {
 		return this.appendTransform(Operator.COUNT, null, null);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#average()
-     */
+	 * @see org.openmrs.logic.LogicCriteria#average()
+	 */
 	public LogicCriteria average() {
 		return this.appendTransform(Operator.AVERAGE, null, null);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#last()
-     */
+	 * @see org.openmrs.logic.LogicCriteria#last()
+	 */
 	public LogicCriteria last() {
 		return this.appendTransform(Operator.LAST, null, null);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#last(java.lang.Integer)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#last(java.lang.Integer)
+	 */
 	public LogicCriteria last(Integer numResults) {
 		return this.appendTransform(Operator.LAST, numResults, null);
 	}
@@ -211,302 +213,302 @@ public class LogicCriteriaImpl implements LogicCriteria {
 	//TODO implement this method
 	//after implementing switch to public
 	@SuppressWarnings("unused")
-    private LogicCriteria last(String sortComponent) {
+	private LogicCriteria last(String sortComponent) {
 		return this.appendTransform(Operator.LAST, null, sortComponent);
 	}
 	
 	//TODO implement this method
 	//after implementing switch to public
 	@SuppressWarnings("unused")
-    private LogicCriteria last(Integer numResults, String sortComponent) {
+	private LogicCriteria last(Integer numResults, String sortComponent) {
 		return this.appendTransform(Operator.LAST, numResults, sortComponent);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#first()
-     */
+	 * @see org.openmrs.logic.LogicCriteria#first()
+	 */
 	public LogicCriteria first() {
 		return this.appendTransform(Operator.FIRST, null, null);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#first(java.lang.Integer)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#first(java.lang.Integer)
+	 */
 	public LogicCriteria first(Integer numResults) {
 		return this.appendTransform(Operator.FIRST, numResults, null);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#first(java.lang.String)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#first(java.lang.String)
+	 */
 	public LogicCriteria first(String sortComponent) {
 		return this.appendTransform(Operator.FIRST, null, sortComponent);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#first(java.lang.Integer, java.lang.String)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#first(java.lang.Integer, java.lang.String)
+	 */
 	public LogicCriteria first(Integer numResults, String sortComponent) {
 		return this.appendTransform(Operator.FIRST, numResults, sortComponent);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#distinct()
-     */
+	 * @see org.openmrs.logic.LogicCriteria#distinct()
+	 */
 	public LogicCriteria distinct() {
 		return this.appendTransform(Operator.DISTINCT, null, null);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#exists()
-     */
+	 * @see org.openmrs.logic.LogicCriteria#exists()
+	 */
 	public LogicCriteria exists() {
 		return this.appendTransform(Operator.EXISTS, null, null);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#notExists()
-     */
+	 * @see org.openmrs.logic.LogicCriteria#notExists()
+	 */
 	public LogicCriteria notExists() {
 		return this.appendTransform(Operator.NOT_EXISTS, null, null);
 	}
 	
 	//--Comparison Operators
 	/**
-     * @see org.openmrs.logic.LogicCriteria#asOf(java.util.Date)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#asOf(java.util.Date)
+	 */
 	public LogicCriteria asOf(Date value) {
 		return appendExpression(Operator.ASOF, new OperandDate(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#before(java.util.Date)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#before(java.util.Date)
+	 */
 	public LogicCriteria before(Date value) {
 		
 		return appendExpression(Operator.BEFORE, new OperandDate(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#after(java.util.Date)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#after(java.util.Date)
+	 */
 	public LogicCriteria after(Date value) {
 		return appendExpression(Operator.AFTER, new OperandDate(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#contains(org.openmrs.logic.op.Operand)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#contains(org.openmrs.logic.op.Operand)
+	 */
 	public LogicCriteria contains(Operand value) {
 		return appendExpression(Operator.CONTAINS, value);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#contains(int)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#contains(int)
+	 */
 	public LogicCriteria contains(int value) {
 		return appendExpression(Operator.CONTAINS, new OperandNumeric(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#contains(float)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#contains(float)
+	 */
 	public LogicCriteria contains(float value) {
 		return appendExpression(Operator.CONTAINS, new OperandNumeric(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#contains(double)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#contains(double)
+	 */
 	public LogicCriteria contains(double value) {
 		return appendExpression(Operator.CONTAINS, new OperandNumeric(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#contains(String)
-     */
-    public LogicCriteria contains(String value) {
-    	return appendExpression(Operator.CONTAINS, new OperandText(value));
-    }
+	 * @see org.openmrs.logic.LogicCriteria#contains(String)
+	 */
+	public LogicCriteria contains(String value) {
+		return appendExpression(Operator.CONTAINS, new OperandText(value));
+	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#equalTo(org.openmrs.logic.op.Operand)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#equalTo(org.openmrs.logic.op.Operand)
+	 */
 	public LogicCriteria equalTo(Operand value) {
 		return appendExpression(Operator.EQUALS, value);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#equalTo(int)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#equalTo(int)
+	 */
 	public LogicCriteria equalTo(int value) {
 		return appendExpression(Operator.EQUALS, new OperandNumeric(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#equalTo(float)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#equalTo(float)
+	 */
 	public LogicCriteria equalTo(float value) {
 		return appendExpression(Operator.EQUALS, new OperandNumeric(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#equalTo(double)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#equalTo(double)
+	 */
 	public LogicCriteria equalTo(double value) {
 		return appendExpression(Operator.EQUALS, new OperandNumeric(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#equalTo(String)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#equalTo(String)
+	 */
 	public LogicCriteria equalTo(String value) {
 		return appendExpression(Operator.EQUALS, new OperandText(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#gte(org.openmrs.logic.op.Operand)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#gte(org.openmrs.logic.op.Operand)
+	 */
 	public LogicCriteria gte(Operand value) {
 		return appendExpression(Operator.GTE, value);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#gte(int)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#gte(int)
+	 */
 	public LogicCriteria gte(int value) {
 		return appendExpression(Operator.GTE, new OperandNumeric(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#gte(float)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#gte(float)
+	 */
 	public LogicCriteria gte(float value) {
 		return appendExpression(Operator.GTE, new OperandNumeric(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#gte(double)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#gte(double)
+	 */
 	public LogicCriteria gte(double value) {
 		return appendExpression(Operator.GTE, new OperandNumeric(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#gt(org.openmrs.logic.op.Operand)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#gt(org.openmrs.logic.op.Operand)
+	 */
 	public LogicCriteria gt(Operand value) {
 		return appendExpression(Operator.GT, value);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#gt(int)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#gt(int)
+	 */
 	public LogicCriteria gt(int value) {
 		return appendExpression(Operator.GT, new OperandNumeric(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#gt(float)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#gt(float)
+	 */
 	public LogicCriteria gt(float value) {
 		return appendExpression(Operator.GT, new OperandNumeric(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#gt(double)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#gt(double)
+	 */
 	public LogicCriteria gt(double value) {
 		return appendExpression(Operator.GT, new OperandNumeric(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#lt(org.openmrs.logic.op.Operand)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#lt(org.openmrs.logic.op.Operand)
+	 */
 	public LogicCriteria lt(Operand value) {
 		return appendExpression(Operator.LT, value);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#lt(int)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#lt(int)
+	 */
 	public LogicCriteria lt(int value) {
 		return appendExpression(Operator.LT, new OperandNumeric(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#lt(float)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#lt(float)
+	 */
 	public LogicCriteria lt(float value) {
 		return appendExpression(Operator.LT, new OperandNumeric(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#lt(double)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#lt(double)
+	 */
 	public LogicCriteria lt(double value) {
 		return appendExpression(Operator.LT, new OperandNumeric(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#lte(org.openmrs.logic.op.Operand)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#lte(org.openmrs.logic.op.Operand)
+	 */
 	public LogicCriteria lte(Operand value) {
 		return appendExpression(Operator.LTE, value);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#lte(int)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#lte(int)
+	 */
 	public LogicCriteria lte(int value) {
 		return appendExpression(Operator.LTE, new OperandNumeric(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#lte(float)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#lte(float)
+	 */
 	public LogicCriteria lte(float value) {
 		return appendExpression(Operator.LTE, new OperandNumeric(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#lte(double)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#lte(double)
+	 */
 	public LogicCriteria lte(double value) {
 		return appendExpression(Operator.LTE, new OperandNumeric(value));
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#within(org.openmrs.logic.Duration)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#within(org.openmrs.logic.Duration)
+	 */
 	public LogicCriteria within(Duration duration) {
 		return appendExpression(Operator.WITHIN, duration);
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#getLogicParameters()
-     */
+	 * @see org.openmrs.logic.LogicCriteria#getLogicParameters()
+	 */
 	public Map<String, Object> getLogicParameters() {
 		return logicParameters;
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#setLogicParameters(java.util.Map)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#setLogicParameters(java.util.Map)
+	 */
 	public void setLogicParameters(Map<String, Object> logicParameters) {
 		this.logicParameters = logicParameters;
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#toString()
-     */
+	 * @see org.openmrs.logic.LogicCriteria#toString()
+	 */
 	public String toString() {
 		return this.expression.toString();
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#getRootToken()
-     */
+	 * @see org.openmrs.logic.LogicCriteria#getRootToken()
+	 */
 	public String getRootToken() {
 		return this.expression.getRootToken();
 	}
@@ -534,8 +536,8 @@ public class LogicCriteriaImpl implements LogicCriteria {
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#hashCode()
-     */
+	 * @see org.openmrs.logic.LogicCriteria#hashCode()
+	 */
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -547,8 +549,8 @@ public class LogicCriteriaImpl implements LogicCriteria {
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#equals(java.lang.Object)
-     */
+	 * @see org.openmrs.logic.LogicCriteria#equals(java.lang.Object)
+	 */
 	@Override
 	public boolean equals(Object obj) {
 		
@@ -578,8 +580,8 @@ public class LogicCriteriaImpl implements LogicCriteria {
 	}
 	
 	/**
-     * @see org.openmrs.logic.LogicCriteria#getExpression()
-     */
+	 * @see org.openmrs.logic.LogicCriteria#getExpression()
+	 */
 	public LogicExpression getExpression() {
 		return expression;
 	}

@@ -144,7 +144,15 @@ public class LogicExpressionBinary implements LogicExpression {
 	 * @see org.openmrs.logic.LogicExpression#getTransform()
 	 */
 	public LogicTransform getTransform() {
-		return transform;
+		if (transform != null)
+			return transform;
+		else {
+			Operand operand = getLeftOperand();
+			if (operand instanceof LogicExpression)
+				return ((LogicExpression) operand).getTransform();
+			else
+				return null;
+		}
 	}
 	
 	/**
@@ -153,14 +161,14 @@ public class LogicExpressionBinary implements LogicExpression {
 	public void setTransform(LogicTransform transform) {
 		this.transform = transform;
 	}
-
+	
 	/**
 	 * All expressions support all type of comparison Operators
 	 * 
-     * @see org.openmrs.logic.op.Operand#supports(org.openmrs.logic.op.ComparisonOperator)
-     */
-    public boolean supports(ComparisonOperator operator) {
-	    return true;
-    }
-    
+	 * @see org.openmrs.logic.op.Operand#supports(org.openmrs.logic.op.ComparisonOperator)
+	 */
+	public boolean supports(ComparisonOperator operator) {
+		return true;
+	}
+	
 }

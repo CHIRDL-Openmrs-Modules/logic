@@ -20,7 +20,7 @@ import java.util.List;
  *
  */
 public class OperandNumeric implements Operand {
-
+	
 	private Double value;
 	
 	/**
@@ -37,41 +37,41 @@ public class OperandNumeric implements Operand {
 		validOperators.add(ComparisonOperator.GTE);
 	}
 	
-    public OperandNumeric(Double value) {
-    	this.value = value;
-    }
-    
-    public OperandNumeric(Float value) {
-    	this.value = value.doubleValue();
-    }
-    
-    public OperandNumeric(Integer value) {
-    	this.value = value.doubleValue();
-    }
-        
-    public Double asDouble() {
-    	return value;
-    }
-    
-    public Float asFloat() {
-    	return value == null ? null : value.floatValue(); 
-    }
-    
-    public Integer asInteger() {
-    	return value == null ? null : value.intValue();
-    }
-    
-    /**
-     * @see java.lang.Object#toString()
-     */
-    public String toString() {
+	public OperandNumeric(Double value) {
+		this.value = value;
+	}
+	
+	public OperandNumeric(Float value) {
+		this.value = value.doubleValue();
+	}
+	
+	public OperandNumeric(Integer value) {
+		this.value = value.doubleValue();
+	}
+	
+	public Double asDouble() {
+		return value;
+	}
+	
+	public Float asFloat() {
+		return value == null ? null : value.floatValue();
+	}
+	
+	public Integer asInteger() {
+		return value == null ? null : value.intValue();
+	}
+	
+	/**
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
 		return value == null ? "null" : value.toString();
 	}
-
+	
 	/**
-     * @see org.openmrs.logic.op.Operand#supports(org.openmrs.logic.op.ComparisonOperator)
-     */
-    public boolean supports(ComparisonOperator operator) {
-	    return validOperators.contains(operator);
-    }
+	 * @see org.openmrs.logic.op.Operand#supports(org.openmrs.logic.op.ComparisonOperator)
+	 */
+	public boolean supports(ComparisonOperator operator) {
+		return validOperators.contains(operator);
+	}
 }

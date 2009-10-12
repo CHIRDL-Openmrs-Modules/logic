@@ -33,8 +33,7 @@ import org.openmrs.logic.result.Result;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 /**
- * Tests for the {@link EncounterDataSource} and
- * {@link HibernateLogicEncounterDAO}
+ * Tests for the {@link EncounterDataSource} and {@link HibernateLogicEncounterDAO}
  */
 public class EncounterDataSourceTest extends BaseModuleContextSensitiveTest {
 	
@@ -49,254 +48,265 @@ public class EncounterDataSourceTest extends BaseModuleContextSensitiveTest {
 	}
 	
 	/**
-	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)}
-	 * test = should return date result for encounter key
+	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)} test = should
+	 *           return date result for encounter key
 	 */
 	@Test
 	public void read_shouldReturnDateResultForEncounterKey() throws Exception {
 		Cohort patients = new Cohort("7");
-        LogicContext context = new LogicContextImpl(patients);
-        
-        Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounter"));
-        assertEquals(1, results.size());
-        assertEquals(3, results.get(7).size());
-        assertEquals("Scheduled", results.get(7).get(0).toString());
-        assertEquals("Scheduled", results.get(7).get(1).toString());
-        assertEquals("Emergency", results.get(7).get(2).toString());
+		LogicContext context = new LogicContextImpl(patients);
+		
+		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounter"));
+		assertEquals(1, results.size());
+		assertEquals(3, results.get(7).size());
+		assertEquals("Scheduled", results.get(7).get(0).toString());
+		assertEquals("Scheduled", results.get(7).get(1).toString());
+		assertEquals("Emergency", results.get(7).get(2).toString());
 	}
-
+	
 	/**
-	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)}
-	 * test = should return text result for encounter location key
+	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)} test = should
+	 *           return text result for encounter location key
 	 */
 	@Test
 	public void read_shouldReturnTextResultForEncounterlocationKey() throws Exception {
 		Cohort patients = new Cohort("7");
-        LogicContext context = new LogicContextImpl(patients);
-        
-        Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounterLocation").last());
-        assertEquals(1, results.size());
-        assertEquals(1, results.get(7).size());
-        assertEquals("Xanadu", results.get(7).get(0).toString());
+		LogicContext context = new LogicContextImpl(patients);
+		
+		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounterLocation").last());
+		assertEquals(1, results.size());
+		assertEquals(1, results.get(7).size());
+		assertEquals("Xanadu", results.get(7).get(0).toString());
 	}
-
+	
 	/**
-	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)}
-	 * test = should return text result for encounterprovider key
+	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)} test = should
+	 *           return text result for encounterprovider key
 	 */
 	@Test
 	public void read_shouldReturnTextResultForEncounterproviderKey() throws Exception {
 		Cohort patients = new Cohort("7");
-        LogicContext context = new LogicContextImpl(patients);
-        
-        Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounterProvider").last());
-        assertEquals(1, results.size());
-        assertEquals(1, results.get(7).size());
-        assertEquals("3-4", results.get(7).get(0).toString());
+		LogicContext context = new LogicContextImpl(patients);
+		
+		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounterProvider").last());
+		assertEquals(1, results.size());
+		assertEquals(1, results.get(7).size());
+		assertEquals("3-4", results.get(7).get(0).toString());
 	}
-
+	
 	/**
-	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)}
-	 * test = should not fail with null encounter type
+	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)} test = should
+	 *           not fail with null encounter type
 	 */
 	@Test
 	public void read_shouldNotFailWithNullEncounterType() throws Exception {
 		executeDataSet("org/openmrs/logic/datasource/include/EncounterDataSourceTest.xml");
 		Cohort patients = new Cohort("7");
-        LogicContext context = new LogicContextImpl(patients);
+		LogicContext context = new LogicContextImpl(patients);
 		dataSource.read(context, patients, new LogicCriteriaImpl("encounter").last());
 	}
-
+	
 	/**
-	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)}
-	 * test = should return text result for encounter key
+	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)} test = should
+	 *           return text result for encounter key
 	 */
 	@Test
 	public void read_shouldReturnTextResultForEncounterKey() throws Exception {
 		Cohort patients = new Cohort("7");
-        LogicContext context = new LogicContextImpl(patients);
-        
-        Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounter").first());
-        assertEquals(1, results.size());
-        assertEquals(1, results.get(7).size());
-        assertEquals("Emergency", results.get(7).get(0).toString());
+		LogicContext context = new LogicContextImpl(patients);
+		
+		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounter").first());
+		assertEquals(1, results.size());
+		assertEquals(1, results.get(7).size());
+		assertEquals("Emergency", results.get(7).get(0).toString());
 	}
-
+	
 	/**
-	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)}
-	 * test = should return text result for encounter key and after operator
+	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)} test = should
+	 *           return text result for encounter key and after operator
 	 */
 	@Test
 	public void read_shouldReturnTextResultForEncounterKeyAndAfterOperator() throws Exception {
 		Cohort patients = new Cohort("7");
-        LogicContext context = new LogicContextImpl(patients);
-        
-        Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounter").after(Context.getDateFormat().parse("18/08/2008")));
-        assertEquals(1, results.size());
-        assertEquals(1, results.get(7).size());
-        assertEquals("Scheduled", results.get(7).get(0).toString());
-        assertEquals("2008-08-19 00:00:00.0", results.get(7).get(0).getResultDate().toString());
+		LogicContext context = new LogicContextImpl(patients);
+		
+		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounter").after(Context
+		        .getDateFormat().parse("18/08/2008")));
+		assertEquals(1, results.size());
+		assertEquals(1, results.get(7).size());
+		assertEquals("Scheduled", results.get(7).get(0).toString());
+		assertEquals("2008-08-19 00:00:00.0", results.get(7).get(0).getResultDate().toString());
 	}
-
+	
 	/**
-	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)}
-	 * test = should return text result for encounter key and before operator
+	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)} test = should
+	 *           return text result for encounter key and before operator
 	 */
 	@Test
 	public void read_shouldReturnTextResultForEncounterKeyAndBeforeOperator() throws Exception {
 		Cohort patients = new Cohort("7");
-        LogicContext context = new LogicContextImpl(patients);
-        
-        Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounter").before(Context.getDateFormat().parse("02/08/2008")));
-        assertEquals(1, results.size());
-        assertEquals(1, results.get(7).size());
-        assertEquals("Emergency", results.get(7).get(0).toString());
-        assertEquals("2008-08-01 00:00:00.0", results.get(7).get(0).getResultDate().toString());
+		LogicContext context = new LogicContextImpl(patients);
+		
+		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounter").before(Context
+		        .getDateFormat().parse("02/08/2008")));
+		assertEquals(1, results.size());
+		assertEquals(1, results.get(7).size());
+		assertEquals("Emergency", results.get(7).get(0).toString());
+		assertEquals("2008-08-01 00:00:00.0", results.get(7).get(0).getResultDate().toString());
 	}
-
+	
 	/**
-	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)}
-	 * test = should return text result for encounter key and contains
+	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)} test = should
+	 *           return text result for encounter key and contains
 	 */
 	@Test
 	public void read_shouldReturnTextResultForEncounterKeyAndContains() throws Exception {
 		Cohort patients = new Cohort("7");
-        LogicContext context = new LogicContextImpl(patients);
-        
-        Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounter").contains("Scheduled"));
-        assertEquals(1, results.size());
-        assertEquals(2, results.get(7).size()); // two "scheduled" encounter types for this user
+		LogicContext context = new LogicContextImpl(patients);
+		
+		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounter")
+		        .contains("Scheduled"));
+		assertEquals(1, results.size());
+		assertEquals(2, results.get(7).size()); // two "scheduled" encounter types for this user
 	}
-
+	
 	/**
-	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)}
-	 * test = should return text result for encounter key and equals
+	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)} test = should
+	 *           return text result for encounter key and equals
 	 */
 	@Test
 	public void read_shouldReturnTextResultForEncounterKeyAndEquals() throws Exception {
 		Cohort patients = new Cohort("7");
-        LogicContext context = new LogicContextImpl(patients);
-        
-        Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounter").contains("Emergency"));
-        assertEquals(1, results.size());
-        assertEquals(1, results.get(7).size()); // one "emergency" encounter type for this user
+		LogicContext context = new LogicContextImpl(patients);
+		
+		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounter")
+		        .contains("Emergency"));
+		assertEquals(1, results.size());
+		assertEquals(1, results.get(7).size()); // one "emergency" encounter type for this user
 	}
-
+	
 	/**
-	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)}
-	 * test = should return text result for encounter key and gte
+	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)} test = should
+	 *           return text result for encounter key and gte
 	 */
 	@Test
 	public void read_shouldReturnTextResultForEncounterKeyAndGte() throws Exception {
 		Cohort patients = new Cohort("7");
-        LogicContext context = new LogicContextImpl(patients);
-        
-        Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounter").gte(new OperandDate(Context.getDateFormat().parse("15/08/2008"))));
-        assertEquals(1, results.size());
-        assertEquals(2, results.get(7).size());
-        assertEquals(5, ((Encounter)results.get(7).get(0).toObject()).getEncounterId().intValue());
-        assertEquals(4, ((Encounter)results.get(7).get(1).toObject()).getEncounterId().intValue());
+		LogicContext context = new LogicContextImpl(patients);
+		
+		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounter")
+		        .gte(new OperandDate(Context.getDateFormat().parse("15/08/2008"))));
+		assertEquals(1, results.size());
+		assertEquals(2, results.get(7).size());
+		assertEquals(5, ((Encounter) results.get(7).get(0).toObject()).getEncounterId().intValue());
+		assertEquals(4, ((Encounter) results.get(7).get(1).toObject()).getEncounterId().intValue());
 	}
-
+	
 	/**
-	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)}
-	 * test = should return text result for encounter key and lte
+	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)} test = should
+	 *           return text result for encounter key and lte
 	 */
 	@Test
 	public void read_shouldReturnTextResultForEncounterKeyAndLte() throws Exception {
 		Cohort patients = new Cohort("7");
-        LogicContext context = new LogicContextImpl(patients);
-        
-        Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounter").lte(new OperandDate(Context.getDateFormat().parse("01/08/2008"))));
-        assertEquals(1, results.size());
-        assertEquals(1, results.get(7).size());
-        assertEquals(3, ((Encounter)results.get(7).get(0).toObject()).getEncounterId().intValue());
+		LogicContext context = new LogicContextImpl(patients);
+		
+		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounter")
+		        .lte(new OperandDate(Context.getDateFormat().parse("01/08/2008"))));
+		assertEquals(1, results.size());
+		assertEquals(1, results.get(7).size());
+		assertEquals(3, ((Encounter) results.get(7).get(0).toObject()).getEncounterId().intValue());
 	}
-
+	
 	/**
-	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)}
-	 * test = should return text result for encounter key and within
+	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)} test = should
+	 *           return text result for encounter key and within
 	 */
 	@Test
 	public void read_shouldReturnTextResultForEncounterKeyAndWithin() throws Exception {
 		Cohort patients = new Cohort("7");
-        LogicContext context = new LogicContextImpl(patients);
-        context.setIndexDate(Context.getDateFormat().parse("03/08/2008"));
-        
-        Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounter").within(Duration.days(-5.0)));
-        assertEquals(1, results.size());
-        assertEquals(1, results.get(7).size());
-        assertEquals(3, ((Encounter)results.get(7).get(0).toObject()).getEncounterId().intValue());
+		LogicContext context = new LogicContextImpl(patients);
+		context.setIndexDate(Context.getDateFormat().parse("03/08/2008"));
+		
+		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounter").within(Duration
+		        .days(-5.0)));
+		assertEquals(1, results.size());
+		assertEquals(1, results.get(7).size());
+		assertEquals(3, ((Encounter) results.get(7).get(0).toObject()).getEncounterId().intValue());
 	}
-
+	
 	/**
-	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)}
-	 * test = should return text result for location key and contains
+	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)} test = should
+	 *           return text result for location key and contains
 	 */
 	@Test
 	public void read_shouldReturnTextResultForLocationKeyAndContains() throws Exception {
 		Cohort patients = new Cohort("7");
-        LogicContext context = new LogicContextImpl(patients);
-        context.setIndexDate(Context.getDateFormat().parse("03/08/2008"));
-        
-        Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounterLocation").contains("Unknown Location"));
-        assertEquals(1, results.size());
-        assertEquals(2, results.get(7).size());
-        assertEquals("2008-08-15 00:00:00.0", results.get(7).get(0).getResultDate().toString());
-        assertEquals("2008-08-01 00:00:00.0", results.get(7).get(1).getResultDate().toString());
+		LogicContext context = new LogicContextImpl(patients);
+		context.setIndexDate(Context.getDateFormat().parse("03/08/2008"));
+		
+		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounterLocation")
+		        .contains("Unknown Location"));
+		assertEquals(1, results.size());
+		assertEquals(2, results.get(7).size());
+		assertEquals("2008-08-15 00:00:00.0", results.get(7).get(0).getResultDate().toString());
+		assertEquals("2008-08-01 00:00:00.0", results.get(7).get(1).getResultDate().toString());
 	}
-
+	
 	/**
-	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)}
-	 * test = should return text result for location key and equals
+	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)} test = should
+	 *           return text result for location key and equals
 	 */
 	@Test
 	public void read_shouldReturnTextResultForLocationKeyAndEquals() throws Exception {
 		Cohort patients = new Cohort("7");
-        LogicContext context = new LogicContextImpl(patients);
-        context.setIndexDate(Context.getDateFormat().parse("03/08/2008"));
-        
-        Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounterLocation").contains("Unknown Location"));
-        assertEquals(1, results.size());
-        assertEquals(2, results.get(7).size());
-        assertEquals("2008-08-15 00:00:00.0", results.get(7).get(0).getResultDate().toString());
-        assertEquals("2008-08-01 00:00:00.0", results.get(7).get(1).getResultDate().toString());
+		LogicContext context = new LogicContextImpl(patients);
+		context.setIndexDate(Context.getDateFormat().parse("03/08/2008"));
+		
+		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounterLocation")
+		        .contains("Unknown Location"));
+		assertEquals(1, results.size());
+		assertEquals(2, results.get(7).size());
+		assertEquals("2008-08-15 00:00:00.0", results.get(7).get(0).getResultDate().toString());
+		assertEquals("2008-08-01 00:00:00.0", results.get(7).get(1).getResultDate().toString());
 	}
-
+	
 	/**
-	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)}
-	 * test = should return text result for provider key and contains
+	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)} test = should
+	 *           return text result for provider key and contains
 	 */
 	@Test
 	public void read_shouldReturnTextResultForProviderKeyAndContains() throws Exception {
 		Cohort patients = new Cohort("7");
-        LogicContext context = new LogicContextImpl(patients);
-        context.setIndexDate(Context.getDateFormat().parse("03/08/2008"));
-        
-        Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounterProvider").contains("3-4"));
-        assertEquals(1, results.size());
-        assertEquals(3, results.get(7).size());
-        assertEquals("2008-08-19 00:00:00.0", results.get(7).get(0).getResultDate().toString());
-        assertEquals("2008-08-15 00:00:00.0", results.get(7).get(1).getResultDate().toString());
-        assertEquals("2008-08-01 00:00:00.0", results.get(7).get(2).getResultDate().toString());
+		LogicContext context = new LogicContextImpl(patients);
+		context.setIndexDate(Context.getDateFormat().parse("03/08/2008"));
+		
+		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounterProvider")
+		        .contains("3-4"));
+		assertEquals(1, results.size());
+		assertEquals(3, results.get(7).size());
+		assertEquals("2008-08-19 00:00:00.0", results.get(7).get(0).getResultDate().toString());
+		assertEquals("2008-08-15 00:00:00.0", results.get(7).get(1).getResultDate().toString());
+		assertEquals("2008-08-01 00:00:00.0", results.get(7).get(2).getResultDate().toString());
 	}
-
+	
 	/**
-	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)}
-	 * test = should return text result for provider key and equals
+	 * @verifies {@link EncounterDataSource#read(LogicContext,Cohort,LogicCriteria)} test = should
+	 *           return text result for provider key and equals
 	 */
 	@Test
 	public void read_shouldReturnTextResultForProviderKeyAndEquals() throws Exception {
 		Cohort patients = new Cohort("7");
-        LogicContext context = new LogicContextImpl(patients);
-        context.setIndexDate(Context.getDateFormat().parse("03/08/2008"));
-        
-        Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounterProvider").contains("3-4"));
-        assertEquals(1, results.size());
-        assertEquals(3, results.get(7).size());
-        assertEquals("2008-08-19 00:00:00.0", results.get(7).get(0).getResultDate().toString());
-        assertEquals("2008-08-15 00:00:00.0", results.get(7).get(1).getResultDate().toString());
-        assertEquals("2008-08-01 00:00:00.0", results.get(7).get(2).getResultDate().toString());
+		LogicContext context = new LogicContextImpl(patients);
+		context.setIndexDate(Context.getDateFormat().parse("03/08/2008"));
+		
+		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounterProvider")
+		        .contains("3-4"));
+		assertEquals(1, results.size());
+		assertEquals(3, results.get(7).size());
+		assertEquals("2008-08-19 00:00:00.0", results.get(7).get(0).getResultDate().toString());
+		assertEquals("2008-08-15 00:00:00.0", results.get(7).get(1).getResultDate().toString());
+		assertEquals("2008-08-01 00:00:00.0", results.get(7).get(2).getResultDate().toString());
 	}
-
+	
 }

@@ -18,7 +18,6 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.Activator;
 
-
 /**
  *
  */

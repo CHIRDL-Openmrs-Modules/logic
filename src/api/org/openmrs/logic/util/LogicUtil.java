@@ -45,14 +45,14 @@ import org.openmrs.logic.rule.ReferenceRule;
 public class LogicUtil {
 	
 	private static final Log log = LogFactory.getLog(LogicUtil.class);
-
+	
 	/**
 	 * Programmatically applies aggregators like COUNT, AVERAGE, etc
 	 * 
 	 * @param finalResult result map of patient id to result list
 	 * @param criteria provides type of transform
 	 */
-	public static void applyAggregators(Map<Integer, Result> finalResult, LogicCriteria criteria,Cohort patients) {
+	public static void applyAggregators(Map<Integer, Result> finalResult, LogicCriteria criteria, Cohort patients) {
 		Set<Integer> personIds = finalResult.keySet();
 		LogicTransform transform = criteria.getExpression().getTransform();
 		
@@ -101,7 +101,8 @@ public class LogicUtil {
 	}
 	
 	/**
-	 * Initialize global settings.  Load default rules at startup, creating if necessary
+	 * Initialize global settings. Load default rules at startup, creating if necessary
+	 * 
 	 * @param p properties from runtime configuration
 	 */
 	public static void registerDefaultRules() throws InvalidReferenceRuleException {
@@ -112,23 +113,24 @@ public class LogicUtil {
 		
 		for (String dataSourceName : dataSources.keySet()) {
 			LogicDataSource dataSource = dataSources.get(dataSourceName);
-
+			
 			if ("obs".equalsIgnoreCase(dataSourceName)) {
 				
 				// Register Tokens for all Concepts in specified classes
 				List<ConceptClass> conceptClasses = new ArrayList<ConceptClass>();
-				String classProp = Context.getAdministrationService().getGlobalProperty("logic.defaultTokens.conceptClasses");
+				String classProp = Context.getAdministrationService()
+				        .getGlobalProperty("logic.defaultTokens.conceptClasses");
 				if (classProp != null) {
 					for (String className : classProp.split(",")) {
 						conceptClasses.add(Context.getConceptService().getConceptClassByName(className));
 					}
-				}
-				else {
+				} else {
 					conceptClasses = Context.getConceptService().getAllConceptClasses();
 				}
 				
 				Locale conceptNameLocale = Locale.US;
-				String localeProp = Context.getAdministrationService().getGlobalProperty("logic.defaultTokens.conceptNameLocale");
+				String localeProp = Context.getAdministrationService().getGlobalProperty(
+				    "logic.defaultTokens.conceptNameLocale");
 				if (localeProp != null) {
 					conceptNameLocale = new Locale(localeProp);
 				}
@@ -142,8 +144,7 @@ public class LogicUtil {
 						}
 					}
 				}
-			}
-			else {
+			} else {
 				for (String key : dataSource.getKeys()) {
 					Rule r = new ReferenceRule(dataSourceName + "." + key);
 					registerRule(key, r);

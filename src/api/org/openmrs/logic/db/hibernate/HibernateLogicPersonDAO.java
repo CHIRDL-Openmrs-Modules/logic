@@ -34,7 +34,7 @@ import org.openmrs.logic.LogicTransform;
 import org.openmrs.logic.db.LogicPersonDAO;
 import org.openmrs.logic.op.Operator;
 import org.openmrs.logic.util.LogicExpressionToCriterion;
-	
+
 /**
  * 
  */
@@ -68,7 +68,7 @@ public class HibernateLogicPersonDAO extends LogicExpressionToCriterion implemen
 	// Helper function, converts logic service's criteria into Hibernate's
 	// criteria
 	@SuppressWarnings("unchecked")
-    private List<Person> logicToHibernate(LogicExpression expression, Collection<Integer> personIds) {
+	private List<Person> logicToHibernate(LogicExpression expression, Collection<Integer> personIds) {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Person.class);
 		
 		Date indexDate = Calendar.getInstance().getTime();
@@ -129,7 +129,7 @@ public class HibernateLogicPersonDAO extends LogicExpressionToCriterion implemen
 	}
 	
 	/**
-	 * @throws LogicException 
+	 * @throws LogicException
 	 * @see org.openmrs.api.db.PersonDAO#getPeople(String, Boolean)
 	 */
 	public List<Person> getPersons(Collection<Integer> personIds, LogicCriteria logicCriteria) throws LogicException {

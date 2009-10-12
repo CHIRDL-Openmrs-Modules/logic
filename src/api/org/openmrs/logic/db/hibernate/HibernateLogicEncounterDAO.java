@@ -74,7 +74,7 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 	 * @param logicExpression
 	 * @param indexDate
 	 * @param criteria Criteria object so that certain expressions can add aliases, etc
-	 * @return Criterion to be added to the Criteria 
+	 * @return Criterion to be added to the Criteria
 	 */
 	public Criterion getCriterion(LogicExpression logicExpression, Date indexDate, Criteria criteria) {
 		Operator operator = logicExpression.getOperator();
@@ -88,7 +88,7 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 		//if the leftOperand is a String and does not match any components,
 		//see if it is a concept name and restrict accordingly
 		//a null operator implies a concept restriction
-		if (leftOperand instanceof LogicExpression){
+		if (leftOperand instanceof LogicExpression) {
 			// no restrictions if there is no operator
 			// TODO restrict on provider != null for encounterProvider token?
 		}
@@ -122,10 +122,10 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 				}
 				
 				if (leftCriteria != null && rightCriteria != null) {
-					if(operator == Operator.AND){
+					if (operator == Operator.AND) {
 						criterion.add(Restrictions.and(leftCriteria, rightCriteria));
 					}
-					if(operator == Operator.OR){
+					if (operator == Operator.OR) {
 						criterion.add(Restrictions.or(leftCriteria, rightCriteria));
 					}
 				}
@@ -147,48 +147,43 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 		} else if (operator == Operator.CONTAINS) {
 			if (ENCOUNTER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
 				criteria.createAlias("encounterType", "encounterType");
-				criterion.add(Expression.eq("encounterType.name", ((OperandText)rightOperand).asString()));
-			}
-			else if (LOCATION_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
+				criterion.add(Expression.eq("encounterType.name", ((OperandText) rightOperand).asString()));
+			} else if (LOCATION_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
 				criteria.createAlias("location", "location");
-				criterion.add(Restrictions.eq("location.name", ((OperandText)rightOperand).asString()));
-			}
-			else if (PROVIDER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
+				criterion.add(Restrictions.eq("location.name", ((OperandText) rightOperand).asString()));
+			} else if (PROVIDER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
 				criteria.createAlias("provider", "provider");
-				criterion.add(Restrictions.eq("provider.systemId", ((OperandText)rightOperand).asString()));
-			}
-			else {
+				criterion.add(Restrictions.eq("provider.systemId", ((OperandText) rightOperand).asString()));
+			} else {
 				throw new LogicException("'contains' is not a valid operator on " + token + " and " + rightOperand);
 			}
 		} else if (operator == Operator.EQUALS) {
 			if (ENCOUNTER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandDate) {
 				criterion.add(Restrictions.eq("encounterDatetime", rightOperand));
-			}
-			else if (ENCOUNTER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
+			} else if (ENCOUNTER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
 				criteria.createAlias("encounterType", "encounterType");
-				criterion.add(Restrictions.eq("encounterType.name", ((OperandText)rightOperand).asString()));
-			}
-			else if (LOCATION_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
+				criterion.add(Restrictions.eq("encounterType.name", ((OperandText) rightOperand).asString()));
+			} else if (LOCATION_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
 				criteria.createAlias("location", "location");
-				criterion.add(Restrictions.eq("location.name", ((OperandText)rightOperand).asString()));
-			}
-			else if (PROVIDER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
+				criterion.add(Restrictions.eq("location.name", ((OperandText) rightOperand).asString()));
+			} else if (PROVIDER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
 				criteria.createAlias("provider", "provider");
-				criterion.add(Restrictions.eq("provider.systemId", ((OperandText)rightOperand).asString()));
-			}
-			else {
-				throw new LogicException ("'equals' is not a valid operator on " + token + " and " + rightOperand);
+				criterion.add(Restrictions.eq("provider.systemId", ((OperandText) rightOperand).asString()));
+			} else {
+				throw new LogicException("'equals' is not a valid operator on " + token + " and " + rightOperand);
 			}
 		} else if (operator == Operator.LTE) {
 			if (rightOperand instanceof OperandDate)
 				criterion.add(Restrictions.le("encounterDatetime", rightOperand));
 			else
-				throw new LogicException("'less than or equals' is not a valid operator on " + token + " and " + rightOperand);
+				throw new LogicException("'less than or equals' is not a valid operator on " + token + " and "
+				        + rightOperand);
 		} else if (operator == Operator.GTE) {
 			if (rightOperand instanceof OperandDate)
 				criterion.add(Restrictions.ge("encounterDatetime", rightOperand));
 			else
-				throw new LogicException("'greater than or equals' is not a valid operator on " + token + " and " + rightOperand);
+				throw new LogicException("'greater than or equals' is not a valid operator on " + token + " and "
+				        + rightOperand);
 		} else if (operator == Operator.LT) {
 			if (rightOperand instanceof OperandDate)
 				criterion.add(Restrictions.lt("encounterDatetime", rightOperand));
@@ -254,7 +249,8 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 	// Helper function, converts logic service's criteria into Hibernate's
 	// criteria
 	@SuppressWarnings("unchecked")
-    private List<Encounter> logicToHibernate(LogicExpression expression, Cohort who, LogicContext logicContext) throws LogicException {
+	private List<Encounter> logicToHibernate(LogicExpression expression, Cohort who, LogicContext logicContext)
+	                                                                                                           throws LogicException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Encounter.class);
 		
 		Date indexDate = logicContext.getIndexDate();
@@ -274,7 +270,8 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 		// set the transform and evaluate the right criteria
 		// if there is any
 		if (transformOperator == Operator.LAST) {
-			criteria.addOrder(Order.desc("encounterDatetime")).addOrder(Order.desc("dateCreated")).addOrder(Order.desc("encounterId"));
+			criteria.addOrder(Order.desc("encounterDatetime")).addOrder(Order.desc("dateCreated")).addOrder(
+			    Order.desc("encounterId"));
 		} else if (transformOperator == Operator.FIRST) {
 			criteria.addOrder(Order.asc("encounterDatetime")).addOrder(Order.asc("encounterId"));
 		} else if (transformOperator == Operator.DISTINCT) {
@@ -328,7 +325,8 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 	 * @see org.openmrs.api.db.EncounterDAO#getEncounters(org.openmrs.Patient, org.openmrs.Location,
 	 *      Date, Date, java.util.Collection, java.util.Collection, java.util.Collection, boolean)
 	 */
-	public List<Encounter> getEncounters(Cohort who, LogicCriteria logicCriteria, LogicContext logicContext) throws LogicException {
+	public List<Encounter> getEncounters(Cohort who, LogicCriteria logicCriteria, LogicContext logicContext)
+	                                                                                                        throws LogicException {
 		return logicToHibernate(logicCriteria.getExpression(), who, logicContext);
 	}
 	
