@@ -5,7 +5,7 @@
 	<!-- logic Module Properties -->
 	<id>logic</id>
 	<name>Logic Module</name>
-	<version>1.0</version>
+	<version>0.1</version>
 	<package>org.openmrs.@MODULE_ID@</package>
 	<author>OpenMRS Core Developer</author>
 	<description>
