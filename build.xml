@@ -124,6 +124,28 @@
 			</fileset>
 		</jar>
 	</target>
+	
+	<target name="queryparser-clean-grammar" description="TODO: write description">
+			<delete>
+				<fileset dir="build/org/openmrs/logic/queryparser">
+				    <include name="**/*.class"/>
+				    <include name="**/*.java"/>
+				</fileset>
+				<fileset dir="src/api/org/openmrs/logic/queryparser">
+				    <include name="**/LogicQuery*.java"/>
+				    <include name="**/*.txt"/>
+				    <include name="**/*.smap"/>
+				    <include name="**/*.class"/>
+				    <include name="**/*.txt"/>
+				</fileset>
+			</delete>
+		</target>
+			
+		<target name="queryparser-make-antlr" description="TODO: write description">
+			<antlr target="src/api/org/openmrs/logic/queryparser/LogicQueryParser.g">
+				<classpath path="lib/antlr/antlr_2.7.6.jar" />
+			</antlr>
+		</target>
 
 </project>
 

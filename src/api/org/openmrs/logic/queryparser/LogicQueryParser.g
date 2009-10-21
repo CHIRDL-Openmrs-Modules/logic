@@ -502,7 +502,7 @@ options {
 
 //(of_read_func_op) | (from_of_func_op (INTLIT )?) expr (temporal_comp_op iso_date_time) ?	SEMI; 
  
-query_AST returns [LogicCriteria lc_return = null]
+query_AST returns [LogicCriteriaImpl lc_return = null]
 {String a = "", b="";
 Operator transform = null, comp_op = null, temporal_op = null;
 boolean lcFormed = false;
@@ -539,7 +539,7 @@ LogicCriteria lc = null;
 			(
 				#(idt:ID 
 					      { b += idt.getText(); //System.err.println("text = " + b);
-					      	lc = new LogicCriteria(null,a);
+					      	lc = new LogicCriteriaImpl(null,a);
 			 				lc.appendExpression(comp_op, b);
 			 				//lc_return = lc.applyTransform(transform);
 			 				lcFormed = true;
@@ -549,7 +549,7 @@ LogicCriteria lc = null;
 			    |
 				#(idstr:STRING_LITERAL 
 						  { b += idstr.getText(); //System.err.println("text = " + b);
-						  	lc = new LogicCriteria(null,a);
+						  	lc = new LogicCriteriaImpl(null,a);
 						 	lc.appendExpression(comp_op, b);
 			 				//lc_return = lc.applyTransform(transform);
 							lcFormed = true;
@@ -562,7 +562,7 @@ LogicCriteria lc = null;
 						  	Integer i = null;
 						
 						  	i = Integer.parseInt(b);
-						  	lc = new LogicCriteria(null,a);
+						  	lc = new LogicCriteriaImpl(null,a);
 			 				
 				  			lc.appendExpression(comp_op, i);
 			 				//lc_return = lc.applyTransform(transform);
@@ -585,7 +585,7 @@ LogicCriteria lc = null;
 							idbl = Double.parseDouble(dbl);
 							  											
 							
-						  	lc = new LogicCriteria(null,a);
+						  	lc = new LogicCriteriaImpl(null,a);
 			 				
 				  			lc.appendExpression(comp_op, idbl);
 			 				//lc_return = lc.applyTransform(transform);
@@ -600,7 +600,7 @@ LogicCriteria lc = null;
 				(
 					{GregorianCalendar gc = new GregorianCalendar();} b = dateAST [gc] 
 							{
-								lc.appendExpression(temporal_op, gc.getTime());
+								lc.appendExpression(temporal_op, new OperandDate(gc.getTime()));
 						 		//lc_return = lc.applyTransform(transform);
 						 		lcFormed = true;
 							} 		  		
@@ -617,8 +617,8 @@ LogicCriteria lc = null;
 			(
 				{GregorianCalendar gc = new GregorianCalendar();} b = dateAST [gc] 
 						{
-						    lc = new LogicCriteria(null,a);
-					 		lc.appendExpression(temporal_op, gc.getTime());
+						    lc = new LogicCriteriaImpl(null,a);
+					 		lc.appendExpression(temporal_op, new OperandDate(gc.getTime()));
 					 		//lc_return = lc.applyTransform(transform);
 					 		lcFormed = true;
 						} 		  		
@@ -630,11 +630,11 @@ LogicCriteria lc = null;
 	{
 		if(lcFormed == false)  // just a terminal symbol like CD4 COUNT
 		{
-			lc_return = new LogicCriteria(null,a);
+			lc_return = new LogicCriteriaImpl(null,a);
 		}
 		else
 		{
-			lc_return = lc.applyTransform(transform);
+			lc_return = (LogicCriteriaImpl) lc.applyTransform(transform);
 		}
 		return lc_return;
 	}   		       
@@ -659,13 +659,13 @@ dateAST [GregorianCalendar calendar] returns [String s = ""]
 	      ( tyear: INTLIT 
 	      	{	 year = tyear.getText();
 	      		 s += year; s += "-";
-	      		 calendar.set(calendar.YEAR, Integer.valueOf(year)); 
+	      		 calendar.set(GregorianCalendar.YEAR, Integer.valueOf(year)); 
 	       	} 
 	     
 	     	tmonth: INTLIT 
 	      	{	 month = tmonth.getText();
 	      		 s += month; s += "-";
-	      		 calendar.set(calendar.MONTH, Integer.valueOf(month) - 1);  // Month is 0 -11 in the Calendar class 
+	      		 calendar.set(GregorianCalendar.MONTH, Integer.valueOf(month) - 1);  // Month is 0 -11 in the Calendar class 
 	       	}
 	      )	
 	    		  
@@ -673,7 +673,7 @@ dateAST [GregorianCalendar calendar] returns [String s = ""]
 	   tday: INTLIT 
 	   { day = tday.getText();
 	   	 s += day; 
-	     calendar.set(calendar.DAY_OF_MONTH, Integer.valueOf(day));
+	     calendar.set(GregorianCalendar.DAY_OF_MONTH, Integer.valueOf(day));
 	   } 	 
 	 ) 
 	 
