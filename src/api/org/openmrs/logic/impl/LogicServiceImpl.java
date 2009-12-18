@@ -367,13 +367,20 @@ public class LogicServiceImpl implements LogicService {
 	/**
 	 * @see org.openmrs.logic.LogicService#parseString(java.lang.String)
 	 */
-	public LogicCriteriaImpl parseString(String inStr) {
+	public LogicCriteria parseString(String inStr) {
+		return parse(inStr);
+	}
+
+	/**
+	 * @see org.openmrs.logic.LogicService#parse(java.lang.String)
+	 */
+	public LogicCriteria parse(String criteria) {
 		
 		try {
-			if (!inStr.endsWith(";")) {
-				inStr += ";";
+			if (!criteria.endsWith(";")) {
+				criteria += ";";
 			}
-			byte currentBytes[] = inStr.getBytes();
+			byte currentBytes[] = criteria.getBytes();
 			
 			ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(currentBytes);
 			
@@ -400,5 +407,5 @@ public class LogicServiceImpl implements LogicService {
 			log.error(e.getStackTrace());
 			return null;
 		}
-	}
+    }
 }

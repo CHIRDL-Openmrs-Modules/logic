@@ -38,9 +38,6 @@
 	<classpathentry kind="lib" path="lib-common/spring-framework/spring-test.jar"/>
 	<classpathentry kind="lib" path="lib-common/spring-framework/spring-webmvc.jar"/>
 	<classpathentry kind="lib" path="lib-common/junit/junit-4.4.jar"/>
-	<classpathentry kind="lib" path="lib-common/openmrs/openmrs-api-1.6.0.10628-dev.jar"/>
-	<classpathentry kind="lib" path="lib-common/openmrs/tests-openmrs-api-1.6.0.10628-dev.jar"/>
-	<classpathentry kind="lib" path="lib-common/openmrs/web-openmrs-api-1.6.0.10628-dev.jar"/>
 	<classpathentry kind="lib" path="lib-common/spring-framework/spring-2.5.6.jar"/>
 	<classpathentry kind="lib" path="lib-common/hibernate/hibernate325-mod.jar"/>
 	<classpathentry kind="lib" path="lib-common/commons-lang/commons-lang-2.4.jar"/>
@@ -77,5 +74,8 @@
 	<classpathentry kind="lib" path="dist/logic-0.1.omod" sourcepath="src/api"/>
 	<classpathentry kind="lib" path="lib-common/junit/dbunit-2.4.4.jar"/>
 	<classpathentry kind="lib" path="lib-common/junit/hsqldb-1.8.0.10.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs/openmrs-api-1.6.0.11511-dev.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs/tests-openmrs-api-1.6.0.11511-dev.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs/web-openmrs-api-1.6.0.11511-dev.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
