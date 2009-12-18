@@ -1,46 +1,81 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/junit/junit-4.4.jar" sourcepath="/openmrs-source/junit-4.4-src.jar"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/junit/xmlunit-1.2.jar" sourcepath="/openmrs-source/xmlunit-1.2-src.zip"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/junit/hsqldb-1.8.0.10.jar" sourcepath="/openmrs-source/hsqldb_1_8_0_9.zip"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/junit/dbunit-2.4.4.jar" sourcepath="/openmrs-source/dbunit-2.2-src.zip"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
 	<classpathentry kind="src" path="src/api"/>
 	<classpathentry kind="src" path="test/api"/>
 	<classpathentry kind="src" path="web/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/spring-framework/spring-2.5.6.jar" sourcepath="/openmrs-source/spring-2.5.1-src.zip"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/spring-framework/spring-test.jar" sourcepath="/openmrs-source/spring-framework-2.5.1-with-dependencies.zip"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/spring-framework/spring-webmvc.jar" sourcepath="/openmrs-source/spring-webmvc-sources.zip"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/mail/mail.jar"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/antlr/antlr_2.7.6.jar"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/liquibase/liquibase-1.9.4-mod.jar" sourcepath="/liquibase-19x"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/jakarta-log4j/log4j-1.2.15.jar" sourcepath="/openmrs-source/apache-log4j-1.2.15.zip"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/tomcat/jsp-api.jar" sourcepath="/openmrs-source/apache-tomcat-5.5.20-src.zip"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/jstl/jstl-1.1.jar" sourcepath="/openmrs-source/apache-tomcat-5.5.20-src.zip"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/dwr/dwr-205.jar" sourcepath="/openmrs-source/dwr-2.0.5-src.zip"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/jakarta-taglibs/taglibs-standard-1.1.jar"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/dom4j/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/jta/jta.jar"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/commons-collections/commons-collections-3.2.jar"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/c3p0/c3p0-0.9.1.jar" sourcepath="/openmrs-source/c3p0-0.9.1-pre9.zip"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/ehcache/ehcache-1.2.4.jar" sourcepath="/openmrs-source/ehcache-1.2.4-src.zip"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/cglib/cglib-2.1_3.jar"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/asm/asm-1.5.3.jar"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/hl7api/hapi-0.5.jar" sourcepath="/openmrs-source/hapi-0.5_source_v25.zip"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/slf4j/slf4j-api-1.5.6.jar"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/slf4j/slf4j-log4j12-1.5.6.jar"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/commons-lang/commons-lang-2.4.jar"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/mysql-connector-java/mysql-connector-java-5.1.7-bin.jar"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/slf4j/jcl-over-slf4j-1.5.6.jar"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/hibernate/hibernate325-mod.jar" sourcepath="/openmrs-source/hibernate-3.2.5ga-lite.zip"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/simple/simple-xml-1.6.1-mod.jar" sourcepath="/Simple-xml-stream-clean/src"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/tomcat/servlet-api.jar" sourcepath="/openmrs-source/apache-tomcat-5.5.20-src.zip"/>
 	<classpathentry kind="lib" path="metadata"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/dist/openmrs-api-1.6.0.10516-dev.jar"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/dist/tests-openmrs-api-1.6.0.10516-dev.jar"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/dist/web-openmrs-api-1.6.0.10516-dev.jar"/>
 	<classpathentry kind="lib" path="dist"/>
-	<classpathentry kind="lib" path="/trunk2logicmodule/lib/xerces/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib-common/config-1.0.dtd"/>
+	<classpathentry kind="lib" path="lib-common/antlr/antlr_2.7.6.jar"/>
+	<classpathentry kind="lib" path="lib-common/c3p0/c3p0-0.9.1.jar"/>
+	<classpathentry kind="lib" path="lib-common/cglib/cglib-2.1_3.jar"/>
+	<classpathentry kind="lib" path="lib-common/commons-beanutils/commons-beanutils-1.7.0.jar"/>
+	<classpathentry kind="lib" path="lib-common/commons-beanutils/commons-beanutils-bean-collections-1.7.0.jar"/>
+	<classpathentry kind="lib" path="lib-common/commons-beanutils/commons-beanutils-core-1.7.0.jar"/>
+	<classpathentry kind="lib" path="lib-common/commons-fileupload/commons-fileupload-1.1.1.jar"/>
+	<classpathentry kind="lib" path="lib-common/commons-logging/commons-logging-1.0.4.jar"/>
+	<classpathentry kind="lib" path="lib-common/dom4j/dom4j-1.6.1.jar"/>
+	<classpathentry kind="lib" path="lib-common/ehcache/ehcache-1.2.4.jar"/>
+	<classpathentry kind="lib" path="lib-common/hl7api/hapi-0.5.jar"/>
+	<classpathentry kind="lib" path="lib-common/jakarta-log4j/log4j-1.2.13.jar"/>
+	<classpathentry kind="lib" path="lib-common/jakarta-taglibs/taglibs-page-1.1.jar"/>
+	<classpathentry kind="lib" path="lib-common/jakarta-taglibs/taglibs-request-1.1.jar"/>
+	<classpathentry kind="lib" path="lib-common/jakarta-taglibs/taglibs-response-1.1.jar"/>
+	<classpathentry kind="lib" path="lib-common/jakarta-taglibs/taglibs-standard-1.1.jar"/>
+	<classpathentry kind="lib" path="lib-common/jstl/jstl-1.1.jar"/>
+	<classpathentry kind="lib" path="lib-common/jta/jta.jar"/>
+	<classpathentry kind="lib" path="lib-common/mail/activation.jar"/>
+	<classpathentry kind="lib" path="lib-common/mail/mail.jar"/>
+	<classpathentry kind="lib" path="lib-common/saxon/saxon8.jar"/>
+	<classpathentry kind="lib" path="lib-common/saxon/saxon8-dom.jar"/>
+	<classpathentry kind="lib" path="lib-common/xerces/resolver.jar"/>
+	<classpathentry kind="lib" path="lib-common/xerces/xercesImpl.jar"/>
+	<classpathentry kind="lib" path="lib-common/xerces/xml-apis.jar"/>
+	<classpathentry kind="lib" path="lib-common/stax/stax-1.2.0.jar"/>
+	<classpathentry kind="lib" path="lib-common/stax/stax-api-1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib-common/tomcat/servlet-api.jar"/>
+	<classpathentry kind="lib" path="lib-common/spring-framework/spring-test.jar"/>
+	<classpathentry kind="lib" path="lib-common/spring-framework/spring-webmvc.jar"/>
+	<classpathentry kind="lib" path="lib-common/junit/junit-4.4.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs/openmrs-api-1.6.0.10628-dev.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs/tests-openmrs-api-1.6.0.10628-dev.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs/web-openmrs-api-1.6.0.10628-dev.jar"/>
+	<classpathentry kind="lib" path="lib-common/spring-framework/spring-2.5.6.jar"/>
+	<classpathentry kind="lib" path="lib-common/hibernate/hibernate325-mod.jar"/>
+	<classpathentry kind="lib" path="lib-common/commons-lang/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="lib-common/ant-contrib/ant-contrib-1.0b2.jar"/>
+	<classpathentry kind="lib" path="lib-common/asm/asm-1.5.3.jar"/>
+	<classpathentry kind="lib" path="lib-common/commons-collections/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="lib-common/commons-digester/commons-digester.jar"/>
+	<classpathentry kind="lib" path="lib-common/benerator/databene-benerator-0.5.5.jar"/>
+	<classpathentry kind="lib" path="lib-common/benerator/databene-commons-0.4.5.jar"/>
+	<classpathentry kind="lib" path="lib-common/benerator/databene-webdecs-0.4.5.jar"/>
+	<classpathentry kind="lib" path="lib-common/commons-io/commons-io-1.4.jar"/>
+	<classpathentry kind="lib" path="lib-common/commons-pool/commons-pool-1.2.jar"/>
+	<classpathentry kind="lib" path="lib-common/dwr/dwr-205.jar"/>
+	<classpathentry kind="lib" path="lib-common/jakarta-log4j/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="lib-common/jfreechart/jcommon-1.0.15.jar"/>
+	<classpathentry kind="lib" path="lib-common/jfreechart/jfreechart-1.0.12.jar"/>
+	<classpathentry kind="lib" path="lib-common/junit/xmlunit-1.2.jar"/>
+	<classpathentry kind="lib" path="lib-common/liquibase/liquibase-1.9.1-mod.jar"/>
+	<classpathentry kind="lib" path="lib-common/mysql-connector-java/mysql-connector-java-5.1.7-bin.jar"/>
+	<classpathentry kind="lib" path="lib-common/poi/poi-3.1.jar"/>
+	<classpathentry kind="lib" path="lib-common/quartz/quartz-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib-common/simple/simple-xml-1.6.1-mod.jar"/>
+	<classpathentry kind="lib" path="lib-common/slf4j/jcl-over-slf4j-1.5.6.jar"/>
+	<classpathentry kind="lib" path="lib-common/slf4j/slf4j-api-1.5.6.jar"/>
+	<classpathentry kind="lib" path="lib-common/slf4j/slf4j-log4j12-1.5.6.jar"/>
+	<classpathentry kind="lib" path="lib-common/tomcat/catalina-ant.jar"/>
+	<classpathentry kind="lib" path="lib-common/tomcat/catalina.jar"/>
+	<classpathentry kind="lib" path="lib-common/tomcat/jsp-api.jar"/>
+	<classpathentry kind="lib" path="lib-common/tomcat/naming-resources.jar"/>
+	<classpathentry kind="lib" path="lib-common/tomcat/tools.jar"/>
+	<classpathentry kind="lib" path="lib-common/velocity/velocity-1.6-beta1.jar"/>
+	<classpathentry kind="lib" path="lib-common/xerces/xercesSamples.jar"/>
+	<classpathentry kind="lib" path="lib-common/xstream/xstream-1.3.jar"/>
+	<classpathentry kind="lib" path="dist/logic-0.1.omod" sourcepath="src/api"/>
+	<classpathentry kind="lib" path="lib-common/junit/dbunit-2.4.4.jar"/>
+	<classpathentry kind="lib" path="lib-common/junit/hsqldb-1.8.0.10.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

@@ -37,12 +37,6 @@
 			<fileset dir="lib-common">
 				<include name="**/*.jar"/>
 			</fileset>
-			<fileset dir="/home/nribeka/Desktop/Work/Workspace/trunk2logicmodule/lib">
-				<include name="**/*.jar"/>
-			</fileset>
-			<fileset dir="/home/nribeka/Desktop/Work/Workspace/trunk2logicmodule/dist">
-				<include name="**/*.jar"/>
-			</fileset>
 		</path>
 
 	</target>
@@ -57,17 +51,19 @@
 		
 		<!-- Copy other source data to the build folder -->
 		<copy todir="build">
-			<fileset dir="src/" excludes="**/*.java" />
+			<fileset dir="src/api" excludes="**/*.java" />
 		</copy>
 		
 		<!--  Compile module java files -->
 		<javac destdir="build" classpathref="classpath" debug="true" debuglevel="lines,source,vars">
+            <compilerarg line="-target 1.5" />
 			<src path="src/" />
 			<include name="**/*.java" />
 		</javac>
 		
 		<!--  Compile module web java files -->
 		<javac destdir="build" classpathref="classpath" debug="true" debuglevel="lines,source,vars">
+            <compilerarg line="-target 1.5" />
 			<compilerarg line="-g" />
 			<src path="web/src/" />
 			<include name="**/*.java" />
