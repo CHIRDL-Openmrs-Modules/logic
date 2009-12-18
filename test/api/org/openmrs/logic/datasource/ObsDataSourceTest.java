@@ -14,6 +14,7 @@ import org.openmrs.logic.result.Result;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 import org.openmrs.test.TestUtil;
+import org.openmrs.test.Verifies;
 
 @SkipBaseSetup
 public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
@@ -405,5 +406,31 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		Assert.assertEquals("Result incorrectly ordered", Double.valueOf(300d), result.toNumber());
 		
 	}
+
+	/**
+     * @see {@link ObsDataSource#read(LogicContext,Cohort,LogicCriteria)}
+     * 
+     */
+    @Test
+    @Verifies(value = "should get return obs ordered by datetime", method = "read(LogicContext,Cohort,LogicCriteria)")
+    public void read_shouldGetReturnObsOrderedByDatetime() throws Exception {
+		Patient who = Context.getPatientService().getPatient(4);
+		LogicContext context = new LogicContextImpl(who);
+		
+		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT");
+		Result result = context.read(who, criteria);
+		
+		int counter = 0;
+		Result previousResult = null;
+		Result currentResult = null;
+		while(counter < result.size()) {
+			previousResult  = currentResult;
+			currentResult = result.get(counter);
+			if (previousResult != null) {
+				Assert.assertTrue(previousResult.getResultDate().after(currentResult.getResultDate()));
+			}
+			counter ++;
+		}
+    }
 	
 }

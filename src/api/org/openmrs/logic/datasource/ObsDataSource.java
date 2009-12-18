@@ -78,6 +78,7 @@ public class ObsDataSource implements LogicDataSource {
 	 * @should get average of null when no obs
 	 * @should get count of obs when obs
 	 * @should get count of zero when no obs
+	 * @should get return obs ordered by datetime
 	 * @see org.openmrs.logic.datasource.LogicDataSource#read(org.openmrs.logic.LogicContext,
 	 *      org.openmrs.Cohort, org.openmrs.logic.LogicCriteria)
 	 */

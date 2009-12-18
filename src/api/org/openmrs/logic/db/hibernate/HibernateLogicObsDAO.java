@@ -154,7 +154,7 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 			} else
 				log.error("Invalid operand value for CONTAINS operation");
 		} else if (operator == Operator.IN) {
-			log.error("Invalid operand value for CONTAINS operation");
+			log.error("Invalid operand value for IN operation");
 		} else if (operator == Operator.EQUALS) {
 			if (rightOperand instanceof OperandNumeric) {
 				if (rootToken.equalsIgnoreCase(COMPONENT_ENCOUNTER_ID)) {
