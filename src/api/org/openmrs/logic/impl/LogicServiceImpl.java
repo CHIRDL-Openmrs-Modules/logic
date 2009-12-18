@@ -370,8 +370,9 @@ public class LogicServiceImpl implements LogicService {
 	public LogicCriteria parseString(String inStr) {
 		return parse(inStr);
 	}
-
+	
 	/**
+	 * @should correctly parse expression with only aggregator and token
 	 * @see org.openmrs.logic.LogicService#parse(java.lang.String)
 	 */
 	public LogicCriteria parse(String criteria) {
@@ -407,5 +408,5 @@ public class LogicServiceImpl implements LogicService {
 			log.error(e.getStackTrace());
 			return null;
 		}
-    }
+	}
 }

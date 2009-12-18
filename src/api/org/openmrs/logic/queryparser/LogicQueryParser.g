@@ -637,14 +637,11 @@ LogicCriteria lc = null;
 		)?
 	) 
 	{
-		if(lcFormed == false)  // just a terminal symbol like CD4 COUNT
+		if (lcFormed == false) // just a terminal symbol like CD4 COUNT
 		{
-			lc_return = new LogicCriteriaImpl(null,a);
+			lc = new LogicCriteriaImpl(null, a);
 		}
-		else
-		{
-			lc_return = (LogicCriteriaImpl) lc.applyTransform(transform);
-		}
+		lc_return = (LogicCriteriaImpl) lc.applyTransform(transform);
 		return lc_return;
 	}   		       
 )
