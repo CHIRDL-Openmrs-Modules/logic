@@ -41,6 +41,7 @@ import org.openmrs.logic.LogicExpression;
 import org.openmrs.logic.LogicExpressionBinary;
 import org.openmrs.logic.LogicTransform;
 import org.openmrs.logic.db.LogicEncounterDAO;
+import org.openmrs.logic.op.OperandCollection;
 import org.openmrs.logic.op.OperandDate;
 import org.openmrs.logic.op.OperandText;
 import org.openmrs.logic.op.Operator;
@@ -157,6 +158,19 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 			} else {
 				throw new LogicException("'contains' is not a valid operator on " + token + " and " + rightOperand);
 			}
+		}  else if (operator == Operator.IN) {
+			if (ENCOUNTER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandCollection) {
+				criteria.createAlias("encounterType", "encounterType");
+				criterion.add(Expression.in("encounterType.name", ((OperandCollection) rightOperand).asCollection()));
+			} else if (LOCATION_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandCollection) {
+				criteria.createAlias("location", "location");
+				criterion.add(Restrictions.in("location.name", ((OperandCollection) rightOperand).asCollection()));
+			} else if (PROVIDER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandCollection) {
+				criteria.createAlias("provider", "provider");
+				criterion.add(Restrictions.in("provider.systemId", ((OperandCollection) rightOperand).asCollection()));
+			} else {
+				throw new LogicException("'in' is not a valid operator on " + token + " and " + rightOperand);
+			}
 		} else if (operator == Operator.EQUALS) {
 			if (ENCOUNTER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandDate) {
 				criterion.add(Restrictions.eq("encounterDatetime", rightOperand));
@@ -218,6 +232,8 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 					within.add(Calendar.WEEK_OF_YEAR, duration.getDuration().intValue());
 				} else if (duration.getUnits() == Duration.Units.DAYS) {
 					within.add(Calendar.DAY_OF_YEAR, duration.getDuration().intValue());
+				} else if (duration.getUnits() == Duration.Units.HOURS) {
+					within.add(Calendar.HOUR_OF_DAY, duration.getDuration().intValue());
 				} else if (duration.getUnits() == Duration.Units.MINUTES) {
 					within.add(Calendar.MINUTE, duration.getDuration().intValue());
 				} else if (duration.getUnits() == Duration.Units.SECONDS) {
@@ -243,6 +259,7 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 				c = Restrictions.and(c, crit);
 			}
 		}
+		System.out.println(c);
 		return c;
 	}
 	

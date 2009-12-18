@@ -2,7 +2,6 @@ package org.openmrs.logic.web.controller;
 
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
-import org.openmrs.logic.LogicCriteriaImpl;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicService;
 import org.openmrs.logic.Rule;
@@ -20,18 +19,18 @@ public class LogicFormController {
 		model.addAttribute("authenticatedUser", Context.getAuthenticatedUser());
 		
 		try {
-			// get a simple rule for testing
 			
+			// get a sample person
+			Patient patient = Context.getPatientService().getPatient(999);
+			
+			// get a simple rule for testing
 			LogicService logicService = Context.getLogicService();
 			Rule rule = logicService.getRule("%%person.birthdate");
 			
 			// register the rule
 			logicService.addRule("birthdate", rule);
 			
-			// get a sample person
-			Patient patient = Context.getPatientService().getPatient(2);
-			
-			Result result = logicService.eval(patient, new LogicCriteriaImpl("birthdate"));
+			Result result = logicService.eval(patient, logicService.parseString("birthdate"));
 			
 			model.addAttribute("result", result);
 			model.addAttribute("error", "-N/A-");

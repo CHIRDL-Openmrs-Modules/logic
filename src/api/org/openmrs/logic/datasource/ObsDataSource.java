@@ -86,7 +86,7 @@ public class ObsDataSource implements LogicDataSource {
 		Map<Integer, Result> finalResult = new HashMap<Integer, Result>();
 		// TODO: make the obs service method more efficient (so we don't have to re-organize
 		// into groupings by patient...or it can be done most expeditiously
-		List<Obs> obs = getLogicObsDAO().getObservations(patients, criteria);
+		List<Obs> obs = getLogicObsDAO().getObservations(patients, criteria, context);
 		
 		// group the received observations by patient and convert them to
 		// Results

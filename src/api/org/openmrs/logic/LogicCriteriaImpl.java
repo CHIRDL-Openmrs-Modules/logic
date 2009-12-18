@@ -13,10 +13,12 @@
  */
 package org.openmrs.logic;
 
+import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
 import org.openmrs.logic.op.Operand;
+import org.openmrs.logic.op.OperandCollection;
 import org.openmrs.logic.op.OperandDate;
 import org.openmrs.logic.op.OperandNumeric;
 import org.openmrs.logic.op.OperandText;
@@ -295,6 +297,13 @@ public class LogicCriteriaImpl implements LogicCriteria {
 	public LogicCriteria after(Date value) {
 		return appendExpression(Operator.AFTER, new OperandDate(value));
 	}
+
+	/**
+	 * @see org.openmrs.logic.LogicCriteria#in(java.util.Collection)
+	 */
+	public LogicCriteria in(Collection<?> value) {
+		return appendExpression(Operator.IN, new OperandCollection(value));
+    }
 	
 	/**
 	 * @see org.openmrs.logic.LogicCriteria#contains(org.openmrs.logic.op.Operand)

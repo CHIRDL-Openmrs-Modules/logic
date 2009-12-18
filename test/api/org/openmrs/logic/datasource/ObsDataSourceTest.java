@@ -144,7 +144,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").after(Context.getDateFormat().parse("01/01/2007"));
 		Result result = context.read(who, criteria);
-		Assert.assertEquals("Wrong number of CD4s returned", 1, result.size());
+		Assert.assertEquals("Wrong number of CD4s returned", 2, result.size());
 		Assert.assertEquals("Result incorrect", Double.valueOf(600d), result.toNumber());
 	}
 	
@@ -157,7 +157,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		Patient who = Context.getPatientService().getPatient(3);
 		LogicContext context = new LogicContextImpl(who);
 		
-		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").before(Context.getDateFormat().parse("01/01/2007"));
+		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").before(Context.getDateFormat().parse("03/03/2007"));
 		Result result = context.read(who, criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 1, result.size());
 		Assert.assertEquals("Result incorrect", Double.valueOf(100d), result.toNumber());
@@ -287,7 +287,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").gt(200).after(
 		    Context.getDateFormat().parse("01/01/2007"));
 		Result result = context.read(who, criteria);
-		Assert.assertEquals("Wrong number of CD4s returned", 1, result.size());
+		Assert.assertEquals("Wrong number of CD4s returned", 2, result.size());
 		Assert.assertEquals("Result incorrect", Double.valueOf(600d), result.toNumber());
 		
 		criteria = new LogicCriteriaImpl("CD4 COUNT").gt(200).after(Context.getDateFormat().parse("01/01/2008"));
@@ -296,7 +296,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		
 		criteria = new LogicCriteriaImpl("CD4 COUNT").gt(900).after(Context.getDateFormat().parse("01/01/2007"));
 		result = context.read(who, criteria);
-		Assert.assertEquals("Wrong number of CD4s returned", 1, result.size());
+		Assert.assertEquals("Wrong number of CD4s returned", 2, result.size());
 	}
 	
 	/**

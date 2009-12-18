@@ -33,6 +33,7 @@ import org.openmrs.Obs;
 import org.openmrs.api.EncounterService;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.Duration;
+import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicExpression;
@@ -152,6 +153,8 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 				
 			} else
 				log.error("Invalid operand value for CONTAINS operation");
+		} else if (operator == Operator.IN) {
+			log.error("Invalid operand value for CONTAINS operation");
 		} else if (operator == Operator.EQUALS) {
 			if (rightOperand instanceof OperandNumeric) {
 				if (rootToken.equalsIgnoreCase(COMPONENT_ENCOUNTER_ID)) {
@@ -248,6 +251,8 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 				within.add(Calendar.WEEK_OF_YEAR, duration.getDuration().intValue());
 			} else if (duration.getUnits() == Duration.Units.DAYS) {
 				within.add(Calendar.DAY_OF_YEAR, duration.getDuration().intValue());
+			} else if (duration.getUnits() == Duration.Units.HOURS) {
+				within.add(Calendar.HOUR_OF_DAY, duration.getDuration().intValue());
 			} else if (duration.getUnits() == Duration.Units.MINUTES) {
 				within.add(Calendar.MINUTE, duration.getDuration().intValue());
 			} else if (duration.getUnits() == Duration.Units.SECONDS) {
@@ -270,16 +275,17 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 				c = Restrictions.and(c, crit);
 			}
 		}
+		System.out.println(c);
 		return c;
 	}
 	
 	// Helper function, converts logic service's criteria into Hibernate's
 	// criteria
 	@SuppressWarnings("unchecked")
-	private List<Obs> logicToHibernate(LogicExpression expression, Cohort who) throws LogicException {
+	private List<Obs> logicToHibernate(LogicExpression expression, Cohort who, LogicContext logicContext) throws LogicException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Obs.class);
 		
-		Date indexDate = Calendar.getInstance().getTime();
+		Date indexDate = logicContext.getIndexDate();
 		Operator transformOperator = null;
 		LogicTransform transform = expression.getTransform();
 		Integer numResults = null;
@@ -301,6 +307,8 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 			criteria.addOrder(Order.asc("obsDatetime")).addOrder(Order.asc("dateCreated")).addOrder(Order.asc("obsId"));
 		} else if (transformOperator == Operator.DISTINCT) {
 			criteria.setResultTransformer(Criteria.DISTINCT_ROOT_ENTITY);
+		} else {
+			criteria.addOrder(Order.desc("obsDatetime"));
 		}
 		
 		Criterion c = this.getCriterion(expression, indexDate, criteria);
@@ -349,9 +357,9 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 	 * @see org.openmrs.api.db.ObsDAO#getObservations(List, List, List, List, List, List, List,
 	 *      Integer, Integer, Date, Date, boolean)
 	 */
-	public List<Obs> getObservations(Cohort who, LogicCriteria logicCriteria) throws LogicException {
+	public List<Obs> getObservations(Cohort who, LogicCriteria logicCriteria, LogicContext logicContext) throws LogicException {
 		log.debug("*** Reading observations ***");
-		return logicToHibernate(logicCriteria.getExpression(), who);
+		return logicToHibernate(logicCriteria.getExpression(), who, logicContext);
 	}
 	
 }

@@ -100,7 +100,7 @@ public class EncounterDataSourceTest extends BaseModuleContextSensitiveTest {
 	 */
 	@Test
 	public void read_shouldNotFailWithNullEncounterType() throws Exception {
-		executeDataSet("org/openmrs/logic/datasource/include/EncounterDataSourceTest.xml");
+		executeDataSet("org/openmrs/logic/include/EncounterDataSourceTest.xml");
 		Cohort patients = new Cohort("7");
 		LogicContext context = new LogicContextImpl(patients);
 		dataSource.read(context, patients, new LogicCriteriaImpl("encounter").last());

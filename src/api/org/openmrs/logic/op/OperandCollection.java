@@ -11,31 +11,31 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.logic;
+package org.openmrs.logic.op;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.openmrs.module.Activator;
+import java.util.Collection;
+
 
 /**
  *
  */
-public class LogicModuleActivator implements Activator {
+public class OperandCollection implements Operand {
 	
-	private static final Log log = LogFactory.getLog(LogicModuleActivator.class);
+	private Collection<?> collection;
 	
-	/**
-	 * @see org.openmrs.module.Activator#startup()
-	 */
-	public void startup() {
-		log.debug("Starting logic module ...");
+	public OperandCollection(Collection<?> strings) {
+		collection = strings;
+	}
+	
+	public Collection<?> asCollection() {
+		return collection;
 	}
 	
 	/**
-	 * @see org.openmrs.module.Activator#shutdown()
+	 * @see org.openmrs.logic.op.Operand#supports(org.openmrs.logic.op.ComparisonOperator)
 	 */
-	public void shutdown() {
-		log.debug("Shutting down logic module ...");
+	public boolean supports(ComparisonOperator operator) {
+		return operator.equals(ComparisonOperator.IN);
 	}
 	
 }

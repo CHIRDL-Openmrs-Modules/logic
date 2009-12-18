@@ -17,6 +17,7 @@ import java.util.List;
 
 import org.openmrs.Cohort;
 import org.openmrs.Obs;
+import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicException;
 
@@ -29,6 +30,6 @@ public interface LogicObsDAO {
 	 * @see org.openmrs.api.db.hibernate.HibernateObsDAO#getObservations(List, List, List, List,
 	 *      List, List, List, Integer, Integer, java.util.Date, java.util.Date, boolean)
 	 */
-	public List<Obs> getObservations(Cohort who, LogicCriteria logicCriteria) throws LogicException;
+	public List<Obs> getObservations(Cohort who, LogicCriteria logicCriteria, LogicContext logicContext) throws LogicException;
 	
 }
