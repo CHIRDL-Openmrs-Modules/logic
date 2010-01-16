@@ -21,7 +21,8 @@ public class LogicFormController {
 		try {
 			
 			// get a sample person
-			Patient patient = Context.getPatientService().getPatient(999);
+			Integer aPatientId = Context.getPatientSetService().getAllPatients().getMemberIds().iterator().next();
+			Patient patient = Context.getPatientService().getPatient(aPatientId);
 			
 			// get a simple rule for testing
 			LogicService logicService = Context.getLogicService();
