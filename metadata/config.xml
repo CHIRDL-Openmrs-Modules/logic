@@ -5,7 +5,7 @@
 	<!-- logic Module Properties -->
 	<id>logic</id>
 	<name>Logic Module</name>
-	<version>0.1</version>
+	<version>0.2</version>
 	<package>org.openmrs.@MODULE_ID@</package>
 	<author>OpenMRS Core Developer</author>
 	<description>
@@ -14,7 +14,6 @@
 	<activator>@MODULE_PACKAGE@.LogicModuleActivator</activator>
 	<updateURL>https://dev.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL>
 
-	<mandatory>true</mandatory>
 	<require_version>1.6.0.11652</require_version>
 	
     <extension>
@@ -31,3 +30,4 @@
 	<!-- /logic Module Properties -->
 	
 </module>
+																
