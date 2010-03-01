@@ -71,11 +71,10 @@
 	<classpathentry kind="lib" path="lib-common/velocity/velocity-1.6-beta1.jar"/>
 	<classpathentry kind="lib" path="lib-common/xerces/xercesSamples.jar"/>
 	<classpathentry kind="lib" path="lib-common/xstream/xstream-1.3.jar"/>
-	<classpathentry kind="lib" path="dist/logic-0.1.omod" sourcepath="src/api"/>
 	<classpathentry kind="lib" path="lib-common/junit/dbunit-2.4.4.jar"/>
 	<classpathentry kind="lib" path="lib-common/junit/hsqldb-1.8.0.10.jar"/>
-	<classpathentry kind="lib" path="lib-common/openmrs/openmrs-api-1.6.0.11511-dev.jar"/>
-	<classpathentry kind="lib" path="lib-common/openmrs/tests-openmrs-api-1.6.0.11511-dev.jar"/>
 	<classpathentry kind="lib" path="lib-common/openmrs/web-openmrs-api-1.6.0.11511-dev.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs/openmrs-api-1.6.0.12223-dev.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs/tests-openmrs-api-1.6.0.12223-dev.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

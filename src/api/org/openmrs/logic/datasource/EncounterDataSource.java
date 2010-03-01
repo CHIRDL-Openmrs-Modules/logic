@@ -24,6 +24,7 @@ import org.openmrs.Cohort;
 import org.openmrs.Encounter;
 import org.openmrs.EncounterType;
 import org.openmrs.Location;
+import org.openmrs.Person;
 import org.openmrs.User;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
@@ -141,14 +142,14 @@ public class EncounterDataSource implements LogicDataSource {
 				result.add(new Result(encounterDatetime, locationName, location));
 			} else if (PROVIDER_KEY.equalsIgnoreCase(rootToken)) {
 				String providerSystemId = "";
-				User provider = encounter.getProvider();
+				Person provider = encounter.getProvider();
 				
 				// check for null objects
 				if (provider == null) {
 					// TODO should this return a string like this, or just null?
 					providerSystemId = "(no provider)";
 				} else {
-					providerSystemId = provider.getSystemId();
+					providerSystemId = provider.getPersonName().getFullName();
 				}
 				
 				// add the provider as the result

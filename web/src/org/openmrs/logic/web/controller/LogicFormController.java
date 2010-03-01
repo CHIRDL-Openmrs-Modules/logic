@@ -9,11 +9,12 @@ import org.openmrs.logic.result.Result;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 public class LogicFormController {
 	
-	@RequestMapping("/module/logic/logic")
+	@RequestMapping(value="/module/logic/logic", method=RequestMethod.GET)
 	public void showLogicResult(ModelMap model) {
 		
 		model.addAttribute("authenticatedUser", Context.getAuthenticatedUser());
