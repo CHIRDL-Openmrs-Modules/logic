@@ -26,14 +26,13 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
-import org.openmrs.logic.LogicCriteria;
+import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicContextImpl;
+import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicCriteriaImpl;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicService;
 import org.openmrs.logic.Rule;
-import org.openmrs.logic.RuleClassLoader;
-import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.queryparser.LogicQueryBaseParser;
 import org.openmrs.logic.queryparser.LogicQueryLexer;
@@ -340,28 +339,6 @@ public class LogicServiceImpl implements LogicService {
 	 */
 	public void removeLogicDataSource(String name) {
 		dataSources.remove(name);
-	}
-	
-	/**
-	 * @see org.openmrs.logic.LogicService#loadRule(java.lang.String, java.lang.String)
-	 */
-	public void loadRule(String tokenName, String ruleClassName) throws Exception {
-		RuleClassLoader ccl = new RuleClassLoader();
-		
-		Class<?> clas = ccl.loadClass(ruleClassName);
-		
-		if (clas == null) {
-			throw new Exception("Could not load class for rule: " + ruleClassName);
-		}
-		
-		Object obj = clas.newInstance();
-		
-		if (!(obj instanceof Rule)) {
-			throw new Exception("Could not load class for rule: " + ruleClassName
-			        + ". The rule must implement the Rule interface.");
-		}
-		
-		this.updateRule(tokenName, (Rule) obj);
 	}
 	
 	/**
