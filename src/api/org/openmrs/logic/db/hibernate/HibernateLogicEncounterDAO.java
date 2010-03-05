@@ -259,7 +259,6 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 				c = Restrictions.and(c, crit);
 			}
 		}
-		System.out.println(c);
 		return c;
 	}
 	

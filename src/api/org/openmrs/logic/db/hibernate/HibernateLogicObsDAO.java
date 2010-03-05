@@ -275,7 +275,6 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 				c = Restrictions.and(c, crit);
 			}
 		}
-		System.out.println(c);
 		return c;
 	}
 	
