@@ -38,6 +38,7 @@ import org.openmrs.logic.rule.AgeRule;
 import org.openmrs.logic.rule.HIVPositiveRule;
 import org.openmrs.logic.rule.InvalidReferenceRuleException;
 import org.openmrs.logic.rule.ReferenceRule;
+import org.springframework.util.StringUtils;
 
 /**
  * 
@@ -115,12 +116,13 @@ public class LogicUtil {
 			LogicDataSource dataSource = dataSources.get(dataSourceName);
 			
 			if ("obs".equalsIgnoreCase(dataSourceName)) {
+				int counter = 0;
 				
 				// Register Tokens for all Concepts in specified classes
 				List<ConceptClass> conceptClasses = new ArrayList<ConceptClass>();
 				String classProp = Context.getAdministrationService()
 				        .getGlobalProperty("logic.defaultTokens.conceptClasses");
-				if (classProp != null) {
+				if (StringUtils.hasText(classProp)) {
 					for (String className : classProp.split(",")) {
 						conceptClasses.add(Context.getConceptService().getConceptClassByName(className));
 					}
@@ -137,10 +139,17 @@ public class LogicUtil {
 				
 				for (ConceptClass currClass : conceptClasses) {
 					for (Concept c : Context.getConceptService().getConceptsByClass(currClass)) {
-						ConceptName conceptName = c.getPreferredName(conceptNameLocale);
-						if (conceptName != null && dataSource.hasKey(conceptName.getName())) {
-							Rule r = new ReferenceRule(dataSourceName + "." + conceptName.getName());
-							registerRule(conceptName.getName(), r);
+						if (!c.getDatatype().isAnswerOnly()) {
+							ConceptName conceptName = c.getPreferredName(conceptNameLocale);
+							if (conceptName != null && dataSource.hasKey(conceptName.getName())) {
+								Rule r = new ReferenceRule(dataSourceName + "." + conceptName.getName());
+								registerRule(conceptName.getName(), r);
+								++counter;
+								if (counter > 50) {
+									counter = 0;
+									Context.flushSession();
+								}
+							}
 						}
 					}
 				}

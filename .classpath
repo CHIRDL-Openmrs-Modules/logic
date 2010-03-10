@@ -73,8 +73,8 @@
 	<classpathentry kind="lib" path="lib-common/xstream/xstream-1.3.jar"/>
 	<classpathentry kind="lib" path="lib-common/junit/dbunit-2.4.4.jar"/>
 	<classpathentry kind="lib" path="lib-common/junit/hsqldb-1.8.0.10.jar"/>
-	<classpathentry kind="lib" path="lib-common/openmrs/web-openmrs-api-1.6.0.11511-dev.jar"/>
-	<classpathentry kind="lib" path="lib-common/openmrs/openmrs-api-1.6.0.12223-dev.jar"/>
-	<classpathentry kind="lib" path="lib-common/openmrs/tests-openmrs-api-1.6.0.12223-dev.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs/openmrs-api-1.6.0.12345-beta3.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs/tests-openmrs-api-1.6.0.12345-beta3.jar" sourcepath="/openmrs-1.6.x"/>
+	<classpathentry kind="lib" path="lib-common/openmrs/web-openmrs-api-1.6.0.12345-beta3.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
