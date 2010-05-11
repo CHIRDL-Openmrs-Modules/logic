@@ -1,12 +1,10 @@
 package org.openmrs.logic.web.controller;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
-import org.openmrs.logic.util.LogicUtil;
-import org.openmrs.logic.init.ProcessStatus;
 import org.openmrs.logic.init.InitStatusImpl;
 import org.openmrs.logic.init.JSONWriter;
+import org.openmrs.logic.init.ProcessStatus;
+import org.openmrs.logic.util.LogicUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
