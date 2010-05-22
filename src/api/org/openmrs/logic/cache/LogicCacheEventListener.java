@@ -59,4 +59,9 @@ public class LogicCacheEventListener implements CacheEventListener {
     public void dispose() {
         log.info("Cache disposed");
     }
+
+    @Override
+    public Object clone() throws CloneNotSupportedException {
+        return super.clone();
+    }
 }
