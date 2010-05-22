@@ -16,7 +16,6 @@
 	<classpathentry kind="lib" path="lib-common/commons-fileupload/commons-fileupload-1.1.1.jar"/>
 	<classpathentry kind="lib" path="lib-common/commons-logging/commons-logging-1.0.4.jar"/>
 	<classpathentry kind="lib" path="lib-common/dom4j/dom4j-1.6.1.jar"/>
-	<classpathentry kind="lib" path="lib-common/ehcache/ehcache-1.2.4.jar"/>
 	<classpathentry kind="lib" path="lib-common/hl7api/hapi-0.5.jar"/>
 	<classpathentry kind="lib" path="lib-common/jakarta-log4j/log4j-1.2.13.jar"/>
 	<classpathentry kind="lib" path="lib-common/jakarta-taglibs/taglibs-page-1.1.jar"/>
@@ -60,9 +59,6 @@
 	<classpathentry kind="lib" path="lib-common/poi/poi-3.1.jar"/>
 	<classpathentry kind="lib" path="lib-common/quartz/quartz-1.5.1.jar"/>
 	<classpathentry kind="lib" path="lib-common/simple/simple-xml-1.6.1-mod.jar"/>
-	<classpathentry kind="lib" path="lib-common/slf4j/jcl-over-slf4j-1.5.6.jar"/>
-	<classpathentry kind="lib" path="lib-common/slf4j/slf4j-api-1.5.6.jar"/>
-	<classpathentry kind="lib" path="lib-common/slf4j/slf4j-log4j12-1.5.6.jar"/>
 	<classpathentry kind="lib" path="lib-common/tomcat/catalina-ant.jar"/>
 	<classpathentry kind="lib" path="lib-common/tomcat/catalina.jar"/>
 	<classpathentry kind="lib" path="lib-common/tomcat/jsp-api.jar"/>
@@ -76,5 +72,9 @@
 	<classpathentry kind="lib" path="lib-common/openmrs/openmrs-api-1.6.0.12345-beta3.jar"/>
 	<classpathentry kind="lib" path="lib-common/openmrs/tests-openmrs-api-1.6.0.12345-beta3.jar" sourcepath="/openmrs-1.6.x"/>
 	<classpathentry kind="lib" path="lib-common/openmrs/web-openmrs-api-1.6.0.12345-beta3.jar"/>
+	<classpathentry kind="lib" path="lib-common/slf4j/jcl-over-slf4j-1.5.11.jar"/>
+	<classpathentry kind="lib" path="lib-common/slf4j/slf4j-api-1.5.11.jar"/>
+	<classpathentry kind="lib" path="lib-common/slf4j/slf4j-log4j12-1.5.11.jar"/>
+	<classpathentry kind="lib" path="lib-common/ehcache/ehcache-core-2.1.0.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
