@@ -69,12 +69,12 @@
 	<classpathentry kind="lib" path="lib-common/xstream/xstream-1.3.jar"/>
 	<classpathentry kind="lib" path="lib-common/junit/dbunit-2.4.4.jar"/>
 	<classpathentry kind="lib" path="lib-common/junit/hsqldb-1.8.0.10.jar"/>
-	<classpathentry kind="lib" path="lib-common/openmrs/openmrs-api-1.6.0.12345-beta3.jar"/>
 	<classpathentry kind="lib" path="lib-common/openmrs/tests-openmrs-api-1.6.0.12345-beta3.jar" sourcepath="/openmrs-1.6.x"/>
 	<classpathentry kind="lib" path="lib-common/openmrs/web-openmrs-api-1.6.0.12345-beta3.jar"/>
 	<classpathentry kind="lib" path="lib-common/slf4j/jcl-over-slf4j-1.5.11.jar"/>
 	<classpathentry kind="lib" path="lib-common/slf4j/slf4j-api-1.5.11.jar"/>
 	<classpathentry kind="lib" path="lib-common/slf4j/slf4j-log4j12-1.5.11.jar"/>
 	<classpathentry kind="lib" path="lib-common/ehcache/ehcache-core-2.1.0.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs/openmrs-api-1.7.0.13416-dev.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>
