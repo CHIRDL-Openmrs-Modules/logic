@@ -19,6 +19,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Ehcache;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
@@ -73,7 +75,9 @@ public class LogicContextImpl implements LogicContext {
 	 * @see org.openmrs.logic.LogicCache
 	 */
 	private LogicCache cache;
-	
+
+//    private Ehcache ehcache = CacheManager.getInstance().getEhcache("org.openmrs.logic.defaultCache");
+
 	/**
 	 * Constructs a logic context applied to a single patient
 	 * 

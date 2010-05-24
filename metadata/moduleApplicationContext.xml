@@ -67,6 +67,4 @@
 	<bean parent="serviceContext">
 		<property name="logicService"><ref bean="logicService"/></property>
 	</bean>
-    <bean id="ehcacheManager" class="net.sf.ehcache.CacheManager">
-	</bean>
 </beans>
