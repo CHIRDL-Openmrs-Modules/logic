@@ -19,14 +19,17 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Ehcache;
+import net.sf.ehcache.Element;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
+import org.openmrs.logic.cache.LogicCacheManager;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.ReferenceRule;
@@ -76,7 +79,7 @@ public class LogicContextImpl implements LogicContext {
 	 */
 	private LogicCache cache;
 
-//    private Ehcache ehcache = CacheManager.getInstance().getEhcache("org.openmrs.logic.defaultCache");
+    private Cache ehcache = LogicCacheManager.getLogicEhCache();//CacheManager.getInstance().getEhcache("org.openmrs.logic.defaultCache");
 
 	/**
 	 * Constructs a logic context applied to a single patient
@@ -121,6 +124,7 @@ public class LogicContextImpl implements LogicContext {
 	 *      org.openmrs.logic.LogicCriteria, java.util.Map)
 	 */
 	public Result eval(Patient patient, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
+        //TODO: Element element = ehcache.get();
 		Result result = getCache().get(patient, criteria, parameters);
 		PatientService patientService = Context.getPatientService();
 		
@@ -143,6 +147,7 @@ public class LogicContextImpl implements LogicContext {
 				if (pid.equals(targetPatientId))
 					result = resultMap.get(pid);
 			}
+            //TODO: Element el = new Element();
 			getCache().put(criteria, parameters, rule.getTTL(), resultMap);
 		}
 		
