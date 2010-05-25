@@ -67,5 +67,21 @@ public class OperandConcept implements Operand {
 	public boolean supports(ComparisonOperator operator) {
 		return validOperators.contains(operator);
 	}
-	
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OperandConcept that = (OperandConcept) o;
+
+        if (concept != null ? !concept.equals(that.concept) : that.concept != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return concept != null ? concept.hashCode() : 0;
+    }
 }
