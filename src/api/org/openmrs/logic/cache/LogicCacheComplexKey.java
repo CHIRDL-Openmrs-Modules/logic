@@ -16,18 +16,18 @@ package org.openmrs.logic.cache;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.datasource.LogicDataSource;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.Map;
 
 /**
  *
  */
-public class LogicCacheComplexKey {
+public class LogicCacheComplexKey implements Serializable {
     private Date indexDate;
     private Map<String, Object> parameters;
     private LogicCriteria criteria;
     private LogicDataSource dataSource;
-    //private Operation
 
     public LogicCacheComplexKey() {
     }
@@ -37,6 +37,30 @@ public class LogicCacheComplexKey {
         this.parameters = parameters;
         this.criteria = criteria;
         this.dataSource = dataSource;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LogicCacheComplexKey that = (LogicCacheComplexKey) o;
+
+        if (criteria != null ? !criteria.equals(that.criteria) : that.criteria != null) return false;
+        if (dataSource != null ? !dataSource.equals(that.dataSource) : that.dataSource != null) return false;
+        if (indexDate != null ? !indexDate.equals(that.indexDate) : that.indexDate != null) return false;
+        if (parameters != null ? !parameters.equals(that.parameters) : that.parameters != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = indexDate != null ? indexDate.hashCode() : 0;
+        result = 31 * result + (parameters != null ? parameters.hashCode() : 0);
+        result = 31 * result + (criteria != null ? criteria.hashCode() : 0);
+        result = 31 * result + (dataSource != null ? dataSource.hashCode() : 0);
+        return result;
     }
 
     public Date getIndexDate() {

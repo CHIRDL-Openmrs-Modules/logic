@@ -52,5 +52,21 @@ public class OperandText implements Operand {
 	public boolean supports(ComparisonOperator operator) {
 		return (ComparisonOperator.EQUALS.equals(operator) || ComparisonOperator.CONTAINS.equals(operator));
 	}
-	
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        OperandText that = (OperandText) o;
+
+        if (string != null ? !string.equals(that.string) : that.string != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return string != null ? string.hashCode() : 0;
+    }
 }

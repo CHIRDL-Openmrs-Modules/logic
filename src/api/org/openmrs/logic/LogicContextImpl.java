@@ -29,6 +29,7 @@ import org.openmrs.Cohort;
 import org.openmrs.Patient;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
+import org.openmrs.logic.cache.LogicCacheComplexKey;
 import org.openmrs.logic.cache.LogicCacheManager;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.result.Result;
@@ -124,10 +125,18 @@ public class LogicContextImpl implements LogicContext {
 	 *      org.openmrs.logic.LogicCriteria, java.util.Map)
 	 */
 	public Result eval(Patient patient, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
-        //TODO: Element element = ehcache.get();
-		Result result = getCache().get(patient, criteria, parameters);
+        LogicCacheComplexKey logicCacheComplexKey = new LogicCacheComplexKey(null, parameters, criteria, null);
+        Element element = ehcache.get(logicCacheComplexKey);
+        Map<Integer, Result> cachedResult;
+        Result result = null;
+        if(null != element) {
+            cachedResult = (Map<Integer, Result>) element.getObjectValue();
+            result = cachedResult.get(patient.getPatientId());
+        }
+
+//		Result result = getCache().get(patient, criteria, parameters);
 		PatientService patientService = Context.getPatientService();
-		
+
 		if (result == null) {
 			Integer targetPatientId = patient.getPatientId();
 			log.debug("Context database read (pid = " + targetPatientId + ")");
@@ -147,8 +156,9 @@ public class LogicContextImpl implements LogicContext {
 				if (pid.equals(targetPatientId))
 					result = resultMap.get(pid);
 			}
-            //TODO: Element el = new Element();
-			getCache().put(criteria, parameters, rule.getTTL(), resultMap);
+            Element el = new Element(logicCacheComplexKey, resultMap );
+            ehcache.put(el);
+			//getCache().put(criteria, parameters, rule.getTTL(), resultMap);
 		}
 		
 		return result;
@@ -207,14 +217,28 @@ public class LogicContextImpl implements LogicContext {
 	 *      org.openmrs.logic.datasource.LogicDataSource, org.openmrs.logic.LogicCriteria)
 	 */
 	public Result read(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
-		Result result = getCache().get(patient, dataSource, criteria);
+        LogicCacheComplexKey logicCacheComplexKey = new LogicCacheComplexKey(null, null, criteria, dataSource);
+        Element element = ehcache.get(logicCacheComplexKey);
+        Map<Integer, Result> cachedResult;
+        Result result = null;
+        if(null != element) {
+            cachedResult = (Map<Integer, Result>) element.getObjectValue();
+            result = cachedResult.get(patient.getPatientId());
+        }
+        
+		//Result result = getCache().get(patient, dataSource, criteria);
 		log
 		        .debug("Reading from data source: " + criteria.getRootToken() + " (" + (result == null ? "NOT" : "")
 		                + " cached)");
 		if (result == null) {
 			Map<Integer, Result> resultMap = dataSource.read(this, patients, criteria);
-			getCache().put(dataSource, criteria, resultMap);
-			result = resultMap.get(patient.getPatientId());
+
+
+//            getCache().put(dataSource, criteria, resultMap);
+            Element el = new Element(logicCacheComplexKey, resultMap );
+            ehcache.put(el);
+
+            result = resultMap.get(patient.getPatientId());
 		}
 		if (result == null)
 			result = Result.emptyResult();

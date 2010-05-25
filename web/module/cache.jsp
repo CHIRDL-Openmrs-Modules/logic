@@ -9,4 +9,15 @@ there are ${cachesCount} caches<br/>
 </c:forEach>
 </ul>
 
+<br/>
+${cacheName} statisctics:
+<br/>
+Status: ${status}
+<br/>
+Objects cached: ${cacheCount}
+<br/>
+<br/>
+
+
+
 <%@ include file="/WEB-INF/template/footer.jsp"%>

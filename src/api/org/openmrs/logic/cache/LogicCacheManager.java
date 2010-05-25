@@ -39,7 +39,7 @@ public class LogicCacheManager {
 
     public static Cache getLogicEhCache() {
         if(null == logicEhCache) {
-            logicEhCache = logicCacheManager.getCache(LOGIC_CACHE_NAME);
+            logicEhCache = getOrCreate().getCache(LOGIC_CACHE_NAME);
 //
 //            CacheConfiguration cacheConfiguration = new CacheConfiguration(LOGIC_CACHE_NAME, 1000)
 //                    .maxElementsOnDisk(1000)

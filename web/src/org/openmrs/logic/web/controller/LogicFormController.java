@@ -1,6 +1,8 @@
 package org.openmrs.logic.web.controller;
 
+import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.Statistics;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicException;
@@ -105,9 +107,16 @@ public class LogicFormController {
 //        CacheManager cacheManager = CacheManager.getInstance();
         CacheManager cacheManager = LogicCacheManager.getOrCreate();
         String []cacheNames = cacheManager.getCacheNames();
+
+        Cache cache = LogicCacheManager.getLogicEhCache();
+        Statistics statistics = cache.getStatistics();
         
 		modelMap.addAttribute("cacheNames", cacheNames);
         modelMap.addAttribute("cachesCount", cacheNames.length);
+
+        modelMap.addAttribute("status", cache.getStatistics());
+        modelMap.addAttribute("cacheName", cache.getName());
+        modelMap.addAttribute("cacheCount", statistics.getObjectCount());
 	}
 
 	/***********************************************************************************************************
