@@ -13,6 +13,8 @@
  */
 package org.openmrs.logic.cache;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import org.junit.Test;
 import org.openmrs.logic.LogicCriteria;
@@ -68,8 +70,11 @@ public class LogicCacheComplexKeyTest {
             e.printStackTrace();
         }
 
-        Element elSimple = new Element(1, new Double("250.0004"));
-        System.out.println("size=" + elSimple.getSerializedSize());
-
+        Cache cache = LogicCacheManager.getLogicEhCache();
+        CacheManager cacheManager = LogicCacheManager.getOrCreate();
+        System.out.println("Caches count: " + cacheManager.getCacheNames().length);
+        cache.put(el);
+        cache.flush();
+        System.out.println("Cache size: " + cache.getDiskStoreSize());
     }
 }
