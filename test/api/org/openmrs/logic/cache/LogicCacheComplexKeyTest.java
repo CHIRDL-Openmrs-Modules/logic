@@ -16,6 +16,7 @@ package org.openmrs.logic.cache;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
+import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicService;
@@ -34,47 +35,62 @@ import static org.junit.Assert.*;
  *
  */
 public class LogicCacheComplexKeyTest {
-    @Test
-    public void testEquals() throws Exception {
-        LogicCacheComplexKey logicCacheComplexKey1 = new LogicCacheComplexKey();
-        LogicCacheComplexKey logicCacheComplexKey2 = new LogicCacheComplexKey();
 
-        assertEquals("Comparing empty keys.", logicCacheComplexKey1, logicCacheComplexKey2);
+    private LogicCacheComplexKey logicCacheComplexKey1;
+    private LogicCacheComplexKey logicCacheComplexKey2;
+    private LogicService logicService;
+    private LogicCriteria logicCriteria1;
+    private LogicCriteria logicCriteria2;
+    private Element element = null;
+    private Element simpleElement = null;
 
+    @Before
+    public void beforeTests() {
+        if(null != element) return; //initialize only once;
 
-        LogicService logicService = new LogicServiceImpl();
-        LogicCriteria logicCriteria1 = logicService.parse("\"AGE\"");
-        LogicCriteria logicCriteria2 = logicService.parse("\"AGE\"");
-
-//        assertEquals("Comparing criteria.", logicCriteria1, logicCriteria2);
+        logicService = new LogicServiceImpl();
+        logicCriteria1 = logicService.parse("\"AGE\"");
+        logicCriteria2 = logicService.parse("\"AGE\"");
 
         logicCacheComplexKey1 = new LogicCacheComplexKey(null, null, logicCriteria1, null);
         logicCacheComplexKey2 = new LogicCacheComplexKey(null, null, logicCriteria2, null);
 
-        assertEquals("Comparing keys with criteria.", logicCacheComplexKey1, logicCacheComplexKey2);
-
         Map<Integer, Result> resultMap = new Hashtable<Integer, Result>();
         Result result = new Result(true);
         resultMap.put(1, result);
+        element = new Element(logicCacheComplexKey1, resultMap);
 
-        Element el = new Element(logicCacheComplexKey1, resultMap);
-        System.out.println("size=" + el.getSerializedSize());
+        simpleElement = new Element("key1", "value1");
+    }
+
+    @Test
+    public void testEquals() throws Exception {
+        assertEquals("Comparing keys with criteria.", logicCacheComplexKey1, logicCacheComplexKey2);
+        assertTrue("Not serialized by element.", element.getSerializedSize() > 0);
 
         try {
             ByteArrayOutputStream out = new ByteArrayOutputStream();
             ObjectOutputStream oos = new ObjectOutputStream(out);
-            oos.writeObject(el);
+            oos.writeObject(element);
             oos.close();
-            assertTrue(out.toByteArray().length > 0);
+            assertTrue("Not serialized by stream.", out.toByteArray().length > 0);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    @Test
+    public void testDiskCache () {
         Cache cache = LogicCacheManager.getLogicEhCache();
         CacheManager cacheManager = LogicCacheManager.getOrCreate();
-        System.out.println("Caches count: " + cacheManager.getCacheNames().length);
-        cache.put(el);
+        assertNotNull("Cache manager is NULL!", cacheManager);
+        System.out.println(cacheManager.getDiskStorePath());
+        assertTrue("Empty cache!", cacheManager.getCacheNames().length > 0);
+
+//        cache.put(element);
+        cache.put(simpleElement);
         cache.flush();
-        System.out.println("Cache size: " + cache.getDiskStoreSize());
+        System.out.println("Disk store = " + cache.getDiskStoreSize());
+        //assertTrue("Not flushed!", cache.getDiskStoreSize() > 0);
     }
 }

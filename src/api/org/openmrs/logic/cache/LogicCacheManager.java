@@ -32,7 +32,7 @@ public class LogicCacheManager {
     public static CacheManager getOrCreate() {
         if(null == logicCacheManager) {
             URL url = LogicCacheManager.class.getResource(LOGIC_CACHE_CONFIG);
-            logicCacheManager = CacheManager.create(url);
+            logicCacheManager = new  CacheManager(url);
         }
         return logicCacheManager;
     }

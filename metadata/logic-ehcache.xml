@@ -426,28 +426,41 @@ in-memory capacity changed at runtime through the cache's configuration object.
 
     The defaultCache has an implicit name "default" which is a reserved cache name.
     -->
-    <defaultCache
-            maxElementsInMemory="0"
-            eternal="false"         
-            timeToIdleSeconds="1200"
-            timeToLiveSeconds="1200"
-            overflowToDisk="true">
-    </defaultCache>
 
-    <cache name="org.openmrs.logic.defaultCache"
-           maxElementsInMemory="10000"
-           maxElementsOnDisk="1000"
-           eternal="false"
-           overflowToDisk="true"
-           diskSpoolBufferSizeMB="20"
-           timeToIdleSeconds="300"
-           timeToLiveSeconds="600"
-           diskExpiryThreadIntervalSeconds="10"
-           memoryStoreEvictionPolicy="LRU"
-           clearOnFlush="false">
+
+    <!--<defaultCache-->
+            <!--maxElementsInMemory="0"-->
+            <!--eternal="false"         -->
+            <!--timeToIdleSeconds="1200"-->
+            <!--timeToLiveSeconds="1200"-->
+            <!--overflowToDisk="true">-->
+    <!--</defaultCache>-->
+
+    <!--<cache name="org.openmrs.logic.defaultCache"-->
+           <!--maxElementsInMemory="5"-->
+           <!--maxElementsOnDisk="100"-->
+           <!--eternal="true"-->
+           <!--overflowToDisk="true"-->
+           <!--diskSpoolBufferSizeMB="20"-->
+           <!--timeToIdleSeconds="300"-->
+           <!--timeToLiveSeconds="600"-->
+           <!--diskExpiryThreadIntervalSeconds="120"-->
+           <!--memoryStoreEvictionPolicy="LRU"-->
+           <!--diskPersistent="true"-->
+           <!--clearOnFlush="false">-->
         
-        <cacheEventListenerFactory class="org.openmrs.logic.cache.LogicCacheEventListenerFactory" properties="" listenFor="all"/>
-    </cache>
+        <!--<cacheEventListenerFactory class="org.openmrs.logic.cache.LogicCacheEventListenerFactory" properties="" listenFor="all"/>-->
+    <!--</cache>-->
+
+    <defaultCache maxElementsInMemory="10000" eternal="true"
+                  timeToIdleSeconds="120" timeToLiveSeconds="120" overflowToDisk="true"
+                  maxElementsOnDisk="10000000" diskPersistent="true"
+                  diskExpiryThreadIntervalSeconds="120" memoryStoreEvictionPolicy="LRU"/>
+
+    <cache name="org.openmrs.logic.defaultCache" maxElementsInMemory="500" eternal="true"
+           overflowToDisk="true" timeToIdleSeconds="300" timeToLiveSeconds="600"
+           diskPersistent="true" diskExpiryThreadIntervalSeconds="1"
+           memoryStoreEvictionPolicy="LFU"/>
 
     <!--
     Sample caches. Following are some example caches. Remove these before use.
