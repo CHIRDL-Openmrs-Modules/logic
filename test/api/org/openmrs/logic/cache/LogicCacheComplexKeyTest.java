@@ -13,10 +13,18 @@
  */
 package org.openmrs.logic.cache;
 
+import net.sf.ehcache.Element;
 import org.junit.Test;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicService;
 import org.openmrs.logic.impl.LogicServiceImpl;
+import org.openmrs.logic.result.Result;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.Hashtable;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 
@@ -42,5 +50,26 @@ public class LogicCacheComplexKeyTest {
         logicCacheComplexKey2 = new LogicCacheComplexKey(null, null, logicCriteria2, null);
 
         assertEquals("Comparing keys with criteria.", logicCacheComplexKey1, logicCacheComplexKey2);
+
+        Map<Integer, Result> resultMap = new Hashtable<Integer, Result>();
+        Result result = new Result(true);
+        resultMap.put(1, result);
+
+        Element el = new Element(logicCacheComplexKey1, resultMap);
+        System.out.println("size=" + el.getSerializedSize());
+
+        try {
+            ByteArrayOutputStream out = new ByteArrayOutputStream();
+            ObjectOutputStream oos = new ObjectOutputStream(out);
+            oos.writeObject(el);
+            oos.close();
+            assertTrue(out.toByteArray().length > 0);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Element elSimple = new Element(1, new Double("250.0004"));
+        System.out.println("size=" + elSimple.getSerializedSize());
+
     }
 }

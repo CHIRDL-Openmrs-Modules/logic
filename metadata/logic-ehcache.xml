@@ -32,7 +32,7 @@ is enabled.  Dynamically configurable caches can have their TTI, TTL and maximum
 in-memory capacity changed at runtime through the cache's configuration object.
 -->
 <ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../../../../../../metadata/ehcache.xsd"
+         xsi:noNamespaceSchemaLocation="ehcache.xsd"
          updateCheck="true" monitoring="autodetect"
          dynamicConfig="true">
 
@@ -443,7 +443,8 @@ in-memory capacity changed at runtime through the cache's configuration object.
            timeToIdleSeconds="300"
            timeToLiveSeconds="600"
            diskExpiryThreadIntervalSeconds="10"
-           memoryStoreEvictionPolicy="LRU">
+           memoryStoreEvictionPolicy="LRU"
+           clearOnFlush="false">
         
         <cacheEventListenerFactory class="org.openmrs.logic.cache.LogicCacheEventListenerFactory" properties="" listenFor="all"/>
     </cache>

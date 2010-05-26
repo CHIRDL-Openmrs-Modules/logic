@@ -3,6 +3,8 @@ package org.openmrs.logic.web.controller;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Statistics;
+import net.sf.ehcache.Status;
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicException;
@@ -103,20 +105,35 @@ public class LogicFormController {
 	}
 
     @RequestMapping("/module/logic/cache")
-	public void handlePath(ModelMap modelMap) throws Exception {
+	public void handlePath(@RequestParam(required = false, value = "flush") String flush, ModelMap modelMap) throws Exception {
 //        CacheManager cacheManager = CacheManager.getInstance();
         CacheManager cacheManager = LogicCacheManager.getOrCreate();
-        String []cacheNames = cacheManager.getCacheNames();
+        String []cacheNames = null;
+        String cachesCount = "", status = "", cacheName = "", cacheStat = "", cacheDir = "";
+        if(null != cacheManager) {
+            cacheNames = cacheManager.getCacheNames();
+            cacheDir = cacheManager.getDiskStorePath();
+        }
 
         Cache cache = LogicCacheManager.getLogicEhCache();
-        Statistics statistics = cache.getStatistics();
-        
-		modelMap.addAttribute("cacheNames", cacheNames);
-        modelMap.addAttribute("cachesCount", cacheNames.length);
 
-        modelMap.addAttribute("status", cache.getStatistics());
-        modelMap.addAttribute("cacheName", cache.getName());
-        modelMap.addAttribute("cacheCount", statistics.getObjectCount());
+        if(null != cache) {
+            if(!StringUtils.isBlank(flush) && Status.STATUS_ALIVE.equals(cache.getStatus())) {
+                cache.flush();
+            }
+            status = cache.getStatus().toString();
+            cacheName = cache.getName();
+            cacheStat = cache.getStatistics().toString();
+        }
+
+		modelMap.addAttribute("cacheNames", cacheNames);
+        modelMap.addAttribute("cachesCount", cacheNames != null ? cacheNames.length : "-");
+
+        modelMap.addAttribute("status", status);
+        modelMap.addAttribute("cacheName", cacheName);
+        modelMap.addAttribute("cacheStat", cacheStat);
+        modelMap.addAttribute("cacheDir", cacheDir);
+        modelMap.addAttribute("serializedSize", cacheDir);        
 	}
 
 	/***********************************************************************************************************
