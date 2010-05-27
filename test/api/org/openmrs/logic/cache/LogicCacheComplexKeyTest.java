@@ -36,13 +36,14 @@ import static org.junit.Assert.*;
  */
 public class LogicCacheComplexKeyTest {
 
+    private final int DISK_CACHE_COUNT = 15;
+
     private LogicCacheComplexKey logicCacheComplexKey1;
     private LogicCacheComplexKey logicCacheComplexKey2;
     private LogicService logicService;
     private LogicCriteria logicCriteria1;
     private LogicCriteria logicCriteria2;
     private Element element = null;
-    private Element simpleElement = null;
 
     @Before
     public void beforeTests() {
@@ -59,8 +60,6 @@ public class LogicCacheComplexKeyTest {
         Result result = new Result(true);
         resultMap.put(1, result);
         element = new Element(logicCacheComplexKey1, resultMap);
-
-        simpleElement = new Element("key1", "value1");
     }
 
     @Test
@@ -81,16 +80,29 @@ public class LogicCacheComplexKeyTest {
 
     @Test
     public void testDiskCache () {
+        Element simpleElement = null;
+        
         Cache cache = LogicCacheManager.getLogicEhCache();
         CacheManager cacheManager = LogicCacheManager.getOrCreate();
         assertNotNull("Cache manager is NULL!", cacheManager);
         System.out.println(cacheManager.getDiskStorePath());
         assertTrue("Empty cache!", cacheManager.getCacheNames().length > 0);
 
-//        cache.put(element);
-        cache.put(simpleElement);
+        for(int i = 0; i < DISK_CACHE_COUNT; i++) {
+            simpleElement = new Element("key"+i, "value"+i);
+            cache.put(simpleElement);
+        }
+
+        cache.put(element);
+
+        assertTrue("No elements in memory", cache.getSize()  > 0);
+        System.out.println("calculateInMemorySize = "+cache.calculateInMemorySize());
+
         cache.flush();
         System.out.println("Disk store = " + cache.getDiskStoreSize());
-        //assertTrue("Not flushed!", cache.getDiskStoreSize() > 0);
+        System.out.println("getSize = "+cache.getSize());
+        System.out.println("getMemoryStoreSize = "+cache.getMemoryStoreSize());
+
+        assertTrue("Not flushed!", cache.getDiskStoreSize() > 0);
     }
 }

@@ -109,7 +109,7 @@ public class LogicFormController {
 //        CacheManager cacheManager = CacheManager.getInstance();
         CacheManager cacheManager = LogicCacheManager.getOrCreate();
         String []cacheNames = null;
-        String cachesCount = "", status = "", cacheName = "", cacheStat = "", cacheDir = "", serialSize = "";
+        String status = "", cacheName = "", cacheStat = "", cacheDir = "", serialSize = "";
         if(null != cacheManager) {
             cacheNames = cacheManager.getCacheNames();
             cacheDir = cacheManager.getDiskStorePath();
@@ -134,7 +134,7 @@ public class LogicFormController {
         modelMap.addAttribute("cacheName", cacheName);
         modelMap.addAttribute("cacheStat", cacheStat);
         modelMap.addAttribute("cacheDir", cacheDir);
-        modelMap.addAttribute("serializedSize", serialSize);
+        modelMap.addAttribute("diskStoreSize", serialSize);
 	}
 
 	/***********************************************************************************************************
