@@ -126,7 +126,7 @@ public class LogicContextImpl implements LogicContext {
 	 */
     //TODO: candidate for caching
 	public Result eval(Patient patient, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
-        LogicCacheComplexKey logicCacheComplexKey = new LogicCacheComplexKey(parameters, criteria, null);
+        LogicCacheComplexKey logicCacheComplexKey = new LogicCacheComplexKey(parameters, criteria, null, patients.getMemberIds());
         Element element = ehcache.get(logicCacheComplexKey);
         Map<Integer, Result> cachedResult;
         Result result = null;
@@ -157,7 +157,7 @@ public class LogicContextImpl implements LogicContext {
 				if (pid.equals(targetPatientId))
 					result = resultMap.get(pid);
 			}
-            Element el = new Element(logicCacheComplexKey, resultMap );
+            Element el = new Element(logicCacheComplexKey, resultMap, false, rule.getTTL(), rule.getTTL());           
             ehcache.put(el);
 			//getCache().put(criteria, parameters, rule.getTTL(), resultMap);
 		}
@@ -219,7 +219,7 @@ public class LogicContextImpl implements LogicContext {
 	 */
     //TODO: candidate for caching
 	public Result read(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
-        LogicCacheComplexKey logicCacheComplexKey = new LogicCacheComplexKey(null, criteria, dataSource);
+        LogicCacheComplexKey logicCacheComplexKey = new LogicCacheComplexKey(null, criteria, dataSource, patients.getMemberIds());
         Element element = ehcache.get(logicCacheComplexKey);
         Map<Integer, Result> cachedResult;
         Result result = null;
@@ -237,7 +237,7 @@ public class LogicContextImpl implements LogicContext {
 
 
 //            getCache().put(dataSource, criteria, resultMap);
-            Element el = new Element(logicCacheComplexKey, resultMap );
+            Element el = new Element(logicCacheComplexKey, resultMap, false, dataSource.getDefaultTTL(), dataSource.getDefaultTTL());
             ehcache.put(el);
 
             result = resultMap.get(patient.getPatientId());

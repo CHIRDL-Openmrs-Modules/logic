@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
@@ -33,6 +35,7 @@ import org.openmrs.logic.LogicCriteriaImpl;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicService;
 import org.openmrs.logic.Rule;
+import org.openmrs.logic.cache.LogicCacheManager;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.queryparser.LogicQueryBaseParser;
 import org.openmrs.logic.queryparser.LogicQueryLexer;
@@ -57,6 +60,8 @@ public class LogicServiceImpl implements LogicService {
 	protected final Log log = LogFactory.getLog(getClass());
 	
 	private RuleFactory ruleFactory;
+
+    private Cache ehcache = LogicCacheManager.getLogicEhCache();
 	
 	private static Map<String, LogicDataSource> dataSources;
 	
@@ -354,7 +359,11 @@ public class LogicServiceImpl implements LogicService {
 	 */
     //TODO: candidate for caching
 	public LogicCriteria parse(String criteria) {
-		
+        Element element = ehcache.get(criteria);
+        if(null != element) {
+            return (LogicCriteria) element.getValue();
+        }
+        
 		try {
 			if (!criteria.endsWith(";")) {
 				criteria += ";";
@@ -380,6 +389,10 @@ public class LogicServiceImpl implements LogicService {
 			
 			LogicCriteriaImpl lc = treeParser.query_AST(t);
 			// System.out.println(lc.toString());
+            
+            element = new Element(criteria, lc);
+            ehcache.put(element);
+
 			return lc;
 		}
 		catch (Exception e) {

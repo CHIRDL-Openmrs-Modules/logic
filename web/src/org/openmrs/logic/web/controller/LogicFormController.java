@@ -48,7 +48,7 @@ public class LogicFormController {
 	/**
 	 * Place holder for the logic tester form
 	 *
-	 * @param model The ModelMap to be used by view to render page
+	 * @param modelMap The ModelMap to be used by view to render page
 	 */
 	@RequestMapping(value = "/module/logic/logic", method = RequestMethod.GET)
 	public void showTestPage(@RequestParam(required = false, value = "patientId") Integer patientId, ModelMap modelMap) {

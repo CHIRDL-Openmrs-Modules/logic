@@ -27,6 +27,7 @@ import org.openmrs.logic.result.Result;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
+import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Map;
 
@@ -55,18 +56,19 @@ public class LogicCacheComplexKeyTest {
         logicCriteria1 = logicService.parse("\"AGE\"");
         logicCriteria2 = logicService.parse("\"AGE\"");
 
-        logicCacheComplexKey1 = new LogicCacheComplexKey(null, logicCriteria1, null);
-        logicCacheComplexKey2 = new LogicCacheComplexKey(null, logicCriteria2, null);
+        logicCacheComplexKey1 = new LogicCacheComplexKey(null, logicCriteria1, null, null);
+        logicCacheComplexKey2 = new LogicCacheComplexKey(null, logicCriteria2, null, null);
 
         Map<Integer, Result> resultMap = new Hashtable<Integer, Result>();
         Result result = new Result(true);
         resultMap.put(1, result);
         element = new Element(logicCacheComplexKey1, resultMap);
+        element.setTimeToLive(100);
 
         cache = LogicCacheManager.getLogicEhCache();
         CacheConfiguration config = cache.getCacheConfiguration();
-        config.setTimeToLiveSeconds(3);
-        config.setTimeToIdleSeconds(2);
+        config.setTimeToLiveSeconds(2);
+        config.setTimeToIdleSeconds(1);
     }
 
     @Test
@@ -112,14 +114,14 @@ public class LogicCacheComplexKeyTest {
 
         synchronized (this) {
             try {
-                wait(Long.valueOf("6000"));
+                wait(Long.valueOf("3000"));
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
         cache.evictExpiredElements();
-        assertTrue("Not evicted!", cache.getDiskStoreSize() == 0);
+        assertTrue("Not evicted!", cache.getDiskStoreSize() == 1);
 //        System.out.println("after expiration:");
 //        System.out.println("Disk store = " + cache.getDiskStoreSize());
 //        System.out.println("getSize = "+cache.getSize());
