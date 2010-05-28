@@ -13,6 +13,7 @@
  */
 package org.openmrs.logic.db;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
 
@@ -22,7 +23,7 @@ import org.openmrs.logic.LogicCriteria;
 /**
  *
  */
-public interface LogicPersonDAO {
+public interface LogicPersonDAO extends Serializable {
 	
 	/**
 	 * Returns a subset of persons that match given criteria

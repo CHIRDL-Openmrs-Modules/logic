@@ -13,6 +13,7 @@
  */
 package org.openmrs.logic.db;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.openmrs.Cohort;
@@ -24,7 +25,7 @@ import org.openmrs.logic.LogicException;
 /**
  *
  */
-public interface LogicObsDAO {
+public interface LogicObsDAO extends Serializable {
 	
 	/**
 	 * @see org.openmrs.api.db.hibernate.HibernateObsDAO#getObservations(List, List, List, List,

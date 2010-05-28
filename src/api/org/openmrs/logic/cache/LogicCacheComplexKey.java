@@ -24,7 +24,6 @@ import java.util.Map;
  *
  */
 public class LogicCacheComplexKey implements Serializable {
-    private Date indexDate;
     private Map<String, Object> parameters;
     private LogicCriteria criteria;
     private LogicDataSource dataSource;
@@ -32,8 +31,7 @@ public class LogicCacheComplexKey implements Serializable {
     public LogicCacheComplexKey() {
     }
 
-    public LogicCacheComplexKey(Date indexDate, Map<String, Object> parameters, LogicCriteria criteria, LogicDataSource dataSource) {
-        this.indexDate = indexDate;
+    public LogicCacheComplexKey(Map<String, Object> parameters, LogicCriteria criteria, LogicDataSource dataSource) {
         this.parameters = parameters;
         this.criteria = criteria;
         this.dataSource = dataSource;
@@ -48,7 +46,6 @@ public class LogicCacheComplexKey implements Serializable {
 
         if (criteria != null ? !criteria.equals(that.criteria) : that.criteria != null) return false;
         if (dataSource != null ? !dataSource.equals(that.dataSource) : that.dataSource != null) return false;
-        if (indexDate != null ? !indexDate.equals(that.indexDate) : that.indexDate != null) return false;
         if (parameters != null ? !parameters.equals(that.parameters) : that.parameters != null) return false;
 
         return true;
@@ -56,19 +53,10 @@ public class LogicCacheComplexKey implements Serializable {
 
     @Override
     public int hashCode() {
-        int result = indexDate != null ? indexDate.hashCode() : 0;
-        result = 31 * result + (parameters != null ? parameters.hashCode() : 0);
+        int result = parameters != null ? parameters.hashCode() : 0;
         result = 31 * result + (criteria != null ? criteria.hashCode() : 0);
         result = 31 * result + (dataSource != null ? dataSource.hashCode() : 0);
         return result;
-    }
-
-    public Date getIndexDate() {
-        return indexDate;
-    }
-
-    public void setIndexDate(Date indexDate) {
-        this.indexDate = indexDate;
     }
 
     public Map<String, Object> getParameters() {

@@ -16,6 +16,7 @@ package org.openmrs.logic.cache;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
+import net.sf.ehcache.config.CacheConfiguration;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.logic.LogicCriteria;
@@ -36,7 +37,7 @@ import static org.junit.Assert.*;
  */
 public class LogicCacheComplexKeyTest {
 
-    private final int DISK_CACHE_COUNT = 15;
+    private final int DISK_CACHE_COUNT = 55;
 
     private LogicCacheComplexKey logicCacheComplexKey1;
     private LogicCacheComplexKey logicCacheComplexKey2;
@@ -44,6 +45,7 @@ public class LogicCacheComplexKeyTest {
     private LogicCriteria logicCriteria1;
     private LogicCriteria logicCriteria2;
     private Element element = null;
+    private Cache cache;
 
     @Before
     public void beforeTests() {
@@ -53,17 +55,22 @@ public class LogicCacheComplexKeyTest {
         logicCriteria1 = logicService.parse("\"AGE\"");
         logicCriteria2 = logicService.parse("\"AGE\"");
 
-        logicCacheComplexKey1 = new LogicCacheComplexKey(null, null, logicCriteria1, null);
-        logicCacheComplexKey2 = new LogicCacheComplexKey(null, null, logicCriteria2, null);
+        logicCacheComplexKey1 = new LogicCacheComplexKey(null, logicCriteria1, null);
+        logicCacheComplexKey2 = new LogicCacheComplexKey(null, logicCriteria2, null);
 
         Map<Integer, Result> resultMap = new Hashtable<Integer, Result>();
         Result result = new Result(true);
         resultMap.put(1, result);
         element = new Element(logicCacheComplexKey1, resultMap);
+
+        cache = LogicCacheManager.getLogicEhCache();
+        CacheConfiguration config = cache.getCacheConfiguration();
+        config.setTimeToLiveSeconds(3);
+        config.setTimeToIdleSeconds(2);
     }
 
     @Test
-    public void testEquals() throws Exception {
+    public void testSerialization() throws Exception {
         assertEquals("Comparing keys with criteria.", logicCacheComplexKey1, logicCacheComplexKey2);
         assertTrue("Not serialized by element.", element.getSerializedSize() > 0);
 
@@ -81,11 +88,10 @@ public class LogicCacheComplexKeyTest {
     @Test
     public void testDiskCache () {
         Element simpleElement = null;
-        
-        Cache cache = LogicCacheManager.getLogicEhCache();
+
         CacheManager cacheManager = LogicCacheManager.getOrCreate();
         assertNotNull("Cache manager is NULL!", cacheManager);
-        System.out.println(cacheManager.getDiskStorePath());
+//        System.out.println(cacheManager.getDiskStorePath());
         assertTrue("Empty cache!", cacheManager.getCacheNames().length > 0);
 
         for(int i = 0; i < DISK_CACHE_COUNT; i++) {
@@ -96,13 +102,27 @@ public class LogicCacheComplexKeyTest {
         cache.put(element);
 
         assertTrue("No elements in memory", cache.getSize()  > 0);
-        System.out.println("calculateInMemorySize = "+cache.calculateInMemorySize());
 
         cache.flush();
-        System.out.println("Disk store = " + cache.getDiskStoreSize());
-        System.out.println("getSize = "+cache.getSize());
-        System.out.println("getMemoryStoreSize = "+cache.getMemoryStoreSize());
+//        System.out.println("Disk store = " + cache.getDiskStoreSize());
+//        System.out.println("getSize = "+cache.getSize());
+//        System.out.println("getMemoryStoreSize = "+cache.getMemoryStoreSize());
 
         assertTrue("Not flushed!", cache.getDiskStoreSize() > 0);
+
+        synchronized (this) {
+            try {
+                wait(Long.valueOf("6000"));
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
+        cache.evictExpiredElements();
+        assertTrue("Not evicted!", cache.getDiskStoreSize() == 0);
+//        System.out.println("after expiration:");
+//        System.out.println("Disk store = " + cache.getDiskStoreSize());
+//        System.out.println("getSize = "+cache.getSize());
+//        System.out.println("getMemoryStoreSize = "+cache.getMemoryStoreSize());
     }
 }

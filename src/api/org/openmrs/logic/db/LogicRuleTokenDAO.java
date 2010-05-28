@@ -13,6 +13,7 @@
  */
 package org.openmrs.logic.db;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
 
@@ -28,7 +29,7 @@ import org.openmrs.logic.LogicService;
  * @see {@link LogicService}
  * @see {@link Context}
  */
-public interface LogicRuleTokenDAO {
+public interface LogicRuleTokenDAO extends Serializable {
 	
 	/**
 	 * Save a logic token definition from the database.

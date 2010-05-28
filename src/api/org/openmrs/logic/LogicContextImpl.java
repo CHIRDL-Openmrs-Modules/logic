@@ -124,8 +124,9 @@ public class LogicContextImpl implements LogicContext {
 	 * @see org.openmrs.logic.LogicContext#eval(org.openmrs.Patient,
 	 *      org.openmrs.logic.LogicCriteria, java.util.Map)
 	 */
+    //TODO: candidate for caching
 	public Result eval(Patient patient, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
-        LogicCacheComplexKey logicCacheComplexKey = new LogicCacheComplexKey(null, parameters, criteria, null);
+        LogicCacheComplexKey logicCacheComplexKey = new LogicCacheComplexKey(parameters, criteria, null);
         Element element = ehcache.get(logicCacheComplexKey);
         Map<Integer, Result> cachedResult;
         Result result = null;
@@ -216,8 +217,9 @@ public class LogicContextImpl implements LogicContext {
 	 * @see org.openmrs.logic.LogicContext#read(org.openmrs.Patient,
 	 *      org.openmrs.logic.datasource.LogicDataSource, org.openmrs.logic.LogicCriteria)
 	 */
+    //TODO: candidate for caching
 	public Result read(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
-        LogicCacheComplexKey logicCacheComplexKey = new LogicCacheComplexKey(null, null, criteria, dataSource);
+        LogicCacheComplexKey logicCacheComplexKey = new LogicCacheComplexKey(null, criteria, dataSource);
         Element element = ehcache.get(logicCacheComplexKey);
         Map<Integer, Result> cachedResult;
         Result result = null;
