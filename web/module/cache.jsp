@@ -9,16 +9,30 @@ there are ${cachesCount} caches<br/>
 </c:forEach>
 </ul>
 
-<br/>
-${cacheName} statisctics:
-<br/>
-Status: ${status}
-<br/>
-Cache stat: ${cacheStat}
-<br/>
-Cache dir: ${cacheDir}
-<br/>
-Serialized size: ${serializedSize}
+<br/>${cacheName} statisctics:<br/>
+<table>
+    <tr>
+        <td>Status:</td>
+        <td>${status}</td>
+    </tr>
+    <tr>
+        <td>Statistics:</td>
+        <td>${cacheStat}</td>
+    </tr>
+    <tr>
+        <td>Cache dir:</td>
+        <td>${cacheDir}</td>
+    </tr>
+    <tr>
+        <td>Disk store size:</td>
+        <td>${serializedSize}</td>
+    </tr>
+    <tr>
+        <td>cacheToStr:</td>
+        <td>${cacheToStr}</td>
+    </tr>
+</table>
+
 <br/>
 <form action="cache.form" method="POST">
     <input type="hidden" name="flush" value="flush"/>

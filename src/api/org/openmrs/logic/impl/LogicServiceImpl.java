@@ -359,15 +359,16 @@ public class LogicServiceImpl implements LogicService {
 	 */
     //TODO: candidate for caching
 	public LogicCriteria parse(String criteria) {
-        Element element = ehcache.get(criteria);
-        if(null != element) {
-            return (LogicCriteria) element.getValue();
-        }
-        
 		try {
 			if (!criteria.endsWith(";")) {
 				criteria += ";";
 			}
+
+            Element element = ehcache.get(criteria);
+            if(null != element) {
+                return (LogicCriteria) element.getValue();
+            }
+            
 			byte currentBytes[] = criteria.getBytes();
 			
 			ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(currentBytes);

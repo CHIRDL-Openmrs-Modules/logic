@@ -126,7 +126,7 @@ public class LogicContextImpl implements LogicContext {
 	 */
     //TODO: candidate for caching
 	public Result eval(Patient patient, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
-        LogicCacheComplexKey logicCacheComplexKey = new LogicCacheComplexKey(parameters, criteria, null, patients.getMemberIds());
+        LogicCacheComplexKey logicCacheComplexKey = new LogicCacheComplexKey(parameters, criteria, null, getIndexDate(), patients.getMemberIds());
         Element element = ehcache.get(logicCacheComplexKey);
         Map<Integer, Result> cachedResult;
         Result result = null;
@@ -219,7 +219,7 @@ public class LogicContextImpl implements LogicContext {
 	 */
     //TODO: candidate for caching
 	public Result read(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
-        LogicCacheComplexKey logicCacheComplexKey = new LogicCacheComplexKey(null, criteria, dataSource, patients.getMemberIds());
+        LogicCacheComplexKey logicCacheComplexKey = new LogicCacheComplexKey(null, criteria, dataSource, getIndexDate(), patients.getMemberIds());
         Element element = ehcache.get(logicCacheComplexKey);
         Map<Integer, Result> cachedResult;
         Result result = null;

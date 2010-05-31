@@ -2,7 +2,6 @@ package org.openmrs.logic.web.controller;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Statistics;
 import net.sf.ehcache.Status;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Patient;
@@ -109,7 +108,9 @@ public class LogicFormController {
 //        CacheManager cacheManager = CacheManager.getInstance();
         CacheManager cacheManager = LogicCacheManager.getOrCreate();
         String []cacheNames = null;
-        String status = "", cacheName = "", cacheStat = "", cacheDir = "", serialSize = "";
+        String status = "", cacheName = "", cacheStat = "", cacheDir = "", diskStoreSize = "", cacheToStr = "";
+
+
         if(null != cacheManager) {
             cacheNames = cacheManager.getCacheNames();
             cacheDir = cacheManager.getDiskStorePath();
@@ -124,7 +125,9 @@ public class LogicFormController {
             status = cache.getStatus().toString();
             cacheName = cache.getName();
             cacheStat = cache.getStatistics().toString();
-            serialSize = String.valueOf(cache.getDiskStoreSize());
+            diskStoreSize = Integer.toString(cache.getDiskStoreSize());
+
+            cacheToStr = cache.toString();
         }
 
 		modelMap.addAttribute("cacheNames", cacheNames);
@@ -134,7 +137,9 @@ public class LogicFormController {
         modelMap.addAttribute("cacheName", cacheName);
         modelMap.addAttribute("cacheStat", cacheStat);
         modelMap.addAttribute("cacheDir", cacheDir);
-        modelMap.addAttribute("diskStoreSize", serialSize);
+        modelMap.addAttribute("diskStoreSize", diskStoreSize);
+
+        modelMap.addAttribute("cacheToStr", cacheToStr);
 	}
 
 	/***********************************************************************************************************
