@@ -19,32 +19,31 @@ import net.sf.ehcache.Element;
 import net.sf.ehcache.config.CacheConfiguration;
 import org.junit.Before;
 import org.junit.Test;
+import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicService;
+import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.impl.LogicServiceImpl;
 import org.openmrs.logic.result.Result;
+import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.Map;
+import java.util.*;
 
 import static org.junit.Assert.*;
 
 /**
  *
  */
-public class LogicCacheComplexKeyTest {
+public class LogicCacheComplexKeyTest extends BaseModuleContextSensitiveTest {
 
     private final int DISK_CACHE_COUNT = 55;
 
     private LogicCacheComplexKey logicCacheComplexKey1;
     private LogicCacheComplexKey logicCacheComplexKey2;
-    private LogicService logicService;
-    private LogicCriteria logicCriteria1;
-    private LogicCriteria logicCriteria2;
+
     private Element element = null;
     private Cache cache;
 
@@ -52,12 +51,21 @@ public class LogicCacheComplexKeyTest {
     public void beforeTests() {
         if(null != element) return; //initialize only once;
 
-        logicService = new LogicServiceImpl();
-        logicCriteria1 = logicService.parse("\"AGE\"");
-        logicCriteria2 = logicService.parse("\"AGE\"");
+        LogicService logicService = new LogicServiceImpl();
+        LogicCriteria logicCriteria1 = logicService.parse("\"AGE\"");
+        LogicCriteria logicCriteria2 = logicService.parse("\"AGE\"");
 
-        logicCacheComplexKey1 = new LogicCacheComplexKey(null, logicCriteria1, null, null);
-        logicCacheComplexKey2 = new LogicCacheComplexKey(null, logicCriteria2, null, null);
+        LogicDataSource dataSource1 = Context.getLogicService().getLogicDataSource("encounter");
+        LogicDataSource dataSource2 = Context.getLogicService().getLogicDataSource("encounter");
+
+        Date indexDate1 = new Date(), indexDate2 = new Date();
+
+        Map<String, Object> paraeters1 = new HashMap<String, Object>(), paraeters2 = new HashMap<String, Object>();
+        paraeters1.put("11 111", 1);
+        paraeters2.put("11 111", 1);
+
+        logicCacheComplexKey1 = new LogicCacheComplexKey(paraeters1, logicCriteria1, dataSource1, indexDate1, null);
+        logicCacheComplexKey2 = new LogicCacheComplexKey(paraeters2, logicCriteria2, dataSource2, indexDate2, null);
 
         Map<Integer, Result> resultMap = new Hashtable<Integer, Result>();
         Result result = new Result(true);
@@ -93,7 +101,6 @@ public class LogicCacheComplexKeyTest {
 
         CacheManager cacheManager = LogicCacheManager.getOrCreate();
         assertNotNull("Cache manager is NULL!", cacheManager);
-//        System.out.println(cacheManager.getDiskStorePath());
         assertTrue("Empty cache!", cacheManager.getCacheNames().length > 0);
 
         for(int i = 0; i < DISK_CACHE_COUNT; i++) {
@@ -106,6 +113,7 @@ public class LogicCacheComplexKeyTest {
         assertTrue("No elements in memory", cache.getSize()  > 0);
 
         cache.flush();
+//        System.out.println(cacheManager.getDiskStorePath());
 //        System.out.println("Disk store = " + cache.getDiskStoreSize());
 //        System.out.println("getSize = "+cache.getSize());
 //        System.out.println("getMemoryStoreSize = "+cache.getMemoryStoreSize());
@@ -121,7 +129,7 @@ public class LogicCacheComplexKeyTest {
         }
 
         cache.evictExpiredElements();
-        assertTrue("Not evicted!", cache.getDiskStoreSize() == 1);
+        assertTrue("Not evicted!", cache.getDiskStoreSize() > 0);
 //        System.out.println("after expiration:");
 //        System.out.println("Disk store = " + cache.getDiskStoreSize());
 //        System.out.println("getSize = "+cache.getSize());

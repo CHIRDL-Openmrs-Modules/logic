@@ -381,7 +381,7 @@ in-memory capacity changed at runtime through the cache's configuration object.
     <cache name="org.openmrs.logic.defaultCache"
            maxElementsInMemory="50"
            maxElementsOnDisk="100"
-           eternal="true"
+           eternal="false"
            overflowToDisk="true"
            diskSpoolBufferSizeMB="20"
            timeToIdleSeconds="300"
