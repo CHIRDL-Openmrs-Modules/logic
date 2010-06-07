@@ -11,19 +11,22 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.logic.cache;
-
-import net.sf.ehcache.event.CacheEventListener;
-import net.sf.ehcache.event.CacheEventListenerFactory;
+package org.openmrs.logic.cache.ehcache.listener;
 
 import java.util.Properties;
+
+import net.sf.ehcache.event.CacheManagerEventListener;
+import net.sf.ehcache.event.CacheManagerEventListenerFactory;
+
 
 /**
  *
  */
-public class LogicCacheEventListenerFactory extends CacheEventListenerFactory {
-    @Override
-    public CacheEventListener createCacheEventListener(Properties properties) {
-        return new LogicCacheEventListener();
+public class LogicCacheManagerEventListenerFactory extends CacheManagerEventListenerFactory{
+
+	@Override
+    public CacheManagerEventListener createCacheManagerEventListener(Properties properties) {
+	    return new LogicCacheManagerEventListener();
     }
+
 }

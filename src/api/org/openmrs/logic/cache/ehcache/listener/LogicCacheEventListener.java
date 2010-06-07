@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.logic.cache;
+package org.openmrs.logic.cache.ehcache.listener;
 
 import net.sf.ehcache.CacheException;
 import net.sf.ehcache.Ehcache;
