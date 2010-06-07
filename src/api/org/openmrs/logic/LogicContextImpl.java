@@ -13,29 +13,20 @@
  */
 package org.openmrs.logic;
 
-import java.util.Collection;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Ehcache;
-import net.sf.ehcache.Element;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
+import org.openmrs.logic.cache.LogicCache;
 import org.openmrs.logic.cache.LogicCacheComplexKey;
 import org.openmrs.logic.cache.LogicCacheManager;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.ReferenceRule;
-import org.openmrs.logic.LogicContext;
-import org.openmrs.logic.LogicCriteria;
+
+import java.util.*;
 
 /**
  * The context within which logic rule and data source evaluations are made. The logic context is
@@ -73,14 +64,10 @@ public class LogicContextImpl implements LogicContext {
 	 */
 	private Cohort patients;
 	
-	/**
-	 * Cache used by this log context
-	 * 
-	 * @see org.openmrs.logic.LogicCache
-	 */
-	private LogicCache cache;
-
-    private Cache ehcache = LogicCacheManager.getLogicEhCache();//CacheManager.getInstance().getEhcache("org.openmrs.logic.defaultCache");
+//	private LogicCache cache;
+//    private Cache ehcache = LogicCacheManagerTMP.getLogicEhCache();//CacheManager.getInstance().getEhcache("org.openmrs.logic.defaultCache");
+    
+    private LogicCache logicCache = LogicCacheManager.getLogicCache("org.openmrs.logic.defaultCache");
 
 	/**
 	 * Constructs a logic context applied to a single patient
@@ -127,13 +114,23 @@ public class LogicContextImpl implements LogicContext {
     //TODO: candidate for caching
 	public Result eval(Patient patient, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
         LogicCacheComplexKey logicCacheComplexKey = new LogicCacheComplexKey(parameters, criteria, null, getIndexDate(), patients.getMemberIds());
-        Element element = ehcache.get(logicCacheComplexKey);
-        Map<Integer, Result> cachedResult;
+
+//        Element element = ehcache.get(logicCacheComplexKey);
+
+        Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheComplexKey);
         Result result = null;
-        if(null != element) {
-            cachedResult = (Map<Integer, Result>) element.getObjectValue();
+
+        if(null != cachedResult)
             result = cachedResult.get(patient.getPatientId());
-        }
+        
+//        if(null != element) {
+//        	try {
+//        		cachedResult = (Map<Integer, Result>) element.getObjectValue();
+//        	} catch (Exception e) {
+//
+//			}
+//            result = cachedResult.get(patient.getPatientId());
+//        }
 
 //		Result result = getCache().get(patient, criteria, parameters);
 		PatientService patientService = Context.getPatientService();
@@ -157,8 +154,10 @@ public class LogicContextImpl implements LogicContext {
 				if (pid.equals(targetPatientId))
 					result = resultMap.get(pid);
 			}
-            Element el = new Element(logicCacheComplexKey, resultMap, false, rule.getTTL(), rule.getTTL());           
-            ehcache.put(el);
+
+//            Element el = new Element(logicCacheComplexKey, resultMap, false, rule.getTTL(), rule.getTTL());
+//            ehcache.put(el);
+            logicCache.put(logicCacheComplexKey, resultMap, rule.getTTL()); //TODO: use TTLProvider
 			//getCache().put(criteria, parameters, rule.getTTL(), resultMap);
 		}
 		
@@ -220,13 +219,16 @@ public class LogicContextImpl implements LogicContext {
     //TODO: candidate for caching
 	public Result read(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
         LogicCacheComplexKey logicCacheComplexKey = new LogicCacheComplexKey(null, criteria, dataSource, getIndexDate(), patients.getMemberIds());
-        Element element = ehcache.get(logicCacheComplexKey);
-        Map<Integer, Result> cachedResult;
+//        Element element = ehcache.get(logicCacheComplexKey);
+        Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheComplexKey);
         Result result = null;
-        if(null != element) {
-            cachedResult = (Map<Integer, Result>) element.getObjectValue();
+        if(null != cachedResult) {
             result = cachedResult.get(patient.getPatientId());
         }
+//        if(null != element) {
+//            cachedResult = (Map<Integer, Result>) element.getObjectValue();
+//            result = cachedResult.get(patient.getPatientId());
+//        }
         
 		//Result result = getCache().get(patient, dataSource, criteria);
 		log
@@ -237,8 +239,9 @@ public class LogicContextImpl implements LogicContext {
 
 
 //            getCache().put(dataSource, criteria, resultMap);
-            Element el = new Element(logicCacheComplexKey, resultMap, false, dataSource.getDefaultTTL(), dataSource.getDefaultTTL());
-            ehcache.put(el);
+//            Element el = new Element(logicCacheComplexKey, resultMap, false, dataSource.getDefaultTTL(), dataSource.getDefaultTTL());
+//            ehcache.put(el);
+            logicCache.put(logicCacheComplexKey, resultMap, dataSource.getDefaultTTL()); //TODO: use TTLPRovider
 
             result = resultMap.get(patient.getPatientId());
 		}
@@ -288,14 +291,19 @@ public class LogicContextImpl implements LogicContext {
 	public Collection<String> getGlobalParameters() {
 		return globalParameters.keySet();
 	}
-	
-	/**
-	 * @return the cache for this logic context
-	 */
-	private LogicCache getCache() {
-		if (cache == null)
-			cache = new LogicCache();
-		return cache;
-	}
-	
+
+//	private LogicCache getCache() {
+//		if (cache == null)
+//			cache = new LogicCache();
+//		return cache;
+//	}
+
+
+    public LogicCache getLogicCache() {
+        return logicCache;
+    }
+
+    public void setLogicCache(LogicCache logicCache) {
+        this.logicCache = logicCache;
+    }
 }

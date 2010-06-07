@@ -13,28 +13,13 @@
  */
 package org.openmrs.logic.impl;
 
-import java.io.ByteArrayInputStream;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.Element;
+import antlr.BaseAST;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
-import org.openmrs.logic.LogicContext;
-import org.openmrs.logic.LogicContextImpl;
-import org.openmrs.logic.LogicCriteria;
-import org.openmrs.logic.LogicCriteriaImpl;
-import org.openmrs.logic.LogicException;
-import org.openmrs.logic.LogicService;
-import org.openmrs.logic.Rule;
+import org.openmrs.logic.*;
+import org.openmrs.logic.cache.LogicCache;
 import org.openmrs.logic.cache.LogicCacheManager;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.queryparser.LogicQueryBaseParser;
@@ -44,7 +29,8 @@ import org.openmrs.logic.result.Result;
 import org.openmrs.logic.result.Result.Datatype;
 import org.openmrs.logic.rule.RuleParameterInfo;
 
-import antlr.BaseAST;
+import java.io.ByteArrayInputStream;
+import java.util.*;
 
 /**
  * Default implementation of the LogicService. This class should not be used directly. This class,
@@ -61,7 +47,8 @@ public class LogicServiceImpl implements LogicService {
 	
 	private RuleFactory ruleFactory;
 
-    private Cache ehcache = LogicCacheManager.getLogicEhCache();
+//    private Cache ehcache = LogicCacheManagerTMP.getLogicEhCache();
+//    private LogicCache logicCache = LogicCacheManager.getLogicCache("org.openmrs.logic.defaultCache"); //TODO: possible caching some methods here
 	
 	private static Map<String, LogicDataSource> dataSources;
 	
@@ -364,11 +351,12 @@ public class LogicServiceImpl implements LogicService {
 				criteria += ";";
 			}
 
-            Element element = ehcache.get(criteria);
-            if(null != element) {
-                return (LogicCriteria) element.getValue();
-            }
-            
+//            Element element = ehcache.get(criteria);
+//            if(null != element) {
+//                return (LogicCriteria) element.getValue();
+//            }
+                        
+
 			byte currentBytes[] = criteria.getBytes();
 			
 			ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(currentBytes);
@@ -391,8 +379,8 @@ public class LogicServiceImpl implements LogicService {
 			LogicCriteriaImpl lc = treeParser.query_AST(t);
 			// System.out.println(lc.toString());
             
-            element = new Element(criteria, lc);
-            ehcache.put(element);
+//            element = new Element(criteria, lc);
+//            ehcache.put(element);
 
 			return lc;
 		}
