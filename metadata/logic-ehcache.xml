@@ -112,60 +112,6 @@ in-memory capacity changed at runtime through the cache's configuration object.
     <cacheManagerEventListenerFactory class="org.openmrs.logic.cache.LogicCacheManagerEventListenerFactory" properties=""/>
 
     <!--
-    TerracottaConfig
-    ========================
-    (Enable for Terracotta clustered operation)
-
-    Note: You need to install and run one or more Terracotta servers to use Terracotta clustering.
-    See http://www.terracotta.org/web/display/orgsite/Download.
-
-    Specifies a TerracottaConfig which will be used to configure the Terracotta
-    runtime for this CacheManager.
-   
-    Configuration can be specified in two main ways: by reference to a source of
-    configuration or by use of an embedded Terracotta configuration file.
-   
-    To specify a reference to a source (or sources) of configuration, use the url
-    attribute.  The url attribute must contain a comma-separated list of:
-    * path to Terracotta configuration file (usually named tc-config.xml)
-    * URL to Terracotta configuration file
-    * <server host>:<port> of running Terracotta Server instance
-   
-    Simplest example for pointing to a Terracotta server on this machine:
-    <terracottaConfig url="localhost:9510"/>
-   
-    Example using a path to Terracotta configuration file:
-    <terracottaConfig url="/app/config/tc-config.xml"/>
-   
-    Example using a URL to a Terracotta configuration file:
-    <terracottaConfig url="http://internal/ehcache/app/tc-config.xml"/>
-   
-    Example using multiple Terracotta server instance URLs (for fault tolerance):
-    <terracottaConfig url="host1:9510,host2:9510,host3:9510"/>
-
-    To embed a Terracotta configuration file within the ehcache configuration, simply
-    place a normal Terracotta XML config within the <terracottaConfig> element.
-   
-    Example:
-    <terracottaConfig>
-        <tc-config>
-            <servers>
-                <server host="server1" name="s1"/>
-                <server host="server2" name="s2"/>
-            </servers>
-            <clients>
-                <logs>app/logs-%i</logs>
-            </clients>          
-        </tc-config>
-    </terracottaConfig>
-   
-    For more information on the Terracotta configuration, see the Terracotta documentation.
-    
-    By default, if the terracotta element is included, clustered=true
-    -->
-    <!-- <terracottaConfig url="localhost:9510"/> -->
-
-    <!--
     Cache configuration
     ===================
 
@@ -384,8 +330,8 @@ in-memory capacity changed at runtime through the cache's configuration object.
            eternal="false"
            overflowToDisk="true"
            diskSpoolBufferSizeMB="20"
-           timeToIdleSeconds="300"
-           timeToLiveSeconds="400"
+           timeToIdleSeconds="1200"
+           timeToLiveSeconds="1200"
            diskExpiryThreadIntervalSeconds="120"
            memoryStoreEvictionPolicy="LRU"
            diskPersistent="true"

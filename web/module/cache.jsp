@@ -35,8 +35,8 @@ there are ${cachesCount} caches<br/>
 
 <br/>
 <form action="cache.form" method="POST">
-    <input type="hidden" name="flush" value="flush"/>
-    <input type="submit" value="flush" />
+    <input type="hidden" name="action" value="action"/>
+    <input type="submit" value="expireOnDisk" />
 </form>
 
 

@@ -8,7 +8,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicService;
-import org.openmrs.logic.cache.LogicCacheManager;
+import org.openmrs.logic.cache.ehcache.LogicCacheManagerTMP;
 import org.openmrs.logic.result.Result;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -104,9 +104,9 @@ public class LogicFormController {
 	}
 
     @RequestMapping("/module/logic/cache")
-	public void handlePath(@RequestParam(required = false, value = "flush") String flush, ModelMap modelMap) throws Exception {
+	public void handlePath(@RequestParam(required = false, value = "action") String action, ModelMap modelMap) throws Exception {
 //        CacheManager cacheManager = CacheManager.getInstance();
-        CacheManager cacheManager = LogicCacheManager.getOrCreate();
+        CacheManager cacheManager = LogicCacheManagerTMP.getOrCreate();
         String []cacheNames = null;
         String status = "", cacheName = "", cacheStat = "", cacheDir = "", diskStoreSize = "", cacheToStr = "";
 
@@ -116,11 +116,11 @@ public class LogicFormController {
             cacheDir = cacheManager.getDiskStorePath();
         }
 
-        Cache cache = LogicCacheManager.getLogicEhCache();
+        Cache cache = LogicCacheManagerTMP.getLogicEhCache();
 
         if(null != cache) {
-            if(!StringUtils.isBlank(flush) && Status.STATUS_ALIVE.equals(cache.getStatus())) {
-                cache.flush();
+            if(!StringUtils.isBlank(action) && Status.STATUS_ALIVE.equals(cache.getStatus())) {
+                cache.evictExpiredElements();//cache.flush();
             }
             status = cache.getStatus().toString();
             cacheName = cache.getName();
