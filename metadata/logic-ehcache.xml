@@ -109,7 +109,7 @@ in-memory capacity changed at runtime through the cache's configuration object.
     If no class is specified, no listener is created. There is no default.
     -->
 
-    <cacheManagerEventListenerFactory class="org.openmrs.logic.cache.LogicCacheManagerEventListenerFactory" properties=""/>
+    <cacheManagerEventListenerFactory class="org.openmrs.logic.cache.ehcache.listener.LogicCacheManagerEventListenerFactory" properties=""/>
 
     <!--
     Cache configuration
@@ -337,7 +337,7 @@ in-memory capacity changed at runtime through the cache's configuration object.
            diskPersistent="true"
            clearOnFlush="false">
         
-        <cacheEventListenerFactory class="org.openmrs.logic.cache.LogicCacheEventListenerFactory" properties="" listenFor="all"/>
+        <cacheEventListenerFactory class="org.openmrs.logic.cache.ehcache.listener.LogicCacheEventListenerFactory" properties="" listenFor="all"/>
     </cache>
 
 </ehcache>

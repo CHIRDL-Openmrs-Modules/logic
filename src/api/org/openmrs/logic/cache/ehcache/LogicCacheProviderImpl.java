@@ -41,7 +41,7 @@ public class LogicCacheProviderImpl extends LogicCacheProvider {
 
     public CacheManager getCacheManager() {
         if(null == cacheManager) {
-            URL url = LogicCacheManagerTMP.class.getResource(LOGIC_CACHE_CONFIG);
+            URL url = LogicCacheProviderImpl.class.getResource(LOGIC_CACHE_CONFIG);
             cacheManager = new CacheManager(url);
         }
         

@@ -22,6 +22,7 @@ import java.net.URL;
 /**
  *
  */
+@Deprecated
 public class LogicCacheManagerTMP {
     private static final String LOGIC_CACHE_NAME = "org.openmrs.logic.defaultCache";
     private static final String LOGIC_CACHE_CONFIG = "/logic-ehcache.xml";
