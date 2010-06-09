@@ -11,21 +11,25 @@ there are ${cachesCount} caches<br/>
 
 <br/>${cacheName} statisctics:<br/>
 <table>
+    <%--<tr>--%>
+        <%--<td>Status:</td>--%>
+        <%--<td>${status}</td>--%>
+    <%--</tr>--%>
+    <%--<tr>--%>
+        <%--<td>Statistics:</td>--%>
+        <%--<td>${cacheStat}</td>--%>
+    <%--</tr>--%>
+    <%--<tr>--%>
+        <%--<td>Cache dir:</td>--%>
+        <%--<td>${cacheDir}</td>--%>
+    <%--</tr>--%>
+    <%--<tr>--%>
+        <%--<td>Disk store size:</td>--%>
+        <%--<td>${serializedSize}</td>--%>
+    <%--</tr>--%>
     <tr>
-        <td>Status:</td>
-        <td>${status}</td>
-    </tr>
-    <tr>
-        <td>Statistics:</td>
-        <td>${cacheStat}</td>
-    </tr>
-    <tr>
-        <td>Cache dir:</td>
-        <td>${cacheDir}</td>
-    </tr>
-    <tr>
-        <td>Disk store size:</td>
-        <td>${serializedSize}</td>
+        <td>cacheSize:</td>
+        <td>${cacheSize}</td>
     </tr>
     <tr>
         <td>cacheToStr:</td>

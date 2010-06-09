@@ -1,14 +1,12 @@
 package org.openmrs.logic.web.controller;
 
-import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.Status;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicService;
-import org.openmrs.logic.cache.ehcache.LogicCacheManagerTMP;
+import org.openmrs.logic.cache.LogicCache;
+import org.openmrs.logic.cache.LogicCacheManager;
 import org.openmrs.logic.result.Result;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -106,39 +104,37 @@ public class LogicFormController {
     @RequestMapping("/module/logic/cache")
 	public void handlePath(@RequestParam(required = false, value = "action") String action, ModelMap modelMap) throws Exception {
 //        CacheManager cacheManager = CacheManager.getInstance();
-        CacheManager cacheManager = LogicCacheManagerTMP.getOrCreate();
         String []cacheNames = null;
-        String status = "", cacheName = "", cacheStat = "", cacheDir = "", diskStoreSize = "", cacheToStr = "";
+        String status = "", cacheName = "", cacheStat = "", cacheDir = "", diskStoreSize = "", cacheToStr = "", cacheSize = "";
 
 
-        if(null != cacheManager) {
-            cacheNames = cacheManager.getCacheNames();
-            cacheDir = cacheManager.getDiskStorePath();
-        }
+        cacheNames = LogicCacheManager.getCacheNames();
+//        cacheDir = cacheManager.getDiskStorePath();
 
-        Cache cache = LogicCacheManagerTMP.getLogicEhCache();
 
-        if(null != cache) {
-            if(!StringUtils.isBlank(action) && Status.STATUS_ALIVE.equals(cache.getStatus())) {
-                cache.evictExpiredElements();//cache.flush();
+        LogicCache logicCache = LogicCacheManager.getLogicCache("org.openmrs.logic.defaultCache");
+
+        if(null != logicCache) {
+            if(!StringUtils.isBlank(action)) { // && Status.STATUS_ALIVE.equals(cache.getStatus())
+                logicCache.flush(); //evictExpiredElements();
             }
-            status = cache.getStatus().toString();
-            cacheName = cache.getName();
-            cacheStat = cache.getStatistics().toString();
-            diskStoreSize = Integer.toString(cache.getDiskStoreSize());
 
-            cacheToStr = cache.toString();
+//            cacheName = cache.getName();
+//            cacheStat = cache.getStatistics().toString();
+//            diskStoreSize = Integer.toString(cache.getDiskStoreSize());
+            cacheSize = Integer.toString(logicCache.getSize());
+            cacheToStr = logicCache.getCacheSpecificStats();
         }
 
 		modelMap.addAttribute("cacheNames", cacheNames);
         modelMap.addAttribute("cachesCount", cacheNames != null ? cacheNames.length : "-");
 
-        modelMap.addAttribute("status", status);
-        modelMap.addAttribute("cacheName", cacheName);
-        modelMap.addAttribute("cacheStat", cacheStat);
-        modelMap.addAttribute("cacheDir", cacheDir);
-        modelMap.addAttribute("diskStoreSize", diskStoreSize);
+//        modelMap.addAttribute("cacheName", cacheName);
+//        modelMap.addAttribute("cacheStat", cacheStat);
+//        modelMap.addAttribute("cacheDir", cacheDir);
+//        modelMap.addAttribute("diskStoreSize", diskStoreSize);
 
+        modelMap.addAttribute("cacheSize", cacheSize);
         modelMap.addAttribute("cacheToStr", cacheToStr);
 	}
 

@@ -56,6 +56,11 @@ public class LogicCacheImpl implements LogicCache {
         cache.remove(key);
     }
 
+    @Override
+    public String getCacheSpecificStats() {
+        return cache.toString();
+    }
+
     public LogicCacheConfig getLogicCacheConfig() {
         return logicCacheConfig;
     }

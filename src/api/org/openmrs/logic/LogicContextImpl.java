@@ -67,7 +67,7 @@ public class LogicContextImpl implements LogicContext {
 //	private LogicCache cache;
 //    private Cache ehcache = LogicCacheManagerTMP.getLogicEhCache();//CacheManager.getInstance().getEhcache("org.openmrs.logic.defaultCache");
     
-    private LogicCache logicCache = LogicCacheManager.getLogicCache("org.openmrs.logic.defaultCache");
+    private LogicCache logicCache = LogicCacheManager.getLogicCache("org.openmrs.logic.defaultCache"); //TODO: name provider ??
 
 	/**
 	 * Constructs a logic context applied to a single patient

@@ -25,4 +25,8 @@ public class LogicCacheManager {
     public static LogicCache getLogicCache(String name) {
         return logicCacheProvider.getCache(name);
     }
+
+    public static String[] getCacheNames() {
+        return logicCacheProvider.getCacheNames();
+    }
 }

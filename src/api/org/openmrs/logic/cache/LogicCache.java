@@ -26,4 +26,6 @@ public interface LogicCache {
     void flush();
 
     void remove(Object key);
+
+    String getCacheSpecificStats();
 }
