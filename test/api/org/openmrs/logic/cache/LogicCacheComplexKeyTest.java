@@ -47,9 +47,9 @@ public class LogicCacheComplexKeyTest extends BaseModuleContextSensitiveTest {
 	
 	private final int DISK_CACHE_COUNT = 55;
 	
-	private LogicCacheComplexKey logicCacheComplexKey1;
+	private LogicCacheKey logicCacheKey1;
 	
-	private LogicCacheComplexKey logicCacheComplexKey2;
+	private LogicCacheKey logicCacheKey2;
 	
 	private Element element = null;
 	
@@ -73,13 +73,13 @@ public class LogicCacheComplexKeyTest extends BaseModuleContextSensitiveTest {
 		paraeters1.put("11 111", 1);
 		paraeters2.put("11 111", 1);
 		
-		logicCacheComplexKey1 = new LogicCacheComplexKey(paraeters1, logicCriteria1, dataSource1, indexDate1, null);
-		logicCacheComplexKey2 = new LogicCacheComplexKey(paraeters2, logicCriteria2, dataSource2, indexDate2, null);
+		logicCacheKey1 = new LogicCacheKey(paraeters1, logicCriteria1, dataSource1, indexDate1, null);
+		logicCacheKey2 = new LogicCacheKey(paraeters2, logicCriteria2, dataSource2, indexDate2, null);
 		
 		Map<Integer, Result> resultMap = new Hashtable<Integer, Result>();
 		Result result = new Result(true);
 		resultMap.put(1, result);
-		element = new Element(logicCacheComplexKey1, resultMap);
+		element = new Element(logicCacheKey1, resultMap);
 		element.setTimeToLive(1000);
 		
 		cache = LogicCacheManagerTMP.getLogicEhCache();
@@ -90,7 +90,7 @@ public class LogicCacheComplexKeyTest extends BaseModuleContextSensitiveTest {
 	
 	@Test
 	public void testSerialization() throws Exception {
-		assertEquals("Comparing keys with criteria.", logicCacheComplexKey1, logicCacheComplexKey2);
+		assertEquals("Comparing keys with criteria.", logicCacheKey1, logicCacheKey2);
 		assertTrue("Not serialized by element.", element.getSerializedSize() > 0);
 		
 		try {

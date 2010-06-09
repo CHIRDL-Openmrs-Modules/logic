@@ -41,6 +41,21 @@ public class LogicCacheImpl implements LogicCache {
         return cache.get(key).getValue();
     }
 
+    @Override
+    public int getSize() {
+        return cache.getSize();
+    }
+
+    @Override
+    public void flush() {
+        cache.flush();
+    }
+
+    @Override
+    public void remove(Object key) {
+        cache.remove(key);
+    }
+
     public LogicCacheConfig getLogicCacheConfig() {
         return logicCacheConfig;
     }

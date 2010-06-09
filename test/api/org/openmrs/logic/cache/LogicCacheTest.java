@@ -15,13 +15,15 @@ package org.openmrs.logic.cache;
 
 import org.junit.Before;
 import org.junit.Test;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  *
  */
 public class LogicCacheTest {
     private final String CACHE_NAME = "org.openmrs.logic.defaultCache";
+    private final int CACHE_OBJS_COUNT = 100;
+    private final int DEF_TTL = 100;
 
     private LogicCache logicCache;
 
@@ -33,10 +35,18 @@ public class LogicCacheTest {
         beforeOnce = true;
 
         logicCache = LogicCacheManager.getLogicCache(CACHE_NAME);
+        assertNotNull("logicCache is null", logicCache);
     }
 
     @Test
     public void logicCachePutGetTest() {
-        assertNotNull("logicCache is null", logicCache);
+        for(int i = 0; i < CACHE_OBJS_COUNT; ++i)
+            logicCache.put("key"+i, i, DEF_TTL);
+
+        assertEquals(CACHE_OBJS_COUNT, logicCache.getSize());
+
+        for(int i = 0; i < CACHE_OBJS_COUNT; ++i) {
+            assertEquals(i, logicCache.get("key"+i));
+        }
     }
 }

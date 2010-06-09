@@ -18,6 +18,12 @@ package org.openmrs.logic.cache;
  */
 public interface LogicCache {
     void put(Object key, Object value, int ttl);
+
     Object get(Object key);
-    
+
+    int getSize();
+
+    void flush();
+
+    void remove(Object key);
 }

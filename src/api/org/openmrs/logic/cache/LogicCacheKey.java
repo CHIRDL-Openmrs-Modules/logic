@@ -25,17 +25,17 @@ import java.util.Set;
 /**
  *
  */
-public class LogicCacheComplexKey implements Serializable {
+public class LogicCacheKey implements Serializable {
     private Map<String, Object> parameters;
     private LogicCriteria criteria;
     private LogicDataSource dataSource;
     private Date indexDate;
     private Set<Integer> membersIds;
 
-    public LogicCacheComplexKey() {
+    public LogicCacheKey() {
     }
 
-    public LogicCacheComplexKey(Map<String, Object> parameters, LogicCriteria criteria, LogicDataSource dataSource, Date indexDate, Set<Integer> membersIds) {
+    public LogicCacheKey(Map<String, Object> parameters, LogicCriteria criteria, LogicDataSource dataSource, Date indexDate, Set<Integer> membersIds) {
         this.parameters = parameters;
         this.criteria = criteria;
         this.dataSource = dataSource;
@@ -51,7 +51,7 @@ public class LogicCacheComplexKey implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        LogicCacheComplexKey that = (LogicCacheComplexKey) o;
+        LogicCacheKey that = (LogicCacheKey) o;
         that.indexDate = updateTime(that.indexDate);
 
         if (criteria != null ? !criteria.equals(that.criteria) : that.criteria != null) return false;

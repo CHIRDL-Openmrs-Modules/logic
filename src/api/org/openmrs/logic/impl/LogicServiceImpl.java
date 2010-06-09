@@ -19,8 +19,6 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
 import org.openmrs.logic.*;
-import org.openmrs.logic.cache.LogicCache;
-import org.openmrs.logic.cache.LogicCacheManager;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.queryparser.LogicQueryBaseParser;
 import org.openmrs.logic.queryparser.LogicQueryLexer;
@@ -148,7 +146,7 @@ public class LogicServiceImpl implements LogicService {
 	public Result eval(Patient who, String token, Map<String, Object> parameters) throws LogicException {
 		return eval(who, new LogicCriteriaImpl(token, parameters));
 	}
-	
+
 	/**
 	 * @see org.openmrs.logic.LogicService#eval(Patient, LogicCriteriaImpl)
 	 */

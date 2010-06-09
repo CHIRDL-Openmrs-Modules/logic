@@ -20,7 +20,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.cache.LogicCache;
-import org.openmrs.logic.cache.LogicCacheComplexKey;
+import org.openmrs.logic.cache.LogicCacheKey;
 import org.openmrs.logic.cache.LogicCacheManager;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.result.Result;
@@ -113,11 +113,11 @@ public class LogicContextImpl implements LogicContext {
 	 */
     //TODO: candidate for caching
 	public Result eval(Patient patient, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
-        LogicCacheComplexKey logicCacheComplexKey = new LogicCacheComplexKey(parameters, criteria, null, getIndexDate(), patients.getMemberIds());
+        LogicCacheKey logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), patients.getMemberIds());
 
-//        Element element = ehcache.get(logicCacheComplexKey);
+//        Element element = ehcache.get(logicCacheKey);
 
-        Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheComplexKey);
+        Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheKey);
         Result result = null;
 
         if(null != cachedResult)
@@ -155,9 +155,9 @@ public class LogicContextImpl implements LogicContext {
 					result = resultMap.get(pid);
 			}
 
-//            Element el = new Element(logicCacheComplexKey, resultMap, false, rule.getTTL(), rule.getTTL());
+//            Element el = new Element(logicCacheKey, resultMap, false, rule.getTTL(), rule.getTTL());
 //            ehcache.put(el);
-            logicCache.put(logicCacheComplexKey, resultMap, rule.getTTL()); //TODO: use TTLProvider
+            logicCache.put(logicCacheKey, resultMap, rule.getTTL()); //TODO: use TTLProvider
 			//getCache().put(criteria, parameters, rule.getTTL(), resultMap);
 		}
 		
@@ -218,9 +218,9 @@ public class LogicContextImpl implements LogicContext {
 	 */
     //TODO: candidate for caching
 	public Result read(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
-        LogicCacheComplexKey logicCacheComplexKey = new LogicCacheComplexKey(null, criteria, dataSource, getIndexDate(), patients.getMemberIds());
-//        Element element = ehcache.get(logicCacheComplexKey);
-        Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheComplexKey);
+        LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patients.getMemberIds());
+//        Element element = ehcache.get(logicCacheKey);
+        Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheKey);
         Result result = null;
         if(null != cachedResult) {
             result = cachedResult.get(patient.getPatientId());
@@ -239,9 +239,9 @@ public class LogicContextImpl implements LogicContext {
 
 
 //            getCache().put(dataSource, criteria, resultMap);
-//            Element el = new Element(logicCacheComplexKey, resultMap, false, dataSource.getDefaultTTL(), dataSource.getDefaultTTL());
+//            Element el = new Element(logicCacheKey, resultMap, false, dataSource.getDefaultTTL(), dataSource.getDefaultTTL());
 //            ehcache.put(el);
-            logicCache.put(logicCacheComplexKey, resultMap, dataSource.getDefaultTTL()); //TODO: use TTLPRovider
+            logicCache.put(logicCacheKey, resultMap, dataSource.getDefaultTTL()); //TODO: use TTLPRovider
 
             result = resultMap.get(patient.getPatientId());
 		}
