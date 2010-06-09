@@ -20,7 +20,6 @@ import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
-import java.util.Set;
 
 /**
  *
@@ -30,20 +29,18 @@ public class LogicCacheKey implements Serializable {
     private LogicCriteria criteria;
     private LogicDataSource dataSource;
     private Date indexDate;
-    private Set<Integer> membersIds;
+    private Integer patientId;
+    //private Set<Integer> membersIds;
 
     public LogicCacheKey() {
     }
 
-    public LogicCacheKey(Map<String, Object> parameters, LogicCriteria criteria, LogicDataSource dataSource, Date indexDate, Set<Integer> membersIds) {
+    public LogicCacheKey(Map<String, Object> parameters, LogicCriteria criteria, LogicDataSource dataSource, Date indexDate, Integer patientId) {
         this.parameters = parameters;
         this.criteria = criteria;
         this.dataSource = dataSource;
-
         this.indexDate = updateTime(indexDate);
-
-
-        this.membersIds = membersIds;
+        this.patientId = patientId;
     }
 
     @Override
@@ -52,13 +49,12 @@ public class LogicCacheKey implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
 
         LogicCacheKey that = (LogicCacheKey) o;
-        that.indexDate = updateTime(that.indexDate);
 
         if (criteria != null ? !criteria.equals(that.criteria) : that.criteria != null) return false;
         if (dataSource != null ? !dataSource.equals(that.dataSource) : that.dataSource != null) return false;
         if (indexDate != null ? !indexDate.equals(that.indexDate) : that.indexDate != null) return false;
-        if (membersIds != null ? !membersIds.equals(that.membersIds) : that.membersIds != null) return false;
         if (parameters != null ? !parameters.equals(that.parameters) : that.parameters != null) return false;
+        if (patientId != null ? !patientId.equals(that.patientId) : that.patientId != null) return false;
 
         return true;
     }
@@ -69,7 +65,7 @@ public class LogicCacheKey implements Serializable {
         result = 31 * result + (criteria != null ? criteria.hashCode() : 0);
         result = 31 * result + (dataSource != null ? dataSource.hashCode() : 0);
         result = 31 * result + (indexDate != null ? indexDate.hashCode() : 0);
-        result = 31 * result + (membersIds != null ? membersIds.hashCode() : 0);
+        result = 31 * result + (patientId != null ? patientId.hashCode() : 0);
         return result;
     }
 
@@ -94,12 +90,12 @@ public class LogicCacheKey implements Serializable {
         this.indexDate = updateTime(indexDate);
     }
 
-    public Set<Integer> getMembersIds() {
-        return membersIds;
+    public Integer getPatientId() {
+        return patientId;
     }
 
-    public void setMembersIds(Set<Integer> membersIds) {
-        this.membersIds = membersIds;
+    public void setPatientId(Integer patientId) {
+        this.patientId = patientId;
     }
 
     public Map<String, Object> getParameters() {

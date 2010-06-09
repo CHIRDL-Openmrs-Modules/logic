@@ -113,15 +113,15 @@ public class LogicContextImpl implements LogicContext {
 	 */
     //TODO: candidate for caching
 	public Result eval(Patient patient, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
-        LogicCacheKey logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), patients.getMemberIds());
+//        LogicCacheKey logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), patient.getPatientId());
 
 //        Element element = ehcache.get(logicCacheKey);
 
-        Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheKey);
+//        Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheKey);
         Result result = null;
 
-        if(null != cachedResult)
-            result = cachedResult.get(patient.getPatientId());
+//        if(null != cachedResult)
+//            result = cachedResult.get(patient.getPatientId());
         
 //        if(null != element) {
 //        	try {
@@ -141,23 +141,33 @@ public class LogicContextImpl implements LogicContext {
 			Rule rule = Context.getLogicService().getRule(criteria.getRootToken());
 			Map<Integer, Result> resultMap = new Hashtable<Integer, Result>();
 			for (Integer pid : patients.getMemberIds()) {
+                LogicCacheKey logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), pid);
+                Result r = (Result) logicCache.get(logicCacheKey);
+                if(null != r) {
+                    resultMap.put(pid, r);
+                    continue;
+                }
+
 				Patient currPatient = patientService.getPatient(pid);
-				Result r = Result.emptyResult();
+
 				if (rule instanceof ReferenceRule) {
 					r = ((ReferenceRule) rule).eval(this, currPatient, criteria);
 				} else {
 					r = rule.eval(this, currPatient, parameters);
 					r = applyCriteria(r, criteria);
 				}
-				
+
+                logicCache.put(logicCacheKey, r, rule.getTTL());
+
 				resultMap.put(pid, r);
-				if (pid.equals(targetPatientId))
-					result = resultMap.get(pid);
+//				if (pid.equals(targetPatientId))
+//					result = resultMap.get(pid);
 			}
 
+            result = resultMap.get(targetPatientId);
 //            Element el = new Element(logicCacheKey, resultMap, false, rule.getTTL(), rule.getTTL());
 //            ehcache.put(el);
-            logicCache.put(logicCacheKey, resultMap, rule.getTTL()); //TODO: use TTLProvider
+//            logicCache.put(logicCacheKey, resultMap, rule.getTTL()); //TODO: use TTLProvider
 			//getCache().put(criteria, parameters, rule.getTTL(), resultMap);
 		}
 		
@@ -218,7 +228,7 @@ public class LogicContextImpl implements LogicContext {
 	 */
     //TODO: candidate for caching
 	public Result read(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
-        LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patients.getMemberIds());
+        LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patient.getPatientId());
 //        Element element = ehcache.get(logicCacheKey);
         Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheKey);
         Result result = null;
