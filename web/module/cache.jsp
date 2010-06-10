@@ -9,7 +9,7 @@ there are ${cachesCount} caches<br/>
 </c:forEach>
 </ul>
 
-<br/>${cacheName} statisctics:<br/>
+<br/><b>${cacheName} statisctics:</b><br/>
 <table>
     <%--<tr>--%>
         <%--<td>Status:</td>--%>
@@ -19,20 +19,20 @@ there are ${cachesCount} caches<br/>
         <%--<td>Statistics:</td>--%>
         <%--<td>${cacheStat}</td>--%>
     <%--</tr>--%>
-    <%--<tr>--%>
-        <%--<td>Cache dir:</td>--%>
-        <%--<td>${cacheDir}</td>--%>
-    <%--</tr>--%>
-    <%--<tr>--%>
-        <%--<td>Disk store size:</td>--%>
-        <%--<td>${serializedSize}</td>--%>
-    <%--</tr>--%>
     <tr>
-        <td>cacheSize:</td>
+        <td>Cache hits:</td>
+        <td>${cacheHits}</td>
+    </tr>
+    <tr>
+        <td>Cache misses:</td>
+        <td>${cacheMisses}</td>
+    </tr>
+    <tr>
+        <td>Cache size:</td>
         <td>${cacheSize}</td>
     </tr>
     <tr>
-        <td>cacheToStr:</td>
+        <td>Cache specific stats:</td>
         <td>${cacheToStr}</td>
     </tr>
 </table>

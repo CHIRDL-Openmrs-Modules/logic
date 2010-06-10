@@ -15,6 +15,8 @@ package org.openmrs.logic.cache;
 
 import org.openmrs.logic.cache.ehcache.LogicCacheProviderImpl;
 
+import java.util.Collection;
+
 /**
  *
  */
@@ -26,7 +28,7 @@ public class LogicCacheManager {
         return logicCacheProvider.getCache(name);
     }
 
-    public static String[] getCacheNames() {
+    public static Collection<String> getCacheNames() {
         return logicCacheProvider.getCacheNames();
     }
 }

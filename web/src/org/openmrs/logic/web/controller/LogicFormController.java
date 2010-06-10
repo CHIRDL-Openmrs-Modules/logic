@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -104,36 +105,28 @@ public class LogicFormController {
     @RequestMapping("/module/logic/cache")
 	public void handlePath(@RequestParam(required = false, value = "action") String action, ModelMap modelMap) throws Exception {
 //        CacheManager cacheManager = CacheManager.getInstance();
-        String []cacheNames = null;
-        String status = "", cacheName = "", cacheStat = "", cacheDir = "", diskStoreSize = "", cacheToStr = "", cacheSize = "";
-
+        Collection<String> cacheNames = null;
+        String cacheHits = "", cacheMisses = "", cacheToStr = "", cacheSize = "";
 
         cacheNames = LogicCacheManager.getCacheNames();
-//        cacheDir = cacheManager.getDiskStorePath();
-
-
         LogicCache logicCache = LogicCacheManager.getLogicCache("org.openmrs.logic.defaultCache");
 
         if(null != logicCache) {
-            if(!StringUtils.isBlank(action)) { // && Status.STATUS_ALIVE.equals(cache.getStatus())
-                logicCache.flush(); //evictExpiredElements();
+            if(!StringUtils.isBlank(action)) {
+                logicCache.flush();
             }
 
-//            cacheName = cache.getName();
-//            cacheStat = cache.getStatistics().toString();
-//            diskStoreSize = Integer.toString(cache.getDiskStoreSize());
+            cacheHits = logicCache.getCacheHits().toString();
+            cacheMisses = logicCache.getCacheMisses().toString();
             cacheSize = Integer.toString(logicCache.getSize());
             cacheToStr = logicCache.getCacheSpecificStats();
         }
 
 		modelMap.addAttribute("cacheNames", cacheNames);
-        modelMap.addAttribute("cachesCount", cacheNames != null ? cacheNames.length : "-");
+        modelMap.addAttribute("cachesCount", cacheNames != null ? cacheNames.size() : "-");
 
-//        modelMap.addAttribute("cacheName", cacheName);
-//        modelMap.addAttribute("cacheStat", cacheStat);
-//        modelMap.addAttribute("cacheDir", cacheDir);
-//        modelMap.addAttribute("diskStoreSize", diskStoreSize);
-
+        modelMap.addAttribute("cacheHits", cacheHits);
+        modelMap.addAttribute("cacheMisses", cacheMisses);
         modelMap.addAttribute("cacheSize", cacheSize);
         modelMap.addAttribute("cacheToStr", cacheToStr);
 	}

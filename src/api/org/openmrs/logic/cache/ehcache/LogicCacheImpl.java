@@ -38,7 +38,8 @@ public class LogicCacheImpl implements LogicCache {
 
     @Override
     public Object get(Object key) {
-        return cache.get(key).getValue();
+        Element element = cache.get(key);
+        return element == null ? null : element.getValue();
     }
 
     @Override
@@ -54,6 +55,16 @@ public class LogicCacheImpl implements LogicCache {
     @Override
     public void remove(Object key) {
         cache.remove(key);
+    }
+
+    @Override
+    public Long getCacheHits() {
+        return cache.getStatistics().getCacheHits();
+    }
+
+    @Override
+    public Long getCacheMisses() {
+        return cache.getStatistics().getCacheMisses();
     }
 
     @Override

@@ -13,6 +13,7 @@
  */
 package org.openmrs.logic.cache;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,8 +25,8 @@ public abstract class LogicCacheProvider {
 
     public abstract LogicCache getCache(String name);
 
-    public String[] getCacheNames() {
-        return (String[]) cacheList.keySet().toArray();
+    public Collection<String> getCacheNames() {
+        return cacheList.keySet();
     }
 
 }
