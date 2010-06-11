@@ -51,7 +51,8 @@ public class LogicCacheKey implements Serializable {
         LogicCacheKey that = (LogicCacheKey) o;
 
         if (criteria != null ? !criteria.equals(that.criteria) : that.criteria != null) return false;
-        if (dataSource != null ? !dataSource.equals(that.dataSource) : that.dataSource != null) return false;
+//        if (dataSource != null ? !dataSource.equals(that.dataSource) : that.dataSource != null) return false;
+        if ((dataSource != null && that.dataSource != null) ? !dataSource.getClass().equals(that.dataSource.getClass()) : !(dataSource == null && that.dataSource == null) ) return false; //check only dataSource is the same for both 
         if (indexDate != null ? !indexDate.equals(that.indexDate) : that.indexDate != null) return false;
         if (parameters != null ? !parameters.equals(that.parameters) : that.parameters != null) return false;
         if (patientId != null ? !patientId.equals(that.patientId) : that.patientId != null) return false;
@@ -63,7 +64,7 @@ public class LogicCacheKey implements Serializable {
     public int hashCode() {
         int result = parameters != null ? parameters.hashCode() : 0;
         result = 31 * result + (criteria != null ? criteria.hashCode() : 0);
-        result = 31 * result + (dataSource != null ? dataSource.hashCode() : 0);
+//        result = 31 * result + (dataSource != null ? dataSource.hashCode() : 0);
         result = 31 * result + (indexDate != null ? indexDate.hashCode() : 0);
         result = 31 * result + (patientId != null ? patientId.hashCode() : 0);
         return result;
