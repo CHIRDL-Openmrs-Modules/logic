@@ -19,6 +19,8 @@ package org.openmrs.logic.cache;
 public interface LogicCache {
     void put(Object key, Object value, int ttl);
 
+    void put(Object key, Object value);
+
     Object get(Object key);
 
     int getSize();
@@ -26,6 +28,8 @@ public interface LogicCache {
     void flush();
 
     void remove(Object key);
+
+    LogicCacheConfig getLogicCacheConfig();
 
     Long getCacheHits();
 

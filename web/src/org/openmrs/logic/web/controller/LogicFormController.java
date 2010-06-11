@@ -109,7 +109,7 @@ public class LogicFormController {
         String cacheHits = "", cacheMisses = "", cacheToStr = "", cacheSize = "";
 
         cacheNames = LogicCacheManager.getCacheNames();
-        LogicCache logicCache = LogicCacheManager.getLogicCache("org.openmrs.logic.defaultCache");
+        LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
 
         if(null != logicCache) {
             if(!StringUtils.isBlank(action)) {

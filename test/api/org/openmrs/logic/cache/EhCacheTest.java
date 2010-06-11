@@ -41,9 +41,9 @@ import org.openmrs.logic.result.Result;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 /**
- *
+ * Class for tests of the ehcache directly.
  */
-public class LogicCacheComplexKeyTest extends BaseModuleContextSensitiveTest {
+public class EhCacheTest extends BaseModuleContextSensitiveTest {
 	
 	private final int DISK_CACHE_COUNT = 55;
 	

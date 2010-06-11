@@ -30,7 +30,6 @@ import static org.junit.Assert.assertNotNull;
  *
  */
 public class LogicCacheTest extends BaseModuleContextSensitiveTest {
-    private final String CACHE_NAME = "org.openmrs.logic.defaultCache";
     private final int CACHE_OBJS_COUNT = 100;
     private final int DEF_TTL = 100;
 
@@ -43,7 +42,7 @@ public class LogicCacheTest extends BaseModuleContextSensitiveTest {
 //        if(beforeOnce) return;
 //        beforeOnce = true;
 
-        logicCache = LogicCacheManager.getLogicCache(CACHE_NAME);
+        logicCache = LogicCacheManager.getDefaultLogicCache();
         assertNotNull("logicCache is null", logicCache);
     }
 

@@ -13,7 +13,7 @@
  */
 package org.openmrs.logic.cache;
 
-import org.openmrs.logic.cache.ehcache.LogicCacheProviderImpl;
+import org.openmrs.logic.cache.ehcache.EhCacheProviderImpl;
 
 import java.util.Collection;
 
@@ -21,11 +21,25 @@ import java.util.Collection;
  *
  */
 public class LogicCacheManager {
-    //TODO: create Factory to provide cache framework
-    private static LogicCacheProvider logicCacheProvider = new LogicCacheProviderImpl();
+    private static String EHCACHE = "ehcache";
+    
+    private static String CURRENT_CACHE_FRAMEWORK = EHCACHE;
+
+    private static LogicCacheProvider logicCacheProvider = getCacheProvider();
+
+    private static LogicCacheProvider getCacheProvider() {
+        if(EHCACHE.equals(CURRENT_CACHE_FRAMEWORK))
+            return new EhCacheProviderImpl();
+        
+        else return null;
+    }
 
     public static LogicCache getLogicCache(String name) {
         return logicCacheProvider.getCache(name);
+    }
+
+    public static LogicCache getDefaultLogicCache() {
+        return logicCacheProvider.getDefaultCache();
     }
 
     public static Collection<String> getCacheNames() {

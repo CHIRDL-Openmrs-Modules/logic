@@ -37,7 +37,7 @@ import java.util.*;
  * can be calculated as if it were 4-July-2005.
  */
 public class LogicContextImpl implements LogicContext {
-	
+
 	protected final Log log = LogFactory.getLog(getClass());
 	
 	/**
@@ -67,7 +67,7 @@ public class LogicContextImpl implements LogicContext {
 //	private LogicCache cache;
 //    private Cache ehcache = LogicCacheManagerTMP.getLogicEhCache();//CacheManager.getInstance().getEhcache("org.openmrs.logic.defaultCache");
     
-    private LogicCache logicCache = LogicCacheManager.getLogicCache("org.openmrs.logic.defaultCache"); //TODO: name provider ??
+    private LogicCache logicCache = LogicCacheManager.getDefaultLogicCache(); //TODO: name provider ?? currently - "org.openmrs.logic.defaultCache"
 
 	/**
 	 * Constructs a logic context applied to a single patient
@@ -113,12 +113,12 @@ public class LogicContextImpl implements LogicContext {
 	 */
     //TODO: candidate for caching
 	public Result eval(Patient patient, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
-//        LogicCacheKey logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), patient.getPatientId());
+        LogicCacheKey logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), patient.getPatientId());
 
 //        Element element = ehcache.get(logicCacheKey);
 
 //        Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheKey);
-        Result result = null;
+        Result result = (Result) logicCache.get(logicCacheKey);
 
 //        if(null != cachedResult)
 //            result = cachedResult.get(patient.getPatientId());
@@ -133,15 +133,14 @@ public class LogicContextImpl implements LogicContext {
 //        }
 
 //		Result result = getCache().get(patient, criteria, parameters);
-		PatientService patientService = Context.getPatientService();
-
 		if (result == null) {
+            PatientService patientService = Context.getPatientService();
 			Integer targetPatientId = patient.getPatientId();
 			log.debug("Context database read (pid = " + targetPatientId + ")");
 			Rule rule = Context.getLogicService().getRule(criteria.getRootToken());
 			Map<Integer, Result> resultMap = new Hashtable<Integer, Result>();
 			for (Integer pid : patients.getMemberIds()) {
-                LogicCacheKey logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), pid);
+                logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), pid);
                 Result r = (Result) logicCache.get(logicCacheKey);
                 if(null != r) {
                     resultMap.put(pid, r);

@@ -46,7 +46,7 @@ public class LogicServiceImpl implements LogicService {
 	private RuleFactory ruleFactory;
 
 //    private Cache ehcache = LogicCacheManagerTMP.getLogicEhCache();
-//    private LogicCache logicCache = LogicCacheManager.getLogicCache("org.openmrs.logic.defaultCache"); //TODO: possible caching some methods here
+//    private LogicCache logicCache = LogicCacheManager.getDefaultLogicCache(); //TODO: possible caching some methods here
 	
 	private static Map<String, LogicDataSource> dataSources;
 	

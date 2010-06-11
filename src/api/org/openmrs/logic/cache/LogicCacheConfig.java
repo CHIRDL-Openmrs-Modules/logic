@@ -17,17 +17,17 @@ package org.openmrs.logic.cache;
  *
  */
 public class LogicCacheConfig {
-    private Integer ttl;
+    private Integer defaultTTL;
     private String evictionPolicy;
     private Integer maxElementsInMemory;
     private Integer maxElementsOnDisk;
 
-    public Integer getTtl() {
-        return ttl;
+    public Integer getDefaultTTL() {
+        return defaultTTL;
     }
 
-    public void setTtl(Integer ttl) {
-        this.ttl = ttl;
+    public void setDefaultTTL(Integer defaultTTL) {
+        this.defaultTTL = defaultTTL;
     }
 
     public String getEvictionPolicy() {

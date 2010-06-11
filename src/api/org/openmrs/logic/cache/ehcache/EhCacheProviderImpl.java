@@ -22,7 +22,8 @@ import java.net.URL;
 /**
  *
  */
-public class LogicCacheProviderImpl extends LogicCacheProvider {
+public class EhCacheProviderImpl extends LogicCacheProvider {
+    private final String LOGIC_CACHE_NAME = "org.openmrs.logic.defaultCache";
     private String LOGIC_CACHE_CONFIG = "/logic-ehcache.xml";
 
     private CacheManager cacheManager;
@@ -38,21 +39,25 @@ public class LogicCacheProviderImpl extends LogicCacheProvider {
         return logicCache;
     }
 
+    @Override
+    public LogicCache getDefaultCache() {
+        return getCache(LOGIC_CACHE_NAME);
+    }
 
     public CacheManager getCacheManager() {
         if(null == cacheManager) {
-            URL url = LogicCacheProviderImpl.class.getResource(LOGIC_CACHE_CONFIG);
+            URL url = EhCacheProviderImpl.class.getResource(LOGIC_CACHE_CONFIG);
             cacheManager = new CacheManager(url);
         }
         
         return cacheManager;
     }
 
-    public LogicCacheProviderImpl() {
+    public EhCacheProviderImpl() {
 
     }
 
-    public LogicCacheProviderImpl(String pathToConfig) {
+    public EhCacheProviderImpl(String pathToConfig) {
         LOGIC_CACHE_CONFIG = pathToConfig;
         getCacheManager();
     }

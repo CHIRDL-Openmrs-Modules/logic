@@ -28,12 +28,17 @@ public class LogicCacheImpl implements LogicCache {
     public LogicCacheImpl(Cache cache) {
         this.cache = cache;
         logicCacheConfig = new LogicCacheConfig();
-        //TODO restore logicConfiguration from it`s store
+        //TODO restore logicConfiguration from it`s possible store
     }
 
     @Override
     public void put(Object key, Object value, int ttl) {
         cache.put(new Element(key, value, false, ttl, ttl));
+    }
+
+    @Override
+    public void put(Object key, Object value) {
+        cache.put(new Element(key, value));
     }
 
     @Override

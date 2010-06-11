@@ -21,9 +21,12 @@ import java.util.Map;
  *
  */
 public abstract class LogicCacheProvider {
+    
     protected Map<String, LogicCache> cacheList = new HashMap<String, LogicCache>();
 
     public abstract LogicCache getCache(String name);
+    
+    public abstract LogicCache getDefaultCache();
 
     public Collection<String> getCacheNames() {
         return cacheList.keySet();
