@@ -25,15 +25,17 @@ public interface LogicCache {
 
     int getSize();
 
-    void flush();
+    void flush() throws UnsupportedOperationException;
 
     void remove(Object key);
 
+    boolean getFeature(String name);
+
     LogicCacheConfig getLogicCacheConfig();
 
-    Long getCacheHits();
+    Long getCacheHits() throws UnsupportedOperationException;
 
-    Long getCacheMisses();
+    Long getCacheMisses() throws UnsupportedOperationException;
 
     String getCacheSpecificStats();
 }

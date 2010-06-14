@@ -13,23 +13,10 @@
  */
 package org.openmrs.logic.cache;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.config.CacheConfiguration;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
@@ -39,6 +26,16 @@ import org.openmrs.logic.cache.ehcache.LogicCacheManagerTMP;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.result.Result;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+
+import static org.junit.Assert.*;
 
 /**
  * Class for tests of the ehcache directly.

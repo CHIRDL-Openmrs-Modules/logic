@@ -21,7 +21,7 @@ import java.util.Collection;
  *
  */
 public class LogicCacheManager {
-    private static String EHCACHE = "ehcache";
+    private static final String EHCACHE = "ehcache";
     
     private static String CURRENT_CACHE_FRAMEWORK = EHCACHE;
 

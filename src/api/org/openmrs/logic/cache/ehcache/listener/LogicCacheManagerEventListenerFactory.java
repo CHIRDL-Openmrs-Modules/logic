@@ -13,10 +13,10 @@
  */
 package org.openmrs.logic.cache.ehcache.listener;
 
-import java.util.Properties;
-
 import net.sf.ehcache.event.CacheManagerEventListener;
 import net.sf.ehcache.event.CacheManagerEventListenerFactory;
+
+import java.util.Properties;
 
 
 /**

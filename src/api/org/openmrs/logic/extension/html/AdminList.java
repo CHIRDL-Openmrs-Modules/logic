@@ -20,6 +20,7 @@ public class AdminList extends AdministrationSectionExt {
 		Map<String, String> localHashMap = new LinkedHashMap<String, String>();
 		localHashMap.put("/module/logic/init.form", "logic.init.title");
 		localHashMap.put("/module/logic/logic.form", "logic.start.title");
+        localHashMap.put("/module/logic/cache.form", "logic.cache.title");
 		return localHashMap;
 	}
 }
