@@ -16,7 +16,7 @@ package org.openmrs.logic.cache;
 /**
  *
  */
-public class LogicCacheConfig {
+public class LogicCacheConfigBean {
     private Integer defaultTTL;
     private String evictionPolicy;
     private Integer maxElementsInMemory;

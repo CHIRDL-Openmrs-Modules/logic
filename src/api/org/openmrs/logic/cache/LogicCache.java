@@ -17,6 +17,8 @@ package org.openmrs.logic.cache;
  *
  */
 public interface LogicCache {
+    public enum Features {FLUSH, CACHE_HITS, CACHE_MISSES}
+
     void put(Object key, Object value, int ttl);
 
     void put(Object key, Object value);
@@ -29,9 +31,9 @@ public interface LogicCache {
 
     void remove(Object key);
 
-    boolean getFeature(String name);
+    boolean getFeature(Features name);
 
-    LogicCacheConfig getLogicCacheConfig();
+    //LogicCacheConfigBean getLogicCacheConfig();
 
     Long getCacheHits() throws UnsupportedOperationException;
 

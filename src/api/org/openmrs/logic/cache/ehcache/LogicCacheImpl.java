@@ -18,21 +18,20 @@ import net.sf.ehcache.Element;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.logic.cache.LogicCache;
-import org.openmrs.logic.cache.LogicCacheConfig;
 
 /**
  *
  */
 public class LogicCacheImpl implements LogicCache {
-    protected final Log log = LogFactory.getLog(getClass());
+    private final Log log = LogFactory.getLog(getClass());
 
     private final Cache cache;
 
-    private LogicCacheConfig logicCacheConfig;
+//    private LogicCacheConfigBean logicCacheConfig;
 
     public LogicCacheImpl(Cache cache) {
         this.cache = cache;
-        logicCacheConfig = new LogicCacheConfig();
+//        logicCacheConfig = new LogicCacheConfigBean();
         //TODO restore logicConfiguration from it`s possible store
     }
 
@@ -68,8 +67,22 @@ public class LogicCacheImpl implements LogicCache {
     }
 
     @Override
-    public boolean getFeature(String name) {
-        return false;  //TODO: implement
+    public boolean getFeature(Features name) {
+        boolean result = false;
+
+        switch (name) {
+            case FLUSH:
+                result = true;
+                break;
+            case CACHE_HITS:
+                result = true;
+                break;
+            case CACHE_MISSES:
+                result = true;
+                break;
+        }
+
+        return result;
     }
 
     @Override
@@ -87,12 +100,10 @@ public class LogicCacheImpl implements LogicCache {
         return cache.toString();
     }
 
-    public LogicCacheConfig getLogicCacheConfig() {
-        return logicCacheConfig;
-    }
+//    @Override
+//    public LogicCacheConfigBean getLogicCacheConfig() {
+//        return null;  //TODO: implement cache config
+//    }
 
-    public void setLogicCacheConfig(LogicCacheConfig logicCacheConfig) {
-        this.logicCacheConfig = logicCacheConfig;
-    }
 
 }
