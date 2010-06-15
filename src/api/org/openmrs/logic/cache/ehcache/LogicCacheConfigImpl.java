@@ -13,50 +13,52 @@
  */
 package org.openmrs.logic.cache.ehcache;
 
+import net.sf.ehcache.Cache;
 import org.openmrs.logic.cache.LogicCacheConfig;
 
 /**
- * TODO: implement config of the cache
+ *
  */
 public class LogicCacheConfigImpl implements LogicCacheConfig {
+    private Cache cache;
+
+    public LogicCacheConfigImpl(Cache cache) {
+        this.cache = cache;
+    }
+
     @Override
     public Integer getMaxElementsInMemory() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return cache.getCacheConfiguration().getMaxElementsInMemory();
     }
 
     @Override
     public Integer getMaxElementsOnDisk() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+        return cache.getCacheConfiguration().getMaxElementsOnDisk();
     }
 
     @Override
-    public Integer getDefaultTTl() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public long getDefaultTTl() {
+        return cache.getCacheConfiguration().getTimeToLiveSeconds();
     }
 
     @Override
-    public String getEvictionAlgorithm() {
-        return null;  //To change body of implemented methods use File | Settings | File Templates.
+    public String getDiskStorePath() {
+        return cache.getCacheConfiguration().getDiskStorePath();
     }
 
     @Override
-    public void setDefaultTTl(Integer ttl) {
-        //To change body of implemented methods use File | Settings | File Templates.
+    public void setDefaultTTl(long ttl) {
+        cache.getCacheConfiguration().setTimeToLiveSeconds(ttl);
     }
 
     @Override
     public void setMaxElementsInMemory(Integer maxInMem) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        cache.getCacheConfiguration().setMaxElementsInMemory(maxInMem);
     }
 
     @Override
     public void setMaxElementsOnDisk(Integer maxOnDisk) {
-        //To change body of implemented methods use File | Settings | File Templates.
-    }
-
-    @Override
-    public void setEvictionAlgorithm(String name) {
-        //To change body of implemented methods use File | Settings | File Templates.
+        cache.getCacheConfiguration().setMaxElementsOnDisk(maxOnDisk);
     }
 
     @Override
@@ -73,7 +75,7 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
             case DEFAULT_TTL:
                 result = true;
                 break;
-            case EVICTION_ALGORITHM:
+            case DISK_STORE_PATH:
                 result = true;
                 break;
         }

@@ -18,6 +18,7 @@ import net.sf.ehcache.Element;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.logic.cache.LogicCache;
+import org.openmrs.logic.cache.LogicCacheConfig;
 
 /**
  *
@@ -26,13 +27,13 @@ public class LogicCacheImpl implements LogicCache {
     private final Log log = LogFactory.getLog(getClass());
 
     private final Cache cache;
+    private LogicCacheConfig logicCacheConfig;
 
 //    private LogicCacheConfigBean logicCacheConfig;
 
     public LogicCacheImpl(Cache cache) {
         this.cache = cache;
-//        logicCacheConfig = new LogicCacheConfigBean();
-        //TODO restore logicConfiguration from it`s possible store
+        logicCacheConfig = new LogicCacheConfigImpl(cache);
     }
 
     @Override
@@ -86,6 +87,11 @@ public class LogicCacheImpl implements LogicCache {
     }
 
     @Override
+    public LogicCacheConfig getLogicCacheConfig() {
+        return logicCacheConfig;
+    }
+
+    @Override
     public Long getCacheHits() throws UnsupportedOperationException {
         return cache.getStatistics().getCacheHits();
     }
@@ -99,11 +105,5 @@ public class LogicCacheImpl implements LogicCache {
     public String getCacheSpecificStats() {
         return cache.toString();
     }
-
-//    @Override
-//    public LogicCacheConfigBean getLogicCacheConfig() {
-//        return null;  //TODO: implement cache config
-//    }
-
 
 }

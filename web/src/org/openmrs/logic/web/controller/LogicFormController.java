@@ -104,7 +104,6 @@ public class LogicFormController {
 
     @RequestMapping("/module/logic/cache")
 	public void handlePath(@RequestParam(required = false, value = "action") String action, ModelMap modelMap) throws Exception {
-//        CacheManager cacheManager = CacheManager.getInstance();
         Collection<String> cacheNames = null;
         String cacheHits = "", cacheMisses = "", cacheToStr = "", cacheSize = "";
 

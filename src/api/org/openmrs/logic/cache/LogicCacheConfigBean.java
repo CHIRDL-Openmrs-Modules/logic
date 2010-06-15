@@ -16,6 +16,7 @@ package org.openmrs.logic.cache;
 /**
  *
  */
+@Deprecated
 public class LogicCacheConfigBean {
     private Integer defaultTTL;
     private String evictionPolicy;

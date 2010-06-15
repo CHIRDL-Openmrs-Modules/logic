@@ -10,7 +10,7 @@ there are ${cachesCount} caches<br/>
 </ul>
 
 <br/><b>${cacheName} statisctics:</b><br/>
-<table>
+<table cellpadding="1" cellspacing="1">
     <%--<tr>--%>
         <%--<td>Status:</td>--%>
         <%--<td>${status}</td>--%>

@@ -335,7 +335,10 @@ in-memory capacity changed at runtime through the cache's configuration object.
            diskExpiryThreadIntervalSeconds="120"
            memoryStoreEvictionPolicy="LRU"
            diskPersistent="true"
-           clearOnFlush="false">
+           clearOnFlush="false"
+           
+           statistics="true"
+           logging="true">
         
         <cacheEventListenerFactory class="org.openmrs.logic.cache.ehcache.listener.LogicCacheEventListenerFactory" properties="" listenFor="all"/>
     </cache>
