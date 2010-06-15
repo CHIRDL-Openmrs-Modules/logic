@@ -166,7 +166,7 @@ public class LogicContextImpl implements LogicContext {
             result = resultMap.get(targetPatientId);
 //            Element el = new Element(logicCacheKey, resultMap, false, rule.getTTL(), rule.getTTL());
 //            ehcache.put(el);
-//            logicCache.put(logicCacheKey, resultMap, rule.getTTL()); //TODO: use TTLProvider
+//            logicCache.put(logicCacheKey, resultMap, rule.getTTL());
 			//getCache().put(criteria, parameters, rule.getTTL(), resultMap);
 		}
 		
@@ -250,7 +250,7 @@ public class LogicContextImpl implements LogicContext {
 //            getCache().put(dataSource, criteria, resultMap);
 //            Element el = new Element(logicCacheKey, resultMap, false, dataSource.getDefaultTTL(), dataSource.getDefaultTTL());
 //            ehcache.put(el);
-            logicCache.put(logicCacheKey, resultMap, dataSource.getDefaultTTL()); //TODO: use TTLPRovider
+            logicCache.put(logicCacheKey, resultMap, dataSource.getDefaultTTL());
 
             result = resultMap.get(patient.getPatientId());
 		}

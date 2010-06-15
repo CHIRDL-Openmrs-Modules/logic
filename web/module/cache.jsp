@@ -11,14 +11,6 @@ there are ${cachesCount} caches<br/>
 
 <br/><b>${cacheName} statisctics:</b><br/>
 <table cellpadding="1" cellspacing="1">
-    <%--<tr>--%>
-        <%--<td>Status:</td>--%>
-        <%--<td>${status}</td>--%>
-    <%--</tr>--%>
-    <%--<tr>--%>
-        <%--<td>Statistics:</td>--%>
-        <%--<td>${cacheStat}</td>--%>
-    <%--</tr>--%>
     <tr>
         <td>Cache hits:</td>
         <td>${cacheHits}</td>

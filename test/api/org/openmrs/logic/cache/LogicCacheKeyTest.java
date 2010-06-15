@@ -85,6 +85,38 @@ public class LogicCacheKeyTest extends BaseModuleContextSensitiveTest {
         assertEquals("result and deserializedResult are not equals", result, deserializedResult);
     }
 
+    //================================================================================
+
+    /**
+        * run  testStoreOnDisk then  testLoadFromDisk. note: this is temporary
+        */
+
+    int size = 80;
+    @Test
+    public void testStoreOnDisk() {
+        Date indexDate = new Date();
+        LogicDataSource logicDataSource = Context.getLogicService().getLogicDataSource("person");
+        LogicCriteria criteria = Context.getLogicService().parse("\"AGE\"");
+        LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
+
+        for(int i = 0; i<size; i++) {
+            LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, logicDataSource, indexDate, i);
+            logicCache.put(logicCacheKey, logicCacheKey, 10000);            
+        }
+//        System.out.println(logicCache.getSize());
+
+        logicCache.flush();
+
+//        System.out.println(logicCache.getCacheSpecificStats());
+    }
+
+    @Test
+    public void testLoadFromDisk() {
+        assertEquals(size, LogicCacheManager.getDefaultLogicCache().getSize());
+    }
+
+    //================================================================================
+
     private Object roundTripSerialization(Object forSerialization) throws IOException, ClassNotFoundException {
         //serialize
         ByteArrayOutputStream out = new ByteArrayOutputStream();
