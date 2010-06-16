@@ -153,6 +153,8 @@
 	<h3><spring:message code="logic.tester.step3.title"/></h3>
 	<input type="submit" name="<spring:message code="general.submit"/>" value="<spring:message code="general.submit"/>" style="margin-left: 20px;"/>
 	<input type="hidden" id="patientIdField" name="patientId" value="${patientId}" />
+    <input type="text" id="cohortIdField" name="cohortId" value="" />
+    <input type="button" id="eval_cohort" name="eval_cohort" value="eval cohort" onclick="this.form.submit();" />
 </form>
 
 <%@ include file="/WEB-INF/template/footer.jsp"%>

@@ -1,6 +1,7 @@
 package org.openmrs.logic.web.controller;
 
 import org.apache.commons.lang.StringUtils;
+import org.openmrs.Cohort;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicException;
@@ -16,10 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Controller
 public class LogicFormController {
@@ -68,22 +66,36 @@ public class LogicFormController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/module/logic/run")
-	public void runTest(@RequestParam(required = false, value = "patientId") Integer patientId,
+	public void runTest(@RequestParam(required = false, value = "cohortId") String cohortId,
+                        @RequestParam(required = false, value = "patientId") Integer patientId,
 	                    @RequestParam(required = false, value = "patientIdentifier") String patientIdentifier,
 	                    @RequestParam(required = false, value = "patientName") String patientName,
 	                    @RequestParam("logicRule") String logicRule, ModelMap modelMap) throws Exception {
 
-		if (patientId > 0 && logicRule != null && logicRule.length() > 0) {
+		if ((patientId > 0 || !StringUtils.isEmpty(cohortId)) && logicRule != null && logicRule.length() > 0) {
 			try {
 				Patient patient = Context.getPatientService().getPatient(patientId);
 
 				LogicService logicService = Context.getLogicService();
 
-				Result result = logicService.eval(patient, logicService.parse(logicRule));
+                Cohort cohort = Context.getCohortService().getCohort(cohortId);
+
+				Result result = null;
+                Map<Integer, Result> mapResult = null;
+
+                if(null != cohort)
+                    mapResult = logicService.eval(cohort, logicService.parse(logicRule));
+                else
+                    result = logicService.eval(patient, logicService.parse(logicRule));
 
 				modelMap.addAttribute("patient", patient);
 				modelMap.addAttribute("logicRule", logicRule);
-				modelMap.addAttribute("result", result);
+                if(mapResult != null) {
+                    modelMap.addAttribute("cohortName", cohortId);
+                    modelMap.addAttribute("cohortSize", mapResult);
+                }
+                else
+                    modelMap.addAttribute("result", result);
 			}
 			catch (LogicException e) {
 				modelMap.addAttribute("error", "Invalid Logic Rule.");
