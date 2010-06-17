@@ -115,36 +115,21 @@ public class LogicContextImpl implements LogicContext {
 	public Result eval(Patient patient, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
         LogicCacheKey logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), patient.getPatientId());
 
-//        Element element = ehcache.get(logicCacheKey);
-
-//        Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheKey);
         Result result = (Result) logicCache.get(logicCacheKey);
 
-//        if(null != cachedResult)
-//            result = cachedResult.get(patient.getPatientId());
-        
-//        if(null != element) {
-//        	try {
-//        		cachedResult = (Map<Integer, Result>) element.getObjectValue();
-//        	} catch (Exception e) {
-//
-//			}
-//            result = cachedResult.get(patient.getPatientId());
-//        }
-
-//		Result result = getCache().get(patient, criteria, parameters);
 		if (result == null) {
             PatientService patientService = Context.getPatientService();
 			Integer targetPatientId = patient.getPatientId();
 			log.debug("Context database read (pid = " + targetPatientId + ")");
 			Rule rule = Context.getLogicService().getRule(criteria.getRootToken());
-			Map<Integer, Result> resultMap = new Hashtable<Integer, Result>();
+//			Map<Integer, Result> resultMap = new Hashtable<Integer, Result>();
 			for (Integer pid : patients.getMemberIds()) {
                 logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), pid);
                 Result r = (Result) logicCache.get(logicCacheKey);
-                if(null != r) {
-                    resultMap.put(pid, r);
-                    continue;
+                if(null != r && pid.equals(targetPatientId)) {
+                    return r;
+//                    resultMap.put(pid, r);
+//                    continue;
                 }
 
 				Patient currPatient = patientService.getPatient(pid);
@@ -158,18 +143,15 @@ public class LogicContextImpl implements LogicContext {
 
                 logicCache.put(logicCacheKey, r, rule.getTTL());
 
-				resultMap.put(pid, r);
+//				resultMap.put(pid, r);
 //				if (pid.equals(targetPatientId))
 //					result = resultMap.get(pid);
 			}
 
-            result = resultMap.get(targetPatientId);
-//            Element el = new Element(logicCacheKey, resultMap, false, rule.getTTL(), rule.getTTL());
-//            ehcache.put(el);
-//            logicCache.put(logicCacheKey, resultMap, rule.getTTL());
-			//getCache().put(criteria, parameters, rule.getTTL(), resultMap);
+//            result = resultMap.get(targetPatientId);
 		}
-		
+		if(result == null)
+            result = Result.emptyResult();
 		return result;
 	}
 	
@@ -228,18 +210,13 @@ public class LogicContextImpl implements LogicContext {
     //TODO: candidate for caching
 	public Result read(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
         LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patient.getPatientId());
-//        Element element = ehcache.get(logicCacheKey);
+
         Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheKey);
         Result result = null;
         if(null != cachedResult) {
             result = cachedResult.get(patient.getPatientId());
         }
-//        if(null != element) {
-//            cachedResult = (Map<Integer, Result>) element.getObjectValue();
-//            result = cachedResult.get(patient.getPatientId());
-//        }
-        
-		//Result result = getCache().get(patient, dataSource, criteria);
+
 		log
 		        .debug("Reading from data source: " + criteria.getRootToken() + " (" + (result == null ? "NOT" : "")
 		                + " cached)");
@@ -247,9 +224,6 @@ public class LogicContextImpl implements LogicContext {
 			Map<Integer, Result> resultMap = dataSource.read(this, patients, criteria);
 
 
-//            getCache().put(dataSource, criteria, resultMap);
-//            Element el = new Element(logicCacheKey, resultMap, false, dataSource.getDefaultTTL(), dataSource.getDefaultTTL());
-//            ehcache.put(el);
             logicCache.put(logicCacheKey, resultMap, dataSource.getDefaultTTL());
 
             result = resultMap.get(patient.getPatientId());

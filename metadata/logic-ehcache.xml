@@ -83,8 +83,8 @@ in-memory capacity changed at runtime through the cache's configuration object.
     You can provide you own lookup class that implements the net.sf.ehcache.transaction.manager.TransactionManagerLookup interface.
     -->
 
-    <transactionManagerLookup class="net.sf.ehcache.transaction.manager.DefaultTransactionManagerLookup" properties=""
-                              propertySeparator=":"/>
+    <!--<transactionManagerLookup class="net.sf.ehcache.transaction.manager.DefaultTransactionManagerLookup" properties=""-->
+                              <!--propertySeparator=":"/>-->
 
     <!--
     CacheManagerEventListener
@@ -325,8 +325,8 @@ in-memory capacity changed at runtime through the cache's configuration object.
     </defaultCache>
 
     <cache name="org.openmrs.logic.defaultCache"
-           maxElementsInMemory="50"
-           maxElementsOnDisk="100"
+           maxElementsInMemory="200"
+           maxElementsOnDisk="250"
            eternal="false"
            overflowToDisk="true"
            diskSpoolBufferSizeMB="20"

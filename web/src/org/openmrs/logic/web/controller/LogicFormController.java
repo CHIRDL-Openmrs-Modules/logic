@@ -74,9 +74,11 @@ public class LogicFormController {
 
 		if ((patientId > 0 || !StringUtils.isEmpty(cohortId)) && logicRule != null && logicRule.length() > 0) {
 			try {
-				Patient patient = Context.getPatientService().getPatient(patientId);
+                Patient patient = null;
+                if(patientId > 0)
+				    patient = Context.getPatientService().getPatient(patientId);
 
-				LogicService logicService = Context.getLogicService();
+                LogicService logicService = Context.getLogicService();
 
                 Cohort cohort = Context.getCohortService().getCohort(cohortId);
 
@@ -92,7 +94,7 @@ public class LogicFormController {
 				modelMap.addAttribute("logicRule", logicRule);
                 if(mapResult != null) {
                     modelMap.addAttribute("cohortName", cohortId);
-                    modelMap.addAttribute("cohortSize", mapResult);
+                    modelMap.addAttribute("cohortMap", mapResult);
                 }
                 else
                     modelMap.addAttribute("result", result);
@@ -105,7 +107,7 @@ public class LogicFormController {
 				modelMap.addAttribute("detail", exception2String(e));
 			}
 
-			modelMap.addAttribute("patientId", patientId.intValue());
+			modelMap.addAttribute("patientId", patientId);
 			modelMap.addAttribute("patientIdentifier", patientIdentifier);
 			modelMap.addAttribute("patientName", patientName);
 

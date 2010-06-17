@@ -28,8 +28,8 @@
 	</c:when>
 
 	<c:when test="${not empty cohortName}">
-		<strong><spring:message code="Encounter.cohort"/>.</strong> ${cohortName}<br/>
-		<strong><spring:message code="SearchResults.resultsFor"/> ${logicRule}:</strong> Successful for ${cohortSize} patient(s)! <br/>
+		<strong><spring:message code="Cohort.title"/>.</strong> ${cohortName}<br/>
+		<strong><spring:message code="SearchResults.resultsFor"/> ${logicRule}:</strong> Successful for ${cohortMap} patient(s)! <br/>
 	</c:when>
 
 	<c:otherwise>
