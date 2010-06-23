@@ -129,7 +129,7 @@ public class LogicFormController {
                 logicCache.flush();
             } else if("shutdown".equals(action)) {
                 LogicCacheManager.shutDown();
-            } else if("flush".equals(action)) {
+            } else if("clear".equals(action)) {
                 //TODO: clear all caches
             }
 

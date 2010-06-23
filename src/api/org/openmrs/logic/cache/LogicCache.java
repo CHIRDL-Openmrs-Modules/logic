@@ -27,13 +27,13 @@ public interface LogicCache {
 
     int getSize();
 
-    void flush() throws UnsupportedOperationException;
-
     void remove(Object key);
 
     boolean getFeature(Features name);
 
     LogicCacheConfig getLogicCacheConfig();
+
+    void flush() throws UnsupportedOperationException;
 
     Long getCacheHits() throws UnsupportedOperationException;
 

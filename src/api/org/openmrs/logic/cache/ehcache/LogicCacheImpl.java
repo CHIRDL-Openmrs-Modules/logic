@@ -27,9 +27,8 @@ public class LogicCacheImpl implements LogicCache {
     private final Log log = LogFactory.getLog(getClass());
 
     private final Cache cache;
-    private LogicCacheConfig logicCacheConfig;
 
-//    private LogicCacheConfigBean logicCacheConfig;
+    private LogicCacheConfig logicCacheConfig;
 
     public LogicCacheImpl(Cache cache) {
         this.cache = cache;
@@ -39,11 +38,13 @@ public class LogicCacheImpl implements LogicCache {
     @Override
     public void put(Object key, Object value, int ttl) {
         cache.put(new Element(key, value, false, ttl, ttl));
+        log.debug("Put new object into the logicCache");
     }
 
     @Override
     public void put(Object key, Object value) {
         cache.put(new Element(key, value));
+        log.debug("Put new object into the logicCache");
     }
 
     @Override
@@ -58,13 +59,35 @@ public class LogicCacheImpl implements LogicCache {
     }
 
     @Override
-    public void flush() throws UnsupportedOperationException {
-        cache.flush();
+    public void remove(Object key) {
+        cache.remove(key);
     }
 
     @Override
-    public void remove(Object key) {
-        cache.remove(key);
+    public LogicCacheConfig getLogicCacheConfig() {
+        return logicCacheConfig;
+    }
+
+
+    @Override
+    public void flush() throws UnsupportedOperationException {
+        cache.flush();
+        log.debug("Flush logicCache");
+    }
+
+    @Override
+    public Long getCacheHits() throws UnsupportedOperationException {
+        return cache.getStatistics().getCacheHits();
+    }
+
+    @Override
+    public Long getCacheMisses() throws UnsupportedOperationException {
+        return cache.getStatistics().getCacheMisses();
+    }
+
+    @Override
+    public String getCacheSpecificStats() {
+        return cache.toString();
     }
 
     @Override
@@ -85,25 +108,4 @@ public class LogicCacheImpl implements LogicCache {
 
         return result;
     }
-
-    @Override
-    public LogicCacheConfig getLogicCacheConfig() {
-        return logicCacheConfig;
-    }
-
-    @Override
-    public Long getCacheHits() throws UnsupportedOperationException {
-        return cache.getStatistics().getCacheHits();
-    }
-
-    @Override
-    public Long getCacheMisses() throws UnsupportedOperationException {
-        return cache.getStatistics().getCacheMisses();
-    }
-
-    @Override
-    public String getCacheSpecificStats() {
-        return cache.toString();
-    }
-
 }

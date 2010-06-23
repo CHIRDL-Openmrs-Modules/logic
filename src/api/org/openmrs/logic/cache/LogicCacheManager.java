@@ -13,6 +13,8 @@
  */
 package org.openmrs.logic.cache;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.logic.cache.ehcache.EhCacheProviderImpl;
 
 import java.util.Collection;
@@ -21,17 +23,20 @@ import java.util.Collection;
  *
  */
 public class LogicCacheManager {
-    private static final String EHCACHE = "ehcache";
+    private static final Log log = LogFactory.getLog(LogicCacheManager.class);
     
+    private static final String EHCACHE = "ehcache";
+
     private static String CURRENT_CACHE_FRAMEWORK = EHCACHE;
 
     private static LogicCacheProvider logicCacheProvider = getCacheProvider();
 
     private static LogicCacheProvider getCacheProvider() {
-        if(EHCACHE.equals(CURRENT_CACHE_FRAMEWORK))
+        if(EHCACHE.equals(CURRENT_CACHE_FRAMEWORK)) {
+            log.info("Initializing new LogicCacheManager with LogicCacheProvider - " + CURRENT_CACHE_FRAMEWORK);
             return new EhCacheProviderImpl();
-        
-        else return null;
+        } else
+            return null;
     }
 
     public static LogicCache getLogicCache(String name) {

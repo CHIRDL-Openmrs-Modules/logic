@@ -25,8 +25,16 @@ import java.net.URL;
 public class EhCacheProviderImpl extends LogicCacheProvider {
     private final String LOGIC_CACHE_NAME = "org.openmrs.logic.defaultCache";
     private String LOGIC_CACHE_CONFIG = "/logic-ehcache.xml";
-
     private CacheManager cacheManager;
+
+    public EhCacheProviderImpl() {
+
+    }
+
+    public EhCacheProviderImpl(String pathToConfig) {
+        LOGIC_CACHE_CONFIG = pathToConfig;
+        getCacheManager();
+    }
 
     @Override
     public LogicCache getCache(String name) {
@@ -56,14 +64,5 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         }
         
         return cacheManager;
-    }
-
-    public EhCacheProviderImpl() {
-
-    }
-
-    public EhCacheProviderImpl(String pathToConfig) {
-        LOGIC_CACHE_CONFIG = pathToConfig;
-        getCacheManager();
     }
 }
