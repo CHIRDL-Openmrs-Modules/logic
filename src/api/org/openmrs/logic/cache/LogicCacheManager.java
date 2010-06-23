@@ -45,4 +45,9 @@ public class LogicCacheManager {
     public static Collection<String> getCacheNames() {
         return logicCacheProvider.getCacheNames();
     }
+
+    //TODO delete later
+    public static void shutDown() {
+        logicCacheProvider.shutDownCacheManager();
+    }
 }

@@ -30,9 +30,20 @@ there are ${cachesCount} caches<br/>
 </table>
 
 <br/>
-<form action="cache.form" method="POST">
-    <input type="hidden" name="action" value="action"/>
-    <input type="submit" value="flush" />
+<script type="text/javascript">
+    function doCacheManagerAction(command) {
+        if(command != '') {
+            var action = document.getElementById("action");
+            action.value = command;
+        }
+        document.forms['formCacheManagerAction'].submit();
+    }
+</script>
+<form action="cache.form" method="POST" name="formCacheManagerAction">
+    <input type="hidden" id="action" name="action" value="flush"/>
+    <input type="button" id="flush" value="flush" onclick="doCacheManagerAction('flush')" />
+    <input type="button" id="clear" value="clear" disabled="true" onclick="doCacheManagerAction('clear')" />
+    <input type="button" id="shutdown" value="shutdown" onclick="doCacheManagerAction('shutdown')" />
 </form>
 
 

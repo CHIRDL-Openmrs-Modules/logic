@@ -111,6 +111,8 @@ in-memory capacity changed at runtime through the cache's configuration object.
 
     <cacheManagerEventListenerFactory class="org.openmrs.logic.cache.ehcache.listener.LogicCacheManagerEventListenerFactory" properties=""/>
 
+    <cacheManagerPeerListenerFactory class="org.terracotta.ehcachedx.monitor.probe.ProbePeerListenerFactory"
+                                     properties="monitorAddress=localhost,monitorPort=9889" propertySeparator=","/>
     <!--
     Cache configuration
     ===================
@@ -332,13 +334,12 @@ in-memory capacity changed at runtime through the cache's configuration object.
            diskSpoolBufferSizeMB="20"
            timeToIdleSeconds="1200"
            timeToLiveSeconds="1200"
-           diskExpiryThreadIntervalSeconds="120"
+           diskExpiryThreadIntervalSeconds="300"
            memoryStoreEvictionPolicy="LRU"
            diskPersistent="true"
            clearOnFlush="false"
            
-           statistics="true"
-           logging="true">
+           statistics="true">
         
         <cacheEventListenerFactory class="org.openmrs.logic.cache.ehcache.listener.LogicCacheEventListenerFactory" properties="" listenFor="all"/>
     </cache>

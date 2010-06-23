@@ -28,6 +28,8 @@ public abstract class LogicCacheProvider {
     
     public abstract LogicCache getDefaultCache();
 
+    public abstract void shutDownCacheManager();
+
     public Collection<String> getCacheNames() {
         return cacheList.keySet();
     }

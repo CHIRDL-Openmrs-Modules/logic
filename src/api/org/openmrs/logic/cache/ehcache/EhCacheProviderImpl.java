@@ -44,6 +44,11 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         return getCache(LOGIC_CACHE_NAME);
     }
 
+    @Override
+    public void shutDownCacheManager() {
+        getCacheManager().shutdown();
+    }
+
     public CacheManager getCacheManager() {
         if(null == cacheManager) {
             URL url = EhCacheProviderImpl.class.getResource(LOGIC_CACHE_CONFIG);

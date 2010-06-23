@@ -209,13 +209,13 @@ public class LogicContextImpl implements LogicContext {
 	 */
     //TODO: candidate for caching
 	public Result read(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
-        LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patient.getPatientId());
+//        LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patient.getPatientId());
 
-        Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheKey);
+//        Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheKey);
         Result result = null;
-        if(null != cachedResult) {
-            result = cachedResult.get(patient.getPatientId());
-        }
+//        if(null != cachedResult) {
+//            result = cachedResult.get(patient.getPatientId());
+//        }
 
 		log
 		        .debug("Reading from data source: " + criteria.getRootToken() + " (" + (result == null ? "NOT" : "")
@@ -224,7 +224,7 @@ public class LogicContextImpl implements LogicContext {
 			Map<Integer, Result> resultMap = dataSource.read(this, patients, criteria);
 
 
-            logicCache.put(logicCacheKey, resultMap, dataSource.getDefaultTTL());
+//            logicCache.put(logicCacheKey, resultMap, dataSource.getDefaultTTL());
 
             result = resultMap.get(patient.getPatientId());
 		}

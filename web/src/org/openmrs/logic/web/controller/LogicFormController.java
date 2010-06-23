@@ -125,8 +125,12 @@ public class LogicFormController {
         LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
 
         if(null != logicCache) {
-            if(!StringUtils.isBlank(action)) {
+            if("flush".equals(action)) {
                 logicCache.flush();
+            } else if("shutdown".equals(action)) {
+                LogicCacheManager.shutDown();
+            } else if("flush".equals(action)) {
+                //TODO: clear all caches
             }
 
             cacheHits = logicCache.getCacheHits().toString();
