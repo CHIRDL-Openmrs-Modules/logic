@@ -63,11 +63,8 @@ public class LogicContextImpl implements LogicContext {
 	 * Patients being processed within this logic context
 	 */
 	private Cohort patients;
-	
-//	private LogicCache cache;
-//    private Cache ehcache = LogicCacheManagerTMP.getLogicEhCache();//CacheManager.getInstance().getEhcache("org.openmrs.logic.defaultCache");
-    
-    private LogicCache logicCache = LogicCacheManager.getDefaultLogicCache(); //TODO: name provider ?? currently - "org.openmrs.logic.defaultCache"
+
+    private LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
 
 	/**
 	 * Constructs a logic context applied to a single patient
@@ -111,7 +108,7 @@ public class LogicContextImpl implements LogicContext {
 	 * @see org.openmrs.logic.LogicContext#eval(org.openmrs.Patient,
 	 *      org.openmrs.logic.LogicCriteria, java.util.Map)
 	 */
-    //TODO: candidate for caching
+    //TODO:
 	public Result eval(Patient patient, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
         LogicCacheKey logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), patient.getPatientId());
 
@@ -127,9 +124,9 @@ public class LogicContextImpl implements LogicContext {
                 logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), pid);
                 Result r = (Result) logicCache.get(logicCacheKey);
                 if(null != r && pid.equals(targetPatientId)) {
-                    return r;
+                    result = r;
 //                    resultMap.put(pid, r);
-//                    continue;
+                    continue;
                 }
 
 				Patient currPatient = patientService.getPatient(pid);
@@ -207,15 +204,15 @@ public class LogicContextImpl implements LogicContext {
 	 * @see org.openmrs.logic.LogicContext#read(org.openmrs.Patient,
 	 *      org.openmrs.logic.datasource.LogicDataSource, org.openmrs.logic.LogicCriteria)
 	 */
-    //TODO: candidate for caching
+    //TODO:
 	public Result read(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
-//        LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patient.getPatientId());
+        LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patient.getPatientId());
 
-//        Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheKey);
+        Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheKey);
         Result result = null;
-//        if(null != cachedResult) {
-//            result = cachedResult.get(patient.getPatientId());
-//        }
+        if(null != cachedResult) {
+            result = cachedResult.get(patient.getPatientId());
+        }
 
 		log
 		        .debug("Reading from data source: " + criteria.getRootToken() + " (" + (result == null ? "NOT" : "")
@@ -223,8 +220,7 @@ public class LogicContextImpl implements LogicContext {
 		if (result == null) {
 			Map<Integer, Result> resultMap = dataSource.read(this, patients, criteria);
 
-
-//            logicCache.put(logicCacheKey, resultMap, dataSource.getDefaultTTL());
+            logicCache.put(logicCacheKey, resultMap, dataSource.getDefaultTTL());
 
             result = resultMap.get(patient.getPatientId());
 		}

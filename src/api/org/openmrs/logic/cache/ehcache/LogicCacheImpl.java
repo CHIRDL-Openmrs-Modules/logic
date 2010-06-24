@@ -68,6 +68,11 @@ public class LogicCacheImpl implements LogicCache {
         return logicCacheConfig;
     }
 
+    @Override
+    public void clean() {
+        cache.removeAll();
+    }
+
 
     @Override
     public void flush() throws UnsupportedOperationException {
