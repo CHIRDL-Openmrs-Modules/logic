@@ -99,13 +99,15 @@
 	function validate() {
 		var patientIdValue = document.getElementById("patientIdField").value;
 		var logicRuleValue = document.getElementById("logicRuleField").value;
-		
-		if (patientIdValue == 0) {
-			$j("#patientError").show();
-			return false;
-		} else {
-			$j("#patientError").hide();
-		}
+        var step1Type = document.getElementById("step1Type");
+		if(step1Type.checked) {
+            if (patientIdValue == 0) {
+                $j("#patientError").show();
+                return false;
+            } else {
+                $j("#patientError").hide();
+            }
+        }
 
 		if (logicRuleValue == null || logicRuleValue.length == 0 || $j("#logicRuleField").val() == $j("#logicRuleField")[0].title) {
 			$j("#logicRuleError").show();
@@ -161,7 +163,7 @@
             </select><br/>
         </div>
         Execute rule for:<br/>
-        <input type="radio" name="step1Type" value="patient" checked="true">Patient <i>or</i>
+        <input type="radio" name="step1Type" id="step1Type" value="patient" checked="true">Patient <i>or</i>
         <input type="radio" name="step1Type" value="cohort" <c:if test="${empty existingCohorts}">disabled=""</c:if> >Cohort<br/>
     </div>
 
@@ -174,8 +176,7 @@
 	<h3><spring:message code="logic.tester.step3.title"/></h3>
 	<input type="submit" name="<spring:message code="general.submit"/>" value="<spring:message code="general.submit"/>" style="margin-left: 20px;"/>
 	<input type="hidden" id="patientIdField" name="patientId" value="${patientId}" />
-
-    <input type="button" id="eval_cohort" name="eval_cohort" value="eval cohort" onclick="this.form.submit();" />
+    <%--<input type="button" id="eval_cohort" name="eval_cohort" value="eval cohort" onclick="this.form.submit();" />--%>
 </form>
 
 <%@ include file="/WEB-INF/template/footer.jsp"%>
