@@ -48,6 +48,9 @@ public class LogicFormController {
 	 */
 	@RequestMapping(value = "/module/logic/logic", method = RequestMethod.GET)
 	public void showTestPage(@RequestParam(required = false, value = "patientId") Integer patientId, ModelMap modelMap) {
+        Collection<Cohort> cohorts = Context.getCohortService().getAllCohorts();
+		modelMap.addAttribute("existingCohorts", cohorts);
+
 		modelMap.addAttribute("authenticatedUser", Context.getAuthenticatedUser());
 		modelMap.addAttribute("patientId", patientId == null ? 0 : patientId.intValue());
 
@@ -66,7 +69,8 @@ public class LogicFormController {
 	 * @throws Exception
 	 */
 	@RequestMapping("/module/logic/run")
-	public void runTest(@RequestParam(required = false, value = "cohortId") String cohortId,
+	public void runTest(@RequestParam(value = "step1Type") String step1Type,
+                        @RequestParam(required = false, value = "cohortId") String cohortId,
                         @RequestParam(required = false, value = "patientId") Integer patientId,
 	                    @RequestParam(required = false, value = "patientIdentifier") String patientIdentifier,
 	                    @RequestParam(required = false, value = "patientName") String patientName,
@@ -79,25 +83,21 @@ public class LogicFormController {
 				    patient = Context.getPatientService().getPatient(patientId);
 
                 LogicService logicService = Context.getLogicService();
-
-                Cohort cohort = Context.getCohortService().getCohort(cohortId);
-
-				Result result = null;
                 Map<Integer, Result> mapResult = null;
+				Result result = null;
 
-                if(null != cohort)
-                    mapResult = logicService.eval(cohort, logicService.parse(logicRule));
-                else
+                if("patient".equals(step1Type)) {
                     result = logicService.eval(patient, logicService.parse(logicRule));
-
-				modelMap.addAttribute("patient", patient);
-				modelMap.addAttribute("logicRule", logicRule);
-                if(mapResult != null) {
+                    modelMap.addAttribute("result", result);
+                } else if("cohort".equals(step1Type)) {
+                    Cohort cohort = Context.getCohortService().getCohort(cohortId);
+                    mapResult = logicService.eval(cohort, logicService.parse(logicRule));
                     modelMap.addAttribute("cohortName", cohortId);
                     modelMap.addAttribute("cohortMap", mapResult);
                 }
-                else
-                    modelMap.addAttribute("result", result);
+                
+				modelMap.addAttribute("patient", patient);
+				modelMap.addAttribute("logicRule", logicRule);
 			}
 			catch (LogicException e) {
 				modelMap.addAttribute("error", "Invalid Logic Rule.");
@@ -107,9 +107,9 @@ public class LogicFormController {
 				modelMap.addAttribute("detail", exception2String(e));
 			}
 
-			modelMap.addAttribute("patientId", patientId);
-			modelMap.addAttribute("patientIdentifier", patientIdentifier);
-			modelMap.addAttribute("patientName", patientName);
+            modelMap.addAttribute("patientId", patientId);
+            modelMap.addAttribute("patientIdentifier", patientIdentifier);
+            modelMap.addAttribute("patientName", patientName);
 
 		} else {
 			modelMap.addAttribute("error", "Invalid parameters");

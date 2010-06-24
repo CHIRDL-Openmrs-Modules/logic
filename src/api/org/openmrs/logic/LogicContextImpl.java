@@ -123,8 +123,9 @@ public class LogicContextImpl implements LogicContext {
 			for (Integer pid : patients.getMemberIds()) {
                 logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), pid);
                 Result r = (Result) logicCache.get(logicCacheKey);
-                if(null != r && pid.equals(targetPatientId)) {
-                    result = r;
+                if(null != r) {
+                    if (pid.equals(targetPatientId))
+					    result = r;
 //                    resultMap.put(pid, r);
                     continue;
                 }
@@ -141,8 +142,8 @@ public class LogicContextImpl implements LogicContext {
                 logicCache.put(logicCacheKey, r, rule.getTTL());
 
 //				resultMap.put(pid, r);
-//				if (pid.equals(targetPatientId))
-//					result = resultMap.get(pid);
+				if (pid.equals(targetPatientId))
+					result = r;
 			}
 
 //            result = resultMap.get(targetPatientId);

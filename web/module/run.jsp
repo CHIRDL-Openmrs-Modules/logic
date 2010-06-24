@@ -39,7 +39,9 @@
 </c:choose>
 
 <form method="get" action="logic.form" name="back" id="back">
-<input type="hidden" id="patientIdField" name="patientId" value="${patientId}" />
+<c:if test="${not empty patientId and patientId != 0}">
+    <input type="hidden" id="patientIdField" name="patientId" value="${patientId}" />
+</c:if>
 <br/><p><a href="#" onclick="document.back.submit();"><spring:message code="logic.tester.results.again"/></a></p>
 </form>
 

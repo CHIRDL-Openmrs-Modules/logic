@@ -144,6 +144,27 @@
 <h3><div id="showPatient" style="display: none; color: #627588; margin-left: 20px;"></div></h3>
 
 <form action="run.form" method="post" onsubmit="return validate();">
+    <div style="width: 90%; margin-left: 20px;">
+        OR<br/>
+        <b class="boxHeader">Choose cohort</b>
+        <div class="box">
+            <label for="cohortId" >Choose a cohort of patients: </label>
+            <select name="cohortId" id="cohortId">
+                <c:if test="${empty existingCohorts}"><option value="">None</option></c:if>
+                <c:forEach var="coh" items="${existingCohorts}">
+                    <option value="${coh.name}"
+                    <c:if test="${status.value == coh.name}">selected</c:if>
+                    />
+                    ${coh.name}
+                    </option>
+                </c:forEach>
+            </select><br/>
+        </div>
+        Execute rule for:<br/>
+        <input type="radio" name="step1Type" value="patient" checked="true">Patient <i>or</i>
+        <input type="radio" name="step1Type" value="cohort" <c:if test="${empty existingCohorts}">disabled=""</c:if> >Cohort<br/>
+    </div>
+
 	<br/>
 	<h3><spring:message code="logic.tester.step2.title"/></h3>	
 	<input type="text" name="logicRule" id="logicRuleField" class="defaultText" title="<spring:message code="logic.tester.step2.hint"/>" autocomplete="off" style="width: 405px; margin-left: 20px;" />
@@ -153,7 +174,7 @@
 	<h3><spring:message code="logic.tester.step3.title"/></h3>
 	<input type="submit" name="<spring:message code="general.submit"/>" value="<spring:message code="general.submit"/>" style="margin-left: 20px;"/>
 	<input type="hidden" id="patientIdField" name="patientId" value="${patientId}" />
-    <input type="text" id="cohortIdField" name="cohortId" value="" />
+
     <input type="button" id="eval_cohort" name="eval_cohort" value="eval cohort" onclick="this.form.submit();" />
 </form>
 
