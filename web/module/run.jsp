@@ -29,7 +29,20 @@
 
 	<c:when test="${not empty cohortName}">
 		<strong><spring:message code="Cohort.title"/>.</strong> ${cohortName}<br/>
-		<strong><spring:message code="SearchResults.resultsFor"/> ${logicRule}:</strong> Successful for ${cohortMap} patient(s)! <br/>
+		<strong><spring:message code="SearchResults.resultsFor"/> ${logicRule}:</strong> Successful for <br/>
+        <table>
+        <tr>
+            <th>Patient ID</th>
+            <th>Test result</th>
+        </tr>
+        <c:forEach var="entry" varStatus="stat" items="${cohortMap}">
+            <tr class="${stat.index % 2 == 1 ? "oddRow" : "evenRow" }">
+                <td>${entry.key}</td>
+                <td>${entry.value}</td>
+            </tr>
+        </c:forEach>
+        </table>
+		<%--${cohortMap} patient(s)! <br/>--%>
 	</c:when>
 
 	<c:otherwise>
