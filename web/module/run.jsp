@@ -30,18 +30,20 @@
 	<c:when test="${not empty cohortName}">
 		<strong><spring:message code="Cohort.title"/>.</strong> ${cohortName}<br/>
 		<strong><spring:message code="SearchResults.resultsFor"/> ${logicRule}:</strong> Successful for <br/>
-        <table>
-        <tr>
-            <th>Patient ID</th>
-            <th>Test result</th>
-        </tr>
-        <c:forEach var="entry" varStatus="stat" items="${cohortMap}">
-            <tr class="${stat.index % 2 == 1 ? "oddRow" : "evenRow" }">
-                <td>${entry.key}</td>
-                <td>${entry.value}</td>
+        <div style="overflow:auto; height:300px;" class="box">
+            <table>
+            <tr>
+                <th>Patient ID</th>
+                <th>Test result</th>
             </tr>
-        </c:forEach>
-        </table>
+            <c:forEach var="entry" varStatus="stat" items="${cohortMap}">
+                <tr class="${stat.index % 2 == 1 ? "oddRow" : "evenRow" }">
+                    <td>${entry.key}</td>
+                    <td>${entry.value}</td>
+                </tr>
+            </c:forEach>
+            </table>
+        </div>
 		<%--${cohortMap} patient(s)! <br/>--%>
 	</c:when>
 
