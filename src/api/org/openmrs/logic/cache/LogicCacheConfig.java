@@ -27,11 +27,11 @@ public interface LogicCacheConfig {
 
     String getDiskStorePath() throws UnsupportedOperationException;
 
-    void setDefaultTTl(long ttl) throws UnsupportedOperationException;
+    boolean setDefaultTTl(long ttl) throws UnsupportedOperationException;
 
-    void setMaxElementsInMemory(Integer maxInMem) throws UnsupportedOperationException;
+    boolean setMaxElementsInMemory(Integer maxInMem) throws UnsupportedOperationException;
 
-    void setMaxElementsOnDisk(Integer maxOnDisk) throws UnsupportedOperationException;
+    boolean setMaxElementsOnDisk(Integer maxOnDisk) throws UnsupportedOperationException;
     
     boolean getFeature(Features name) throws UnsupportedOperationException;
 }

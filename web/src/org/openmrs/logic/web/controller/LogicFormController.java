@@ -130,7 +130,7 @@ public class LogicFormController {
             } else if("shutdown".equals(action)) {
                 LogicCacheManager.shutDown();
             } else if("clear".equals(action)) {
-                //TODO: clear all caches
+                logicCache.clean();
             }
 
             cacheHits = logicCache.getCacheHits().toString();
@@ -146,6 +146,7 @@ public class LogicFormController {
         modelMap.addAttribute("cacheMisses", cacheMisses);
         modelMap.addAttribute("cacheSize", cacheSize);
         modelMap.addAttribute("cacheToStr", cacheToStr);
+        modelMap.addAttribute("cacheDiskStorePath", logicCache.getLogicCacheConfig().getDiskStorePath());
 	}
 
 	/***********************************************************************************************************

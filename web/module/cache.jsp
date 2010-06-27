@@ -24,6 +24,10 @@ there are ${cachesCount} caches<br/>
         <td>${cacheSize}</td>
     </tr>
     <tr>
+        <td>Disk stroe path:</td>
+        <td>${cacheDiskStorePath}</td>
+    </tr>
+    <tr>
         <td>Cache specific stats:</td>
         <td>${cacheToStr}</td>
     </tr>
@@ -42,7 +46,7 @@ there are ${cachesCount} caches<br/>
 <form action="cache.form" method="POST" name="formCacheManagerAction">
     <input type="hidden" id="action" name="action" value="flush"/>
     <input type="button" id="flush" value="flush" onclick="doCacheManagerAction('flush')" />
-    <input type="button" id="clear" value="clear" disabled="true" onclick="doCacheManagerAction('clear')" />
+    <input type="button" id="clear" value="clear" onclick="doCacheManagerAction('clear')" />
     <input type="button" id="shutdown" value="shutdown" onclick="doCacheManagerAction('shutdown')" />
 </form>
 

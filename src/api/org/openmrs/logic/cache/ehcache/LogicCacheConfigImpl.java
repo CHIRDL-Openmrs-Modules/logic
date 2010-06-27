@@ -47,18 +47,24 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     }
 
     @Override
-    public void setDefaultTTl(long ttl) throws UnsupportedOperationException {
+    public boolean setDefaultTTl(long ttl) throws UnsupportedOperationException {
         cache.getCacheConfiguration().setTimeToLiveSeconds(ttl);
+        //TODO
+        return false;
     }
 
     @Override
-    public void setMaxElementsInMemory(Integer maxInMem) throws UnsupportedOperationException {
+    public boolean setMaxElementsInMemory(Integer maxInMem) throws UnsupportedOperationException {
         cache.getCacheConfiguration().setMaxElementsInMemory(maxInMem);
+        //TODO
+        return false;
     }
 
     @Override
-    public void setMaxElementsOnDisk(Integer maxOnDisk) throws UnsupportedOperationException {
+    public boolean setMaxElementsOnDisk(Integer maxOnDisk) throws UnsupportedOperationException {
         cache.getCacheConfiguration().setMaxElementsOnDisk(maxOnDisk);
+        //TODO
+        return false;
     }
 
     @Override
