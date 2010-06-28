@@ -13,6 +13,7 @@
  */
 package org.openmrs.logic.cache;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.api.context.Context;
@@ -23,8 +24,7 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 import java.util.Date;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  *
@@ -46,8 +46,13 @@ public class LogicCacheTest extends BaseModuleContextSensitiveTest {
         assertNotNull("logicCache is null", logicCache);
     }
 
+    @After
+    public void tearDown() throws Exception {
+        logicCache.clean();
+    }
+
     @Test
-    public void logicCachePutGetTest() {
+    public void testLogicCachePutGet() {
         for(int i = 0; i < CACHE_OBJS_COUNT; ++i)
             logicCache.put("key"+i, i, DEF_TTL);
 
@@ -59,7 +64,38 @@ public class LogicCacheTest extends BaseModuleContextSensitiveTest {
     }
 
     @Test
-    public void logicCacheKeyTest() {
+    public void testRemove() {
+        Integer key0 = 0, value0 = 1;
+        Integer gotValue0;
+
+        logicCache.put(key0, value0);
+        gotValue0 = (Integer) logicCache.get(key0);
+        assertEquals("Getting value from cache by the key the value was put.", value0, gotValue0);
+
+        logicCache.remove(key0);
+        gotValue0 = (Integer) logicCache.get(key0);
+        assertNull("Getting removed object, expected null.", gotValue0);
+
+        //nothing must happen!
+        logicCache.remove(key0);
+    }
+
+    @Test
+    public void testClean() {
+        for(Integer i = 0; i < CACHE_OBJS_COUNT; ++i)
+            logicCache.put(i, i, DEF_TTL);
+
+        assertEquals(CACHE_OBJS_COUNT, logicCache.getSize());
+
+        logicCache.clean();
+        assertEquals(0, logicCache.getSize());
+
+        //nothing must happen!
+        logicCache.clean();
+    }
+
+    @Test
+    public void testLogicCacheKey() {
         LogicService logicService = Context.getLogicService();
         LogicCriteria lc = logicService.parse("\"AGE\"");
         LogicDataSource logicDataSource = logicService.getLogicDataSource("obs");
@@ -68,7 +104,10 @@ public class LogicCacheTest extends BaseModuleContextSensitiveTest {
 
         LogicCacheKey logicCacheKey = new LogicCacheKey(null, lc, logicDataSource, new Date(), 2);
 
-        logicCache.put(logicCacheKey, 1, 100);
-        logicCache.get(logicCacheKey);
+        Integer testValue = 1;
+
+        logicCache.put(logicCacheKey, testValue, DEF_TTL);
+        Integer gotValue = (Integer) logicCache.get(logicCacheKey);
+        assertEquals("Getting value from cache by the key the value was put.", testValue, gotValue);        
     }
 }

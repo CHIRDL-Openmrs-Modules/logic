@@ -91,7 +91,7 @@ public class LogicCacheKeyTest extends BaseModuleContextSensitiveTest {
         * run  testStoreOnDisk then  testLoadFromDisk. note: this is temporary
         */
 
-    int size = 80;
+/*    int size = 80;
     @Test
     public void testStoreOnDisk() {
         Date indexDate = new Date();
@@ -113,10 +113,17 @@ public class LogicCacheKeyTest extends BaseModuleContextSensitiveTest {
     @Test
     public void testLoadFromDisk() {
         assertEquals(size, LogicCacheManager.getDefaultLogicCache().getSize());
-    }
+    }*/
 
     //================================================================================
 
+    /**
+         *
+         * @param forSerialization
+         * @return
+         * @throws IOException
+         * @throws ClassNotFoundException
+         */
     private Object roundTripSerialization(Object forSerialization) throws IOException, ClassNotFoundException {
         //serialize
         ByteArrayOutputStream out = new ByteArrayOutputStream();

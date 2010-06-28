@@ -39,6 +39,7 @@ import static org.junit.Assert.*;
 
 /**
  * Class for tests of the ehcache directly.
+ * TODO: remove this when it is unnecessary
  */
 public class EhCacheTest extends BaseModuleContextSensitiveTest {
 	

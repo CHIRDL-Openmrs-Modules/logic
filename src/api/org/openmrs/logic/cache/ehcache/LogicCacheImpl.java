@@ -21,7 +21,7 @@ import org.openmrs.logic.cache.LogicCache;
 import org.openmrs.logic.cache.LogicCacheConfig;
 
 /**
- *
+ * TODO sometimes cache may throw IllegalStateException, handle it.
  */
 public class LogicCacheImpl implements LogicCache {
     private final Log log = LogFactory.getLog(getClass());
