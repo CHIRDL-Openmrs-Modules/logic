@@ -17,15 +17,13 @@ package org.openmrs.logic.cache;
  *
  */
 public interface LogicCacheConfig {
-    public enum Features {MAX_ELEMENTS_IN_MEMORY, MAX_ELEMENTS_ON_DISK, DEFAULT_TTL, DISK_STORE_PATH}
+    public enum Features {MAX_ELEMENTS_IN_MEMORY, MAX_ELEMENTS_ON_DISK, DEFAULT_TTL, DISK_STORE_PATH, CACHE_HITS, CACHE_MISSES}
 
     Integer getMaxElementsInMemory() throws UnsupportedOperationException;
 
     Integer getMaxElementsOnDisk() throws UnsupportedOperationException;
 
     long getDefaultTTl() throws UnsupportedOperationException;
-
-    String getDiskStorePath() throws UnsupportedOperationException;
 
     boolean setDefaultTTl(long ttl) throws UnsupportedOperationException;
 
@@ -34,4 +32,10 @@ public interface LogicCacheConfig {
     boolean setMaxElementsOnDisk(Integer maxOnDisk) throws UnsupportedOperationException;
     
     boolean getFeature(Features name) throws UnsupportedOperationException;
+
+    Long getCacheHits() throws UnsupportedOperationException;
+
+    Long getCacheMisses() throws UnsupportedOperationException;
+
+    String getDiskStorePath() throws UnsupportedOperationException;
 }

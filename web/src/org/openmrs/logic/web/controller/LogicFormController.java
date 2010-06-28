@@ -7,6 +7,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicService;
 import org.openmrs.logic.cache.LogicCache;
+import org.openmrs.logic.cache.LogicCacheConfig;
 import org.openmrs.logic.cache.LogicCacheManager;
 import org.openmrs.logic.result.Result;
 import org.springframework.stereotype.Controller;
@@ -119,10 +120,11 @@ public class LogicFormController {
     @RequestMapping("/module/logic/cache")
 	public void handlePath(@RequestParam(required = false, value = "action") String action, ModelMap modelMap) throws Exception {
         Collection<String> cacheNames = null;
-        String cacheHits = "", cacheMisses = "", cacheToStr = "", cacheSize = "";
+        String cacheHits = "", cacheMisses = "", cacheToStr = "", cacheSize = "", diskStorePath = "";
 
         cacheNames = LogicCacheManager.getCacheNames();
         LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
+        LogicCacheConfig logicCacheConfig;
 
         if(null != logicCache) {
             if("flush".equals(action)) {
@@ -132,9 +134,11 @@ public class LogicFormController {
             } else if("clear".equals(action)) {
                 logicCache.clean();
             }
+            logicCacheConfig = logicCache.getLogicCacheConfig();
 
-            cacheHits = logicCache.getCacheHits().toString();
-            cacheMisses = logicCache.getCacheMisses().toString();
+            cacheHits = logicCacheConfig.getCacheHits().toString();
+            cacheMisses = logicCacheConfig.getCacheMisses().toString();
+            diskStorePath = logicCacheConfig.getDiskStorePath();
             cacheSize = Integer.toString(logicCache.getSize());
             cacheToStr = logicCache.getCacheSpecificStats();
         }
@@ -146,7 +150,7 @@ public class LogicFormController {
         modelMap.addAttribute("cacheMisses", cacheMisses);
         modelMap.addAttribute("cacheSize", cacheSize);
         modelMap.addAttribute("cacheToStr", cacheToStr);
-        modelMap.addAttribute("cacheDiskStorePath", logicCache.getLogicCacheConfig().getDiskStorePath());
+        modelMap.addAttribute("cacheDiskStorePath", diskStorePath);
 	}
 
 	/***********************************************************************************************************

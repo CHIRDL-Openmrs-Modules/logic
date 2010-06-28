@@ -68,6 +68,16 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     }
 
     @Override
+    public Long getCacheHits() throws UnsupportedOperationException {
+        return cache.getStatistics().getCacheHits();
+    }
+
+    @Override
+    public Long getCacheMisses() throws UnsupportedOperationException {
+        return cache.getStatistics().getCacheMisses();
+    }
+
+    @Override
     public boolean getFeature(Features name) {
         boolean result = false;
 
@@ -84,8 +94,15 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
             case DISK_STORE_PATH:
                 result = true;
                 break;
+            case CACHE_HITS:
+                result = true;
+                break;
+            case CACHE_MISSES:
+                result = true;
+                break;
         }
 
         return result;
     }
+
 }
