@@ -15,13 +15,14 @@ package org.openmrs.logic.cache.ehcache;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
+import net.sf.ehcache.Status;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.logic.cache.LogicCache;
 import org.openmrs.logic.cache.LogicCacheConfig;
 
 /**
- * TODO sometimes cache may throw IllegalStateException, handle it.
+ * 
  */
 public class LogicCacheImpl implements LogicCache {
     private final Log log = LogFactory.getLog(getClass());
@@ -35,32 +36,41 @@ public class LogicCacheImpl implements LogicCache {
         logicCacheConfig = new LogicCacheConfigImpl(cache);
     }
 
+    private Cache getCache() {
+        if(!Status.STATUS_ALIVE.equals(cache.getStatus())) {
+            log.warn(cache.getName() + " has invalid status. Cache may not work. Disable cache.");
+            cache.setDisabled(true);
+        }
+
+        return cache;
+    }
+
     @Override
     public void put(Object key, Object value, int ttl) {
-        cache.put(new Element(key, value, false, ttl, ttl));
+        getCache().put(new Element(key, value, false, ttl, ttl));
         log.debug("Put new object into the logicCache");
     }
 
     @Override
     public void put(Object key, Object value) {
-        cache.put(new Element(key, value));
+        getCache().put(new Element(key, value));
         log.debug("Put new object into the logicCache");
     }
 
     @Override
     public Object get(Object key) {
-        Element element = cache.get(key);
+        Element element = getCache().get(key);
         return element == null ? null : element.getValue();
     }
 
     @Override
     public int getSize() {
-        return cache.getSize();
+        return getCache().getSize();
     }
 
     @Override
     public void remove(Object key) {
-        cache.remove(key);
+        getCache().remove(key);
     }
 
     @Override
@@ -70,19 +80,19 @@ public class LogicCacheImpl implements LogicCache {
 
     @Override
     public void clean() {
-        cache.removeAll();
+        getCache().removeAll();
     }
 
 
     @Override
     public void flush() throws UnsupportedOperationException {
-        cache.flush();
+        getCache().flush();
         log.debug("Flush logicCache");
     }
 
     @Override
     public String getCacheSpecificStats() {
-        return cache.toString();
+        return getCache().toString();
     }
 
     @Override

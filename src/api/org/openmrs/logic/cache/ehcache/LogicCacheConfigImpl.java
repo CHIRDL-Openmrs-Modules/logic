@@ -14,7 +14,11 @@
 package org.openmrs.logic.cache.ehcache;
 
 import net.sf.ehcache.Cache;
+import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 import org.openmrs.logic.cache.LogicCacheConfig;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -43,27 +47,27 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
 
     @Override
     public String getDiskStorePath() throws UnsupportedOperationException {
-        return cache.getCacheConfiguration().getDiskStorePath();
+        return cache.getCacheManager().getDiskStorePath();
     }
 
     @Override
     public boolean setDefaultTTl(long ttl) throws UnsupportedOperationException {
         cache.getCacheConfiguration().setTimeToLiveSeconds(ttl);
-        //TODO
+        //TODO: true if restart is needed
         return false;
     }
 
     @Override
     public boolean setMaxElementsInMemory(Integer maxInMem) throws UnsupportedOperationException {
         cache.getCacheConfiguration().setMaxElementsInMemory(maxInMem);
-        //TODO
+        //TODO: true if restart is needed
         return false;
     }
 
     @Override
     public boolean setMaxElementsOnDisk(Integer maxOnDisk) throws UnsupportedOperationException {
         cache.getCacheConfiguration().setMaxElementsOnDisk(maxOnDisk);
-        //TODO
+        //TODO: true if restart is needed
         return false;
     }
 
@@ -75,6 +79,25 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     @Override
     public Long getCacheMisses() throws UnsupportedOperationException {
         return cache.getStatistics().getCacheMisses();
+    }
+
+    //TODO impl or delete
+    public List<String> getAvailableEvictionPolicies() {
+        List<String> evictionPolicies = new ArrayList<String>();
+        evictionPolicies.add(MemoryStoreEvictionPolicy.FIFO.toString());
+        evictionPolicies.add(MemoryStoreEvictionPolicy.LFU.toString());
+        evictionPolicies.add(MemoryStoreEvictionPolicy.LRU.toString());
+
+        return evictionPolicies;
+    }
+
+    //TODO impl or delete
+    public boolean setEvictionPolicy(String policy) {
+        MemoryStoreEvictionPolicy newPolicy = MemoryStoreEvictionPolicy.fromString(policy);
+        cache.getCacheConfiguration().setMemoryStoreEvictionPolicy(newPolicy.toString());
+        
+        //TODO: true if restart is needed
+        return false;
     }
 
     @Override

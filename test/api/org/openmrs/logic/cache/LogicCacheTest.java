@@ -35,13 +35,8 @@ public class LogicCacheTest extends BaseModuleContextSensitiveTest {
 
     private LogicCache logicCache;
 
-//    private Boolean beforeOnce = false;
-
     @Before
     public void setUp() throws Exception {
-//        if(beforeOnce) return;
-//        beforeOnce = true;
-
         logicCache = LogicCacheManager.getDefaultLogicCache();
         assertNotNull("logicCache is null", logicCache);
     }
