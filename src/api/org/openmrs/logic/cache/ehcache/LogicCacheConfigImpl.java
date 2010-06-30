@@ -14,17 +14,13 @@
 package org.openmrs.logic.cache.ehcache;
 
 import net.sf.ehcache.Cache;
-import net.sf.ehcache.store.MemoryStoreEvictionPolicy;
 import org.openmrs.logic.cache.LogicCacheConfig;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  *
  */
 public class LogicCacheConfigImpl implements LogicCacheConfig {
-    private Cache cache;
+    private final Cache cache;
 
     public LogicCacheConfigImpl(Cache cache) {
         this.cache = cache;
@@ -41,17 +37,12 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     }
 
     @Override
-    public long getDefaultTTl() throws UnsupportedOperationException {
+    public long getDefaultTTL() throws UnsupportedOperationException {
         return cache.getCacheConfiguration().getTimeToLiveSeconds();
     }
 
     @Override
-    public String getDiskStorePath() throws UnsupportedOperationException {
-        return cache.getCacheManager().getDiskStorePath();
-    }
-
-    @Override
-    public boolean setDefaultTTl(long ttl) throws UnsupportedOperationException {
+    public boolean setDefaultTTL(long ttl) throws UnsupportedOperationException {
         cache.getCacheConfiguration().setTimeToLiveSeconds(ttl);
         //TODO: true if restart is needed
         return false;
@@ -80,6 +71,7 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     public Long getCacheMisses() throws UnsupportedOperationException {
         return cache.getStatistics().getCacheMisses();
     }
+/*
 
     //TODO impl or delete
     public List<String> getAvailableEvictionPolicies() {
@@ -100,6 +92,7 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
         return false;
     }
 
+*/
     @Override
     public boolean getFeature(Features name) {
         boolean result = false;

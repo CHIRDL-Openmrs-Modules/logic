@@ -45,4 +45,10 @@ public class LogicCacheConfigTest {
     public void testSetMaxElementsOnDisk() throws Exception {
         //TODO
     }
+
+    @Test
+    public void testXMLEncoderDecoder() {
+        LogicCacheConfig logicCacheConfig = LogicCacheManager.getDefaultLogicCache().getLogicCacheConfig();
+        logicCacheConfig.storeConfig();
+    }
 }

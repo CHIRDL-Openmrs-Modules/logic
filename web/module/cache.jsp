@@ -1,5 +1,8 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="/WEB-INF/template/header.jsp"%>
+
+<openmrs:require privilege="View Administration Functions" otherwise="/login.htm" redirect="/admin/index.htm" />
+
 there are ${cachesCount} caches<br/>
 <ul>
 <c:forEach var="cacheName" varStatus="stat" items="${cacheNames}">
@@ -48,6 +51,7 @@ there are ${cachesCount} caches<br/>
     <input type="button" id="flush" value="flush" onclick="doCacheManagerAction('flush')" />
     <input type="button" id="clear" value="clear" onclick="doCacheManagerAction('clear')" />
     <input type="button" id="shutdown" value="shutdown" onclick="doCacheManagerAction('shutdown')" />
+    <input type="button" id="refresh" value="refresh" onclick="location.replace('')" />
 </form>
 
 

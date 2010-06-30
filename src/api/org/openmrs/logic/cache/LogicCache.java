@@ -33,6 +33,8 @@ public interface LogicCache {
 
     LogicCacheConfig getLogicCacheConfig();
 
+    void storeConfig() throws UnsupportedOperationException;
+
     void clean();
 
     void flush() throws UnsupportedOperationException;

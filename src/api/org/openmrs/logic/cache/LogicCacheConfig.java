@@ -23,9 +23,9 @@ public interface LogicCacheConfig {
 
     Integer getMaxElementsOnDisk() throws UnsupportedOperationException;
 
-    long getDefaultTTl() throws UnsupportedOperationException;
+    long getDefaultTTL() throws UnsupportedOperationException;
 
-    boolean setDefaultTTl(long ttl) throws UnsupportedOperationException;
+    boolean setDefaultTTL(long ttl) throws UnsupportedOperationException;
 
     boolean setMaxElementsInMemory(Integer maxInMem) throws UnsupportedOperationException;
 
@@ -37,5 +37,4 @@ public interface LogicCacheConfig {
 
     Long getCacheMisses() throws UnsupportedOperationException;
 
-    String getDiskStorePath() throws UnsupportedOperationException;
 }

@@ -13,7 +13,9 @@
  */
 package org.openmrs.logic.cache.ehcache;
 
+import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
+import net.sf.ehcache.config.CacheConfiguration;
 import org.openmrs.logic.cache.LogicCache;
 import org.openmrs.logic.cache.LogicCacheProvider;
 
@@ -49,7 +51,18 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
 
     @Override
     public LogicCache getDefaultCache() {
-        return getCache(LOGIC_CACHE_NAME);
+        LogicCache logicCache = cacheList.get(LOGIC_CACHE_NAME);
+        if(null != logicCache) return logicCache;
+
+        CacheConfiguration configuration = new CacheConfiguration();
+        configuration.setName(LOGIC_CACHE_NAME);
+
+        Cache cache = new Cache(configuration);
+        logicCache = new LogicCacheImpl(configuration);
+        getCacheManager().addCache(cache);
+        cacheList.put(LOGIC_CACHE_NAME, logicCache);
+
+        return logicCache;
     }
 
     @Override

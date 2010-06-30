@@ -16,10 +16,16 @@ package org.openmrs.logic.cache.ehcache;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.Status;
+import net.sf.ehcache.config.CacheConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.logic.cache.ConfigToStoreBean;
 import org.openmrs.logic.cache.LogicCache;
 import org.openmrs.logic.cache.LogicCacheConfig;
+
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.*;
 
 /**
  * 
@@ -36,14 +42,68 @@ public class LogicCacheImpl implements LogicCache {
         logicCacheConfig = new LogicCacheConfigImpl(cache);
     }
 
+    public LogicCacheImpl(CacheConfiguration configuration) {
+        ConfigToStoreBean config = restoreConfig();
+        if(null != config) {
+            configuration.setMaxElementsInMemory(config.getMaxElementsInMemory());
+            configuration.setMaxElementsOnDisk(config.getMaxElementsOnDisk());
+            configuration.setTimeToLiveSeconds(config.getDefaultTTL());
+            configuration.setTimeToIdleSeconds(config.getDefaultTTL());
+        }
+
+        cache = new Cache(configuration);
+    }
+
     private Cache getCache() {
         if(!Status.STATUS_ALIVE.equals(cache.getStatus())) {
-            log.warn(cache.getName() + " has invalid status. Cache may not work. Disable cache.");
-            cache.setDisabled(true);
+            log.warn(cache.getName() + " has invalid status. Cache may not work.");
         }
 
         return cache;
     }
+
+    @Override
+    public void storeConfig() throws UnsupportedOperationException {
+        XMLEncoder xmlEncoder = null;
+        CacheConfiguration cacheConfig = getCache().getCacheConfiguration();
+
+        ConfigToStoreBean configToStore = new ConfigToStoreBean();
+        configToStore.setDefaultTTL(cacheConfig.getTimeToLiveSeconds());
+        configToStore.setMaxElementsInMemory(cacheConfig.getMaxElementsInMemory());
+        configToStore.setMaxElementsOnDisk(cacheConfig.getMaxElementsOnDisk());
+
+        try {
+            xmlEncoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream("test.xml")));
+            xmlEncoder.writeObject(configToStore);
+        } catch (FileNotFoundException e) {
+            log.error("Cache configuration is not saved.", e);
+        } finally {
+            if(null != xmlEncoder)
+                xmlEncoder.close();
+        }
+    }
+
+    public ConfigToStoreBean restoreConfig() {
+        ConfigToStoreBean configRestored = null;
+        Object restoredObj = null;
+        XMLDecoder xmlDecoder = null;
+
+        try {
+            xmlDecoder = new XMLDecoder(new BufferedInputStream(new FileInputStream("test.xml")));
+            restoredObj = xmlDecoder.readObject();
+        } catch (FileNotFoundException e) {
+            log.warn("Cache configuration not found.", e);
+        } finally {
+            if(null != xmlDecoder)
+                xmlDecoder.close();
+        }
+
+        if(restoredObj != null && restoredObj instanceof ConfigToStoreBean)
+            configRestored = (ConfigToStoreBean) restoredObj;
+
+        return configRestored;
+    }
+
 
     @Override
     public void put(Object key, Object value, int ttl) {
