@@ -27,10 +27,6 @@ there are ${cachesCount} caches<br/>
         <td>${cacheSize}</td>
     </tr>
     <tr>
-        <td>Disk stroe path:</td>
-        <td>${cacheDiskStorePath}</td>
-    </tr>
-    <tr>
         <td>Cache specific stats:</td>
         <td>${cacheToStr}</td>
     </tr>

@@ -41,28 +41,16 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
     @Override
     public LogicCache getCache(String name) {
         LogicCache logicCache = cacheList.get(name);
-        if(null != logicCache)
-            return logicCache;
+        if(null != logicCache) return logicCache;
 
-        logicCache = new LogicCacheImpl(getCacheManager().getCache(name));
-        cacheList.put(name, logicCache);
+        logicCache = createLogicCache(name);
+
         return logicCache;
     }
 
     @Override
     public LogicCache getDefaultCache() {
-        LogicCache logicCache = cacheList.get(LOGIC_CACHE_NAME);
-        if(null != logicCache) return logicCache;
-
-        CacheConfiguration configuration = new CacheConfiguration();
-        configuration.setName(LOGIC_CACHE_NAME);
-
-        Cache cache = new Cache(configuration);
-        logicCache = new LogicCacheImpl(configuration);
-        getCacheManager().addCache(cache);
-        cacheList.put(LOGIC_CACHE_NAME, logicCache);
-
-        return logicCache;
+        return getCache(LOGIC_CACHE_NAME);
     }
 
     @Override
@@ -70,7 +58,19 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         getCacheManager().shutdown();
     }
 
-    public CacheManager getCacheManager() {
+    private LogicCache createLogicCache(String name) {
+        CacheConfiguration configuration = new CacheConfiguration();
+        configuration.setName(name);
+
+        Cache cache = new Cache(configuration);
+        LogicCache logicCache = new LogicCacheImpl(configuration);
+        getCacheManager().addCache(cache);
+        cacheList.put(name, logicCache);
+
+        return logicCache;
+    }
+
+    private CacheManager getCacheManager() {
         if(null == cacheManager) {
             URL url = EhCacheProviderImpl.class.getResource(LOGIC_CACHE_CONFIG);
             cacheManager = new CacheManager(url);

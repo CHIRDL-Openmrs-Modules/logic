@@ -34,15 +34,18 @@ public class LogicCacheImpl implements LogicCache {
     private final Log log = LogFactory.getLog(getClass());
 
     private final Cache cache;
+    private final String cacheConfigPath;
 
     private LogicCacheConfig logicCacheConfig;
 
     public LogicCacheImpl(Cache cache) {
         this.cache = cache;
+        cacheConfigPath = cache.getName();
         logicCacheConfig = new LogicCacheConfigImpl(cache);
     }
 
     public LogicCacheImpl(CacheConfiguration configuration) {
+        cacheConfigPath = configuration.getName();
         ConfigToStoreBean config = restoreConfig();
         if(null != config) {
             configuration.setMaxElementsInMemory(config.getMaxElementsInMemory());
@@ -52,6 +55,7 @@ public class LogicCacheImpl implements LogicCache {
         }
 
         cache = new Cache(configuration);
+        logicCacheConfig = new LogicCacheConfigImpl(cache);
     }
 
     private Cache getCache() {
@@ -73,7 +77,7 @@ public class LogicCacheImpl implements LogicCache {
         configToStore.setMaxElementsOnDisk(cacheConfig.getMaxElementsOnDisk());
 
         try {
-            xmlEncoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream("test.xml")));
+            xmlEncoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(cacheConfigPath + ".xml")));
             xmlEncoder.writeObject(configToStore);
         } catch (FileNotFoundException e) {
             log.error("Cache configuration is not saved.", e);
@@ -89,7 +93,7 @@ public class LogicCacheImpl implements LogicCache {
         XMLDecoder xmlDecoder = null;
 
         try {
-            xmlDecoder = new XMLDecoder(new BufferedInputStream(new FileInputStream("test.xml")));
+            xmlDecoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(cacheConfigPath + ".xml")));
             restoredObj = xmlDecoder.readObject();
         } catch (FileNotFoundException e) {
             log.warn("Cache configuration not found.", e);

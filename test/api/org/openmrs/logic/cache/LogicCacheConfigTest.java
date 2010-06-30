@@ -48,7 +48,7 @@ public class LogicCacheConfigTest {
 
     @Test
     public void testXMLEncoderDecoder() {
-        LogicCacheConfig logicCacheConfig = LogicCacheManager.getDefaultLogicCache().getLogicCacheConfig();
-        logicCacheConfig.storeConfig();
+        LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
+        logicCache.storeConfig();
     }
 }

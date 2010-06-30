@@ -138,7 +138,6 @@ public class LogicFormController {
 
             cacheHits = logicCacheConfig.getCacheHits().toString();
             cacheMisses = logicCacheConfig.getCacheMisses().toString();
-            diskStorePath = logicCacheConfig.getDiskStorePath();
             cacheSize = Integer.toString(logicCache.getSize());
             cacheToStr = logicCache.getCacheSpecificStats();
         }
