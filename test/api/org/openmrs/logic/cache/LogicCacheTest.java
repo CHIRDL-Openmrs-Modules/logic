@@ -30,7 +30,7 @@ import static org.junit.Assert.*;
  *
  */
 public class LogicCacheTest extends BaseModuleContextSensitiveTest {
-    private final int CACHE_OBJS_COUNT = 100;
+    private final int CACHE_OBJS_COUNT = 800;
     private final int DEF_TTL = 100;
 
     private LogicCache logicCache;

@@ -14,19 +14,12 @@
 package org.openmrs.logic.cache.ehcache;
 
 import net.sf.ehcache.Cache;
-import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.Status;
-import net.sf.ehcache.config.CacheConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.logic.cache.ConfigToStoreBean;
 import org.openmrs.logic.cache.LogicCache;
 import org.openmrs.logic.cache.LogicCacheConfig;
-
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
-import java.io.*;
 
 /**
  * 
@@ -35,27 +28,37 @@ public class LogicCacheImpl implements LogicCache {
     private final Log log = LogFactory.getLog(getClass());
 
     private final Cache cache;
-    private final CacheManager cacheManager; //TODO may be local var??
-    private final String cacheConfigPath;
+    private final EhCacheProviderImpl ehCacheProvider;
+//    private final CacheManager cacheManager;
+//    private final String cacheConfigPath;
 
     private LogicCacheConfig logicCacheConfig;
 
-    public LogicCacheImpl(CacheConfiguration configuration, CacheManager cacheManager) {
-        this.cacheManager = cacheManager;
-        cacheConfigPath = configuration.getName() + ".config";
-        ConfigToStoreBean config = restoreConfig();
-        if(null != config) {
-            configuration.setMaxElementsInMemory(config.getMaxElementsInMemory());
-            configuration.setMaxElementsOnDisk(config.getMaxElementsOnDisk());
-            configuration.setTimeToLiveSeconds(config.getDefaultTTL());
-            configuration.setTimeToIdleSeconds(config.getDefaultTTL());
-        }
-
-        cache = new Cache(configuration);
+    public LogicCacheImpl(Cache cache, EhCacheProviderImpl ehCacheProvider) {
+        this.cache = cache;
         logicCacheConfig = new LogicCacheConfigImpl(cache);
-        this.cacheManager.addCache(cache);
+        this.ehCacheProvider = ehCacheProvider;
     }
 
+    /*
+
+        public LogicCacheImpl(CacheConfiguration configuration, CacheManager cacheManager) {
+            this.cacheManager = cacheManager;
+            cacheConfigPath = configuration.getName() + ".config";
+            ConfigToStoreBean config = restoreConfig();
+            if(null != config) {
+                configuration.setMaxElementsInMemory(config.getMaxElementsInMemory());
+                configuration.setMaxElementsOnDisk(config.getMaxElementsOnDisk());
+                configuration.setTimeToLiveSeconds(config.getDefaultTTL());
+                configuration.setTimeToIdleSeconds(config.getDefaultTTL());
+            }
+
+            cache = new Cache(configuration);
+            logicCacheConfig = new LogicCacheConfigImpl(cache);
+            this.cacheManager.addCache(cache);
+        }
+
+    */
     private Cache getCache() {
         if(!Status.STATUS_ALIVE.equals(cache.getStatus())) {
             log.warn(cache.getName() + " has invalid status. Cache may not work.");
@@ -63,6 +66,12 @@ public class LogicCacheImpl implements LogicCache {
 
         return cache;
     }
+
+    @Override
+    public void storeConfig() {
+        ehCacheProvider.storeConfig();
+    }
+/*
 
     @Override
     public void storeConfig() {
@@ -106,6 +115,7 @@ public class LogicCacheImpl implements LogicCache {
         return configRestored;
     }
 
+*/
 
     @Override
     public void put(Object key, Object value, int ttl) {
