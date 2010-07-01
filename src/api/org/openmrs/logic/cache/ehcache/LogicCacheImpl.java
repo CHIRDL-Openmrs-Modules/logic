@@ -14,6 +14,7 @@
 package org.openmrs.logic.cache.ehcache;
 
 import net.sf.ehcache.Cache;
+import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import net.sf.ehcache.Status;
 import net.sf.ehcache.config.CacheConfiguration;
@@ -34,18 +35,14 @@ public class LogicCacheImpl implements LogicCache {
     private final Log log = LogFactory.getLog(getClass());
 
     private final Cache cache;
+    private final CacheManager cacheManager; //TODO may be local var??
     private final String cacheConfigPath;
 
     private LogicCacheConfig logicCacheConfig;
 
-    public LogicCacheImpl(Cache cache) {
-        this.cache = cache;
-        cacheConfigPath = cache.getName();
-        logicCacheConfig = new LogicCacheConfigImpl(cache);
-    }
-
-    public LogicCacheImpl(CacheConfiguration configuration) {
-        cacheConfigPath = configuration.getName();
+    public LogicCacheImpl(CacheConfiguration configuration, CacheManager cacheManager) {
+        this.cacheManager = cacheManager;
+        cacheConfigPath = configuration.getName() + ".config";
         ConfigToStoreBean config = restoreConfig();
         if(null != config) {
             configuration.setMaxElementsInMemory(config.getMaxElementsInMemory());
@@ -56,6 +53,7 @@ public class LogicCacheImpl implements LogicCache {
 
         cache = new Cache(configuration);
         logicCacheConfig = new LogicCacheConfigImpl(cache);
+        this.cacheManager.addCache(cache);
     }
 
     private Cache getCache() {
@@ -67,7 +65,7 @@ public class LogicCacheImpl implements LogicCache {
     }
 
     @Override
-    public void storeConfig() throws UnsupportedOperationException {
+    public void storeConfig() {
         XMLEncoder xmlEncoder = null;
         CacheConfiguration cacheConfig = getCache().getCacheConfiguration();
 
@@ -77,7 +75,7 @@ public class LogicCacheImpl implements LogicCache {
         configToStore.setMaxElementsOnDisk(cacheConfig.getMaxElementsOnDisk());
 
         try {
-            xmlEncoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(cacheConfigPath + ".xml")));
+            xmlEncoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(cacheConfigPath)));
             xmlEncoder.writeObject(configToStore);
         } catch (FileNotFoundException e) {
             log.error("Cache configuration is not saved.", e);
@@ -93,7 +91,7 @@ public class LogicCacheImpl implements LogicCache {
         XMLDecoder xmlDecoder = null;
 
         try {
-            xmlDecoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(cacheConfigPath + ".xml")));
+            xmlDecoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(cacheConfigPath)));
             restoredObj = xmlDecoder.readObject();
         } catch (FileNotFoundException e) {
             log.warn("Cache configuration not found.", e);

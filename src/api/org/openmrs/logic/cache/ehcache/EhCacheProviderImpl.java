@@ -13,7 +13,6 @@
  */
 package org.openmrs.logic.cache.ehcache;
 
-import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.config.CacheConfiguration;
 import org.openmrs.logic.cache.LogicCache;
@@ -26,7 +25,8 @@ import java.net.URL;
  */
 public class EhCacheProviderImpl extends LogicCacheProvider {
     private final String LOGIC_CACHE_NAME = "org.openmrs.logic.defaultCache";
-    private String LOGIC_CACHE_CONFIG = "/logic-ehcache.xml";
+//    private final String LOGIC_CACHE_CONFIG_PATH = System.getProperty("user.home")+"/.OpenMRS/cache/config";
+    private String EHCACHE_CONFIG = "/logic-ehcache.xml";
     private CacheManager cacheManager;
 
     public EhCacheProviderImpl() {
@@ -34,7 +34,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
     }
 
     public EhCacheProviderImpl(String pathToConfig) {
-        LOGIC_CACHE_CONFIG = pathToConfig;
+        EHCACHE_CONFIG = pathToConfig;
         getCacheManager();
     }
 
@@ -62,9 +62,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         CacheConfiguration configuration = new CacheConfiguration();
         configuration.setName(name);
 
-        Cache cache = new Cache(configuration);
-        LogicCache logicCache = new LogicCacheImpl(configuration);
-        getCacheManager().addCache(cache);
+        LogicCache logicCache = new LogicCacheImpl(configuration, getCacheManager());
         cacheList.put(name, logicCache);
 
         return logicCache;
@@ -72,7 +70,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
 
     private CacheManager getCacheManager() {
         if(null == cacheManager) {
-            URL url = EhCacheProviderImpl.class.getResource(LOGIC_CACHE_CONFIG);
+            URL url = EhCacheProviderImpl.class.getResource(EHCACHE_CONFIG);
             cacheManager = new CacheManager(url);
         }
         
