@@ -35,12 +35,10 @@ import java.util.Map;
 public class EhCacheProviderImpl extends LogicCacheProvider {
     private final Log log = LogFactory.getLog(getClass());
     private final String LOGIC_CACHE_NAME = "org.openmrs.logic.defaultCache";
-    private final String LOGIC_CACHE_CONFIG_PATH = "logic-cache.config";//System.getProperty("user.home")+"/.OpenMRS/cache/config";
     private String EHCACHE_CONFIG = "/logic-ehcache.xml";
     private CacheManager cacheManager;
 
     public EhCacheProviderImpl() {
-
     }
 
     public EhCacheProviderImpl(String pathToConfig) {
@@ -104,7 +102,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         Map<String, ConfigToStoreBean> configs = new HashMap<String, ConfigToStoreBean>();
 
         try {
-            xmlEncoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(LOGIC_CACHE_CONFIG_PATH)));
+            xmlEncoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(getLogicCacheConfigPath())));
 
             for(String cacheName : cacheManager.getCacheNames()) {
                 CacheConfiguration cacheConfig =  cacheManager.getCache(cacheName).getCacheConfiguration();
@@ -133,7 +131,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         Map<String, ConfigToStoreBean> configs = new HashMap<String, ConfigToStoreBean>();
 
         try {
-            xmlDecoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(LOGIC_CACHE_CONFIG_PATH)));
+            xmlDecoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(getLogicCacheConfigPath())));
             restoredObj = xmlDecoder.readObject();
         } catch (FileNotFoundException e) {
             log.warn("Cache configuration not found.", e);
@@ -155,5 +153,9 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         }
         
         return cacheManager;
+    }
+
+    private String getLogicCacheConfigPath() {
+        return getCacheManager().getDiskStorePath() + System.getProperty("file.separator") + "logic-cache.config";
     }
 }
