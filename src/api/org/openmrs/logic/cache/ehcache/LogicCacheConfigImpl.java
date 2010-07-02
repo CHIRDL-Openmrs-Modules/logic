@@ -15,6 +15,7 @@ package org.openmrs.logic.cache.ehcache;
 
 import net.sf.ehcache.Cache;
 import org.openmrs.logic.cache.LogicCacheConfig;
+import org.openmrs.logic.cache.LogicCacheConfigBean;
 
 /**
  *
@@ -71,28 +72,17 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     public Long getCacheMisses() throws UnsupportedOperationException {
         return cache.getStatistics().getCacheMisses();
     }
-/*
 
-    //TODO impl or delete
-    public List<String> getAvailableEvictionPolicies() {
-        List<String> evictionPolicies = new ArrayList<String>();
-        evictionPolicies.add(MemoryStoreEvictionPolicy.FIFO.toString());
-        evictionPolicies.add(MemoryStoreEvictionPolicy.LFU.toString());
-        evictionPolicies.add(MemoryStoreEvictionPolicy.LRU.toString());
+    @Override
+    public LogicCacheConfigBean getConfigBean() {
+        LogicCacheConfigBean retVal = new LogicCacheConfigBean();
+        if(getFeature(Features.DEFAULT_TTL)) retVal.setDefaultTTL(getDefaultTTL());
+        if(getFeature(Features.MAX_ELEMENTS_IN_MEMORY)) retVal.setMaxElementsInMemory(getMaxElementsInMemory());
+        if(getFeature(Features.MAX_ELEMENTS_ON_DISK)) retVal.setMaxElementsOnDisk(getMaxElementsOnDisk());
 
-        return evictionPolicies;
+        return retVal;
     }
 
-    //TODO impl or delete
-    public boolean setEvictionPolicy(String policy) {
-        MemoryStoreEvictionPolicy newPolicy = MemoryStoreEvictionPolicy.fromString(policy);
-        cache.getCacheConfiguration().setMemoryStoreEvictionPolicy(newPolicy.toString());
-        
-        //TODO: true if restart is needed
-        return false;
-    }
-
-*/
     @Override
     public boolean getFeature(Features name) {
         boolean result = false;

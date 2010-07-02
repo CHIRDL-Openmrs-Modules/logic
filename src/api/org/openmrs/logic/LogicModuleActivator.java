@@ -15,27 +15,46 @@ package org.openmrs.logic;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.logic.cache.LogicCacheManager;
 import org.openmrs.module.Activator;
+import org.openmrs.module.BaseModuleActivator;
 
 /**
  *
  */
-public class LogicModuleActivator implements Activator {
+public class LogicModuleActivator extends BaseModuleActivator {
 	
 	private static final Log log = LogFactory.getLog(LogicModuleActivator.class);
-	
-	/**
-	 * @see org.openmrs.module.Activator#startup()
-	 */
-	public void startup() {
-		log.debug("Starting logic module ...");
-	}
-	
-	/**
-	 * @see org.openmrs.module.Activator#shutdown()
-	 */
-	public void shutdown() {
-		log.debug("Shutting down logic module ...");
-	}
-	
+
+    @Override
+    public void contextRefreshed() {
+
+    }
+
+    @Override
+    public void started() {
+
+    }
+
+    @Override
+    public void stopped() {
+
+    }
+
+    @Override
+    public void willRefreshContext() {
+
+    }
+
+    @Override
+    public void willStart() {
+        log.debug("Shutting down logic module ...");
+    }
+
+    @Override
+    public void willStop() {
+        LogicCacheManager.shutDown();
+        log.debug("Starting logic module ...");
+    }
+
 }

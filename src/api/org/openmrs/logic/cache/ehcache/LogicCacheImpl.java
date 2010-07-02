@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.logic.cache.LogicCache;
 import org.openmrs.logic.cache.LogicCacheConfig;
+import org.openmrs.logic.cache.LogicCacheConfigBean;
 
 /**
  * 
@@ -45,7 +46,7 @@ public class LogicCacheImpl implements LogicCache {
         public LogicCacheImpl(CacheConfiguration configuration, CacheManager cacheManager) {
             this.cacheManager = cacheManager;
             cacheConfigPath = configuration.getName() + ".config";
-            ConfigToStoreBean config = restoreConfig();
+            LogicCacheConfigBean config = restoreConfig();
             if(null != config) {
                 configuration.setMaxElementsInMemory(config.getMaxElementsInMemory());
                 configuration.setMaxElementsOnDisk(config.getMaxElementsOnDisk());
@@ -78,7 +79,7 @@ public class LogicCacheImpl implements LogicCache {
         XMLEncoder xmlEncoder = null;
         CacheConfiguration cacheConfig = getCache().getCacheConfiguration();
 
-        ConfigToStoreBean configToStore = new ConfigToStoreBean();
+        LogicCacheConfigBean configToStore = new LogicCacheConfigBean();
         configToStore.setDefaultTTL(cacheConfig.getTimeToLiveSeconds());
         configToStore.setMaxElementsInMemory(cacheConfig.getMaxElementsInMemory());
         configToStore.setMaxElementsOnDisk(cacheConfig.getMaxElementsOnDisk());
@@ -94,8 +95,8 @@ public class LogicCacheImpl implements LogicCache {
         }
     }
 
-    public ConfigToStoreBean restoreConfig() {
-        ConfigToStoreBean configRestored = null;
+    public LogicCacheConfigBean restoreConfig() {
+        LogicCacheConfigBean configRestored = null;
         Object restoredObj = null;
         XMLDecoder xmlDecoder = null;
 
@@ -109,8 +110,8 @@ public class LogicCacheImpl implements LogicCache {
                 xmlDecoder.close();
         }
 
-        if(restoredObj != null && restoredObj instanceof ConfigToStoreBean)
-            configRestored = (ConfigToStoreBean) restoredObj;
+        if(restoredObj != null && restoredObj instanceof LogicCacheConfigBean)
+            configRestored = (LogicCacheConfigBean) restoredObj;
 
         return configRestored;
     }

@@ -37,4 +37,6 @@ public interface LogicCacheConfig {
 
     Long getCacheMisses() throws UnsupportedOperationException;
 
+    LogicCacheConfigBean getConfigBean();
+
 }

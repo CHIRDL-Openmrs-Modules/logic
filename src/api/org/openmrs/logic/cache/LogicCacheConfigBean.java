@@ -18,7 +18,7 @@ import java.io.Serializable;
 /**
  *
  */
-public class ConfigToStoreBean implements Serializable {
+public class LogicCacheConfigBean implements Serializable {
 	private long defaultTTL;
     private Integer maxElementsInMemory;
     private Integer maxElementsOnDisk;

@@ -6,6 +6,7 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicService;
+import org.openmrs.logic.cache.LogicCacheConfigBean;
 import org.openmrs.logic.cache.LogicCache;
 import org.openmrs.logic.cache.LogicCacheConfig;
 import org.openmrs.logic.cache.LogicCacheManager;
@@ -120,9 +121,11 @@ public class LogicFormController {
     @RequestMapping("/module/logic/cache")
 	public void handlePath(@RequestParam(required = false, value = "action") String action, ModelMap modelMap) throws Exception {
         Collection<String> cacheNames = null;
-        String cacheHits = "", cacheMisses = "", cacheToStr = "", cacheSize = "", diskStorePath = "";
+        Map<String, LogicCacheConfigBean> cacheConfigs = LogicCacheManager.getLogicCacheConfigBeans();
+        String cacheHits = "", cacheMisses = "", cacheToStr = "", cacheSize = "";
 
         cacheNames = LogicCacheManager.getCacheNames();
+        
         LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
         LogicCacheConfig logicCacheConfig;
 
@@ -143,13 +146,13 @@ public class LogicFormController {
         }
 
 		modelMap.addAttribute("cacheNames", cacheNames);
-        modelMap.addAttribute("cachesCount", cacheNames != null ? cacheNames.size() : "-");
+        modelMap.addAttribute("cacheConfigs", cacheConfigs);
+        modelMap.addAttribute("cachesCount", cacheNames != null ? cacheNames.size() : "0");
 
         modelMap.addAttribute("cacheHits", cacheHits);
         modelMap.addAttribute("cacheMisses", cacheMisses);
         modelMap.addAttribute("cacheSize", cacheSize);
         modelMap.addAttribute("cacheToStr", cacheToStr);
-        modelMap.addAttribute("cacheDiskStorePath", diskStorePath);
 	}
 
 	/***********************************************************************************************************

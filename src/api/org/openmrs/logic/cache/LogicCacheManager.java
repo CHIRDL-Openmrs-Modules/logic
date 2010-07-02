@@ -18,6 +18,7 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.logic.cache.ehcache.EhCacheProviderImpl;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  *
@@ -51,7 +52,6 @@ public class LogicCacheManager {
         return logicCacheProvider.getCacheNames();
     }
 
-    //TODO delete later
     public static void shutDown() {
         logicCacheProvider.shutDownCacheManager();
     }
