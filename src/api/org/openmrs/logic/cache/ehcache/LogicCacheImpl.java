@@ -119,6 +119,11 @@ public class LogicCacheImpl implements LogicCache {
 */
 
     @Override
+    public String getName() {
+        return getCache().getName();
+    }
+
+    @Override
     public void put(Object key, Object value, int ttl) {
         getCache().put(new Element(key, value, false, ttl, ttl));
         log.debug("Put new object into the logicCache");
@@ -154,13 +159,14 @@ public class LogicCacheImpl implements LogicCache {
     @Override
     public void clean() {
         getCache().removeAll();
+        log.debug(getCache().getName() + ": cleaning.");
     }
 
 
     @Override
     public void flush() throws UnsupportedOperationException {
         getCache().flush();
-        log.debug("Flush logicCache");
+        log.debug(getCache().getName() + ": flushing.");
     }
 
     @Override

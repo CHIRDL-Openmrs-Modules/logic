@@ -18,8 +18,8 @@ import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.config.CacheConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.logic.cache.LogicCacheConfigBean;
 import org.openmrs.logic.cache.LogicCache;
+import org.openmrs.logic.cache.LogicCacheConfigBean;
 import org.openmrs.logic.cache.LogicCacheProvider;
 
 import java.beans.XMLDecoder;
@@ -75,14 +75,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
             xmlEncoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(getLogicCacheConfigPath())));
 
             for(String cacheName : cacheManager.getCacheNames()) {
-                CacheConfiguration cacheConfig =  cacheManager.getCache(cacheName).getCacheConfiguration();
-
                 LogicCacheConfigBean configToStore = cacheList.get(cacheName).getLogicCacheConfig().getConfigBean();
-//                LogicCacheConfigBean configToStore = new LogicCacheConfigBean();
-//                configToStore.setDefaultTTL(cacheConfig.getTimeToLiveSeconds());
-//                configToStore.setMaxElementsInMemory(cacheConfig.getMaxElementsInMemory());
-//                configToStore.setMaxElementsOnDisk(cacheConfig.getMaxElementsOnDisk());
-
                 configs.put(cacheName, configToStore);
             }
 
@@ -106,7 +99,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
             xmlDecoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(getLogicCacheConfigPath())));
             restoredObj = xmlDecoder.readObject();
         } catch (FileNotFoundException e) {
-            log.warn("Cache configuration not found.", e);
+            log.warn("Cache configuration not found.");
         } finally {
             if(null != xmlDecoder)
                 xmlDecoder.close();
@@ -134,10 +127,14 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
 
         LogicCacheConfigBean configStored = restoreConfig(name);
         if(null != configStored) {
-            configuration.setMaxElementsInMemory(configStored.getMaxElementsInMemory());
-            configuration.setMaxElementsOnDisk(configStored.getMaxElementsOnDisk());
-            configuration.setTimeToLiveSeconds(configStored.getDefaultTTL());
-            configuration.setTimeToIdleSeconds(configStored.getDefaultTTL());
+            if(configStored.getMaxElementsInMemory() != null)
+                configuration.setMaxElementsInMemory(configStored.getMaxElementsInMemory());
+            if(configStored.getMaxElementsOnDisk() != null)
+                configuration.setMaxElementsOnDisk(configStored.getMaxElementsOnDisk());
+            if(configStored.getDefaultTTL() != null) {
+                configuration.setTimeToLiveSeconds(configStored.getDefaultTTL());
+                configuration.setTimeToIdleSeconds(configStored.getDefaultTTL());
+            }
         }
         Cache cache = new Cache(configuration);
         getCacheManager().addCache(cache);

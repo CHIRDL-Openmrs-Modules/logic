@@ -19,6 +19,8 @@ package org.openmrs.logic.cache;
 public interface LogicCache {
     public enum Features {FLUSH}
 
+    String getName();
+
     void put(Object key, Object value, int ttl);
 
     void put(Object key, Object value);

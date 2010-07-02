@@ -38,12 +38,12 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     }
 
     @Override
-    public long getDefaultTTL() throws UnsupportedOperationException {
+    public Long getDefaultTTL() throws UnsupportedOperationException {
         return cache.getCacheConfiguration().getTimeToLiveSeconds();
     }
 
     @Override
-    public boolean setDefaultTTL(long ttl) throws UnsupportedOperationException {
+    public boolean setDefaultTTL(Long ttl) throws UnsupportedOperationException {
         cache.getCacheConfiguration().setTimeToLiveSeconds(ttl);
         //TODO: true if restart is needed
         return false;

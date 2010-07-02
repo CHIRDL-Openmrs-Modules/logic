@@ -19,15 +19,15 @@ import java.io.Serializable;
  *
  */
 public class LogicCacheConfigBean implements Serializable {
-	private long defaultTTL;
+	private Long defaultTTL;
     private Integer maxElementsInMemory;
     private Integer maxElementsOnDisk;
 	
-	public long getDefaultTTL() {
+	public Long getDefaultTTL() {
 		return defaultTTL;
 	}
 	
-	public void setDefaultTTL(long defaultTTL) {
+	public void setDefaultTTL(Long defaultTTL) {
 		this.defaultTTL = defaultTTL;
 	}
 

@@ -26,11 +26,10 @@
     <input type="hidden" id="cacheName" name="cacheName" value=""/>
     <input type="hidden" id="action" name="action" value="flush"/>
     <input type="button" id="shutdown" value="shutdown" onclick="doCacheManagerAction('shutdown', '')"/>
-    <input type="button" id="refresh" value="refresh" onclick="location.replace('')"/>
 </form>
 
 <form action="cache.form" name="formEditCache">
-    <input type="hidden" id="editCacheName" name="editCacheName" value=""/>
+    <input type="hidden" id="editCacheName" name="cacheName" value=""/>
 </form>
 
 Logic caches (${cachesCount}):<br/>

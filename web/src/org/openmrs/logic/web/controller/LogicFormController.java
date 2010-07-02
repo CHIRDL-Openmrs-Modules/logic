@@ -6,9 +6,9 @@ import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicService;
-import org.openmrs.logic.cache.LogicCacheConfigBean;
 import org.openmrs.logic.cache.LogicCache;
 import org.openmrs.logic.cache.LogicCacheConfig;
+import org.openmrs.logic.cache.LogicCacheConfigBean;
 import org.openmrs.logic.cache.LogicCacheManager;
 import org.openmrs.logic.result.Result;
 import org.springframework.stereotype.Controller;
@@ -119,7 +119,24 @@ public class LogicFormController {
 	}
 
     @RequestMapping("/module/logic/caches")
-	public void showCaches(@RequestParam(required = false, value = "action") String action, ModelMap modelMap) throws Exception {
+	public void showCaches(@RequestParam(required = false, value = "action") String action,
+                           @RequestParam(required = false, value = "cacheName") String cacheName,
+                           ModelMap modelMap) throws Exception {
+
+        if(!StringUtils.isEmpty(action)) {
+            LogicCache logicCache = null;
+            if(!StringUtils.isEmpty(cacheName))
+                logicCache = LogicCacheManager.getLogicCache(cacheName);
+
+            if ("shutdown".equals(action)) {
+                LogicCacheManager.shutDown();
+            } else if ("flush".equals(action) && null != logicCache && logicCache.getFeature(LogicCache.Features.FLUSH)) {
+                logicCache.flush();
+            } else if ("clear".equals(action) && null != logicCache) {
+                logicCache.clean();
+            }
+        }
+
         Collection<String> cacheNames = LogicCacheManager.getCacheNames();
         LogicCacheManager.getDefaultLogicCache(); //creating cache if it isn`t
 
@@ -128,27 +145,48 @@ public class LogicFormController {
 	}
 
     @RequestMapping("/module/logic/cache")
-	public void manageCache(@RequestParam(required = false, value = "action") String action, ModelMap modelMap) throws Exception {
-        LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
-        LogicCacheConfig logicCacheConfig;
+    public void manageCache(@RequestParam(required = false, value = "cacheName") String cacheName,
+                            @RequestParam(required = false, value = "maxElemInMem") Integer maxElemInMem,
+                            @RequestParam(required = false, value = "maxElemOnDisk") Integer maxElemOnDisk,
+                            @RequestParam(required = false, value = "defaultTTL") Long defaultTTL,
+                            ModelMap modelMap) throws Exception {
+
+        LogicCache logicCache;
+        if (!StringUtils.isEmpty(cacheName))
+            logicCache = LogicCacheManager.getLogicCache(cacheName);
+        else {
+            logicCache = LogicCacheManager.getDefaultLogicCache();
+            cacheName = logicCache.getName();
+        }
+
+        LogicCacheConfig logicCacheConfig = logicCache.getLogicCacheConfig();
         String cacheHits = "", cacheMisses = "", cacheToStr = "", cacheSize = "";
 
-        if(null != logicCache) {
-            if("flush".equals(action)) {
-                logicCache.flush();
-            } else if("shutdown".equals(action)) {
-                LogicCacheManager.shutDown();
-            } else if("clear".equals(action)) {
-                logicCache.clean();
-            }
-            logicCacheConfig = logicCache.getLogicCacheConfig();
+        if (null != maxElemInMem || null != maxElemOnDisk || null != defaultTTL) {
+            if (null != maxElemInMem && maxElemInMem >= 0 && logicCacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_IN_MEMORY))
+                logicCacheConfig.setMaxElementsInMemory(maxElemInMem);
 
-            cacheHits = logicCacheConfig.getCacheHits().toString();
-            cacheMisses = logicCacheConfig.getCacheMisses().toString();
-            cacheSize = Integer.toString(logicCache.getSize());
-            cacheToStr = logicCache.getCacheSpecificStats();
+            if (null != maxElemOnDisk && maxElemOnDisk >= 0 && logicCacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_ON_DISK))
+                logicCacheConfig.setMaxElementsOnDisk(maxElemOnDisk);
+
+            if (defaultTTL > 0 && logicCacheConfig.getFeature(LogicCacheConfig.Features.DEFAULT_TTL))
+                logicCacheConfig.setDefaultTTL(defaultTTL);
+
+            logicCache.storeConfig();
         }
-        
+
+        cacheHits = logicCacheConfig.getCacheHits().toString();
+        cacheMisses = logicCacheConfig.getCacheMisses().toString();
+        cacheSize = Integer.toString(logicCache.getSize());
+        cacheToStr = logicCache.getCacheSpecificStats();
+
+        LogicCacheConfigBean configBean = logicCacheConfig.getConfigBean();
+
+        modelMap.addAttribute("configTTL", configBean.getDefaultTTL().toString());
+        modelMap.addAttribute("configMaxElInMem", configBean.getMaxElementsInMemory());
+        modelMap.addAttribute("configMaxElOnDisk", configBean.getMaxElementsOnDisk());
+
+        modelMap.addAttribute("cacheName", cacheName);
         modelMap.addAttribute("cacheHits", cacheHits);
         modelMap.addAttribute("cacheMisses", cacheMisses);
         modelMap.addAttribute("cacheSize", cacheSize);
@@ -156,7 +194,7 @@ public class LogicFormController {
     }
 
 
-	/***********************************************************************************************************
+    /***********************************************************************************************************
 	 * Formats exception into a printable string
 	 * 
 	 * @param exception Exception

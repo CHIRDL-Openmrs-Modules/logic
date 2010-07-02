@@ -3,20 +3,33 @@
 
 <openmrs:require privilege="View Administration Functions" otherwise="/login.htm" redirect="/admin/index.htm"/>
 
-<form action="cache.form">
-    <table cellpadding="0" cellspacing="0">
+<h3>${cacheName}</h3>
+
+<form action="cache.form" method="POST">
+    <table cellpadding="1" cellspacing="1">
+        <c:if test="${not empty configMaxElInMem}">
         <tr>
-            <th>Max elements in memory</th>
-            <th>Max elements on disk</th>
-            <th>Default TTL</th>
+            <td class="evenRow">Max elements in memory</td>
+            <td><input type="text" name="maxElemInMem" value="${configMaxElInMem}"/></td>
         </tr>
+        </c:if>
+        <c:if test="${not empty configMaxElOnDisk}">
         <tr>
-            <td><input type="text" name="maxElemInMem" value=""/></td>
-            <td><input type="text" name="maxElemOnDisk" value=""/></td>
-            <td><input type="text" name="DefaultTTL" value=""/></td>
+            <td class="evenRow">Max elements on disk</td>
+            <td><input type="text" name="maxElemOnDisk" value="${configMaxElOnDisk}"/></td>
         </tr>
+        </c:if>
+        <c:if test="${not empty configTTL}">
         <tr>
-            <td colspan="3"><input type="submit" value="save"/></td>
+            <td class="evenRow">Default TTL</td>
+            <td><input type="text" name="defaultTTL" value="${configTTL}"/></td>
+        </tr>
+        </c:if>
+        <tr>
+            <td colspan="2">
+                <input type="submit" value="save"/>
+                <input type="button" id="refresh" value="refresh" onclick="location.replace('')"/>
+            </td>
         </tr>
     </table>
 </form>
