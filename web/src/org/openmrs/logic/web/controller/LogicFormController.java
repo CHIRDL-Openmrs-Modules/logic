@@ -118,16 +118,20 @@ public class LogicFormController {
 		}
 	}
 
-    @RequestMapping("/module/logic/cache")
-	public void handlePath(@RequestParam(required = false, value = "action") String action, ModelMap modelMap) throws Exception {
-        Collection<String> cacheNames = null;
-        Map<String, LogicCacheConfigBean> cacheConfigs = LogicCacheManager.getLogicCacheConfigBeans();
-        String cacheHits = "", cacheMisses = "", cacheToStr = "", cacheSize = "";
+    @RequestMapping("/module/logic/caches")
+	public void showCaches(@RequestParam(required = false, value = "action") String action, ModelMap modelMap) throws Exception {
+        Collection<String> cacheNames = LogicCacheManager.getCacheNames();
+        LogicCacheManager.getDefaultLogicCache(); //creating cache if it isn`t
 
-        cacheNames = LogicCacheManager.getCacheNames();
-        
+    	modelMap.addAttribute("cacheNames", cacheNames);
+        modelMap.addAttribute("cachesCount", cacheNames != null ? cacheNames.size() : "0");
+	}
+
+    @RequestMapping("/module/logic/cache")
+	public void manageCache(@RequestParam(required = false, value = "action") String action, ModelMap modelMap) throws Exception {
         LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
         LogicCacheConfig logicCacheConfig;
+        String cacheHits = "", cacheMisses = "", cacheToStr = "", cacheSize = "";
 
         if(null != logicCache) {
             if("flush".equals(action)) {
@@ -144,16 +148,13 @@ public class LogicFormController {
             cacheSize = Integer.toString(logicCache.getSize());
             cacheToStr = logicCache.getCacheSpecificStats();
         }
-
-		modelMap.addAttribute("cacheNames", cacheNames);
-        modelMap.addAttribute("cacheConfigs", cacheConfigs);
-        modelMap.addAttribute("cachesCount", cacheNames != null ? cacheNames.size() : "0");
-
+        
         modelMap.addAttribute("cacheHits", cacheHits);
         modelMap.addAttribute("cacheMisses", cacheMisses);
         modelMap.addAttribute("cacheSize", cacheSize);
         modelMap.addAttribute("cacheToStr", cacheToStr);
-	}
+    }
+
 
 	/***********************************************************************************************************
 	 * Formats exception into a printable string
