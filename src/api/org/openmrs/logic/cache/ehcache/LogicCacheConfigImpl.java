@@ -63,6 +63,7 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
         return false;
     }
 
+    ///////////////////////TODO: delete later
     @Override
     public Long getCacheHits() throws UnsupportedOperationException {
         return cache.getStatistics().getCacheHits();
@@ -72,6 +73,7 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     public Long getCacheMisses() throws UnsupportedOperationException {
         return cache.getStatistics().getCacheMisses();
     }
+    ///////////////////////
 
     @Override
     public LogicCacheConfigBean getConfigBean() {
@@ -95,15 +97,6 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
                 result = true;
                 break;
             case DEFAULT_TTL:
-                result = true;
-                break;
-            case DISK_STORE_PATH:
-                result = true;
-                break;
-            case CACHE_HITS:
-                result = true;
-                break;
-            case CACHE_MISSES:
                 result = true;
                 break;
         }

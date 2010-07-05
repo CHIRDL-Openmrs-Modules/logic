@@ -3,6 +3,8 @@
 
 <openmrs:require privilege="View Administration Functions" otherwise="/login.htm" redirect="/admin/index.htm"/>
 
+<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js" />
+
 <script type="text/javascript">
     function doCacheManagerAction(command, cacheName) {
         var cacheNameInput = document.getElementById("cacheName");

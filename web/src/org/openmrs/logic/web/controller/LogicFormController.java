@@ -137,8 +137,8 @@ public class LogicFormController {
             }
         }
 
-        Collection<String> cacheNames = LogicCacheManager.getCacheNames();
         LogicCacheManager.getDefaultLogicCache(); //creating cache if it isn`t
+        Collection<String> cacheNames = LogicCacheManager.getCacheNames();
 
     	modelMap.addAttribute("cacheNames", cacheNames);
         modelMap.addAttribute("cachesCount", cacheNames != null ? cacheNames.size() : "0");
@@ -182,15 +182,21 @@ public class LogicFormController {
 
         LogicCacheConfigBean configBean = logicCacheConfig.getConfigBean();
 
-        modelMap.addAttribute("configTTL", configBean.getDefaultTTL().toString());
-        modelMap.addAttribute("configMaxElInMem", configBean.getMaxElementsInMemory());
-        modelMap.addAttribute("configMaxElOnDisk", configBean.getMaxElementsOnDisk());
+        if(logicCacheConfig.getFeature(LogicCacheConfig.Features.DEFAULT_TTL))
+            modelMap.addAttribute("configTTL", configBean.getDefaultTTL().toString());
+        if(logicCacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_IN_MEMORY))
+            modelMap.addAttribute("configMaxElInMem", configBean.getMaxElementsInMemory());
+        if(logicCacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_ON_DISK))
+            modelMap.addAttribute("configMaxElOnDisk", configBean.getMaxElementsOnDisk());
 
         modelMap.addAttribute("cacheName", cacheName);
+        modelMap.addAttribute("cacheSize", cacheSize);
+
+        ///////////////////////TODO: delete later
         modelMap.addAttribute("cacheHits", cacheHits);
         modelMap.addAttribute("cacheMisses", cacheMisses);
-        modelMap.addAttribute("cacheSize", cacheSize);
         modelMap.addAttribute("cacheToStr", cacheToStr);
+        ///////////////////////
     }
 
 
