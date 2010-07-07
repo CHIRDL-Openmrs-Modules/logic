@@ -137,7 +137,10 @@ public class LogicFormController {
             }
         }
 
-        LogicCacheManager.getDefaultLogicCache(); //creating cache if it isn`t
+        //creating cache if it isn`t
+        LogicCacheManager.getDefaultLogicCache();
+        LogicCacheManager.getLogicCache("org.openmrs.logic.criteriaCache");
+
         Collection<String> cacheNames = LogicCacheManager.getCacheNames();
 
     	modelMap.addAttribute("cacheNames", cacheNames);
@@ -160,7 +163,7 @@ public class LogicFormController {
         }
 
         LogicCacheConfig logicCacheConfig = logicCache.getLogicCacheConfig();
-        String cacheHits = "", cacheMisses = "", cacheToStr = "", cacheSize = "";
+        String cacheHits, cacheMisses, cacheToStr, cacheSize;
 
         if (null != maxElemInMem || null != maxElemOnDisk || null != defaultTTL) {
             if (null != maxElemInMem && maxElemInMem >= 0 && logicCacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_IN_MEMORY))
@@ -175,11 +178,7 @@ public class LogicFormController {
             logicCache.storeConfig();
         }
 
-        cacheHits = logicCacheConfig.getCacheHits().toString();
-        cacheMisses = logicCacheConfig.getCacheMisses().toString();
         cacheSize = Integer.toString(logicCache.getSize());
-        cacheToStr = logicCache.getCacheSpecificStats();
-
         LogicCacheConfigBean configBean = logicCacheConfig.getConfigBean();
 
         if(logicCacheConfig.getFeature(LogicCacheConfig.Features.DEFAULT_TTL))
@@ -193,6 +192,10 @@ public class LogicFormController {
         modelMap.addAttribute("cacheSize", cacheSize);
 
         ///////////////////////TODO: delete later
+        cacheHits = logicCacheConfig.getCacheHits().toString();
+        cacheMisses = logicCacheConfig.getCacheMisses().toString();
+        cacheToStr = logicCache.getCacheSpecificStats();
+        
         modelMap.addAttribute("cacheHits", cacheHits);
         modelMap.addAttribute("cacheMisses", cacheMisses);
         modelMap.addAttribute("cacheToStr", cacheToStr);

@@ -19,6 +19,8 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
 import org.openmrs.logic.*;
+import org.openmrs.logic.cache.LogicCache;
+import org.openmrs.logic.cache.LogicCacheManager;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.queryparser.LogicQueryBaseParser;
 import org.openmrs.logic.queryparser.LogicQueryLexer;
@@ -347,19 +349,17 @@ public class LogicServiceImpl implements LogicService {
 		try {
 			if (!criteria.endsWith(";")) {
 				criteria += ";";
-			}
+            }
 
-//            Element element = ehcache.get(criteria);
-//            if(null != element) {
-//                return (LogicCriteria) element.getValue();
-//            }
-                        
+            LogicCache logicCache = LogicCacheManager.getLogicCache("org.openmrs.logic.criteriaCache");
+            LogicCriteriaImpl lc = (LogicCriteriaImpl) logicCache.get(criteria);
+            if(null != lc) return lc;
 
-			byte currentBytes[] = criteria.getBytes();
-			
-			ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(currentBytes);
-			
-			// Create a scanner that reads from the input stream passed to us
+            byte currentBytes[] = criteria.getBytes();
+
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(currentBytes);
+
+            // Create a scanner that reads from the input stream passed to us
 			LogicQueryLexer lexer = new LogicQueryLexer(byteArrayInputStream);
 			
 			// Create a parser that reads from the scanner
@@ -374,11 +374,10 @@ public class LogicServiceImpl implements LogicService {
 			
 			LogicQueryTreeParser treeParser = new LogicQueryTreeParser();
 			
-			LogicCriteriaImpl lc = treeParser.query_AST(t);
+			lc = treeParser.query_AST(t);
 			// System.out.println(lc.toString());
-            
-//            element = new Element(criteria, lc);
-//            ehcache.put(element);
+
+            logicCache.put(criteria, lc);
 
 			return lc;
 		}

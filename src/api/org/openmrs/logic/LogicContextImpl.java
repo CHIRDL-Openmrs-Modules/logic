@@ -207,7 +207,7 @@ public class LogicContextImpl implements LogicContext {
 	 */
     //TODO:
 	public Result read(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
-        LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patient.getPatientId());
+        LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), null);
 
         Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheKey);
         Result result = null;
