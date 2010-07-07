@@ -43,6 +43,11 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     }
 
     @Override
+    public boolean getUsingDiskStore() throws UnsupportedOperationException {
+        return cache.getCacheConfiguration().isOverflowToDisk();
+    }
+
+    @Override
     public boolean setDefaultTTL(Long ttl) throws UnsupportedOperationException {
         cache.getCacheConfiguration().setTimeToLiveSeconds(ttl);
         //TODO: true if restart is needed
@@ -63,6 +68,13 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
         return false;
     }
 
+    @Override
+    public boolean setUsingDiskStore(boolean isDiskStore) throws UnsupportedOperationException {
+        cache.getCacheConfiguration().setOverflowToDisk(isDiskStore);
+        //TODO: true if restart is needed
+        return true;
+    }
+
     ///////////////////////TODO: delete later
     @Override
     public Long getCacheHits() throws UnsupportedOperationException {
@@ -81,6 +93,7 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
         if(getFeature(Features.DEFAULT_TTL)) retVal.setDefaultTTL(getDefaultTTL());
         if(getFeature(Features.MAX_ELEMENTS_IN_MEMORY)) retVal.setMaxElementsInMemory(getMaxElementsInMemory());
         if(getFeature(Features.MAX_ELEMENTS_ON_DISK)) retVal.setMaxElementsOnDisk(getMaxElementsOnDisk());
+        if(getFeature(Features.USING_DISK_STORE)) retVal.setUsingDiskStore(getUsingDiskStore());
 
         return retVal;
     }
@@ -97,6 +110,9 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
                 result = true;
                 break;
             case DEFAULT_TTL:
+                result = true;
+                break;
+            case USING_DISK_STORE:
                 result = true;
                 break;
         }

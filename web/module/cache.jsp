@@ -30,6 +30,12 @@
             <td><input type="text" name="defaultTTL" value="${configTTL}"/></td>
         </tr>
         </c:if>
+        <c:if test="${not empty diskPersistence}">
+        <tr>
+            <td class="evenRow">Disk persistence</td>
+            <td><input type="checkbox" name="diskPersistence" <c:if test="${diskPersistence}">checked</c:if> /></td>
+        </tr>
+        </c:if>
         <tr>
             <td colspan="2">
                 <input type="submit" value="save"/>

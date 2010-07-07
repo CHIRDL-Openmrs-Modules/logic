@@ -22,8 +22,17 @@ public class LogicCacheConfigBean implements Serializable {
 	private Long defaultTTL;
     private Integer maxElementsInMemory;
     private Integer maxElementsOnDisk;
-	
-	public Long getDefaultTTL() {
+    private boolean usingDiskStore;
+
+    public boolean isUsingDiskStore() {
+        return usingDiskStore;
+    }
+
+    public void setUsingDiskStore(boolean usingDiskStore) {
+        this.usingDiskStore = usingDiskStore;
+    }
+
+    public Long getDefaultTTL() {
 		return defaultTTL;
 	}
 	

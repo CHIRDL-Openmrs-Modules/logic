@@ -152,6 +152,7 @@ public class LogicFormController {
                             @RequestParam(required = false, value = "maxElemInMem") Integer maxElemInMem,
                             @RequestParam(required = false, value = "maxElemOnDisk") Integer maxElemOnDisk,
                             @RequestParam(required = false, value = "defaultTTL") Long defaultTTL,
+                            @RequestParam(required = false, value = "diskPersistence") Boolean diskPersistence,
                             ModelMap modelMap) throws Exception {
 
         LogicCache logicCache;
@@ -165,15 +166,18 @@ public class LogicFormController {
         LogicCacheConfig logicCacheConfig = logicCache.getLogicCacheConfig();
         String cacheHits, cacheMisses, cacheToStr, cacheSize;
 
-        if (null != maxElemInMem || null != maxElemOnDisk || null != defaultTTL) {
+        if (null != maxElemInMem || null != maxElemOnDisk || null != defaultTTL || null != diskPersistence) {
             if (null != maxElemInMem && maxElemInMem >= 0 && logicCacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_IN_MEMORY))
                 logicCacheConfig.setMaxElementsInMemory(maxElemInMem);
 
             if (null != maxElemOnDisk && maxElemOnDisk >= 0 && logicCacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_ON_DISK))
                 logicCacheConfig.setMaxElementsOnDisk(maxElemOnDisk);
 
-            if (defaultTTL > 0 && logicCacheConfig.getFeature(LogicCacheConfig.Features.DEFAULT_TTL))
+            if (null != defaultTTL && defaultTTL > 0 && logicCacheConfig.getFeature(LogicCacheConfig.Features.DEFAULT_TTL))
                 logicCacheConfig.setDefaultTTL(defaultTTL);
+
+            if (null != diskPersistence && logicCacheConfig.getFeature(LogicCacheConfig.Features.USING_DISK_STORE))
+                logicCacheConfig.setUsingDiskStore(diskPersistence);        
 
             logicCache.storeConfig();
         }
@@ -187,6 +191,8 @@ public class LogicFormController {
             modelMap.addAttribute("configMaxElInMem", configBean.getMaxElementsInMemory());
         if(logicCacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_ON_DISK))
             modelMap.addAttribute("configMaxElOnDisk", configBean.getMaxElementsOnDisk());
+        if(logicCacheConfig.getFeature(LogicCacheConfig.Features.USING_DISK_STORE))
+            modelMap.addAttribute("diskPersistence", configBean.isUsingDiskStore());
 
         modelMap.addAttribute("cacheName", cacheName);
         modelMap.addAttribute("cacheSize", cacheSize);
