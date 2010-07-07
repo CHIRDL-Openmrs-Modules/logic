@@ -3,9 +3,14 @@
 
 <openmrs:require privilege="View Administration Functions" otherwise="/login.htm" redirect="/admin/index.htm"/>
 
+<form method="get" action="caches.form" name="back" id="back">
+<p><a href="#" onclick="document.back.submit();">Back to the cache list page.</a></p><br/>
+</form>
+
 <h3>${cacheName}</h3>
 
-<form action="cache.form" method="POST">
+<form action="cache.form">
+    <input type="hidden" name="cacheName" value="${cacheName}" />
     <table cellpadding="1" cellspacing="1">
         <c:if test="${not empty configMaxElInMem}">
         <tr>
@@ -28,10 +33,14 @@
         <tr>
             <td colspan="2">
                 <input type="submit" value="save"/>
-                <input type="button" id="refresh" value="refresh" onclick="location.replace('')"/>
+                <input type="button" value="refresh" onclick="document.refresh.submit();"/>
             </td>
         </tr>
     </table>
+</form>
+
+<form action="cache.form" id="refresh" name="refresh">
+    <input type="hidden" name="cacheName" value="${cacheName}" />
 </form>
 
 <br/>
