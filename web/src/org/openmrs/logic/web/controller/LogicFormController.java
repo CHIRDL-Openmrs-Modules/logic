@@ -153,6 +153,7 @@ public class LogicFormController {
                             @RequestParam(required = false, value = "maxElemOnDisk") Integer maxElemOnDisk,
                             @RequestParam(required = false, value = "defaultTTL") Long defaultTTL,
                             @RequestParam(required = false, value = "diskPersistence") Boolean diskPersistence,
+                            @RequestParam(required = false, value = "restart") Boolean restart,
                             ModelMap modelMap) throws Exception {
 
         LogicCache logicCache;
@@ -161,6 +162,10 @@ public class LogicFormController {
         else {
             logicCache = LogicCacheManager.getDefaultLogicCache();
             cacheName = logicCache.getName();
+        }
+
+        if(null != restart && restart && logicCache.getFeature(LogicCache.Features.RESTART)) {
+            logicCache.restart();
         }
 
         LogicCacheConfig logicCacheConfig = logicCache.getLogicCacheConfig();
@@ -194,6 +199,7 @@ public class LogicFormController {
         if(logicCacheConfig.getFeature(LogicCacheConfig.Features.USING_DISK_STORE))
             modelMap.addAttribute("diskPersistence", configBean.isUsingDiskStore());
 
+        modelMap.addAttribute("cacheRestart", logicCache.getFeature(LogicCache.Features.RESTART));
         modelMap.addAttribute("cacheName", cacheName);
         modelMap.addAttribute("cacheSize", cacheSize);
 

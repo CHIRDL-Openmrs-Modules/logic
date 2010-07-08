@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.logic.cache.LogicCache;
 import org.openmrs.logic.cache.LogicCacheConfigBean;
+import org.openmrs.logic.cache.LogicCacheManager;
 import org.openmrs.logic.cache.LogicCacheProvider;
 
 import java.beans.XMLDecoder;
@@ -74,7 +75,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         try {
             xmlEncoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(getLogicCacheConfigPath())));
 
-            for(String cacheName : cacheManager.getCacheNames()) {
+            for(String cacheName : LogicCacheManager.getCacheNames()) {
                 LogicCacheConfigBean configToStore = cacheList.get(cacheName).getLogicCacheConfig().getConfigBean();
                 configs.put(cacheName, configToStore);
             }

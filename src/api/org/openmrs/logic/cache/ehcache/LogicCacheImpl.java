@@ -122,6 +122,7 @@ public class LogicCacheImpl implements LogicCache {
                 result = true;
                 break;
             case RESTART:
+                result = true;
                 break;
         }
 
