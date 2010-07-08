@@ -17,7 +17,7 @@ package org.openmrs.logic.cache;
  *
  */
 public interface LogicCache {
-    public enum Features {FLUSH}
+    public enum Features {FLUSH, RESTART}
 
     String getName();
 
@@ -38,6 +38,8 @@ public interface LogicCache {
     void clean();
 
     void storeConfig();
+
+    void restart() throws UnsupportedOperationException;
 
     void flush() throws UnsupportedOperationException;
 

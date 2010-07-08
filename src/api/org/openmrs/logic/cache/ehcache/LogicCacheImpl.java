@@ -30,8 +30,6 @@ public class LogicCacheImpl implements LogicCache {
 
     private final Cache cache;
     private final EhCacheProviderImpl ehCacheProvider;
-//    private final CacheManager cacheManager;
-//    private final String cacheConfigPath;
 
     private LogicCacheConfig logicCacheConfig;
 
@@ -41,25 +39,6 @@ public class LogicCacheImpl implements LogicCache {
         this.ehCacheProvider = ehCacheProvider;
     }
 
-    /*
-
-        public LogicCacheImpl(CacheConfiguration configuration, CacheManager cacheManager) {
-            this.cacheManager = cacheManager;
-            cacheConfigPath = configuration.getName() + ".config";
-            LogicCacheConfigBean config = restoreConfig();
-            if(null != config) {
-                configuration.setMaxElementsInMemory(config.getMaxElementsInMemory());
-                configuration.setMaxElementsOnDisk(config.getMaxElementsOnDisk());
-                configuration.setTimeToLiveSeconds(config.getDefaultTTL());
-                configuration.setTimeToIdleSeconds(config.getDefaultTTL());
-            }
-
-            cache = new Cache(configuration);
-            logicCacheConfig = new LogicCacheConfigImpl(cache);
-            this.cacheManager.addCache(cache);
-        }
-
-    */
     private Cache getCache() {
         if(!Status.STATUS_ALIVE.equals(cache.getStatus())) {
             log.warn(cache.getName() + " has invalid status. Cache may not work.");
@@ -72,51 +51,11 @@ public class LogicCacheImpl implements LogicCache {
     public void storeConfig() {
         ehCacheProvider.storeConfig();
     }
-/*
 
     @Override
-    public void storeConfig() {
-        XMLEncoder xmlEncoder = null;
-        CacheConfiguration cacheConfig = getCache().getCacheConfiguration();
-
-        LogicCacheConfigBean configToStore = new LogicCacheConfigBean();
-        configToStore.setDefaultTTL(cacheConfig.getTimeToLiveSeconds());
-        configToStore.setMaxElementsInMemory(cacheConfig.getMaxElementsInMemory());
-        configToStore.setMaxElementsOnDisk(cacheConfig.getMaxElementsOnDisk());
-
-        try {
-            xmlEncoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(cacheConfigPath)));
-            xmlEncoder.writeObject(configToStore);
-        } catch (FileNotFoundException e) {
-            log.error("Cache configuration is not saved.", e);
-        } finally {
-            if(null != xmlEncoder)
-                xmlEncoder.close();
-        }
+    public void restart() throws UnsupportedOperationException {
+        
     }
-
-    public LogicCacheConfigBean restoreConfig() {
-        LogicCacheConfigBean configRestored = null;
-        Object restoredObj = null;
-        XMLDecoder xmlDecoder = null;
-
-        try {
-            xmlDecoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(cacheConfigPath)));
-            restoredObj = xmlDecoder.readObject();
-        } catch (FileNotFoundException e) {
-            log.warn("Cache configuration not found.", e);
-        } finally {
-            if(null != xmlDecoder)
-                xmlDecoder.close();
-        }
-
-        if(restoredObj != null && restoredObj instanceof LogicCacheConfigBean)
-            configRestored = (LogicCacheConfigBean) restoredObj;
-
-        return configRestored;
-    }
-
-*/
 
     @Override
     public String getName() {
@@ -181,6 +120,8 @@ public class LogicCacheImpl implements LogicCache {
         switch (name) {
             case FLUSH:
                 result = true;
+                break;
+            case RESTART:
                 break;
         }
 

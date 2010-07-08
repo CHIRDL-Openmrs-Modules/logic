@@ -95,7 +95,6 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         Map<String, LogicCacheConfigBean> configs = new HashMap<String, LogicCacheConfigBean>();
 
         try {
-            //TODO check if file exists
             xmlDecoder = new XMLDecoder(new BufferedInputStream(new FileInputStream(getLogicCacheConfigPath())));
             restoredObj = xmlDecoder.readObject();
         } catch (FileNotFoundException e) {
@@ -112,17 +111,23 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
     }
 
     private LogicCache createLogicCache(String name) {
+        Cache preConfigCache = getCacheManager().getCache("prefix."+name);
+        if(null == preConfigCache)
+            preConfigCache = getCacheManager().getCache("preConfiguredCache");
+        
+        CacheConfiguration defConfig = preConfigCache.getCacheConfiguration();
+
         CacheConfiguration configuration = new CacheConfiguration();
         configuration.setName(name);
-        configuration.setMaxElementsInMemory(500);
-        configuration.setMaxElementsOnDisk(5000);
-        configuration.setTimeToLiveSeconds(120);
-        configuration.setTimeToIdleSeconds(120);
-        configuration.setOverflowToDisk(true);
-        configuration.setDiskPersistent(false);
-        configuration.setClearOnFlush(false);
-        configuration.setEternal(false);
-        configuration.setStatistics(true); //TODO temporary
+        configuration.setMaxElementsInMemory(defConfig.getMaxElementsInMemory());
+        configuration.setMaxElementsOnDisk(defConfig.getMaxElementsOnDisk());
+        configuration.setTimeToLiveSeconds(defConfig.getTimeToLiveSeconds());
+        configuration.setTimeToIdleSeconds(defConfig.getTimeToIdleSeconds());
+        configuration.setOverflowToDisk(defConfig.isOverflowToDisk());
+        configuration.setDiskPersistent(defConfig.isDiskPersistent());
+        configuration.setClearOnFlush(defConfig.isClearOnFlush());
+        configuration.setEternal(defConfig.isEternal());
+        configuration.setStatistics(true); //TODO: temporary, this may slow cache. needed for cache monitor.
         configuration.setDiskStorePath(getCacheManager().getDiskStorePath());
 
         LogicCacheConfigBean configStored = restoreConfig(name);

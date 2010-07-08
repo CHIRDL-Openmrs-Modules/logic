@@ -33,9 +33,13 @@
         <c:if test="${not empty diskPersistence}">
         <tr>
             <td class="evenRow">Disk persistence</td>
-            <td><input type="checkbox" name="diskPersistence" <c:if test="${diskPersistence}">checked</c:if> /></td>
+            <td><input type="checkbox" name="diskPersistence" <c:if test="${diskPersistence}">checked</c:if> value="true" /></td>
         </tr>
         </c:if>
+        <tr class="evenRow">
+            <td>Cache size:</td>
+            <td>${cacheSize}</td>
+        </tr>
         <tr>
             <td colspan="2">
                 <input type="submit" value="save"/>
@@ -61,10 +65,6 @@ TEMPORARY
     <tr>
         <td>Cache misses:</td>
         <td>${cacheMisses}</td>
-    </tr>
-    <tr>
-        <td>Cache size:</td>
-        <td>${cacheSize}</td>
     </tr>
     <tr style="color:#bfbdbd;">
         <td>Cache specific stats:</td>

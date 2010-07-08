@@ -177,7 +177,7 @@ public class LogicFormController {
                 logicCacheConfig.setDefaultTTL(defaultTTL);
 
             if (null != diskPersistence && logicCacheConfig.getFeature(LogicCacheConfig.Features.USING_DISK_STORE))
-                logicCacheConfig.setUsingDiskStore(diskPersistence);        
+                logicCacheConfig.setUsingDiskStore(diskPersistence);
 
             logicCache.storeConfig();
         }

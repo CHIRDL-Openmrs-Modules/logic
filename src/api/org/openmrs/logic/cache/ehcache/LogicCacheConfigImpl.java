@@ -22,9 +22,16 @@ import org.openmrs.logic.cache.LogicCacheConfigBean;
  */
 public class LogicCacheConfigImpl implements LogicCacheConfig {
     private final Cache cache;
+    private LogicCacheConfigBean configBean;
 
     public LogicCacheConfigImpl(Cache cache) {
         this.cache = cache;
+        
+        configBean = new LogicCacheConfigBean();
+        if(getFeature(Features.DEFAULT_TTL)) configBean.setDefaultTTL(getDefaultTTL());
+        if(getFeature(Features.MAX_ELEMENTS_IN_MEMORY)) configBean.setMaxElementsInMemory(getMaxElementsInMemory());
+        if(getFeature(Features.MAX_ELEMENTS_ON_DISK)) configBean.setMaxElementsOnDisk(getMaxElementsOnDisk());
+        if(getFeature(Features.USING_DISK_STORE)) configBean.setUsingDiskStore(getUsingDiskStore());
     }
 
     @Override
@@ -50,6 +57,7 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     @Override
     public boolean setDefaultTTL(Long ttl) throws UnsupportedOperationException {
         cache.getCacheConfiguration().setTimeToLiveSeconds(ttl);
+        configBean.setDefaultTTL(ttl);
         //TODO: true if restart is needed
         return false;
     }
@@ -57,6 +65,7 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     @Override
     public boolean setMaxElementsInMemory(Integer maxInMem) throws UnsupportedOperationException {
         cache.getCacheConfiguration().setMaxElementsInMemory(maxInMem);
+        configBean.setMaxElementsInMemory(maxInMem);
         //TODO: true if restart is needed
         return false;
     }
@@ -64,6 +73,7 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     @Override
     public boolean setMaxElementsOnDisk(Integer maxOnDisk) throws UnsupportedOperationException {
         cache.getCacheConfiguration().setMaxElementsOnDisk(maxOnDisk);
+        configBean.setMaxElementsOnDisk(maxOnDisk);
         //TODO: true if restart is needed
         return false;
     }
@@ -71,6 +81,7 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     @Override
     public boolean setUsingDiskStore(boolean isDiskStore) throws UnsupportedOperationException {
         cache.getCacheConfiguration().setOverflowToDisk(isDiskStore);
+        configBean.setUsingDiskStore(isDiskStore);
         //TODO: true if restart is needed
         return true;
     }
@@ -87,15 +98,17 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     }
     ///////////////////////
 
+    //TODO: mb delete later?
     @Override
     public LogicCacheConfigBean getConfigBean() {
-        LogicCacheConfigBean retVal = new LogicCacheConfigBean();
-        if(getFeature(Features.DEFAULT_TTL)) retVal.setDefaultTTL(getDefaultTTL());
-        if(getFeature(Features.MAX_ELEMENTS_IN_MEMORY)) retVal.setMaxElementsInMemory(getMaxElementsInMemory());
-        if(getFeature(Features.MAX_ELEMENTS_ON_DISK)) retVal.setMaxElementsOnDisk(getMaxElementsOnDisk());
-        if(getFeature(Features.USING_DISK_STORE)) retVal.setUsingDiskStore(getUsingDiskStore());
-
-        return retVal;
+//        LogicCacheConfigBean retVal = new LogicCacheConfigBean();
+//        if(getFeature(Features.DEFAULT_TTL)) retVal.setDefaultTTL(getDefaultTTL());
+//        if(getFeature(Features.MAX_ELEMENTS_IN_MEMORY)) retVal.setMaxElementsInMemory(getMaxElementsInMemory());
+//        if(getFeature(Features.MAX_ELEMENTS_ON_DISK)) retVal.setMaxElementsOnDisk(getMaxElementsOnDisk());
+//        if(getFeature(Features.USING_DISK_STORE)) retVal.setUsingDiskStore(getUsingDiskStore());
+//
+//        return retVal;
+        return configBean;
     }
 
     @Override

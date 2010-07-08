@@ -336,23 +336,42 @@ in-memory capacity changed at runtime through the cache's configuration object.
         <cacheEventListenerFactory class="org.openmrs.logic.cache.ehcache.listener.LogicCacheEventListenerFactory" properties="" listenFor="all"/>
     </defaultCache>
 
-    <!--<cache name="org.openmrs.logic.defaultCache"-->
-           <!--maxElementsInMemory="500"-->
-           <!--maxElementsOnDisk="5000"-->
-           <!--eternal="false"-->
-           <!--overflowToDisk="true"-->
-           <!--diskSpoolBufferSizeMB="30"-->
-           <!--timeToIdleSeconds="1200"-->
-           <!--timeToLiveSeconds="1200"-->
-           <!--diskExpiryThreadIntervalSeconds="300"-->
-           <!--memoryStoreEvictionPolicy="LRU"-->
-           <!--diskPersistent="false"-->
-           <!--clearOnFlush="false"-->
-           
-           <!--statistics="true">-->
-        
-        <!--<cacheEventListenerFactory class="org.openmrs.logic.cache.ehcache.listener.LogicCacheEventListenerFactory" properties="" listenFor="all"/>-->
-    <!--</cache>-->
+    <cache name="prefix.org.openmrs.logic.defaultCache"
+           timeToIdleSeconds="1200"
+           timeToLiveSeconds="1200"
+           diskExpiryThreadIntervalSeconds="300"
+           eternal="false"
+           maxElementsInMemory="50000"
+           maxElementsOnDisk="100000"
+           diskPersistent="false"
+           clearOnFlush="false"
+           overflowToDisk="true">
+    </cache>
+
+    <cache name="prefix.org.openmrs.logic.criteriaCache"
+           timeToIdleSeconds="1200"
+           timeToLiveSeconds="1200"
+           eternal="false"
+           maxElementsInMemory="300"
+           diskPersistent="false"
+           clearOnFlush="false"
+           overflowToDisk="false">
+    </cache>
+
+    <cache name="preConfiguredCache"
+           maxElementsInMemory="5000"
+           maxElementsOnDisk="50000"
+           eternal="false"
+           overflowToDisk="true"
+           diskSpoolBufferSizeMB="30"
+           timeToIdleSeconds="1200"
+           timeToLiveSeconds="1200"
+           diskExpiryThreadIntervalSeconds="300"
+           memoryStoreEvictionPolicy="LRU"
+           diskPersistent="false"
+           clearOnFlush="false"
+           statistics="true">
+    </cache>
 
 </ehcache>
 
