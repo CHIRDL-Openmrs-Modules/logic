@@ -64,8 +64,6 @@ public class LogicContextImpl implements LogicContext {
 	 */
 	private Cohort patients;
 
-    private LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
-
 	/**
 	 * Constructs a logic context applied to a single patient
 	 * 
@@ -111,7 +109,7 @@ public class LogicContextImpl implements LogicContext {
     //TODO:
 	public Result eval(Patient patient, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
         LogicCacheKey logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), patient.getPatientId());
-
+        LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
         Result result = (Result) logicCache.get(logicCacheKey);
 
 		if (result == null) {
@@ -208,7 +206,8 @@ public class LogicContextImpl implements LogicContext {
     //TODO:
 	public Result read(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
         LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), null);
-
+        
+        LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
         Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheKey);
         Result result = null;
         if(null != cachedResult) {
@@ -272,18 +271,4 @@ public class LogicContextImpl implements LogicContext {
 		return globalParameters.keySet();
 	}
 
-//	private LogicCache getCache() {
-//		if (cache == null)
-//			cache = new LogicCache();
-//		return cache;
-//	}
-
-
-    public LogicCache getLogicCache() {
-        return logicCache;
-    }
-
-    public void setLogicCache(LogicCache logicCache) {
-        this.logicCache = logicCache;
-    }
 }

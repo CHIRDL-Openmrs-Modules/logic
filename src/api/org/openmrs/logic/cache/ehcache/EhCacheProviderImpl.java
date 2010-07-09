@@ -71,10 +71,17 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         LogicCache logicCache = cacheList.get(name);
         if(null == logicCache) return null;
 
-        cacheList.remove(name);
-        getCacheManager().removeCache(name);
+        //to prevent situation of getting cache when it is down.
+        synchronized (this) {
+            cacheList.remove(name);
+            getCacheManager().removeCache(name);
 
-        return createLogicCache(name);
+            logicCache = createLogicCache(name);
+
+            this.notifyAll();
+        }
+
+        return logicCache;
     }
 
     public void storeConfig() {
@@ -161,7 +168,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         return logicCache;
     }
 
-    private CacheManager getCacheManager() {
+    public CacheManager getCacheManager() {
         if(null == cacheManager) {
             URL url = EhCacheProviderImpl.class.getResource(EHCACHE_CONFIG);
             cacheManager = new CacheManager(url);

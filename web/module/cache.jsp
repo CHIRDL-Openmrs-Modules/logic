@@ -71,7 +71,10 @@
 </form>
 
 <c:if test="${isRestartNeeded}">
-<div style="font-style:italic; color:#d2691e; padding-top: 15px;">You need to restart this cache to activate the changed configuration. WARNING: you`ll lose cached entries of this cache during restart.</div>
+<div style="font-style:italic; color:#d2691e; padding-top: 15px;">
+    You need to restart this cache to activate the changed configuration.
+    WARNING: you`ll lose cached entries of this cache during restart.
+</div>
 </c:if>
 
 <form action="cache.form" id="cacheAction" name="cacheAction">

@@ -46,9 +46,6 @@ public class LogicServiceImpl implements LogicService {
 	protected final Log log = LogFactory.getLog(getClass());
 	
 	private RuleFactory ruleFactory;
-
-//    private Cache ehcache = LogicCacheManagerTMP.getLogicEhCache();
-//    private LogicCache logicCache = LogicCacheManager.getDefaultLogicCache(); //TODO: possible caching some methods here
 	
 	private static Map<String, LogicDataSource> dataSources;
 	

@@ -28,7 +28,7 @@ import org.openmrs.logic.cache.LogicCacheConfigBean;
 public class LogicCacheImpl implements LogicCache {
     private final Log log = LogFactory.getLog(getClass());
 
-    private final Cache cache;
+    private Cache cache;
     private final EhCacheProviderImpl ehCacheProvider;
 
     private LogicCacheConfig logicCacheConfig;
@@ -41,7 +41,11 @@ public class LogicCacheImpl implements LogicCache {
 
     private Cache getCache() {
         if(!Status.STATUS_ALIVE.equals(cache.getStatus())) {
-            log.warn(cache.getName() + " has invalid status. Cache may not work.");
+            log.warn(cache.getName() + " has invalid status. Trying to get cache from cache manager.");
+            synchronized (ehCacheProvider) {
+                cache = ehCacheProvider.getCacheManager().getCache(cache.getName());
+                ehCacheProvider.notifyAll();
+            }
         }
 
         return cache;
