@@ -53,8 +53,8 @@ public class LogicCacheImpl implements LogicCache {
     }
 
     @Override
-    public void restart() throws UnsupportedOperationException {
-        
+    public LogicCache restart() throws UnsupportedOperationException {
+        return ehCacheProvider.restartCache(getCache().getName());
     }
 
     @Override

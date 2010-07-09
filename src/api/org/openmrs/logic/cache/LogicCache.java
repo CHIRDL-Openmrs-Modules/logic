@@ -39,7 +39,7 @@ public interface LogicCache {
 
     void storeConfig();
 
-    void restart() throws UnsupportedOperationException;
+    LogicCache restart() throws UnsupportedOperationException;
 
     void flush() throws UnsupportedOperationException;
 

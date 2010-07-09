@@ -165,7 +165,7 @@ public class LogicFormController {
         }
 
         if(null != restart && restart && logicCache.getFeature(LogicCache.Features.RESTART)) {
-            logicCache.restart();
+            logicCache = logicCache.restart();
         }
 
         LogicCacheConfig logicCacheConfig = logicCache.getLogicCacheConfig();
@@ -202,6 +202,7 @@ public class LogicFormController {
         modelMap.addAttribute("cacheRestart", logicCache.getFeature(LogicCache.Features.RESTART));
         modelMap.addAttribute("cacheName", cacheName);
         modelMap.addAttribute("cacheSize", cacheSize);
+        modelMap.addAttribute("isRestartNeeded", logicCacheConfig.isRestartNeeded());
 
         ///////////////////////TODO: delete later
         cacheHits = logicCacheConfig.getCacheHits().toString();

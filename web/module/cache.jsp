@@ -16,13 +16,15 @@
     }
 
     function restartCache() {
-        var restart = document.getElementById("restart");
-        restart.value = "true";
-        document.cacheAction.submit();
+        if (confirm("You`ll lose all cached data!\n Do you really want to restart this cache?")) { 
+            var restart = document.getElementById("restart");
+            restart.value = "true";
+            document.cacheAction.submit();
+        }
     }
 </script>
 
-<form action="cache.form">
+<form action="cache.form" method="post">
     <input type="hidden" name="cacheName" value="${cacheName}" />
     <table cellpadding="1" cellspacing="1">
         <c:if test="${not empty configTTL}">
@@ -67,6 +69,10 @@
         </tr>
     </table>
 </form>
+
+<c:if test="${isRestartNeeded}">
+<div style="font-style:italic; color:#d2691e; padding-top: 15px;">You need to restart this cache to activate the changed configuration. WARNING: you`ll lose cached entries of this cache during restart.</div>
+</c:if>
 
 <form action="cache.form" id="cacheAction" name="cacheAction">
     <input type="hidden" name="cacheName" value="${cacheName}" />

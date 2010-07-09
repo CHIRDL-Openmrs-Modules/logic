@@ -67,9 +67,18 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         getCacheManager().shutdown();
     }
 
+    public LogicCache restartCache(String name) {
+        LogicCache logicCache = cacheList.get(name);
+        if(null == logicCache) return null;
+
+        cacheList.remove(name);
+        getCacheManager().removeCache(name);
+
+        return createLogicCache(name);
+    }
+
     public void storeConfig() {
         XMLEncoder xmlEncoder = null;
-        CacheManager cacheManager = getCacheManager();
         Map<String, LogicCacheConfigBean> configs = new HashMap<String, LogicCacheConfigBean>();
 
         try {
@@ -141,6 +150,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
                 configuration.setTimeToLiveSeconds(configStored.getDefaultTTL());
                 configuration.setTimeToIdleSeconds(configStored.getDefaultTTL());
             }
+            configuration.setOverflowToDisk(configStored.isUsingDiskStore());
         }
         Cache cache = new Cache(configuration);
         getCacheManager().addCache(cache);

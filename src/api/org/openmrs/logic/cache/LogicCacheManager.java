@@ -28,7 +28,7 @@ public class LogicCacheManager {
     
     private static final String EHCACHE = "ehcache";
 
-    private static String CURRENT_CACHE_FRAMEWORK = EHCACHE;
+    public static String CURRENT_CACHE_FRAMEWORK = EHCACHE;
 
     private static LogicCacheProvider logicCacheProvider = getCacheProvider();
 
