@@ -3,8 +3,14 @@
 
 <openmrs:require privilege="View Administration Functions" otherwise="/login.htm" redirect="/admin/index.htm"/>
 
+<c:if test="${not empty error}">
+    <div id="openmrs_error">
+        <spring:message code="Hl7inQueue.queueList.errorMessage.header"/>: ${error}
+    </div>
+</c:if>
+
 <form method="get" action="caches.form" name="back" id="back">
-<p><a href="#" onclick="document.back.submit();">Back to the cache list page.</a></p><br/>
+    <p><a href="#" onclick="document.back.submit();">Back to the cache list page.</a></p><br/>
 </form>
 
 <h3>${cacheName}</h3>

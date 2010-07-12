@@ -14,6 +14,7 @@
 package org.openmrs.logic.cache.ehcache;
 
 import net.sf.ehcache.Cache;
+import net.sf.ehcache.config.CacheConfiguration;
 import org.openmrs.logic.cache.LogicCacheConfig;
 import org.openmrs.logic.cache.LogicCacheConfigBean;
 
@@ -27,12 +28,13 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
 
     public LogicCacheConfigImpl(Cache cache) {
         this.cache = cache;
-        
+        CacheConfiguration cacheConfig = cache.getCacheConfiguration();
         configBean = new LogicCacheConfigBean();
-        if(getFeature(Features.DEFAULT_TTL)) configBean.setDefaultTTL(getDefaultTTL());
-        if(getFeature(Features.MAX_ELEMENTS_IN_MEMORY)) configBean.setMaxElementsInMemory(getMaxElementsInMemory());
-        if(getFeature(Features.MAX_ELEMENTS_ON_DISK)) configBean.setMaxElementsOnDisk(getMaxElementsOnDisk());
-        if(getFeature(Features.USING_DISK_STORE)) configBean.setUsingDiskStore(isUsingDiskStore());
+        if(getFeature(Features.DEFAULT_TTL)) configBean.setDefaultTTL(cacheConfig.getTimeToLiveSeconds());
+        if(getFeature(Features.MAX_ELEMENTS_IN_MEMORY)) configBean.setMaxElementsInMemory(cacheConfig.getMaxElementsInMemory());
+        if(getFeature(Features.MAX_ELEMENTS_ON_DISK)) configBean.setMaxElementsOnDisk(cacheConfig.getMaxElementsOnDisk());
+        if(getFeature(Features.USING_DISK_STORE)) configBean.setUsingDiskStore(cacheConfig.isOverflowToDisk());
+        if(getFeature(Features.USING_DISK_STORE)) configBean.setDisabled(cache.isDisabled());
     }
 
     @Override

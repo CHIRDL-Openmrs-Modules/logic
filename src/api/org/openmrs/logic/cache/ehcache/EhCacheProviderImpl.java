@@ -119,7 +119,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
             xmlEncoder.writeObject(configs);
         } catch (FileNotFoundException e) {
             log.error("Cache configuration is not saved.", e);
-            throw new IOException("Error has occured during storing cache`s configuration.");
+            throw new IOException(e);
         } finally {
             if(null != xmlEncoder)
                 xmlEncoder.close();
