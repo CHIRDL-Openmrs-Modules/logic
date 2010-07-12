@@ -13,6 +13,8 @@
  */
 package org.openmrs.logic.cache;
 
+import java.io.IOException;
+
 /**
  *
  */
@@ -37,7 +39,7 @@ public interface LogicCache {
 
     void clean();
 
-    void storeConfig();
+    void storeConfig() throws IOException;
 
     LogicCache restart() throws UnsupportedOperationException;
 

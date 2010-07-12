@@ -359,18 +359,15 @@ in-memory capacity changed at runtime through the cache's configuration object.
     </cache>
 
     <cache name="preConfiguredCache"
-           maxElementsInMemory="5000"
-           maxElementsOnDisk="50000"
+           maxElementsInMemory="50"
            eternal="false"
-           overflowToDisk="true"
-           diskSpoolBufferSizeMB="30"
+           overflowToDisk="false"
            timeToIdleSeconds="1200"
            timeToLiveSeconds="1200"
            diskExpiryThreadIntervalSeconds="300"
            memoryStoreEvictionPolicy="LRU"
            diskPersistent="false"
-           clearOnFlush="false"
-           statistics="true">
+           clearOnFlush="false">
     </cache>
 
 </ehcache>

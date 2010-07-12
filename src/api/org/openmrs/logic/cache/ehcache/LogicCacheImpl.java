@@ -20,7 +20,8 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.logic.cache.LogicCache;
 import org.openmrs.logic.cache.LogicCacheConfig;
-import org.openmrs.logic.cache.LogicCacheConfigBean;
+
+import java.io.IOException;
 
 /**
  * 
@@ -41,7 +42,7 @@ public class LogicCacheImpl implements LogicCache {
 
     private Cache getCache() {
         if(!Status.STATUS_ALIVE.equals(cache.getStatus())) {
-            log.warn(cache.getName() + " has invalid status. Trying to get cache from cache manager.");
+            log.warn(cache.getName() + " has invalid status. Trying to get cache from cache-manager.");
             synchronized (ehCacheProvider) {
                 cache = ehCacheProvider.getCacheManager().getCache(cache.getName());
                 ehCacheProvider.notifyAll();
@@ -52,7 +53,7 @@ public class LogicCacheImpl implements LogicCache {
     }
 
     @Override
-    public void storeConfig() {
+    public void storeConfig() throws IOException {
         ehCacheProvider.storeConfig();
     }
 

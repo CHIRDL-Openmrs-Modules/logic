@@ -23,6 +23,15 @@ public class LogicCacheConfigBean implements Serializable {
     private Integer maxElementsInMemory;
     private Integer maxElementsOnDisk;
     private boolean usingDiskStore;
+    private boolean disabled;
+
+    public boolean isDisabled() {
+        return disabled;
+    }
+
+    public void setDisabled(boolean disabled) {
+        this.disabled = disabled;
+    }
 
     public boolean isUsingDiskStore() {
         return usingDiskStore;

@@ -10,15 +10,20 @@
 <h3>${cacheName}</h3>
 
 <script type="text/javascript">
-    function changeDiskPersistenceOption(persistenceCheckBox) {
-        var diskPersistence = document.getElementById("diskPersistence");
-        diskPersistence.value = persistenceCheckBox.checked;
+    function changeInputAccordingToCheBox(checkBox, associatedInputName) {
+        var inputText = document.getElementById(associatedInputName);
+        inputText.value = checkBox.checked;
     }
 
-    function restartCache() {
-        if (confirm("You`ll lose all cached data!\n Do you really want to restart this cache?")) { 
-            var restart = document.getElementById("restart");
-            restart.value = "true";
+    function doCacheManagerAction(command) {
+        var actionInput = document.getElementById("action");
+
+        if (command != '') {
+            if(command == "restart") {
+                if (!confirm("You`ll lose all cached data!\n Do you really want to restart this cache?"))
+                    return;
+            }
+            actionInput.value = command;
             document.cacheAction.submit();
         }
     }
@@ -47,10 +52,19 @@
         </c:if>
         <c:if test="${not empty diskPersistence}">
         <tr>
-            <td class="evenRow"><label for="_diskPersistence">Disk persistence<code>onchange</code></label></td>
+            <td class="evenRow"><label for="_diskPersistence">Disk persistence</label></td>
             <td>
                 <input type="hidden" id="diskPersistence" name="diskPersistence" value="${diskPersistence}" />
-                <input type="checkbox" id="_diskPersistence" onchange="changeDiskPersistenceOption(this);" <c:if test="${diskPersistence}">checked</c:if> />
+                <input type="checkbox" id="_diskPersistence" onchange="changeInputAccordingToCheBox(this, 'diskPersistence');" <c:if test="${diskPersistence}">checked</c:if> />
+            </td>
+        </tr>
+        </c:if>
+        <c:if test="${not empty isDisabled}">
+        <tr>
+            <td class="evenRow"><label for="_isDisabled">Disabled</label></td>
+            <td>
+                <input type="hidden" id="isDisabled" name="isDisabled" value="${isDisabled}" />
+                <input type="checkbox" id="_isDisabled" onchange="changeInputAccordingToCheBox(this, 'isDisabled');" <c:if test="${isDisabled}">checked</c:if> />
             </td>
         </tr>
         </c:if>
@@ -62,8 +76,10 @@
             <td colspan="2">
                 <input type="submit" value="save"/>
                 <input type="button" value="refresh" onclick="document.cacheAction.submit();"/>
+                <input type="button" id="flush" value="flush" onclick="doCacheManagerAction('flush');"/>
+                <input type="button" id="clear" value="clear" onclick="doCacheManagerAction('clear');"/>
                 <c:if test="${cacheRestart}">
-                    <input type="button" value="restart cache" onclick="restartCache();"/>
+                    <input type="button" value="restart cache" onclick="doCacheManagerAction('restart');"/>
                 </c:if>
             </td>
         </tr>
@@ -79,9 +95,7 @@
 
 <form action="cache.form" id="cacheAction" name="cacheAction">
     <input type="hidden" name="cacheName" value="${cacheName}" />
-    <c:if test="${cacheRestart}">
-        <input type="hidden" id="restart" name="restart" value="false" />
-    </c:if>
+    <input type="hidden" id="action" name="action" value=""/>
 </form>
 
 <br/>
@@ -89,11 +103,11 @@
 TEMPORARY
 <br/><b>${cacheName} Statisctics:</b><br/>
 <table cellpadding="1" cellspacing="1">
-    <tr>
+    <tr style="color:#bfbdbd;">
         <td>Cache hits:</td>
         <td>${cacheHits}</td>
     </tr>
-    <tr>
+    <tr style="color:#bfbdbd;">
         <td>Cache misses:</td>
         <td>${cacheMisses}</td>
     </tr>

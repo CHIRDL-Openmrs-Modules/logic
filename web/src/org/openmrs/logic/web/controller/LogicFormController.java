@@ -8,7 +8,6 @@ import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicService;
 import org.openmrs.logic.cache.LogicCache;
 import org.openmrs.logic.cache.LogicCacheConfig;
-import org.openmrs.logic.cache.LogicCacheConfigBean;
 import org.openmrs.logic.cache.LogicCacheManager;
 import org.openmrs.logic.result.Result;
 import org.springframework.stereotype.Controller;
@@ -17,9 +16,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class LogicFormController {
@@ -123,20 +127,6 @@ public class LogicFormController {
                            @RequestParam(required = false, value = "cacheName") String cacheName,
                            ModelMap modelMap) throws Exception {
 
-        if(!StringUtils.isEmpty(action)) {
-            LogicCache logicCache = null;
-            if(!StringUtils.isEmpty(cacheName))
-                logicCache = LogicCacheManager.getLogicCache(cacheName);
-
-            if ("shutdown".equals(action)) {
-                LogicCacheManager.shutDown();
-            } else if ("flush".equals(action) && null != logicCache && logicCache.getFeature(LogicCache.Features.FLUSH)) {
-                logicCache.flush();
-            } else if ("clear".equals(action) && null != logicCache) {
-                logicCache.clean();
-            }
-        }
-
         //creating cache if it isn`t
         LogicCacheManager.getDefaultLogicCache();
         LogicCacheManager.getLogicCache("org.openmrs.logic.criteriaCache");
@@ -153,7 +143,8 @@ public class LogicFormController {
                             @RequestParam(required = false, value = "maxElemOnDisk") Integer maxElemOnDisk,
                             @RequestParam(required = false, value = "defaultTTL") Long defaultTTL,
                             @RequestParam(required = false, value = "diskPersistence") Boolean diskPersistence,
-                            @RequestParam(required = false, value = "restart") Boolean restart,
+                            @RequestParam(required = false, value = "isDisabled") Boolean isDisabled,
+                            @RequestParam(required = false, value = "action") String action,
                             ModelMap modelMap) throws Exception {
 
         LogicCache logicCache;
@@ -164,12 +155,17 @@ public class LogicFormController {
             cacheName = logicCache.getName();
         }
 
-        if(null != restart && restart && logicCache.getFeature(LogicCache.Features.RESTART)) {
-            logicCache = logicCache.restart();
+        if(!StringUtils.isEmpty(action)) {
+            if("restart".equals(action) && logicCache.getFeature(LogicCache.Features.RESTART) ) {
+                logicCache = logicCache.restart();
+            } else if ("flush".equals(action) && null != logicCache && logicCache.getFeature(LogicCache.Features.FLUSH)) {
+                logicCache.flush();
+            } else if ("clear".equals(action) && null != logicCache) {
+                logicCache.clean();
+            }
         }
 
         LogicCacheConfig logicCacheConfig = logicCache.getLogicCacheConfig();
-        String cacheHits, cacheMisses, cacheToStr, cacheSize;
 
         if (null != maxElemInMem || null != maxElemOnDisk || null != defaultTTL || null != diskPersistence) {
             if (null != maxElemInMem && maxElemInMem >= 0 && logicCacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_IN_MEMORY))
@@ -181,37 +177,39 @@ public class LogicFormController {
             if (null != defaultTTL && defaultTTL > 0 && logicCacheConfig.getFeature(LogicCacheConfig.Features.DEFAULT_TTL))
                 logicCacheConfig.setDefaultTTL(defaultTTL);
 
-            if (null != diskPersistence && logicCacheConfig.getFeature(LogicCacheConfig.Features.USING_DISK_STORE) && !diskPersistence.equals(logicCacheConfig.getUsingDiskStore()))
+            if (null != diskPersistence && logicCacheConfig.getFeature(LogicCacheConfig.Features.USING_DISK_STORE) && !diskPersistence.equals(logicCacheConfig.isUsingDiskStore()))
                 logicCacheConfig.setUsingDiskStore(diskPersistence);
 
-            logicCache.storeConfig();
+            if (null != isDisabled && logicCacheConfig.getFeature(LogicCacheConfig.Features.DISABLE) && !isDisabled.equals(logicCacheConfig.isDisabled()))
+                logicCacheConfig.setDisabled(isDisabled);
+
+            try {
+                logicCache.storeConfig();
+            } catch (IOException e) {
+                modelMap.addAttribute("error", e.toString());
+            }
         }
 
-        cacheSize = Integer.toString(logicCache.getSize());
-        LogicCacheConfigBean configBean = logicCacheConfig.getConfigBean();
-
         if(logicCacheConfig.getFeature(LogicCacheConfig.Features.DEFAULT_TTL))
-            modelMap.addAttribute("configTTL", configBean.getDefaultTTL().toString());
+            modelMap.addAttribute("configTTL", logicCacheConfig.getDefaultTTL().toString());
         if(logicCacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_IN_MEMORY))
-            modelMap.addAttribute("configMaxElInMem", configBean.getMaxElementsInMemory());
+            modelMap.addAttribute("configMaxElInMem", logicCacheConfig.getMaxElementsInMemory());
         if(logicCacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_ON_DISK))
-            modelMap.addAttribute("configMaxElOnDisk", configBean.getMaxElementsOnDisk());
+            modelMap.addAttribute("configMaxElOnDisk", logicCacheConfig.getMaxElementsOnDisk());
         if(logicCacheConfig.getFeature(LogicCacheConfig.Features.USING_DISK_STORE))
-            modelMap.addAttribute("diskPersistence", configBean.isUsingDiskStore());
+            modelMap.addAttribute("diskPersistence", logicCacheConfig.isUsingDiskStore());
+        if(logicCacheConfig.getFeature(LogicCacheConfig.Features.DISABLE))
+            modelMap.addAttribute("isDisabled", logicCacheConfig.isDisabled());
 
         modelMap.addAttribute("cacheRestart", logicCache.getFeature(LogicCache.Features.RESTART));
         modelMap.addAttribute("cacheName", cacheName);
-        modelMap.addAttribute("cacheSize", cacheSize);
+        modelMap.addAttribute("cacheSize", logicCache.getSize());
         modelMap.addAttribute("isRestartNeeded", logicCacheConfig.isRestartNeeded());
 
         ///////////////////////TODO: delete later
-        cacheHits = logicCacheConfig.getCacheHits().toString();
-        cacheMisses = logicCacheConfig.getCacheMisses().toString();
-        cacheToStr = logicCache.getCacheSpecificStats();
-        
-        modelMap.addAttribute("cacheHits", cacheHits);
-        modelMap.addAttribute("cacheMisses", cacheMisses);
-        modelMap.addAttribute("cacheToStr", cacheToStr);
+        modelMap.addAttribute("cacheHits", logicCacheConfig.getCacheHits().toString());
+        modelMap.addAttribute("cacheMisses", logicCacheConfig.getCacheMisses().toString());
+        modelMap.addAttribute("cacheToStr", logicCache.getCacheSpecificStats());
         ///////////////////////
     }
 

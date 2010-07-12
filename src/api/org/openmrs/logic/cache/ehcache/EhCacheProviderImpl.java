@@ -19,13 +19,19 @@ import net.sf.ehcache.config.CacheConfiguration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.logic.cache.LogicCache;
+import org.openmrs.logic.cache.LogicCacheConfig;
 import org.openmrs.logic.cache.LogicCacheConfigBean;
 import org.openmrs.logic.cache.LogicCacheManager;
 import org.openmrs.logic.cache.LogicCacheProvider;
 
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
@@ -84,7 +90,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         return logicCache;
     }
 
-    public void storeConfig() {
+    public void storeConfig() throws IOException {
         XMLEncoder xmlEncoder = null;
         Map<String, LogicCacheConfigBean> configs = new HashMap<String, LogicCacheConfigBean>();
 
@@ -92,13 +98,28 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
             xmlEncoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(getLogicCacheConfigPath())));
 
             for(String cacheName : LogicCacheManager.getCacheNames()) {
-                LogicCacheConfigBean configToStore = cacheList.get(cacheName).getLogicCacheConfig().getConfigBean();
+//                LogicCacheConfigBean configToStore = cacheList.get(cacheName).getLogicCacheConfig().getConfigBean();
+                LogicCacheConfig cacheConfig = cacheList.get(cacheName).getLogicCacheConfig();
+                LogicCacheConfigBean configToStore = new LogicCacheConfigBean();
+
+                if (cacheConfig.getFeature(LogicCacheConfig.Features.DEFAULT_TTL))
+                    configToStore.setDefaultTTL(cacheConfig.getDefaultTTL());
+                if (cacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_IN_MEMORY))
+                    configToStore.setMaxElementsInMemory(cacheConfig.getMaxElementsInMemory());
+                if (cacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_ON_DISK))
+                    configToStore.setMaxElementsOnDisk(cacheConfig.getMaxElementsOnDisk());
+                if (cacheConfig.getFeature(LogicCacheConfig.Features.USING_DISK_STORE))
+                    configToStore.setUsingDiskStore(cacheConfig.isUsingDiskStore());
+                if (cacheConfig.getFeature(LogicCacheConfig.Features.DISABLE))
+                    configToStore.setDisabled(cacheConfig.isDisabled());
+
                 configs.put(cacheName, configToStore);
             }
 
             xmlEncoder.writeObject(configs);
         } catch (FileNotFoundException e) {
             log.error("Cache configuration is not saved.", e);
+            throw new IOException("Error has occured during storing cache`s configuration.");
         } finally {
             if(null != xmlEncoder)
                 xmlEncoder.close();
@@ -128,7 +149,8 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
     }
 
     private LogicCache createLogicCache(String name) {
-        Cache preConfigCache = getCacheManager().getCache("prefix."+name);
+        String preConfigCacheName = "prefix."+name;
+        Cache preConfigCache = getCacheManager().getCache(preConfigCacheName);
         if(null == preConfigCache)
             preConfigCache = getCacheManager().getCache("preConfiguredCache");
         
@@ -164,6 +186,8 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
 
         LogicCache logicCache = new LogicCacheImpl(cache, this);
         cacheList.put(name, logicCache);
+
+        getCacheManager().removeCache(preConfigCacheName); //remove predefined cache from memory
 
         return logicCache;
     }

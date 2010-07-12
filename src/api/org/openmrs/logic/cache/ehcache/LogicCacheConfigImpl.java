@@ -32,7 +32,7 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
         if(getFeature(Features.DEFAULT_TTL)) configBean.setDefaultTTL(getDefaultTTL());
         if(getFeature(Features.MAX_ELEMENTS_IN_MEMORY)) configBean.setMaxElementsInMemory(getMaxElementsInMemory());
         if(getFeature(Features.MAX_ELEMENTS_ON_DISK)) configBean.setMaxElementsOnDisk(getMaxElementsOnDisk());
-        if(getFeature(Features.USING_DISK_STORE)) configBean.setUsingDiskStore(getUsingDiskStore());
+        if(getFeature(Features.USING_DISK_STORE)) configBean.setUsingDiskStore(isUsingDiskStore());
     }
 
     @Override
@@ -51,8 +51,14 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     }
 
     @Override
-    public boolean getUsingDiskStore() throws UnsupportedOperationException {
-        return cache.getCacheConfiguration().isOverflowToDisk();
+    public boolean isUsingDiskStore() throws UnsupportedOperationException {
+        //use configBean here because ehcache config will be changed after cache restart.
+        return configBean.isUsingDiskStore();
+    }
+
+    @Override
+    public boolean isDisabled() throws UnsupportedOperationException {
+        return cache.isDisabled();
     }
 
     @Override
@@ -82,6 +88,12 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     }
 
     @Override
+    public void setDisabled(boolean disabled) throws UnsupportedOperationException {
+        cache.setDisabled(disabled);
+        configBean.setDisabled(disabled);
+    }
+
+    @Override
     public boolean isRestartNeeded() {
         return restartNeeded;
     }
@@ -98,12 +110,6 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     }
     ///////////////////////
 
-    //TODO: mb delete later?
-    @Override
-    public LogicCacheConfigBean getConfigBean() {
-        return configBean;
-    }
-
     @Override
     public boolean getFeature(Features name) {
         boolean result = false;
@@ -119,6 +125,9 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
                 result = true;
                 break;
             case USING_DISK_STORE:
+                result = true;
+                break;
+            case DISABLE:
                 result = true;
                 break;
         }
