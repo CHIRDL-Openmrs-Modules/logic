@@ -10,7 +10,7 @@
 </c:if>
 
 <form method="get" action="caches.form" name="back" id="back">
-    <p><a href="#" onclick="document.back.submit();">Back to the cache list page.</a></p><br/>
+    <p><a href="#" onclick="document.back.submit();"><spring:message code="logic.cache.backToCacheList"/>.</a></p><br/>
 </form>
 
 <h3>${cacheName}</h3>
@@ -26,7 +26,7 @@
 
         if (command != '') {
             if(command == "restart") {
-                if (!confirm("You`ll lose all cached data!\n Do you really want to restart this cache?"))
+                if (!confirm("<spring:message code="logic.cache.restartPopupWarn"/>"))
                     return;
             }
             actionInput.value = command;
@@ -40,25 +40,25 @@
     <table cellpadding="1" cellspacing="1">
         <c:if test="${not empty configTTL}">
         <tr>
-            <td class="evenRow">Default TTL</td>
+            <td class="evenRow"><spring:message code="logic.cache.config.defaultTTL"/></td>
             <td><input type="text" name="defaultTTL" value="${configTTL}"/></td>
         </tr>
         </c:if>
         <c:if test="${not empty configMaxElInMem}">
         <tr>
-            <td class="evenRow">Max elements in memory</td>
+            <td class="evenRow"><spring:message code="logic.cache.config.maxElementsInMem"/></td>
             <td><input type="text" name="maxElemInMem" value="${configMaxElInMem}"/></td>
         </tr>
         </c:if>
         <c:if test="${not empty configMaxElOnDisk}">
         <tr>
-            <td class="evenRow">Max elements on disk</td>
+            <td class="evenRow"><spring:message code="logic.cache.config.maxElementsOnDisk"/></td>
             <td><input type="text" name="maxElemOnDisk" value="${configMaxElOnDisk}" <c:if test="${not diskPersistence}">disabled=""</c:if> /></td>
         </tr>
         </c:if>
         <c:if test="${not empty diskPersistence}">
         <tr>
-            <td class="evenRow"><label for="_diskPersistence">Disk persistence</label></td>
+            <td class="evenRow"><label for="_diskPersistence"><spring:message code="logic.cache.config.persistence"/></label></td>
             <td>
                 <input type="hidden" id="diskPersistence" name="diskPersistence" value="${diskPersistence}" />
                 <input type="checkbox" id="_diskPersistence" onchange="changeInputAccordingToCheBox(this, 'diskPersistence');" <c:if test="${diskPersistence}">checked</c:if> />
@@ -67,7 +67,7 @@
         </c:if>
         <c:if test="${not empty isDisabled}">
         <tr>
-            <td class="evenRow"><label for="_isDisabled">Disabled</label></td>
+            <td class="evenRow"><label for="_isDisabled"><spring:message code="logic.cache.config.disabled"/></label></td>
             <td>
                 <input type="hidden" id="isDisabled" name="isDisabled" value="${isDisabled}" />
                 <input type="checkbox" id="_isDisabled" onchange="changeInputAccordingToCheBox(this, 'isDisabled');" <c:if test="${isDisabled}">checked</c:if> />
@@ -75,17 +75,17 @@
         </tr>
         </c:if>
         <tr class="evenRow">
-            <td>Cache size</td>
+            <td><spring:message code="logic.cache.config.cacheSize"/></td>
             <td>${cacheSize}</td>
         </tr>
         <tr>
             <td colspan="2">
-                <input type="submit" value="save"/>
-                <input type="button" value="refresh" onclick="document.cacheAction.submit();"/>
-                <input type="button" id="flush" value="flush" onclick="doCacheManagerAction('flush');"/>
-                <input type="button" id="clear" value="clear" onclick="doCacheManagerAction('clear');"/>
+                <input type="submit" value="<spring:message code="logic.cache.command.save"/>"/>
+                <input type="button" value="<spring:message code="logic.cache.refreshPage"/>" onclick="document.cacheAction.submit();"/>
+                <input type="button" id="flush" value="<spring:message code="logic.cache.command.flush"/>" onclick="doCacheManagerAction('flush');"/>
+                <input type="button" id="clear" value="<spring:message code="logic.cache.command.clear"/>" onclick="doCacheManagerAction('clear');"/>
                 <c:if test="${cacheRestart}">
-                    <input type="button" value="restart cache" onclick="doCacheManagerAction('restart');"/>
+                    <input type="button" value="<spring:message code="logic.cache.command.restart"/>" onclick="doCacheManagerAction('restart');"/>
                 </c:if>
             </td>
         </tr>
@@ -94,8 +94,7 @@
 
 <c:if test="${isRestartNeeded}">
 <div style="font-style:italic; color:#d2691e; padding-top: 15px;">
-    You need to restart this cache to activate the changed configuration.
-    WARNING: you`ll lose cached entries of this cache during restart.
+    <spring:message code="logic.cache.restartWarn"/>
 </div>
 </c:if>
 

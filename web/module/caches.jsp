@@ -15,12 +15,12 @@
     <input type="hidden" id="editCacheName" name="cacheName" value=""/>
 </form>
 
-Logic caches (${cachesCount}):<br/>
+<spring:message code="logic.cache.caches"/> (${cachesCount}):<br/>
 <ul>
     <c:forEach var="cacheName" varStatus="stat" items="${cacheNames}">
         <li class="${stat.index % 2 == 1 ? "oddRow" : "evenRow" }">
             ${cacheName}
-            <input type="button" id="edit" value="edit" onclick="editCache('${cacheName}')"/>
+            <input type="button" id="edit" value="<spring:message code="logic.cache.command.edit"/>" onclick="editCache('${cacheName}')" />
         </li>
     </c:forEach>
 </ul>
