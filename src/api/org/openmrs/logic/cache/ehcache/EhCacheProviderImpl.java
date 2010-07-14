@@ -44,6 +44,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
     private final String LOGIC_CACHE_NAME = "org.openmrs.logic.defaultCache";
     private String EHCACHE_CONFIG = "/logic-ehcache.xml";
     private CacheManager cacheManager;
+    private Map<String, CacheConfiguration> predefinedConfigs;
 
     public EhCacheProviderImpl() {
     }
@@ -150,11 +151,15 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
 
     private LogicCache createLogicCache(String name) {
         String preConfigCacheName = "prefix."+name;
-        Cache preConfigCache = getCacheManager().getCache(preConfigCacheName);
-        if(null == preConfigCache)
-            preConfigCache = getCacheManager().getCache("preConfiguredCache");
+//        Cache preConfigCache = getCacheManager().getCache(preConfigCacheName);
+//        if(null == preConfigCache)
+//            preConfigCache = getCacheManager().getCache("preConfiguredCache");
+//
+//        CacheConfiguration defConfig = preConfigCache.getCacheConfiguration();
         
-        CacheConfiguration defConfig = preConfigCache.getCacheConfiguration();
+        CacheConfiguration defConfig = getPredefinedConfiguration(preConfigCacheName);
+        if(null == defConfig)
+            defConfig = getPredefinedConfiguration("preConfiguredCache");    
 
         CacheConfiguration configuration = new CacheConfiguration();
         configuration.setName(name);
@@ -187,8 +192,6 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         LogicCache logicCache = new LogicCacheImpl(cache, this);
         cacheList.put(name, logicCache);
 
-        getCacheManager().removeCache(preConfigCacheName); //remove predefined cache from memory
-
         return logicCache;
     }
 
@@ -199,6 +202,23 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         }
         
         return cacheManager;
+    }
+
+    private CacheConfiguration getPredefinedConfiguration(String name) {
+        if(null == predefinedConfigs) {
+            predefinedConfigs = new HashMap<String, CacheConfiguration>();
+            String [] cacheNames = getCacheManager().getCacheNames();
+            for(String cacheName : cacheNames) {
+                predefinedConfigs.put(name, getCacheManager().getCache(cacheName).getCacheConfiguration());
+                getCacheManager().removeCache(cacheName); //clean mem, we don`t need this cache.
+            }
+        }
+
+        CacheConfiguration config = predefinedConfigs.get(name);
+        if(null == config)
+            config = new CacheConfiguration(name, 0);
+        
+        return config;
     }
 
     private String getLogicCacheConfigPath() {

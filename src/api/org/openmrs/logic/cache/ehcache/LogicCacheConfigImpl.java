@@ -34,7 +34,7 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
         if(getFeature(Features.MAX_ELEMENTS_IN_MEMORY)) configBean.setMaxElementsInMemory(cacheConfig.getMaxElementsInMemory());
         if(getFeature(Features.MAX_ELEMENTS_ON_DISK)) configBean.setMaxElementsOnDisk(cacheConfig.getMaxElementsOnDisk());
         if(getFeature(Features.USING_DISK_STORE)) configBean.setUsingDiskStore(cacheConfig.isOverflowToDisk());
-        if(getFeature(Features.USING_DISK_STORE)) configBean.setDisabled(cache.isDisabled());
+        if(getFeature(Features.DISABLE)) configBean.setDisabled(cache.isDisabled());
     }
 
     @Override
