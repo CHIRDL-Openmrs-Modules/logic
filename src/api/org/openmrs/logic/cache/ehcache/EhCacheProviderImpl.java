@@ -99,7 +99,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
             xmlEncoder = new XMLEncoder(new BufferedOutputStream(new FileOutputStream(getLogicCacheConfigPath())));
 
             for(String cacheName : LogicCacheManager.getCacheNames()) {
-//                LogicCacheConfigBean configToStore = cacheList.get(cacheName).getLogicCacheConfig().getConfigBean();
+
                 LogicCacheConfig cacheConfig = cacheList.get(cacheName).getLogicCacheConfig();
                 LogicCacheConfigBean configToStore = new LogicCacheConfigBean();
 
@@ -146,17 +146,12 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         if(restoredObj != null && restoredObj instanceof Map)
             configs = (Map<String, LogicCacheConfigBean>) restoredObj;
 
-        return configs.get(cacheName);
+        return configs.get(cacheName); //configs.containsKey(cacheName) ? configs.get(cacheName) : null;
     }
 
     private LogicCache createLogicCache(String name) {
         String preConfigCacheName = "prefix."+name;
-//        Cache preConfigCache = getCacheManager().getCache(preConfigCacheName);
-//        if(null == preConfigCache)
-//            preConfigCache = getCacheManager().getCache("preConfiguredCache");
-//
-//        CacheConfiguration defConfig = preConfigCache.getCacheConfiguration();
-        
+
         CacheConfiguration defConfig = getPredefinedConfiguration(preConfigCacheName);
         if(null == defConfig)
             defConfig = getPredefinedConfiguration("preConfiguredCache");    
@@ -209,7 +204,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
             predefinedConfigs = new HashMap<String, CacheConfiguration>();
             String [] cacheNames = getCacheManager().getCacheNames();
             for(String cacheName : cacheNames) {
-                predefinedConfigs.put(name, getCacheManager().getCache(cacheName).getCacheConfiguration());
+                predefinedConfigs.put(cacheName, getCacheManager().getCache(cacheName).getCacheConfiguration());
                 getCacheManager().removeCache(cacheName); //clean mem, we don`t need this cache.
             }
         }

@@ -99,7 +99,8 @@ public class LogicFormController {
                     Cohort cohort = Context.getCohortService().getCohort(cohortId);
                     mapResult = logicService.eval(cohort, logicService.parse(logicRule));
                     modelMap.addAttribute("cohortName", cohortId);
-                    modelMap.addAttribute("cohortMap", mapResult != null ? mapResult.entrySet() : null);
+                    modelMap.addAttribute("cohortSize", mapResult.size());
+                    modelMap.addAttribute("cohortMap", mapResult.entrySet());
                 }
                 
 				modelMap.addAttribute("patient", patient);

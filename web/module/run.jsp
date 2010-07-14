@@ -28,8 +28,8 @@
 	</c:when>
 
 	<c:when test="${not empty cohortName}">
-		<strong><spring:message code="Cohort.title"/>.</strong> ${cohortName}<br/>
-		<strong><spring:message code="SearchResults.resultsFor"/> ${logicRule}:</strong> Successful for <br/>
+		<strong><spring:message code="Cohort.title"/>:</strong> ${cohortName}<br/>
+		<strong><spring:message code="SearchResults.resultsFor"/> ${logicRule}:</strong> ${cohortSize} patient(s) <br/>
         <div style="overflow:auto; height:300px;" class="box">
             <table>
             <tr>
