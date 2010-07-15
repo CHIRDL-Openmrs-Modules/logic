@@ -15,6 +15,7 @@ package org.openmrs.logic;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.databene.commons.collection.MapEntry;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
 import org.openmrs.api.PatientService;
@@ -205,14 +206,16 @@ public class LogicContextImpl implements LogicContext {
 	 */
     //TODO:
 	public Result read(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
-        LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), null);
+        LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patient.getPatientId());
         
         LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
-        Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheKey);
-        Result result = null;
-        if(null != cachedResult) {
-            result = cachedResult.get(patient.getPatientId());
-        }
+        Result result = (Result) logicCache.get(logicCacheKey);
+
+//        Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheKey);
+//        Result result = null;
+//        if(null != cachedResult) {
+//            result = cachedResult.get(patient.getPatientId());
+//        }
 
 		log
 		        .debug("Reading from data source: " + criteria.getRootToken() + " (" + (result == null ? "NOT" : "")
@@ -220,7 +223,11 @@ public class LogicContextImpl implements LogicContext {
 		if (result == null) {
 			Map<Integer, Result> resultMap = dataSource.read(this, patients, criteria);
 
-            logicCache.put(logicCacheKey, resultMap, dataSource.getDefaultTTL());
+//            logicCache.put(logicCacheKey, resultMap, dataSource.getDefaultTTL());
+            for(Integer entry: resultMap.keySet()) {
+                logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), entry);
+                logicCache.put(logicCacheKey, resultMap.get(entry), dataSource.getDefaultTTL());
+            }
 
             result = resultMap.get(patient.getPatientId());
 		}
