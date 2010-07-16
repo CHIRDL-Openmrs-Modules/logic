@@ -35,16 +35,12 @@ import static org.junit.Assert.*;
  *
  */
 public class LogicCacheKeyTest extends BaseModuleContextSensitiveTest {
-//    private LogicCache logicCache;
     private LogicCacheKey logicCacheKey1;
     private LogicCacheKey logicCacheKey2;
     private LogicService logicService;
 
     @Before
     public void setUp() throws Exception {
-//        logicCache = LogicCacheManager.getDefaultLogicCache();
-//        assertNotNull("logicCache is null", logicCache);
-
         logicService = Context.getLogicService();
         assertNotNull(logicService);
 
@@ -85,7 +81,7 @@ public class LogicCacheKeyTest extends BaseModuleContextSensitiveTest {
         assertEquals("result and deserializedResult are not equals", result, deserializedResult);
     }
 
-    //================================================================================
+    //=====TO BE DELETED==============================================================
 
     /**
         * run  testStoreOnDisk then  testLoadFromDisk. note: this is temporary
@@ -121,11 +117,12 @@ public class LogicCacheKeyTest extends BaseModuleContextSensitiveTest {
     //================================================================================
 
     /**
+         * Writes object forSerialization into the output stream and then reads it from the input stream.
          *
-         * @param forSerialization
-         * @return
-         * @throws IOException
-         * @throws ClassNotFoundException
+         * @param forSerialization object to serialize and deserialize
+         * @return deserialized from input stream object
+         * @throws IOException if problems to read/write stream
+         * @throws ClassNotFoundException if problems of deserialized object
          */
     private Object roundTripSerialization(Object forSerialization) throws IOException, ClassNotFoundException {
         //serialize

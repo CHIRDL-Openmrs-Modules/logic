@@ -124,9 +124,7 @@ public class LogicFormController {
 	}
 
     @RequestMapping("/module/logic/caches")
-	public void showCaches(@RequestParam(required = false, value = "action") String action,
-                           @RequestParam(required = false, value = "cacheName") String cacheName,
-                           ModelMap modelMap) throws Exception {
+	public void showCaches(ModelMap modelMap) throws Exception {
 
         //creating cache if it isn`t
         LogicCacheManager.getDefaultLogicCache();
@@ -186,6 +184,7 @@ public class LogicFormController {
 
             try {
                 logicCache.storeConfig();
+                modelMap.addAttribute("configSuccessfullySaved", "True");
             } catch (IOException e) {
                 modelMap.addAttribute("error", e.toString());
             }

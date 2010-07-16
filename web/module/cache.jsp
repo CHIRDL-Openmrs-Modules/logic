@@ -8,6 +8,11 @@
         <spring:message code="Hl7inQueue.queueList.errorMessage.header"/>: ${error}
     </div>
 </c:if>
+<c:if test="${not empty configSuccessfullySaved}">
+    <div id="openmrs_msg">
+        <spring:message code="logic.cache.config.savedMessage"/>
+    </div>
+</c:if>
 
 <form method="get" action="caches.form" name="back" id="back">
     <p><a href="#" onclick="document.back.submit();"><spring:message code="logic.cache.backToCacheList"/>.</a></p><br/>
@@ -80,7 +85,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <input type="submit" value="<spring:message code="logic.cache.command.save"/>"/>
+                <input type="submit" value="<spring:message code="logic.cache.command.applyAndSave"/>"/>
                 <input type="button" value="<spring:message code="logic.cache.refreshPage"/>" onclick="document.cacheAction.submit();"/>
                 <input type="button" id="flush" value="<spring:message code="logic.cache.command.flush"/>" onclick="doCacheManagerAction('flush');"/>
                 <input type="button" id="clear" value="<spring:message code="logic.cache.command.clear"/>" onclick="doCacheManagerAction('clear');"/>

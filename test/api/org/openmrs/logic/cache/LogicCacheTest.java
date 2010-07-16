@@ -22,6 +22,7 @@ import org.openmrs.logic.LogicService;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 
+import java.io.IOException;
 import java.util.Date;
 
 import static org.junit.Assert.*;
@@ -31,7 +32,7 @@ import static org.junit.Assert.*;
  */
 public class LogicCacheTest extends BaseModuleContextSensitiveTest {
     private final int CACHE_OBJS_COUNT = 800;
-    private final int DEF_TTL = 100;
+    private final int DEF_TTL = 1000;
 
     private LogicCache logicCache;
 
@@ -48,13 +49,14 @@ public class LogicCacheTest extends BaseModuleContextSensitiveTest {
 
     @Test
     public void testLogicCachePutGet() {
+        String key = "key";
         for(int i = 0; i < CACHE_OBJS_COUNT; ++i)
-            logicCache.put("key"+i, i, DEF_TTL);
+            logicCache.put(key+i, i, DEF_TTL);
 
         assertEquals(CACHE_OBJS_COUNT, logicCache.getSize());
 
         for(int i = 0; i < CACHE_OBJS_COUNT; ++i) {
-            assertEquals(i, logicCache.get("key"+i));
+            assertEquals(i, logicCache.get(key+i));
         }
     }
 
@@ -90,12 +92,19 @@ public class LogicCacheTest extends BaseModuleContextSensitiveTest {
     }
 
     @Test
+    public void testStoreConfig() {
+        try {
+            logicCache.storeConfig();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Test
     public void testLogicCacheKey() {
         LogicService logicService = Context.getLogicService();
         LogicCriteria lc = logicService.parse("\"AGE\"");
         LogicDataSource logicDataSource = logicService.getLogicDataSource("obs");
-//        Patient patient = Context.getPatientService().getPatient(2);
-//        LogicContext logicContext = new LogicContextImpl(patient);
 
         LogicCacheKey logicCacheKey = new LogicCacheKey(null, lc, logicDataSource, new Date(), 2);
 

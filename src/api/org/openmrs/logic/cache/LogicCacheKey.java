@@ -27,11 +27,9 @@ import java.util.Map;
 public class LogicCacheKey implements Serializable {
     private Map<String, Object> parameters;
     private LogicCriteria criteria;
-//    private LogicDataSource dataSource;
     private String dataSource;
     private Date indexDate;
     private Integer patientId;
-    //private Set<Integer> membersIds;
 
     public LogicCacheKey() {
     }

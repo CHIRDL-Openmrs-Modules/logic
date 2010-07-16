@@ -182,6 +182,8 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
             configuration.setOverflowToDisk(configStored.isUsingDiskStore());
         }
         Cache cache = new Cache(configuration);
+        if(null != configStored) cache.setDisabled(configStored.isDisabled());
+        
         getCacheManager().addCache(cache);
 
         LogicCache logicCache = new LogicCacheImpl(cache, this);
