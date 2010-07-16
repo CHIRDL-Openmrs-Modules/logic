@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.logic.cache.LogicCache;
 import org.openmrs.logic.cache.LogicCacheConfig;
+import org.openmrs.logic.cache.LogicCacheConfigBean;
 
 import java.io.IOException;
 
@@ -55,6 +56,21 @@ public class LogicCacheImpl implements LogicCache {
     @Override
     public void storeConfig() throws IOException {
         ehCacheProvider.storeConfig();
+    }
+
+    @Override
+    public void restoreConfig() {
+        LogicCacheConfigBean cacheConfigBean = ehCacheProvider.restoreConfig(getName());
+        if (logicCacheConfig.getFeature(LogicCacheConfig.Features.DEFAULT_TTL))
+            logicCacheConfig.setDefaultTTL(cacheConfigBean.getDefaultTTL());
+        if (logicCacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_IN_MEMORY))
+            logicCacheConfig.setMaxElementsInMemory(cacheConfigBean.getMaxElementsInMemory());
+        if (logicCacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_ON_DISK))
+            logicCacheConfig.setMaxElementsOnDisk(cacheConfigBean.getMaxElementsOnDisk());
+        if (logicCacheConfig.getFeature(LogicCacheConfig.Features.USING_DISK_STORE) && logicCacheConfig.isUsingDiskStore() != cacheConfigBean.isUsingDiskStore())
+            logicCacheConfig.setUsingDiskStore(cacheConfigBean.isUsingDiskStore());
+        if (logicCacheConfig.getFeature(LogicCacheConfig.Features.DISABLE))
+            logicCacheConfig.setDisabled(cacheConfigBean.isDisabled());
     }
 
     @Override

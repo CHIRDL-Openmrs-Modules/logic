@@ -93,11 +93,21 @@ public class LogicCacheTest extends BaseModuleContextSensitiveTest {
 
     @Test
     public void testStoreConfig() {
+        LogicCacheConfig cacheConfig = logicCache.getLogicCacheConfig();
+        Integer oldMaxInMem = cacheConfig.getMaxElementsInMemory();
+        Integer newMaxInMem = oldMaxInMem + 100;
+
         try {
             logicCache.storeConfig();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        cacheConfig.setMaxElementsInMemory(newMaxInMem);
+
+        logicCache.restoreConfig();
+
+        assertEquals("Configuration is not restored.", oldMaxInMem, cacheConfig.getMaxElementsInMemory());
     }
 
     @Test

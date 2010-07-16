@@ -41,6 +41,8 @@ public interface LogicCache {
 
     void storeConfig() throws IOException;
 
+    void restoreConfig();
+
     LogicCache restart() throws UnsupportedOperationException;
 
     void flush() throws UnsupportedOperationException;
