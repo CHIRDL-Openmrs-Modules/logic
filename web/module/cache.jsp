@@ -3,6 +3,12 @@
 
 <openmrs:require privilege="View Administration Functions" otherwise="/login.htm" redirect="/admin/index.htm"/>
 
+<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js" />
+
+<script type="text/javascript">
+	var $j = jQuery.noConflict();
+</script>
+
 <c:if test="${not empty error}">
     <div id="openmrs_error">
         <spring:message code="Hl7inQueue.queueList.errorMessage.header"/>: ${error}
@@ -38,27 +44,59 @@
             document.cacheAction.submit();
         }
     }
+
+    function validate() {
+        var defTtlValue = document.getElementById("defaultTTL").value;
+        var maxElemInMemValue = document.getElementById("maxElemInMem").value;
+        var maxElemOnDiskValue = document.getElementById("maxElemOnDisk").value;
+        var posIntRegExp = /^[1-9]\d*$/;
+        var retVal = true;
+
+        if(!posIntRegExp.test(defTtlValue)) {
+            $j("#defaultTtlError").show();
+            retVal = false;
+        } else $j("#defaultTtlError").hide();
+        if(!posIntRegExp.test(maxElemInMemValue)) {
+            $j("#maxElemInMemError").show();
+            retVal = false;
+        } else $j("#maxElemInMemError").hide();
+        if(!posIntRegExp.test(maxElemOnDiskValue)) {
+            $j("#maxElemOnDiskError").show();
+            retVal = false;
+        } else $j("#maxElemOnDiskError").hide();
+
+        return retVal;
+    }
 </script>
 
-<form action="cache.form" method="post">
+<form action="cache.form" method="post" onsubmit="return validate();" >
     <input type="hidden" name="cacheName" value="${cacheName}" />
     <table cellpadding="1" cellspacing="1">
         <c:if test="${not empty configTTL}">
         <tr>
             <td class="evenRow"><spring:message code="logic.cache.config.defaultTTL"/></td>
-            <td><input type="text" name="defaultTTL" value="${configTTL}"/></td>
+            <td>
+                <input type="text" id="defaultTTL" name="defaultTTL" value="${configTTL}"/>
+                <span class="error" id="defaultTtlError" style="display: none;"><spring:message code="logic.cache.validation.intPositive"/></span>
+            </td>
         </tr>
         </c:if>
         <c:if test="${not empty configMaxElInMem}">
         <tr>
             <td class="evenRow"><spring:message code="logic.cache.config.maxElementsInMem"/></td>
-            <td><input type="text" name="maxElemInMem" value="${configMaxElInMem}"/></td>
+            <td>
+                <input type="text" id="maxElemInMem" name="maxElemInMem" value="${configMaxElInMem}"/>
+                <span class="error" id="maxElemInMemError" style="display: none;"><spring:message code="logic.cache.validation.intPositive"/></span>
+            </td>
         </tr>
         </c:if>
         <c:if test="${not empty configMaxElOnDisk}">
         <tr>
             <td class="evenRow"><spring:message code="logic.cache.config.maxElementsOnDisk"/></td>
-            <td><input type="text" name="maxElemOnDisk" value="${configMaxElOnDisk}" <c:if test="${not diskPersistence}">disabled=""</c:if> /></td>
+            <td>
+                <input type="text" id="maxElemOnDisk" name="maxElemOnDisk" value="${configMaxElOnDisk}" <c:if test="${not diskPersistence}">disabled=""</c:if> />
+                <span class="error" id="maxElemOnDiskError" style="display: none;"><spring:message code="logic.cache.validation.intPositive"/></span>
+            </td>
         </tr>
         </c:if>
         <c:if test="${not empty diskPersistence}">
