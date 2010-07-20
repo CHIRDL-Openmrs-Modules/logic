@@ -15,7 +15,6 @@ package org.openmrs.logic;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.databene.commons.collection.MapEntry;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
 import org.openmrs.api.PatientService;
@@ -27,7 +26,10 @@ import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.ReferenceRule;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The context within which logic rule and data source evaluations are made. The logic context is
@@ -107,7 +109,6 @@ public class LogicContextImpl implements LogicContext {
 	 * @see org.openmrs.logic.LogicContext#eval(org.openmrs.Patient,
 	 *      org.openmrs.logic.LogicCriteria, java.util.Map)
 	 */
-    //TODO:
 	public Result eval(Patient patient, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
         LogicCacheKey logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), patient.getPatientId());
         LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
@@ -118,14 +119,12 @@ public class LogicContextImpl implements LogicContext {
 			Integer targetPatientId = patient.getPatientId();
 			log.debug("Context database read (pid = " + targetPatientId + ")");
 			Rule rule = Context.getLogicService().getRule(criteria.getRootToken());
-//			Map<Integer, Result> resultMap = new Hashtable<Integer, Result>();
 			for (Integer pid : patients.getMemberIds()) {
                 logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), pid);
                 Result r = (Result) logicCache.get(logicCacheKey);
                 if(null != r) {
                     if (pid.equals(targetPatientId))
 					    result = r;
-//                    resultMap.put(pid, r);
                     continue;
                 }
 
@@ -140,12 +139,10 @@ public class LogicContextImpl implements LogicContext {
 
                 logicCache.put(logicCacheKey, r, rule.getTTL());
 
-//				resultMap.put(pid, r);
 				if (pid.equals(targetPatientId))
 					result = r;
 			}
 
-//            result = resultMap.get(targetPatientId);
 		}
 		if(result == null)
             result = Result.emptyResult();
@@ -204,18 +201,11 @@ public class LogicContextImpl implements LogicContext {
 	 * @see org.openmrs.logic.LogicContext#read(org.openmrs.Patient,
 	 *      org.openmrs.logic.datasource.LogicDataSource, org.openmrs.logic.LogicCriteria)
 	 */
-    //TODO:
 	public Result read(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
         LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patient.getPatientId());
         
         LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
         Result result = (Result) logicCache.get(logicCacheKey);
-
-//        Map<Integer, Result> cachedResult = (Map<Integer, Result>) logicCache.get(logicCacheKey);
-//        Result result = null;
-//        if(null != cachedResult) {
-//            result = cachedResult.get(patient.getPatientId());
-//        }
 
 		log
 		        .debug("Reading from data source: " + criteria.getRootToken() + " (" + (result == null ? "NOT" : "")
@@ -223,10 +213,9 @@ public class LogicContextImpl implements LogicContext {
 		if (result == null) {
 			Map<Integer, Result> resultMap = dataSource.read(this, patients, criteria);
 
-//            logicCache.put(logicCacheKey, resultMap, dataSource.getDefaultTTL());
-            for(Integer entry: resultMap.keySet()) {
-                logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), entry);
-                logicCache.put(logicCacheKey, resultMap.get(entry), dataSource.getDefaultTTL());
+            for(Integer patientId: resultMap.keySet()) {
+                logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patientId);
+                logicCache.put(logicCacheKey, resultMap.get(patientId), dataSource.getDefaultTTL());
             }
 
             result = resultMap.get(patient.getPatientId());
