@@ -201,7 +201,8 @@ public class LogicFormController {
         if(logicCacheConfig.getFeature(LogicCacheConfig.Features.DISABLE))
             modelMap.addAttribute("isDisabled", logicCacheConfig.isDisabled());
 
-        modelMap.addAttribute("cacheRestart", logicCache.getFeature(LogicCache.Features.RESTART));
+        modelMap.addAttribute("isCacheRestart", logicCache.getFeature(LogicCache.Features.RESTART));
+        modelMap.addAttribute("isCacheFlush", logicCache.getFeature(LogicCache.Features.FLUSH));
         modelMap.addAttribute("cacheName", cacheName);
         modelMap.addAttribute("cacheSize", logicCache.getSize());
         modelMap.addAttribute("isRestartNeeded", logicCacheConfig.isRestartNeeded());

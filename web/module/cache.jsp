@@ -125,9 +125,11 @@
             <td colspan="2">
                 <input type="submit" value="<spring:message code="logic.cache.command.applyAndSave"/>"/>
                 <input type="button" value="<spring:message code="logic.cache.refreshPage"/>" onclick="document.cacheAction.submit();"/>
-                <input type="button" id="flush" value="<spring:message code="logic.cache.command.flush"/>" onclick="doCacheManagerAction('flush');"/>
+                <c:if test="${isCacheFlush}">
+                    <input type="button" id="flush" value="<spring:message code="logic.cache.command.flush"/>" onclick="doCacheManagerAction('flush');"/>
+                </c:if>
                 <input type="button" id="clear" value="<spring:message code="logic.cache.command.clear"/>" onclick="doCacheManagerAction('clear');"/>
-                <c:if test="${cacheRestart}">
+                <c:if test="${isCacheRestart}">
                     <input type="button" value="<spring:message code="logic.cache.command.restart"/>" onclick="doCacheManagerAction('restart');"/>
                 </c:if>
             </td>
@@ -135,7 +137,7 @@
     </table>
 </form>
 
-<c:if test="${isRestartNeeded}">
+<c:if test="${isRestartNeeded and isCacheRestart}">
 <div style="font-style:italic; color:#d2691e; padding-top: 15px;">
     <spring:message code="logic.cache.restartWarn"/>
 </div>

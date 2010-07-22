@@ -140,7 +140,7 @@ public class LogicCacheImpl implements LogicCache {
 
         switch (name) {
             case FLUSH:
-                result = true;
+                result = false;
                 break;
             case RESTART:
                 result = true;
