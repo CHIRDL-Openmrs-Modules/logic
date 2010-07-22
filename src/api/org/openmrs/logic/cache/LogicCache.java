@@ -47,5 +47,6 @@ public interface LogicCache {
 
     void flush() throws UnsupportedOperationException;
 
+    //TODO may be delete later??
     String getCacheSpecificStats();
 }

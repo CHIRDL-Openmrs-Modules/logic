@@ -202,10 +202,11 @@ public class LogicContextImpl implements LogicContext {
 	 *      org.openmrs.logic.datasource.LogicDataSource, org.openmrs.logic.LogicCriteria)
 	 */
 	public Result read(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
-        LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patient.getPatientId());
-        
-        LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
-        Result result = (Result) logicCache.get(logicCacheKey);
+//        LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patient.getPatientId());
+//
+//        LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
+//        Result result = (Result) logicCache.get(logicCacheKey);
+        Result result = null;
 
 		log
 		        .debug("Reading from data source: " + criteria.getRootToken() + " (" + (result == null ? "NOT" : "")
@@ -213,10 +214,10 @@ public class LogicContextImpl implements LogicContext {
 		if (result == null) {
 			Map<Integer, Result> resultMap = dataSource.read(this, patients, criteria);
 
-            for(Integer patientId: resultMap.keySet()) {
-                logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patientId);
-                logicCache.put(logicCacheKey, resultMap.get(patientId), dataSource.getDefaultTTL());
-            }
+//            for(Integer patientId: resultMap.keySet()) {
+//                logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patientId);
+//                logicCache.put(logicCacheKey, resultMap.get(patientId), dataSource.getDefaultTTL());
+//            }
 
             result = resultMap.get(patient.getPatientId());
 		}
