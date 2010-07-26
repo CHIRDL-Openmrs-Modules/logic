@@ -25,7 +25,7 @@ import org.openmrs.logic.cache.LogicCacheConfigBean;
 import java.io.IOException;
 
 /**
- * 
+ *
  */
 public class LogicCacheImpl implements LogicCache {
     private final Log log = LogFactory.getLog(getClass());
@@ -42,7 +42,7 @@ public class LogicCacheImpl implements LogicCache {
     }
 
     private Cache getCache() {
-        if(!Status.STATUS_ALIVE.equals(cache.getStatus())) {
+        if (!Status.STATUS_ALIVE.equals(cache.getStatus())) {
             log.warn(cache.getName() + " has invalid status. Trying to get cache from cache-manager.");
             synchronized (ehCacheProvider) {
                 cache = ehCacheProvider.getCacheManager().getCache(cache.getName());
@@ -107,6 +107,14 @@ public class LogicCacheImpl implements LogicCache {
     }
 
     @Override
+    public int getMaxSize() {
+        int retVal = logicCacheConfig.getMaxElementsInMemory();
+        retVal += logicCacheConfig.isUsingDiskStore() ? logicCacheConfig.getMaxElementsOnDisk() : 0;
+
+        return retVal;
+    }
+
+    @Override
     public void remove(Object key) {
         getCache().remove(key);
     }
@@ -136,17 +144,20 @@ public class LogicCacheImpl implements LogicCache {
 
     @Override
     public boolean getFeature(Features name) {
-        boolean result = false;
+        boolean retVal = false;
 
         switch (name) {
             case FLUSH:
-                result = false;
+                retVal = false;
                 break;
             case RESTART:
-                result = true;
+                retVal = true;
+                break;
+            case MAX_SIZE:
+                retVal = logicCacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_IN_MEMORY) || logicCacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_ON_DISK);
                 break;
         }
 
-        return result;
+        return retVal;
     }
 }

@@ -214,15 +214,18 @@ public class LogicContextImpl implements LogicContext {
 		if (result == null) {
 			Map<Integer, Result> resultMap = dataSource.read(this, patients, criteria);
 
+            //TODO possible partial result, e.g. 31 of 70 => redesign
 //            for(Integer patientId: resultMap.keySet()) {
-//                logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patientId);
-//                logicCache.put(logicCacheKey, resultMap.get(patientId), dataSource.getDefaultTTL());
+//                LogicCacheKey cacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patientId);
+//                logicCache.put(cacheKey, resultMap.get(patientId), dataSource.getDefaultTTL());
 //            }
 
             result = resultMap.get(patient.getPatientId());
 		}
-		if (result == null)
+		if (result == null) {
 			result = Result.emptyResult();
+//            logicCache.put(logicCacheKey, result, dataSource.getDefaultTTL());
+        }
 		return result;
 	}
 	

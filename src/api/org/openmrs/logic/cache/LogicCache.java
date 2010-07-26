@@ -19,7 +19,7 @@ import java.io.IOException;
  *
  */
 public interface LogicCache {
-    public enum Features {FLUSH, RESTART}
+    public enum Features {FLUSH, RESTART, MAX_SIZE}
 
     String getName();
 
@@ -30,6 +30,8 @@ public interface LogicCache {
     Object get(Object key);
 
     int getSize();
+
+    int getMaxSize() throws UnsupportedOperationException;
 
     void remove(Object key);
 

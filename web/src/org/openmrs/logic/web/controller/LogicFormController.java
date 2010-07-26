@@ -3,6 +3,7 @@ package org.openmrs.logic.web.controller;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
+import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicService;
@@ -189,6 +190,15 @@ public class LogicFormController {
                 modelMap.addAttribute("error", e.toString());
             }
         }
+
+        PatientService patientService = Context.getPatientService();
+        int patientsCount = patientService.getAllPatients().size();
+        int warningCacheSize = patientsCount*2;
+        int atLeastCacheSize = patientsCount*2 + 50;
+
+        if(logicCache.getFeature(LogicCache.Features.MAX_SIZE) && (warningCacheSize > logicCache.getMaxSize()) )
+            modelMap.addAttribute("cacheSizeWarn", "True");
+        modelMap.addAttribute("patientsCount", atLeastCacheSize);
 
         if(logicCacheConfig.getFeature(LogicCacheConfig.Features.DEFAULT_TTL))
             modelMap.addAttribute("configTTL", logicCacheConfig.getDefaultTTL().toString());
