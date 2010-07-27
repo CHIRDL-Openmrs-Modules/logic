@@ -192,13 +192,13 @@ public class LogicFormController {
         }
 
         PatientService patientService = Context.getPatientService();
-        int patientsCount = patientService.getAllPatients().size();
-        int warningCacheSize = patientsCount*2;
-        int atLeastCacheSize = patientsCount*2 + 50;
+        Long patientsCount = patientService.getCount();
+        Long warningCacheSize = patientsCount*2;
+        Long atLeastCacheSize = patientsCount*3;
 
         if(logicCache.getFeature(LogicCache.Features.MAX_SIZE) && (warningCacheSize > logicCache.getMaxSize()) )
             modelMap.addAttribute("cacheSizeWarn", "True");
-        modelMap.addAttribute("patientsCount", atLeastCacheSize);
+        modelMap.addAttribute("atLeastCacheSize", atLeastCacheSize);
 
         if(logicCacheConfig.getFeature(LogicCacheConfig.Features.DEFAULT_TTL))
             modelMap.addAttribute("configTTL", logicCacheConfig.getDefaultTTL().toString());
