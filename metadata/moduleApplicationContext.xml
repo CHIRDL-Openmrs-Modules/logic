@@ -46,6 +46,7 @@
 		<property name="logicRuleTokenDAO"><ref bean="logicRuleTokenDAO" /></property>
 	</bean>
 	<bean id="logicServiceTarget" class="org.openmrs.logic.impl.LogicServiceImpl">
+        <property name="sessionFactory"><ref bean="sessionFactory"/></property>
 		<property name="ruleFactory"><ref bean="ruleFactory" /></property>
 		<property name="logicDataSources">
 			<map>

@@ -74,7 +74,7 @@ public class LogicCacheImpl implements LogicCache {
     }
 
     @Override
-    public LogicCache restart() throws UnsupportedOperationException {
+    public LogicCache restart() {
         return ehCacheProvider.restartCache(getCache().getName());
     }
 
@@ -132,7 +132,7 @@ public class LogicCacheImpl implements LogicCache {
 
 
     @Override
-    public void flush() throws UnsupportedOperationException {
+    public void flush() {
         getCache().flush();
         log.debug(getCache().getName() + ": flushing.");
     }

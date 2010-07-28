@@ -16,9 +16,17 @@ package org.openmrs.logic.impl;
 import antlr.BaseAST;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Query;
+import org.hibernate.SessionFactory;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
-import org.openmrs.logic.*;
+import org.openmrs.logic.LogicContext;
+import org.openmrs.logic.LogicContextImpl;
+import org.openmrs.logic.LogicCriteria;
+import org.openmrs.logic.LogicCriteriaImpl;
+import org.openmrs.logic.LogicException;
+import org.openmrs.logic.LogicService;
+import org.openmrs.logic.Rule;
 import org.openmrs.logic.cache.LogicCache;
 import org.openmrs.logic.cache.LogicCacheManager;
 import org.openmrs.logic.datasource.LogicDataSource;
@@ -30,7 +38,13 @@ import org.openmrs.logic.result.Result.Datatype;
 import org.openmrs.logic.rule.RuleParameterInfo;
 
 import java.io.ByteArrayInputStream;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Default implementation of the LogicService. This class should not be used directly. This class,
@@ -48,14 +62,20 @@ public class LogicServiceImpl implements LogicService {
 	private RuleFactory ruleFactory;
 	
 	private static Map<String, LogicDataSource> dataSources;
+
+    private SessionFactory sessionFactory;
 	
 	/**
 	 * Default constructor. Creates a new RuleFactory (and populates it)
 	 */
 	public LogicServiceImpl() {
 	}
-	
-	/**
+
+    public void setSessionFactory(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    /**
 	 * @param ruleFactory the ruleFactory to set
 	 */
 	public void setRuleFactory(RuleFactory ruleFactory) {
@@ -383,4 +403,10 @@ public class LogicServiceImpl implements LogicService {
 			return null;
 		}
 	}
+
+    public Long getPatientsCount() {
+        Query query = sessionFactory.getCurrentSession().createQuery("select count(p.patientId) from Patient p");
+
+		return (Long) query.uniqueResult();
+    }
 }

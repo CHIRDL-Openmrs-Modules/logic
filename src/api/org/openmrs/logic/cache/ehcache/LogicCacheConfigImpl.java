@@ -38,51 +38,51 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     }
 
     @Override
-    public Integer getMaxElementsInMemory() throws UnsupportedOperationException {
+    public Integer getMaxElementsInMemory() {
         return cache.getCacheConfiguration().getMaxElementsInMemory();
     }
 
     @Override
-    public Integer getMaxElementsOnDisk() throws UnsupportedOperationException {
+    public Integer getMaxElementsOnDisk() {
         return cache.getCacheConfiguration().getMaxElementsOnDisk();
     }
 
     @Override
-    public Long getDefaultTTL() throws UnsupportedOperationException {
+    public Long getDefaultTTL() {
         return cache.getCacheConfiguration().getTimeToLiveSeconds();
     }
 
     @Override
-    public boolean isUsingDiskStore() throws UnsupportedOperationException {
+    public boolean isUsingDiskStore() {
         //use configBean here because ehcache config will be changed after cache restart.
         return configBean.isUsingDiskStore();
     }
 
     @Override
-    public boolean isDisabled() throws UnsupportedOperationException {
+    public boolean isDisabled() {
         return cache.isDisabled();
     }
 
     @Override
-    public void setDefaultTTL(Long ttl) throws UnsupportedOperationException {
+    public void setDefaultTTL(Long ttl) {
         cache.getCacheConfiguration().setTimeToLiveSeconds(ttl);
         configBean.setDefaultTTL(ttl);
     }
 
     @Override
-    public void setMaxElementsInMemory(Integer maxInMem) throws UnsupportedOperationException {
+    public void setMaxElementsInMemory(Integer maxInMem) {
         cache.getCacheConfiguration().setMaxElementsInMemory(maxInMem);
         configBean.setMaxElementsInMemory(maxInMem);
     }
 
     @Override
-    public void setMaxElementsOnDisk(Integer maxOnDisk) throws UnsupportedOperationException {
+    public void setMaxElementsOnDisk(Integer maxOnDisk) {
         cache.getCacheConfiguration().setMaxElementsOnDisk(maxOnDisk);
         configBean.setMaxElementsOnDisk(maxOnDisk);
     }
 
     @Override
-    public void setUsingDiskStore(boolean isDiskStore) throws UnsupportedOperationException {
+    public void setUsingDiskStore(boolean isDiskStore) {
         cache.getCacheConfiguration().setOverflowToDisk(isDiskStore);
         configBean.setUsingDiskStore(isDiskStore);
 
@@ -90,7 +90,7 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
     }
 
     @Override
-    public void setDisabled(boolean disabled) throws UnsupportedOperationException {
+    public void setDisabled(boolean disabled) {
         cache.setDisabled(disabled);
         configBean.setDisabled(disabled);
     }
@@ -102,12 +102,12 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
 
     ///////////////////////TODO: delete later
     @Override
-    public Long getCacheHits() throws UnsupportedOperationException {
+    public Long getCacheHits() {
         return cache.getStatistics().getCacheHits();
     }
 
     @Override
-    public Long getCacheMisses() throws UnsupportedOperationException {
+    public Long getCacheMisses() {
         return cache.getStatistics().getCacheMisses();
     }
     ///////////////////////
