@@ -191,14 +191,16 @@ public class LogicFormController {
             }
         }
 
-        PatientService patientService = Context.getPatientService();
-        Long patientsCount = patientService.getCount();
-        Long warningCacheSize = patientsCount*2;
-        Long atLeastCacheSize = patientsCount*3;
+        if(logicCache.getName().equals("org.openmrs.logic.defaultCache")) {
+    //        PatientService patientService = Context.getPatientService();
+            Long patientsCount = 4000l; //patientService.getCount(); //TODO: rewrite this
+            Long warningCacheSize = patientsCount * 2;
+            Long atLeastCacheSize = patientsCount * 3;
 
-        if(logicCache.getFeature(LogicCache.Features.MAX_SIZE) && (warningCacheSize > logicCache.getMaxSize()) )
-            modelMap.addAttribute("cacheSizeWarn", "True");
-        modelMap.addAttribute("atLeastCacheSize", atLeastCacheSize);
+            if (logicCache.getFeature(LogicCache.Features.MAX_SIZE) && (warningCacheSize > logicCache.getMaxSize()))
+                modelMap.addAttribute("cacheSizeWarn", "True");
+            modelMap.addAttribute("atLeastCacheSize", atLeastCacheSize);
+        }
 
         if(logicCacheConfig.getFeature(LogicCacheConfig.Features.DEFAULT_TTL))
             modelMap.addAttribute("configTTL", logicCacheConfig.getDefaultTTL().toString());

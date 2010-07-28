@@ -17,9 +17,11 @@ import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.datasource.LogicDataSource;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
+import java.util.Set;
 
 /**
  *
@@ -30,18 +32,21 @@ public class LogicCacheKey implements Serializable {
     private String dataSource;
     private Date indexDate;
     private Integer patientId;
+    private Set<Integer> memberIds;
 
     public LogicCacheKey() {
     }
 
-    public LogicCacheKey(Map<String, Object> parameters, LogicCriteria criteria, LogicDataSource dataSource, Date indexDate, Integer patientId) {
+    public LogicCacheKey(Map<String, Object> parameters, LogicCriteria criteria, LogicDataSource dataSource, Date indexDate, Integer patientId, Set<Integer> memberIds) {
         this.parameters = parameters;
         this.criteria = criteria;
         this.dataSource = dataSource != null ? dataSource.getClass().getCanonicalName() : null;
         this.indexDate = updateTime(indexDate);
         this.patientId = patientId;
+        this.memberIds = memberIds;
     }
 
+//        if ((dataSource != null && that.dataSource != null) ? !dataSource.getClass().equals(that.dataSource.getClass()) : !(dataSource == null && that.dataSource == null) ) return false; //check only dataSource is the same for both
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -51,8 +56,8 @@ public class LogicCacheKey implements Serializable {
 
         if (criteria != null ? !criteria.equals(that.criteria) : that.criteria != null) return false;
         if (dataSource != null ? !dataSource.equals(that.dataSource) : that.dataSource != null) return false;
-//        if ((dataSource != null && that.dataSource != null) ? !dataSource.getClass().equals(that.dataSource.getClass()) : !(dataSource == null && that.dataSource == null) ) return false; //check only dataSource is the same for both
         if (indexDate != null ? !indexDate.equals(that.indexDate) : that.indexDate != null) return false;
+        if (memberIds != null ? !Arrays.equals(memberIds.toArray(), that.memberIds.toArray()) : that.memberIds != null) return false;
         if (parameters != null ? !parameters.equals(that.parameters) : that.parameters != null) return false;
         if (patientId != null ? !patientId.equals(that.patientId) : that.patientId != null) return false;
 
@@ -66,6 +71,7 @@ public class LogicCacheKey implements Serializable {
         result = 31 * result + (dataSource != null ? dataSource.hashCode() : 0);
         result = 31 * result + (indexDate != null ? indexDate.hashCode() : 0);
         result = 31 * result + (patientId != null ? patientId.hashCode() : 0);
+        result = 31 * result + (memberIds != null ? memberIds.hashCode() : 0);
         return result;
     }
 
@@ -120,5 +126,13 @@ public class LogicCacheKey implements Serializable {
 
     public void setDataSource(String dataSource) {
         this.dataSource = dataSource;
+    }
+
+    public Set<Integer> getMemberIds() {
+        return memberIds;
+    }
+
+    public void setMemberIds(Set<Integer> memberIds) {
+        this.memberIds = memberIds;
     }
 }

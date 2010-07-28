@@ -139,8 +139,7 @@
 
 <c:if test="${cacheSizeWarn}">
 <div style="font-style:italic; color:#d2691e; padding-top: 15px;">
-    Cache size warning! Cache size is (Max elements in memory + Max elements on disk).
-    Recommended size at least is ${atLeastCacheSize}. 
+    <spring:message code="logic.cache.cacheSizeWarn"/> <b>${atLeastCacheSize}</b>.
 </div>
 </c:if>
 

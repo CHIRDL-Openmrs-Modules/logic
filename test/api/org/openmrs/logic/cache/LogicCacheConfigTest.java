@@ -17,7 +17,8 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*; //TODO ctrl+alt+O
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  *
@@ -38,7 +39,6 @@ public class LogicCacheConfigTest {
 
     @After
     public void tearDown() throws Exception {
-        logicCache.clean();
     }
 
     @Test
@@ -50,7 +50,6 @@ public class LogicCacheConfigTest {
         int extTtl = 100;
         Long defTTL = cacheConfig.getDefaultTTL();
         assertNotNull("Got null def ttl", defTTL);
-        assertTrue("Default ttl must be positive value", defTTL >= 0);
 
         Long newTTL = defTTL + extTtl;
 
@@ -67,6 +66,17 @@ public class LogicCacheConfigTest {
         //check if current feature is supported
         if(cacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_IN_MEMORY))
             return;
+
+        Integer ext = 100;
+        Integer oldMemStoreSize = cacheConfig.getMaxElementsInMemory();
+        Integer newMemStoreSize = oldMemStoreSize + ext;
+
+        cacheConfig.setMaxElementsInMemory(newMemStoreSize);
+
+        assertEquals("Property default ttl is not set", newMemStoreSize, cacheConfig.getMaxElementsInMemory());
+
+        //restore old value
+        cacheConfig.setMaxElementsInMemory(oldMemStoreSize);
     }
 
     @Test
@@ -74,5 +84,21 @@ public class LogicCacheConfigTest {
         //check if current feature is supported
         if(cacheConfig.getFeature(LogicCacheConfig.Features.MAX_ELEMENTS_ON_DISK))
             return;
+
+        Integer ext = 100;
+        Integer oldDiskStoreSize = cacheConfig.getMaxElementsOnDisk();
+        Integer newDiskStoreSize = oldDiskStoreSize + ext;
+
+        cacheConfig.setMaxElementsInMemory(newDiskStoreSize);
+
+        assertEquals("Property default ttl is not set", newDiskStoreSize, cacheConfig.getMaxElementsOnDisk());
+
+        //restore old value
+        cacheConfig.setMaxElementsInMemory(oldDiskStoreSize);
+    }
+
+    @Test
+    public void test() {
+        
     }
 }
