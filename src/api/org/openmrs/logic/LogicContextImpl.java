@@ -110,7 +110,7 @@ public class LogicContextImpl implements LogicContext {
 	 *      org.openmrs.logic.LogicCriteria, java.util.Map)
 	 */
 	public Result eval(Patient patient, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
-        LogicCacheKey logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), patient.getPatientId(), null);
+        LogicCacheKey logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), patient.getPatientId());
         LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
         Result result = (Result) logicCache.get(logicCacheKey);
 
@@ -120,7 +120,7 @@ public class LogicContextImpl implements LogicContext {
 			log.debug("Context database read (pid = " + targetPatientId + ")");
 			Rule rule = Context.getLogicService().getRule(criteria.getRootToken());
 			for (Integer pid : patients.getMemberIds()) {
-                logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), pid, null);
+                logicCacheKey = new LogicCacheKey(parameters, criteria, null, getIndexDate(), pid);
                 Result r = (Result) logicCache.get(logicCacheKey);
                 if(null != r) {
                     if (pid.equals(targetPatientId))
@@ -202,8 +202,8 @@ public class LogicContextImpl implements LogicContext {
 	 *      org.openmrs.logic.datasource.LogicDataSource, org.openmrs.logic.LogicCriteria)
 	 */
 	public Result read(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
-        LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patient.getPatientId(), null);
-        LogicCacheKey currentCohortKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), null, patients.getMemberIds());
+        LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patient.getPatientId());
+        LogicCacheKey currentCohortKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patients.getMemberIds());
 
         LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
         Result result = (Result) logicCache.get(logicCacheKey);
@@ -217,7 +217,7 @@ public class LogicContextImpl implements LogicContext {
 			Map<Integer, Result> resultMap = dataSource.read(this, patients, criteria);
 
             for(Integer patientId: resultMap.keySet()) {
-                LogicCacheKey cacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patientId, null);
+                LogicCacheKey cacheKey = new LogicCacheKey(null, criteria, dataSource, getIndexDate(), patientId);
                 logicCache.put(cacheKey, resultMap.get(patientId), dataSource.getDefaultTTL());
             }
 

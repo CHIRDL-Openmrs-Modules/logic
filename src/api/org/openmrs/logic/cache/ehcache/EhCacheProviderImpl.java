@@ -76,7 +76,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
 
     public LogicCache restartCache(String name) {
         LogicCache logicCache = cacheList.get(name);
-        if(null == logicCache) return null;
+        if(null == logicCache) return createLogicCache(name);
 
         //to prevent situation of getting cache when it is down.
         synchronized (this) {

@@ -37,12 +37,19 @@ public class LogicCacheKey implements Serializable {
     public LogicCacheKey() {
     }
 
-    public LogicCacheKey(Map<String, Object> parameters, LogicCriteria criteria, LogicDataSource dataSource, Date indexDate, Integer patientId, Set<Integer> memberIds) {
+    public LogicCacheKey(Map<String, Object> parameters, LogicCriteria criteria, LogicDataSource dataSource, Date indexDate, Integer patientId) {
         this.parameters = parameters;
         this.criteria = criteria;
         this.dataSource = dataSource != null ? dataSource.getClass().getCanonicalName() : null;
         this.indexDate = updateTime(indexDate);
         this.patientId = patientId;
+    }
+
+    public LogicCacheKey(Map<String, Object> parameters, LogicCriteria criteria, LogicDataSource dataSource, Date indexDate, Set<Integer> memberIds) {
+        this.parameters = parameters;
+        this.criteria = criteria;
+        this.dataSource = dataSource != null ? dataSource.getClass().getCanonicalName() : null;
+        this.indexDate = updateTime(indexDate);
         this.memberIds = memberIds;
     }
 
