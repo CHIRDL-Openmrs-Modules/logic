@@ -154,25 +154,4 @@
     <input type="hidden" id="action" name="action" value=""/>
 </form>
 
-<br/>
-<hr/>
-TEMPORARY
-<br/><b>${cacheName} Statisctics:</b><br/>
-<table cellpadding="1" cellspacing="1">
-    <tr style="color:#bfbdbd;">
-        <td>Cache hits:</td>
-        <td>${cacheHits}</td>
-    </tr>
-    <tr style="color:#bfbdbd;">
-        <td>Cache misses:</td>
-        <td>${cacheMisses}</td>
-    </tr>
-    <tr style="color:#bfbdbd;">
-        <td>Cache specific stats:</td>
-        <td>${cacheToStr}</td>
-    </tr>
-</table>
-<br/>
-<hr/>
-
 <%@ include file="/WEB-INF/template/footer.jsp" %>

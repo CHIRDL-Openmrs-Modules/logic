@@ -43,9 +43,4 @@ public interface LogicCacheConfig {
     
     boolean getFeature(Features name);
 
-    ///////////////////////TODO: delete later
-    Long getCacheHits() throws UnsupportedOperationException;
-
-    Long getCacheMisses() throws UnsupportedOperationException;
-    ///////////////////////
 }

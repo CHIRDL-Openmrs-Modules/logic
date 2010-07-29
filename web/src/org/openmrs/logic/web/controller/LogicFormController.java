@@ -218,12 +218,6 @@ public class LogicFormController {
         modelMap.addAttribute("cacheName", cacheName);
         modelMap.addAttribute("cacheSize", logicCache.getSize());
         modelMap.addAttribute("isRestartNeeded", logicCacheConfig.isRestartNeeded());
-
-        ///////////////////////TODO: delete later
-        modelMap.addAttribute("cacheHits", logicCacheConfig.getCacheHits().toString());
-        modelMap.addAttribute("cacheMisses", logicCacheConfig.getCacheMisses().toString());
-        modelMap.addAttribute("cacheToStr", logicCache.getCacheSpecificStats());
-        ///////////////////////
     }
 
 

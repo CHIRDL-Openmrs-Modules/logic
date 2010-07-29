@@ -53,7 +53,6 @@ public class LogicCacheKey implements Serializable {
         this.memberIds = memberIds;
     }
 
-//        if ((dataSource != null && that.dataSource != null) ? !dataSource.getClass().equals(that.dataSource.getClass()) : !(dataSource == null && that.dataSource == null) ) return false; //check only dataSource is the same for both
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

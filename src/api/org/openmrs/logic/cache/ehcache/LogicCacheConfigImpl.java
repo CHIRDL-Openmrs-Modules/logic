@@ -100,18 +100,6 @@ public class LogicCacheConfigImpl implements LogicCacheConfig {
         return restartNeeded;
     }
 
-    ///////////////////////TODO: delete later
-    @Override
-    public Long getCacheHits() {
-        return cache.getStatistics().getCacheHits();
-    }
-
-    @Override
-    public Long getCacheMisses() {
-        return cache.getStatistics().getCacheMisses();
-    }
-    ///////////////////////
-
     @Override
     public boolean getFeature(Features name) {
         boolean result = false;

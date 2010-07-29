@@ -138,11 +138,6 @@ public class LogicCacheImpl implements LogicCache {
     }
 
     @Override
-    public String getCacheSpecificStats() {
-        return getCache().toString();
-    }
-
-    @Override
     public boolean getFeature(Features name) {
         boolean retVal = false;
 
