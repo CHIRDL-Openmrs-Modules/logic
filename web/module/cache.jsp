@@ -49,6 +49,8 @@
         var defTtlValue = document.getElementById("defaultTTL").value;
         var maxElemInMemValue = document.getElementById("maxElemInMem").value;
         var maxElemOnDiskValue = document.getElementById("maxElemOnDisk").value;
+        var isMaxElemOnDisk = document.getElementById("maxElemOnDisk").disabled;
+        var isDiskPersistence = document.getElementById("_diskPersistence").checked;
         var posIntRegExp = /^[1-9]\d*$/;
         var retVal = true;
 
@@ -60,7 +62,7 @@
             $j("#maxElemInMemError").show();
             retVal = false;
         } else $j("#maxElemInMemError").hide();
-        if(!posIntRegExp.test(maxElemOnDiskValue)) {
+        if(!isMaxElemOnDisk && isDiskPersistence && !posIntRegExp.test(maxElemOnDiskValue)) {
             $j("#maxElemOnDiskError").show();
             retVal = false;
         } else $j("#maxElemOnDiskError").hide();
@@ -104,7 +106,7 @@
             <td class="evenRow"><label for="_diskPersistence"><spring:message code="logic.cache.config.persistence"/></label></td>
             <td>
                 <input type="hidden" id="diskPersistence" name="diskPersistence" value="${diskPersistence}" />
-                <input type="checkbox" id="_diskPersistence" onchange="changeInputAccordingToCheBox(this, 'diskPersistence');" <c:if test="${diskPersistence}">checked</c:if> />
+                <input type="checkbox" id="_diskPersistence" onchange="changeInputAccordingToCheBox(this, 'diskPersistence'); document.getElementById('maxElemOnDisk').disabled = !this.checked;" <c:if test="${diskPersistence}">checked</c:if> />
             </td>
         </tr>
         </c:if>

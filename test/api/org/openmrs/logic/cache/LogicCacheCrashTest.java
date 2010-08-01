@@ -82,7 +82,7 @@ public class LogicCacheCrashTest {
         for (int i = 0; i < COUNT_OBJECTS_TO_CACHE; i++)
             logicCache.put(i, i);
 
-        assertEquals("Cache is not full", logicCache.getMaxSize(), logicCache.getSize());
+        assertTrue("Cache is not full", logicCache.getMaxSize() <= logicCache.getSize());
     }
 
     @Test

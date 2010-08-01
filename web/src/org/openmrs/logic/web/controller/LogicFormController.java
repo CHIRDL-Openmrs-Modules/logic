@@ -3,7 +3,6 @@ package org.openmrs.logic.web.controller;
 import org.apache.commons.lang.StringUtils;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
-import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicService;
