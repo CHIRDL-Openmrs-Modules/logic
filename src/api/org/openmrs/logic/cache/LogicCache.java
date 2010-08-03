@@ -32,15 +32,15 @@ public interface LogicCache {
          */
     public enum Features {
         /**
-                 *  Name of feature to ask if {@link LogicCache#flush()} method if supported
+                 *  Name of feature to ask if {@link LogicCache#flush()} method is supported
                  */
         FLUSH,
         /**
-                 *  Name of feature to ask if {@link LogicCache#restart()} method if supported
+                 *  Name of feature to ask if {@link LogicCache#restart()} method is supported
                  */
         RESTART,
         /**
-                 *  Name of feature to ask if {@link LogicCache#getMaxSize()} method if supported
+                 *  Name of feature to ask if {@link LogicCache#getMaxSize()} method is supported
                  */
         MAX_SIZE
     }
@@ -102,7 +102,7 @@ public interface LogicCache {
 
     /**
          *  Some methods may not be supported by caching framework. Such methods may throw UnsupportedOperationException.
-         * To ask is the method is supported we may call getFeature method with a proper feature name.
+         * To ask is the method supported we may call getFeature method with a proper feature name.
          *
          * @param name feature`s name according to a method`s name
          * @return true if feature is supported else false
