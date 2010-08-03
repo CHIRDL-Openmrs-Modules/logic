@@ -30,7 +30,20 @@ public interface LogicCache {
          *  Enumeration of those methods which may not be supported by the certain caching framework.
          * Used only by {@link LogicCache#getFeature} method. 
          */
-    public enum Features {FLUSH, RESTART, MAX_SIZE}
+    public enum Features {
+        /**
+                 *  Name of feature to ask if {@link LogicCache#flush()} method if supported
+                 */
+        FLUSH,
+        /**
+                 *  Name of feature to ask if {@link LogicCache#restart()} method if supported
+                 */
+        RESTART,
+        /**
+                 *  Name of feature to ask if {@link LogicCache#getMaxSize()} method if supported
+                 */
+        MAX_SIZE
+    }
 
     /**
          *  Each cache has it`s unique name

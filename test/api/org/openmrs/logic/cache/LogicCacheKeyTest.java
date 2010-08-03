@@ -88,41 +88,6 @@ public class LogicCacheKeyTest extends BaseModuleContextSensitiveTest {
         assertEquals("result and deserializedResult are not equals", result, deserializedResult);
     }
 
-    //=====TO BE DELETED==============================================================
-
-    /**
-        * run  testStoreOnDisk then  testLoadFromDisk. note: this is temporary
-        */
-/*
-
-    int size = 800;
-    @Test
-    public void testStoreOnDisk() {
-        Date indexDate = new Date();
-        LogicDataSource logicDataSource = Context.getLogicService().getLogicDataSource("person");
-        LogicCriteria criteria = Context.getLogicService().parse("\"AGE\"");
-        LogicCache logicCache = LogicCacheManager.getDefaultLogicCache();
-
-        for(int i = 0; i<size; i++) {
-            LogicCacheKey logicCacheKey = new LogicCacheKey(null, criteria, logicDataSource, indexDate, i);
-            logicCache.put(logicCacheKey, logicCacheKey, 10000);            
-        }
-        System.out.println(logicCache.getSize());
-
-        logicCache.flush();
-
-        System.out.println(logicCache.getCacheSpecificStats());
-    }
-
-    @Test
-    public void testLoadFromDisk() {
-        System.out.println(LogicCacheManager.getDefaultLogicCache().getSize());
-        assertEquals(size, LogicCacheManager.getDefaultLogicCache().getSize());
-    }
-
-*/
-    //================================================================================
-
     /**
          * Writes object forSerialization into the output stream and then reads it from the input stream.
          *

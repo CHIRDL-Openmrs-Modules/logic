@@ -75,6 +75,6 @@
 	<classpathentry kind="lib" path="lib-common/slf4j/slf4j-api-1.5.11.jar"/>
 	<classpathentry kind="lib" path="lib-common/slf4j/slf4j-log4j12-1.5.11.jar"/>
 	<classpathentry kind="lib" path="lib-common/ehcache/ehcache-core-2.1.0.jar"/>
-	<classpathentry kind="lib" path="lib-common/openmrs/openmrs-api-1.7.0.13464-dev.jar" sourcepath="/home/inc/work/develop/java/openmrs/trunk"/>
+	<classpathentry kind="lib" path="lib-common/openmrs/openmrs-api-1.7.0.13464-dev.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

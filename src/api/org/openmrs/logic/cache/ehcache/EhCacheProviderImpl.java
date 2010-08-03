@@ -166,7 +166,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         configuration.setDiskPersistent(defConfig.isDiskPersistent());
         configuration.setClearOnFlush(defConfig.isClearOnFlush());
         configuration.setEternal(defConfig.isEternal());
-        configuration.setStatistics(true); //TODO: temporary, this may slow cache. needed for cache monitor.
+        //configuration.setStatistics(true); //NOTE: this may slow cache. but useful for debugging
         configuration.setDiskStorePath(getCacheManager().getDiskStorePath());
 
         LogicCacheConfigBean configStored = restoreConfig(name);
