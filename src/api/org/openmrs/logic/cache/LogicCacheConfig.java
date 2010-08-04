@@ -23,11 +23,11 @@ package org.openmrs.logic.cache;
  *      logicCacheConfig.setDisabled(true);
  * </pre>
  *
- * There are several properties you may change:
- * maxElementsInMemory - memory store size.
- * maxElementsOnDisk - disk store size.
- * defaultTTL - if you use {@link LogicCache#put(Object, Object)}, which without ttl parameter, so defaultTTL is used.
- * usingDiskStore - shows does this cache use disk store or not.
+ * There are several properties you may change:<br/>
+ * maxElementsInMemory - memory store size.<br/>
+ * maxElementsOnDisk - disk store size.<br/>
+ * defaultTTL - if you use {@link LogicCache#put(Object, Object)}, which without ttl parameter, so defaultTTL is used.<br/>
+ * usingDiskStore - shows does this cache use disk store or not.<br/>
  * disable - shows does this cache is disabled. If true then does not work, it will not put objects, and will always return null on get(). 
  */
 public interface LogicCacheConfig {

@@ -24,7 +24,14 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- *
+ *   This bean is used to create complex keys. To cache result of the
+ * {@link org.openmrs.logic.LogicContextImpl#eval(org.openmrs.Patient, org.openmrs.logic.LogicCriteria, java.util.Map)} method or the
+ * {@link org.openmrs.logic.LogicContextImpl#read(org.openmrs.Patient, org.openmrs.logic.datasource.LogicDataSource, org.openmrs.logic.LogicCriteria)}
+ * method we need to include into the key all parameters result depends on.
+ * <p/>This class and all it`s properties are serializable to store cached elements (key, value) to a disk store. As well as all properties are serializable
+ * they must have equals and hashCode methods.
+ * <p/>It has indexDate field like {@link org.openmrs.logic.LogicContext}, but stores it truncated to days {@link LogicCacheKey#truncDate(java.util.Date)}
+ * for comparison if indexDate was for the "past time". 
  */
 public class LogicCacheKey implements Serializable {
     private Map<String, Object> parameters;
@@ -41,7 +48,7 @@ public class LogicCacheKey implements Serializable {
         this.parameters = parameters;
         this.criteria = criteria;
         this.dataSource = dataSource != null ? dataSource.getClass().getCanonicalName() : null;
-        this.indexDate = updateTime(indexDate);
+        this.indexDate = truncDate(indexDate);
         this.patientId = patientId;
     }
 
@@ -49,7 +56,7 @@ public class LogicCacheKey implements Serializable {
         this.parameters = parameters;
         this.criteria = criteria;
         this.dataSource = dataSource != null ? dataSource.getClass().getCanonicalName() : null;
-        this.indexDate = updateTime(indexDate);
+        this.indexDate = truncDate(indexDate);
         this.memberIds = memberIds;
     }
 
@@ -81,7 +88,13 @@ public class LogicCacheKey implements Serializable {
         return result;
     }
 
-    private Date updateTime(Date date) {
+    /**
+         *   Truncates date to days. If indexDate`d put '2010-07-16 20:38:40' it would be '2010-07-16 00:00:00'
+         * 
+         * @param date - date from {@link org.openmrs.logic.LogicContext#getIndexDate()}
+         * @return truncated to days date
+         */
+    private Date truncDate(Date date) {
         if(null == date) return null;
         
         Calendar calendar = Calendar.getInstance();
@@ -99,7 +112,7 @@ public class LogicCacheKey implements Serializable {
     }
 
     public void setIndexDate(Date indexDate) {
-        this.indexDate = updateTime(indexDate);
+        this.indexDate = truncDate(indexDate);
     }
 
     public Integer getPatientId() {
