@@ -19,7 +19,8 @@ import net.sf.ehcache.event.CacheEventListenerFactory;
 import java.util.Properties;
 
 /**
- *
+ *   Factory to create listeners of the Cache`s events. It can then be configured in
+ * logic-ehcache.xml
  */
 public class LogicCacheEventListenerFactory extends CacheEventListenerFactory {
     @Override

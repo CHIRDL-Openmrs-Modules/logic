@@ -22,7 +22,7 @@ import org.apache.commons.logging.LogFactory;
 
 
 /**
- *
+ *   Callback methods to listen the CachManager`s events.
  */
 public class LogicCacheManagerEventListener implements CacheManagerEventListener {
 	

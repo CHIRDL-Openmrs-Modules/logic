@@ -37,6 +37,7 @@ import java.util.Map;
 
 /**
  *   Implementation of the LogicCacheProvider with the ehcache caching framework.
+ * <p/>Hides work of the ehcache`s CacheManager. Works on logic-ehcache.xml predefined cache configurations.
  */
 public class EhCacheProviderImpl extends LogicCacheProvider {
     private final Log log = LogFactory.getLog(getClass());
@@ -187,11 +188,11 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
     /**
          *  Creates new cache of the ehcache caching framework with predefined configuration certainly for current
          * cache name or default predefined configuration.
-         * <p/>To add predefined configuration  TODO:complete 
+         * <p/>To add predefined configuration put configuration into logic-ehcache.xml with prfix.&lt;cachename&gt; name.
+         *  And then get cache with &lt;cachename&gt;
          *
-         *
-         * @param name
-         * @return
+         * @param name cache`s name
+         * @return  initialized and ready to work implementation of the LogicCache
          */
     private LogicCache createLogicCache(String name) {
         String preConfigCacheName = "prefix."+name;
@@ -245,6 +246,13 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         return cacheManager;
     }
 
+    /**
+         *  Gets all predefined configurations from the logic-ehcache.xml, keeps all of them in memory map.
+         * Returns configuration of the cache with the specified name.
+         *
+         * @param name cache`s name
+         * @return ehcache`s configuration
+         */
     private CacheConfiguration getPredefinedConfiguration(String name) {
         if(null == predefinedConfigs) {
             predefinedConfigs = new HashMap<String, CacheConfiguration>();

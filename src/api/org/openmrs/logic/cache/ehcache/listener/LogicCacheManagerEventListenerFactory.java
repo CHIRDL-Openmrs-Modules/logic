@@ -20,9 +20,10 @@ import java.util.Properties;
 
 
 /**
- *
+ *   Factory to create listeners of the CachManager`s events. It can then be configured in
+ * logic-ehcache.xml
  */
-public class LogicCacheManagerEventListenerFactory extends CacheManagerEventListenerFactory{
+public class LogicCacheManagerEventListenerFactory extends CacheManagerEventListenerFactory {
 
 	@Override
     public CacheManagerEventListener createCacheManagerEventListener(Properties properties) {

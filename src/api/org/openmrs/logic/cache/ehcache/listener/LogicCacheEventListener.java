@@ -20,7 +20,9 @@ import net.sf.ehcache.event.CacheEventListener;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
-
+/**
+ *   Callback methods to listen the Cache`s events.
+ */
 public class LogicCacheEventListener implements CacheEventListener {
 
     private static Log log = LogFactory.getLog(LogicCacheEventListener.class);

@@ -18,7 +18,7 @@ import net.sf.ehcache.config.CacheConfiguration;
 import org.openmrs.logic.cache.LogicCacheConfig;
 
 /**
- *
+ *   EhCache`s implementation of the {@link org.openmrs.logic.cache.LogicCacheConfig}.
  */
 public class LogicCacheConfigImpl implements LogicCacheConfig {
     private final Cache cache;
