@@ -20,7 +20,6 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.logic.cache.LogicCache;
 import org.openmrs.logic.cache.LogicCacheConfig;
-import org.openmrs.logic.cache.LogicCacheConfigBean;
 import org.openmrs.logic.cache.LogicCacheManager;
 import org.openmrs.logic.cache.LogicCacheProvider;
 
@@ -37,21 +36,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ *   Implementation of the LogicCacheProvider with the ehcache caching framework.
  */
 public class EhCacheProviderImpl extends LogicCacheProvider {
     private final Log log = LogFactory.getLog(getClass());
-    private final String LOGIC_CACHE_NAME = "org.openmrs.logic.defaultCache";
-    private String EHCACHE_CONFIG = "/logic-ehcache.xml";
+
+    private final String DEFAULT_LOGIC_CACHE_NAME = "org.openmrs.logic.defaultCache";
+
+    private String EHCACHE_CONFIG_PATH = "/logic-ehcache.xml";
+
     private CacheManager cacheManager;
+
+    /**
+         *  Keeps cache configurations to restore one after the cache restart.
+         */
     private Map<String, CacheConfiguration> predefinedConfigs;
 
     public EhCacheProviderImpl() {
     }
 
+    /**
+         *  Create cache provider with specified path to the ehcache configuration xml.
+         *
+         * @param pathToConfig path to ehcache configuration file
+         */
     public EhCacheProviderImpl(String pathToConfig) {
-        EHCACHE_CONFIG = pathToConfig;
-        getCacheManager();
+        EHCACHE_CONFIG_PATH = pathToConfig;
     }
 
     @Override
@@ -66,7 +76,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
 
     @Override
     public LogicCache getDefaultCache() {
-        return getCache(LOGIC_CACHE_NAME);
+        return getCache(DEFAULT_LOGIC_CACHE_NAME);
     }
 
     @Override
@@ -74,6 +84,16 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         getCacheManager().shutdown();
     }
 
+    /**
+         *  Restarts cache with the specified name. This includes disposing of the cache and creating a new one with the same configuration.
+         * <p/>You need to restart cache only to activate changed configuration which cannot be changed dynamically. This depends on the
+         * caching framework. 
+         *
+         * @param name cache`s name
+         * @return initialized logic cache with updated configuration
+         *
+         * @see org.openmrs.logic.cache.LogicCache#restart() 
+         */
     public LogicCache restartCache(String name) {
         LogicCache logicCache = cacheList.get(name);
         if(null == logicCache) return createLogicCache(name);
@@ -91,6 +111,14 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         return logicCache;
     }
 
+    /**
+         *  Stores all cache configurations to a XML file by  {@link EhCacheProviderImpl#getLogicCacheConfigPath()} path.
+        * Uses XMLEncoder to store bean to XML.
+        *
+         * @throws IOException if there are issues with r/w of the filesystem
+         *
+         * @see org.openmrs.logic.cache.ehcache.LogicCacheConfigBean
+         */
     public void storeConfig() throws IOException {
         XMLEncoder xmlEncoder = null;
         Map<String, LogicCacheConfigBean> configs = new HashMap<String, LogicCacheConfigBean>();
@@ -128,6 +156,13 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
 
     }
 
+    /**
+         *  If stored configuration exists, restores it from the XML file by {@link EhCacheProviderImpl#getLogicCacheConfigPath()} path. 
+         * Uses XMLDecoder to restore bean from XML.
+         *
+         * @param cacheName cache`s name
+         * @return restored configuration bean or null
+         */
     public LogicCacheConfigBean restoreConfig(String cacheName) {
         Object restoredObj = null;
         XMLDecoder xmlDecoder = null;
@@ -146,9 +181,18 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
         if(restoredObj != null && restoredObj instanceof Map)
             configs = (Map<String, LogicCacheConfigBean>) restoredObj;
 
-        return configs.get(cacheName); //configs.containsKey(cacheName) ? configs.get(cacheName) : null;
+        return configs.get(cacheName);
     }
 
+    /**
+         *  Creates new cache of the ehcache caching framework with predefined configuration certainly for current
+         * cache name or default predefined configuration.
+         * <p/>To add predefined configuration  TODO:complete 
+         *
+         *
+         * @param name
+         * @return
+         */
     private LogicCache createLogicCache(String name) {
         String preConfigCacheName = "prefix."+name;
 
@@ -194,7 +238,7 @@ public class EhCacheProviderImpl extends LogicCacheProvider {
 
     public CacheManager getCacheManager() {
         if(null == cacheManager) {
-            URL url = EhCacheProviderImpl.class.getResource(EHCACHE_CONFIG);
+            URL url = EhCacheProviderImpl.class.getResource(EHCACHE_CONFIG_PATH);
             cacheManager = new CacheManager(url);
         }
         

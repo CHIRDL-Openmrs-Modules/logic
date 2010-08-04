@@ -16,7 +16,6 @@ package org.openmrs.logic.cache.ehcache;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.config.CacheConfiguration;
 import org.openmrs.logic.cache.LogicCacheConfig;
-import org.openmrs.logic.cache.LogicCacheConfigBean;
 
 /**
  *

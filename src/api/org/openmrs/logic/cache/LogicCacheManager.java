@@ -20,18 +20,24 @@ import org.openmrs.logic.cache.ehcache.EhCacheProviderImpl;
 import java.util.Collection;
 
 /**
- *
+ *   This is the central class which provides access to logic cache by it`s name. You need not create logic cache manually, you have to
+ * get it from the LogicCacheManager.
  */
 public class LogicCacheManager {
     private static final Log log = LogFactory.getLog(LogicCacheManager.class);
     
     private static final String EHCACHE = "ehcache";
 
-    public static String CURRENT_CACHE_FRAMEWORK = EHCACHE;
-
     private static LogicCacheProvider logicCacheProvider = getCacheProvider();
 
+    /**
+         * Keeps current caching framework`s name.
+         */
+    public static String CURRENT_CACHE_FRAMEWORK = EHCACHE;
+
     private static LogicCacheProvider getCacheProvider() {
+        if(null != logicCacheProvider) return logicCacheProvider;
+
         if(EHCACHE.equals(CURRENT_CACHE_FRAMEWORK)) {
             log.info("Initializing new LogicCacheManager with LogicCacheProvider - " + CURRENT_CACHE_FRAMEWORK);
             return new EhCacheProviderImpl();
@@ -39,19 +45,38 @@ public class LogicCacheManager {
             return null;
     }
 
+    /**
+         *  Gets or creates a logic cache with specified name.
+         *
+         * @param name the name of the cache we want to get or create
+         * @return initialized and ready to work implementation of the LogicCache
+         */
     public static LogicCache getLogicCache(String name) {
-        return logicCacheProvider.getCache(name);
+        return getCacheProvider().getCache(name);
     }
 
+    /**
+         *  Returns the default logic cache.
+         *
+         * @return initialized and ready to work implementation of the LogicCache
+         */
     public static LogicCache getDefaultLogicCache() {
-        return logicCacheProvider.getDefaultCache();
+        return getCacheProvider().getDefaultCache();
     }
 
+    /**
+         *  This method returns all names of logic caches which were created.
+         *
+         * @return a collection of strings which are names of all logic caches
+         */
     public static Collection<String> getCacheNames() {
-        return logicCacheProvider.getCacheNames();
+        return getCacheProvider().getCacheNames();
     }
 
+    /**
+         *  Removes all caches and releases all resources, does all necessary actions.
+         */
     public static void shutDown() {
-        logicCacheProvider.shutDownCacheManager();
+        getCacheProvider().shutDownCacheManager();
     }
 }

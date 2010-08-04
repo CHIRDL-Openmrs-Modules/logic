@@ -11,12 +11,16 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.logic.cache;
+package org.openmrs.logic.cache.ehcache;
 
 import java.io.Serializable;
 
 /**
+ *   This bean is used for storing cache`s configuration to a disk. It has properties according to setters/getters of the
+ * {@link org.openmrs.logic.cache.LogicCacheConfig} interface. It is used by {@link org.openmrs.logic.cache.ehcache.EhCacheProviderImpl} with
+ * {@link java.beans.XMLDecoder} and {@link java.beans.XMLEncoder} classes.
  *
+ * @see EhCacheProviderImpl#storeConfig() 
  */
 public class LogicCacheConfigBean implements Serializable {
 	private Long defaultTTL;

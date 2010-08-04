@@ -18,16 +18,31 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- *
+ *   It is an abstraction layer between LogicCacheManager and the certain caching framework. This class keeps all created logic cache`s names.
+ * It has a set of abstract methods cache provider of the certain caching system must have.
  */
 public abstract class LogicCacheProvider {
     
     protected Map<String, LogicCache> cacheList = new HashMap<String, LogicCache>();
 
+    /**
+         *  Gets or creates a logic cache with specified name.
+         *
+         * @param name the name of the cache we want to get or create
+         * @return initialized and ready to work implementation of the LogicCache
+         */
     public abstract LogicCache getCache(String name);
-    
+
+    /**
+         *  Gets or creates the default logic cache.
+         *
+         * @return initialized and ready to work implementation of the LogicCache
+         */
     public abstract LogicCache getDefaultCache();
 
+    /**
+         *  Removes all caches and releases all resources, does all necessary actions.
+         */
     public abstract void shutDownCacheManager();
 
     public Collection<String> getCacheNames() {
