@@ -361,7 +361,6 @@ public class LogicServiceImpl implements LogicService {
 	 * @should correctly parse expression with only aggregator and token
 	 * @see org.openmrs.logic.LogicService#parse(java.lang.String)
 	 */
-    //TODO: candidate for caching
 	public LogicCriteria parse(String criteria) {
 		try {
 			if (!criteria.endsWith(";")) {
