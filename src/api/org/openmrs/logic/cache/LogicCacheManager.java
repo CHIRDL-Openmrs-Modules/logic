@@ -28,16 +28,14 @@ public class LogicCacheManager {
     
     private static final String EHCACHE = "ehcache";
 
-    private static LogicCacheProvider logicCacheProvider = getCacheProvider();
+    private static final LogicCacheProvider logicCacheProvider = getCacheProvider();
 
     /**
          * Keeps current caching framework`s name.
          */
-    public static String CURRENT_CACHE_FRAMEWORK = EHCACHE;
+    public static final String CURRENT_CACHE_FRAMEWORK = EHCACHE;
 
     private static LogicCacheProvider getCacheProvider() {
-        if(null != logicCacheProvider) return logicCacheProvider;
-
         if(EHCACHE.equals(CURRENT_CACHE_FRAMEWORK)) {
             log.info("Initializing new LogicCacheManager with LogicCacheProvider - " + CURRENT_CACHE_FRAMEWORK);
             return new EhCacheProviderImpl();
@@ -52,7 +50,7 @@ public class LogicCacheManager {
          * @return initialized and ready to work implementation of the LogicCache
          */
     public static LogicCache getLogicCache(String name) {
-        return getCacheProvider().getCache(name);
+        return logicCacheProvider.getCache(name);
     }
 
     /**
@@ -61,7 +59,7 @@ public class LogicCacheManager {
          * @return initialized and ready to work implementation of the LogicCache
          */
     public static LogicCache getDefaultLogicCache() {
-        return getCacheProvider().getDefaultCache();
+        return logicCacheProvider.getDefaultCache();
     }
 
     /**
@@ -70,13 +68,13 @@ public class LogicCacheManager {
          * @return a collection of strings which are names of all logic caches
          */
     public static Collection<String> getCacheNames() {
-        return getCacheProvider().getCacheNames();
+        return logicCacheProvider.getCacheNames();
     }
 
     /**
          *  Removes all caches and releases all resources, does all necessary actions.
          */
     public static void shutDown() {
-        getCacheProvider().shutDownCacheManager();
+        logicCacheProvider.shutDownCacheManager();
     }
 }
