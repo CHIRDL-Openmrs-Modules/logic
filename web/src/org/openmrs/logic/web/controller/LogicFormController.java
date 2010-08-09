@@ -190,6 +190,16 @@ public class LogicFormController {
             }
         }
 
+        /**
+                 *  Default cache is used in the LogicContext#eval and LogicContext#read methods, if cache size will not be enough it may work like
+                 * without cache! It fires when e.g. cohort size bigger then cache max size.
+                 *  The idea how to solve this problem is to watch on the cache size and fire warning message if cache size too small.
+                 *  The biggest cohort size is the count of patients in the database, we need to cache results of the LogicContext#eval and LogicContext#read
+                 *  methods, it is two entries per patient, so warning cache size (patientsCount * 2) and at least cache size is (patientsCount * 3). This isn`t
+                 * ideal decision but will work.
+                 *
+                 * TODO: think about better idea how to calculate minimal cache size for the defaultCache.
+                 */
         if(logicCache.getName().equals("org.openmrs.logic.defaultCache")) {
             LogicService logicService = Context.getLogicService();
             Long patientsCount = logicService.getPatientsCount();
