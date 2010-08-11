@@ -29,6 +29,8 @@ import org.openmrs.logic.result.Result.Datatype;
  * 
  */
 public class EnrolledBeforeDateRule implements Rule {
+
+    private static final long serialVersionUID = 1L;
 	
 	/**
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, org.openmrs.Patient,

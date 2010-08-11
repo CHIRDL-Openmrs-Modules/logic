@@ -403,7 +403,11 @@ public class LogicServiceImpl implements LogicService {
 		}
 	}
 
-    public Long getPatientsCount() {
+    /**
+         *  @see org.openmrs.logic.web.controller.LogicFormController#manageCache(String, Integer, Integer, Long, Boolean, Boolean, String, org.springframework.ui.ModelMap) 
+         *
+         */
+    public Long getPatientCount() {
         Query query = sessionFactory.getCurrentSession().createQuery("select count(p.patientId) from Patient p");
 
 		return (Long) query.uniqueResult();

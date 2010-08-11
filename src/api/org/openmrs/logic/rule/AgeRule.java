@@ -29,6 +29,8 @@ import org.openmrs.logic.result.Result.Datatype;
  * Calculates a person's age in years based from their date of birth to the index date
  */
 public class AgeRule implements Rule {
+
+    private static final long serialVersionUID = 1L;
 	
 	/**
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, org.openmrs.Patient,

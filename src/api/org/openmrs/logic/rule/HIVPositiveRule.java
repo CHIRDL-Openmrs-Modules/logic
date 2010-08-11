@@ -31,6 +31,8 @@ import org.openmrs.logic.result.Result.Datatype;
  * 
  */
 public class HIVPositiveRule implements Rule {
+
+    private static final long serialVersionUID = 1L;
 	
 	@SuppressWarnings("unused")
 	private Log log = LogFactory.getLog(this.getClass());

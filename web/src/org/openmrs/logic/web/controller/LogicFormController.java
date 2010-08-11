@@ -202,7 +202,7 @@ public class LogicFormController {
                  */
         if(logicCache.getName().equals("org.openmrs.logic.defaultCache")) {
             LogicService logicService = Context.getLogicService();
-            Long patientsCount = logicService.getPatientsCount();
+            Long patientsCount = logicService.getPatientCount();
             Long warningCacheSize = patientsCount * 2;
             Long atLeastCacheSize = patientsCount * 3;
 

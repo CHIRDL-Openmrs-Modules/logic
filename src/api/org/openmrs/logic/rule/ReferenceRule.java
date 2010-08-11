@@ -33,6 +33,8 @@ import org.openmrs.logic.result.Result.Datatype;
  * 
  */
 public class ReferenceRule implements StatefulRule {
+
+    private static final long serialVersionUID = 1L;
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
