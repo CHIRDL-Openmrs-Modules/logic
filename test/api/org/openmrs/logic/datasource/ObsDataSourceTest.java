@@ -13,7 +13,6 @@ import org.openmrs.logic.LogicCriteriaImpl;
 import org.openmrs.logic.result.Result;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
-import org.openmrs.test.TestUtil;
 import org.openmrs.test.Verifies;
 
 @SkipBaseSetup
@@ -308,7 +307,6 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	public void read_shouldGetFirstNObs() throws Exception {
 		Patient who = Context.getPatientService().getPatient(4);
 		LogicContext context = new LogicContextImpl(who);
-		TestUtil.printOutTableContents(getConnection(), "obs");
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").first(3);
 		Result result = context.read(who, criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 3, result.size());

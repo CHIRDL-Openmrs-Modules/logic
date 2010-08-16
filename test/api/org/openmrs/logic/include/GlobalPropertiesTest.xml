@@ -1,0 +1,6 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <global_property property="logic.default.ruleClassDirectory" property_value="logic/classes" description="Directory in the file system where logic rule class will be stored." uuid="902ce5e6-5a62-443f-a6e3-6768421c71e9"/>
+  <global_property property="logic.default.ruleJavaDirectory" property_value="logic/sources" description="Directory in the file system where logic rule java file will be stored." uuid="902ce5e6-5a62-443f-a6e3-676842c117e9"/>
+  <global_property property="logic.default.packageName" property_value="org.openmrs.logic.rule" description="Default package prefix for all rule." uuid="902ce5e6-625a-443f-a6e3-676842c117e9"/>
+</dataset>

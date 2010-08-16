@@ -27,6 +27,16 @@
 		<defaultValue></defaultValue>
 		<description>When registering default tokens for logic, if you specify a comma-separated list of concept class names here, only concepts of those classes will have tokens registered. If you leave this blank, all classes will have tokens registered for their concepts.</description>
 	</globalProperty>
+	<globalProperty>
+		<property>logic.default.ruleClassDirectory</property> <!-- Must start with `moduleId.` -->
+		<defaultValue>logic/class</defaultValue>
+		<description>Default folder where compiled rule will be stored</description>
+	</globalProperty>
+	<globalProperty>
+		<property>logic.default.ruleJavaDirectory</property> <!-- Must start with `moduleId.` -->
+		<defaultValue>logic/sources</defaultValue>
+		<description>Default folder where rule's java file will be stored</description>
+	</globalProperty>
 	
 	<messages>
 		<lang>en</lang>

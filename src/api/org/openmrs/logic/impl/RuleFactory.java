@@ -16,10 +16,14 @@ package org.openmrs.logic.impl;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.Concept;
+import org.openmrs.ConceptDerived;
 import org.openmrs.api.context.Context;
+import org.openmrs.logic.CompilingClassLoader;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicRuleToken;
 import org.openmrs.logic.Rule;
@@ -62,34 +66,52 @@ class RuleFactory {
 	 * 
 	 * @param token token under which the rule was registered
 	 * @return the rule registered with the given token
-	 * @throws LogicException
+	 * @throws LogicException when no rule can be associated with the token
+	 * @should load and create rule class from unregistered concept derived
+	 * @should load and create rule class from registered concept derived
+	 * @should load and create rule class from plain java from file system
 	 */
 	public Rule getRule(String token) throws LogicException {
 		Rule rule = null;
 		if (token == null)
 			throw new LogicException("Token cannot be null");
 		
-		if (token.startsWith("%%"))
-			return new ReferenceRule(token.substring(2));
+		if (token.startsWith("%%")) {
+			rule = new ReferenceRule(token.substring(2));
+			// auto register the new rule
+			// addRule(token.substring(token.indexOf('.')), rule);
+			return rule;
+		}
 		
 		LogicRuleToken logicToken = logicRuleTokenDAO.getLogicRuleToken(token);
-		if (logicToken == null)
-			throw new LogicException("No token \"" + token + "\" registered");
+		// token is not registered yet. try to find a concept derived with that token
+		if (logicToken == null) {
+			// test if this token is a concept derived or no
+			Concept concept = Context.getConceptService().getConcept(token);
+			if (concept instanceof ConceptDerived) {
+				ConceptDerived conceptDerived = (ConceptDerived) concept;
+				LanguageHandler handler = LanguageHandlerInstance.getHandler(conceptDerived.getLanguage());
+				return handler.handle(conceptDerived);
+			}
+			// token is not null but token is concept derived, throw exception
+			throw new LogicException("Token is not registered and token is not concept derived ...");
+		}
 		
+		// try with the default class loader
 		try {
-			
 			Class<?> c = Context.loadClass(logicToken.getClassName());
 			Object obj = c.newInstance();
 			rule = (Rule) obj;
-		}
-		catch (InstantiationException e) {
-			log.error("Error creating new instance of Rule", e);
-		}
-		catch (IllegalAccessException e) {
-			log.error("Error creating new instance of Rule", e);
-		}
-		catch (ClassNotFoundException e) {
-			log.error("Error creating new instance of Rule", e);
+		} catch (Exception e) {
+			try {
+				// we allowed registering custom rules, so try to load it as custom rules
+				CompilingClassLoader classLoader = new CompilingClassLoader();
+				Class<?> c = classLoader.loadClass(logicToken.getClassName());
+				Object obj = c.newInstance();
+				rule = (Rule) obj;
+			} catch (Exception ce) {
+				log.error("Error creating new instance of Rule", e);
+			}
 		}
 		
 		if (StringUtils.isNotBlank(logicToken.getState()))
@@ -154,22 +176,14 @@ class RuleFactory {
 			if (logicToken != null) {
 				// the parameter for updating a rule are token and rule
 				logicToken.setClassName(rule.getClass().getCanonicalName());
-				if (StatefulRule.class.isAssignableFrom(rule.getClass()))
+				if (ClassUtils.isAssignable(rule.getClass(), StatefulRule.class))
 					logicToken.setState(((StatefulRule) rule).saveToString());
-				// update the audit section
-				// logicToken.setChangedBy(Context.getAuthenticatedUser());
-				// logicToken.setDateChanged(new Date());
 			} else {
 				// create a new token and then put the associated tags to the logic token
 				logicToken = new LogicRuleToken(token, rule);
-				if (tags != null) {
-					for (int i = 0; i < tags.length; i++) {
+				if (tags != null)
+					for (int i = 0; i < tags.length; i++)
 						logicToken.addTag(tags[i]);
-					}
-				}
-				// fill the audit section
-				// logicToken.setCreator(Context.getAuthenticatedUser());
-				// logicToken.setDateCreated(new Date());
 			}
 			logicRuleTokenDAO.saveLogicRuleToken(logicToken);
 		}

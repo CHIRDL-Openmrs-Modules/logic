@@ -91,7 +91,7 @@ public class EncounterDataSourceTest extends BaseModuleContextSensitiveTest {
 		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounterProvider").last());
 		assertEquals(1, results.size());
 		assertEquals(1, results.get(7).size());
-		assertEquals("3-4", results.get(7).get(0).toString());
+		assertEquals("Hippocrates  of Cos", results.get(7).get(0).toString());
 	}
 	
 	/**
@@ -282,7 +282,7 @@ public class EncounterDataSourceTest extends BaseModuleContextSensitiveTest {
 		context.setIndexDate(Context.getDateFormat().parse("03/08/2008"));
 		
 		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounterProvider")
-		        .contains(3));
+		        .contains(502));
 		assertEquals(1, results.size());
 		assertEquals(3, results.get(7).size());
 		assertEquals("2008-08-19 00:00:00.0", results.get(7).get(0).getResultDate().toString());
@@ -301,7 +301,7 @@ public class EncounterDataSourceTest extends BaseModuleContextSensitiveTest {
 		context.setIndexDate(Context.getDateFormat().parse("03/08/2008"));
 		
 		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounterProvider")
-		        .contains(3));
+		        .contains(502));
 		assertEquals(1, results.size());
 		assertEquals(3, results.get(7).size());
 		assertEquals("2008-08-19 00:00:00.0", results.get(7).get(0).getResultDate().toString());

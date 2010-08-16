@@ -15,7 +15,9 @@ package org.openmrs.logic;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.Activator;
+import org.openmrs.util.OpenmrsUtil;
 
 /**
  *
@@ -29,6 +31,14 @@ public class LogicModuleActivator implements Activator {
 	 */
 	public void startup() {
 		log.debug("Starting logic module ...");
+		
+		log.info("Creating default directory structure for logic module ...");
+		String[] properties = {
+				Context.getAdministrationService().getGlobalProperty(LogicConstants.RULE_DEFAULT_CLASS_FOLDER),
+				Context.getAdministrationService().getGlobalProperty(LogicConstants.RULE_DEFAULT_SOURCE_FOLDER)
+		};
+		for (String property : properties)
+	        OpenmrsUtil.getDirectoryInApplicationDataDirectory(property);
 	}
 	
 	/**

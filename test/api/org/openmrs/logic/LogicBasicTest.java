@@ -107,10 +107,6 @@ public class LogicBasicTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void shouldFetchActiveMedications() throws Exception {
 		executeDataSet("org/openmrs/logic/include/LogicBasicTest.concepts.xml");
-		
-		//TestUtil.printOutTableContents(getConnection(), "concept", "concept_name");
-		
-		// Result = ACTIVE MEDICATIONS
 		Patient patient = Context.getPatientService().getPatient(2);
 		Result result = Context.getLogicService().eval(patient,
 		    new LogicCriteriaImpl("CURRENT ANTIRETROVIRAL DRUGS USED FOR TREATMENT"));

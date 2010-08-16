@@ -43,6 +43,7 @@ import org.openmrs.logic.LogicTransform;
 import org.openmrs.logic.db.LogicEncounterDAO;
 import org.openmrs.logic.op.OperandCollection;
 import org.openmrs.logic.op.OperandDate;
+import org.openmrs.logic.op.OperandNumeric;
 import org.openmrs.logic.op.OperandText;
 import org.openmrs.logic.op.Operator;
 import org.openmrs.logic.util.LogicExpressionToCriterion;
@@ -152,9 +153,9 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 			} else if (LOCATION_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
 				criteria.createAlias("location", "location");
 				criterion.add(Restrictions.eq("location.name", ((OperandText) rightOperand).asString()));
-			} else if (PROVIDER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
+			} else if (PROVIDER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandNumeric) {
 				criteria.createAlias("provider", "provider");
-				criterion.add(Restrictions.eq("provider.systemId", ((OperandText) rightOperand).asString()));
+				criterion.add(Restrictions.eq("provider.personId", ((OperandNumeric) rightOperand).asInteger()));
 			} else {
 				throw new LogicException("'contains' is not a valid operator on " + token + " and " + rightOperand);
 			}

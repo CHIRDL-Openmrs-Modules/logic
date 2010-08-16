@@ -1,0 +1,5 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<dataset>
+  <logic_rule_token logic_rule_token_id="17" creator="1" date_created="2009-08-31 13:29:35.551" token="PREGNANT WOMAN" class_name="org.openmrs.logic.rule.BaselineHgbReminder"/>
+  <logic_rule_token logic_rule_token_id="18" creator="1" date_created="2009-08-31 13:29:35.551" token="PREGNANT MAN" class_name="org.openmrs.logic.rule.BaselineHgbReminder"/>
+</dataset>

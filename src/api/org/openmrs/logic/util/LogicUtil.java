@@ -13,11 +13,14 @@
  */
 package org.openmrs.logic.util;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,6 +41,7 @@ import org.openmrs.logic.rule.AgeRule;
 import org.openmrs.logic.rule.HIVPositiveRule;
 import org.openmrs.logic.rule.InvalidReferenceRuleException;
 import org.openmrs.logic.rule.ReferenceRule;
+import org.openmrs.util.OpenmrsConstants;
 import org.springframework.util.StringUtils;
 
 /**
@@ -173,5 +177,46 @@ public class LogicUtil {
 		catch (LogicException e) {
 			log.debug("Rule with token <" + token.toUpperCase() + "> already in RuleMap.  Ignoring: " + rule);
 		}
+	}
+	
+	/**
+	 * Generic method to fork a new command for the operating system to run.
+	 * 
+	 * @param commands the command and the parameters
+	 * @param workingDirectory the directory where the commands should be invoked
+	 * @return true when the command executed succesfully.
+	 */
+	public static final boolean executeCommand(String[] commands, File workingDirectory) {
+		
+		boolean executed = false;
+		try {
+			Runtime runtime = Runtime.getRuntime();
+			Process process = null;
+			if (OpenmrsConstants.UNIX_BASED_OPERATING_SYSTEM)
+				process = runtime.exec(commands, null, workingDirectory);
+			else
+				process = runtime.exec(commands);
+			
+			ExecutorService executorService = Executors.newCachedThreadPool();
+			
+			StreamHandler errorHandler = new StreamHandler(process.getErrorStream(), "ERROR");
+			StreamHandler outputHandler = new StreamHandler(process.getInputStream(), "OUTPUT");
+			
+			if (executorService == null)
+				executorService = Executors.newCachedThreadPool();
+			
+			executorService.execute(errorHandler);
+			executorService.execute(outputHandler);
+			
+			int exitValue = process.waitFor();
+			log.info("Process execution completed with exit value: " + exitValue + " ...");
+			
+			executed = true;
+		}
+		catch (Exception e) {
+			log.error("Error generated", e);
+		}
+		
+		return executed;
 	}
 }

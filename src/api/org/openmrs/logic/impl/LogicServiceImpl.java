@@ -124,6 +124,10 @@ public class LogicServiceImpl implements LogicService {
 	
 	/**
 	 * @see org.openmrs.logic.LogicService#getRule(java.lang.String)
+	 * @should return ReferenceRule when the token are already registered
+	 * @should return new ReferenceRule when the special string token are passed
+	 * @should return Rule when concept derived name are passed
+	 * @should return Rule when registered concept derived name are passed
 	 */
 	public Rule getRule(String token) throws LogicException {
 		return ruleFactory.getRule(token);
