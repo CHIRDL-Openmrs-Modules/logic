@@ -53,7 +53,7 @@ public class JavaLanguageHandler extends CompilableLanguageHandler {
 		if (!javaFile.exists() || modifiedDate.after(new Date(javaFile.lastModified())))
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(javaFile));
-				writer.write(conceptDerived.getRule());
+				writer.write(conceptDerived.getRuleContent());
 				writer.close();
 			}
 			catch (IOException e) {

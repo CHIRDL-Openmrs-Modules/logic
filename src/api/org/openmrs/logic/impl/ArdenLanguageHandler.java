@@ -48,7 +48,7 @@ public class ArdenLanguageHandler extends CompilableLanguageHandler {
 			modifiedDate = conceptDerived.getDateCreated();
 		// only compile when the java file is not exist or the concept derived is updated after the source file last modified
 		if (!javaFile.exists() || modifiedDate.after(new Date(javaFile.lastModified())))
-			Context.getArdenService().compile(conceptDerived.getRule(), sourceDirectory.getAbsolutePath());
+			Context.getArdenService().compile(conceptDerived.getRuleContent(), sourceDirectory.getAbsolutePath());
 	}
 	
 }

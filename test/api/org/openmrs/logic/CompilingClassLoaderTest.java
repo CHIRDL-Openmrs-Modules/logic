@@ -39,7 +39,7 @@ public class CompilingClassLoaderTest extends BaseContextSensitiveTest {
 		File ruleSourceDir = OpenmrsUtil.getDirectoryInApplicationDataDirectory(ruleJavaDir);
 		
 		ArdenService ardenService = Context.getArdenService();
-		ardenService.compile(derived.getRule(), ruleSourceDir.getAbsolutePath());
+		ardenService.compile(derived.getRuleContent(), ruleSourceDir.getAbsolutePath());
 		
 		CompilingClassLoader loader = new CompilingClassLoader();
 		

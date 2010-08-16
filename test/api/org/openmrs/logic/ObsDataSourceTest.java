@@ -27,6 +27,8 @@ import org.openmrs.api.context.Context;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.result.Result;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.SkipBaseSetup;
+import org.openmrs.test.TestUtil;
 
 /**
  * Tests the ObsDataSource functionality
@@ -34,17 +36,20 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	
 	@SuppressWarnings("unused")
-	private Log log = LogFactory.getLog(this.getClass());
+	private final Log log = LogFactory.getLog(this.getClass());
 	
 	@Before
 	public void runBeforeEachTest() throws Exception {
+		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/logic/include/LogicStandardDatasets.xml");
 		executeDataSet("org/openmrs/logic/include/ObsDataSourceTest.xml");
+		authenticate();
 	}
 	
 	/**
 	 * TODO change to use the in memory database
 	 */
+	@SkipBaseSetup
 	@Test
 	public void shouldObsDataSource() throws Exception {
 		LogicDataSource lds = Context.getLogicService().getLogicDataSource("obs");
@@ -57,6 +62,9 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContextImpl context = new LogicContextImpl(patients);
 		Map<Integer, Result> result = lds.read(context, patients, new LogicCriteriaImpl("CD4 COUNT"));
 		context = null;
+		
+		TestUtil.printOutTableContents(getConnection(), "obs");
+		
 		assertNotNull(result);
 		assertEquals(2, result.size());
 	}
