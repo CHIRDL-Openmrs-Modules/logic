@@ -21,11 +21,15 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.Criteria;
 import org.hibernate.Hibernate;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Expression;
+import org.hibernate.criterion.Order;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.DAOException;
+import org.openmrs.logic.LogicRule;
 import org.openmrs.logic.LogicRuleToken;
 import org.openmrs.logic.LogicService;
 import org.openmrs.logic.db.LogicRuleTokenDAO;
@@ -56,14 +60,63 @@ public class HibernateLogicRuleTokenDAO implements LogicRuleTokenDAO {
 	}
 	
 	/**
-	 * @see org.openmrs.logic.db.LogicRuleTokenDAO#deleteLogicRuleToken(org.openmrs.logic.LogicRuleToken)
+	 * @see LogicRuleTokenDAO#getLogicRule(Integer)
+	 */
+	public LogicRule getLogicRule(Integer id) throws DAOException {
+		return (LogicRule) sessionFactory.getCurrentSession().get(LogicRule.class, id);
+	}
+
+	/**
+	 * @see LogicRuleTokenDAO#getLogicRule(String)
+	 */
+	@SuppressWarnings("unchecked")
+	public LogicRule getLogicRule(String name) throws DAOException {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(LogicRule.class);
+		criteria.add(Expression.eq("name", name));
+		List<LogicRule> found = criteria.list();
+		if (found == null || found.isEmpty()) {
+			return null;
+		}
+		return found.get(0);
+	}
+
+	/**
+	 * @see LogicRuleTokenDAO#getAllLogicRules(boolean)
+	 */
+	@SuppressWarnings("unchecked")
+	public List<LogicRule> getAllLogicRules(boolean includeRetired) throws DAOException {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(LogicRule.class);
+		if (!includeRetired) {
+			criteria.add(Expression.like("retired", false));
+		}
+		criteria.addOrder(Order.asc("name"));
+		return criteria.list();
+	}
+	
+	/**
+	 * @see LogicRuleTokenDAO#saveLogicRule(LogicRule)
+	 */
+	public LogicRule saveLogicRule(LogicRule logicRule) throws DAOException {
+		sessionFactory.getCurrentSession().saveOrUpdate(logicRule);
+		return logicRule;
+	}
+
+	/**
+	 * @see LogicRuleTokenDAO#purgeLogicRule(LogicRule)
+	 */
+	public void purgeLogicRule(LogicRule logicRule) throws DAOException {
+		sessionFactory.getCurrentSession().delete(logicRule);	
+	}
+
+	/**
+	 * @see LogicRuleTokenDAO#deleteLogicRuleToken(LogicRuleToken)
 	 */
 	public void deleteLogicRuleToken(LogicRuleToken logicToken) throws DAOException {
 		sessionFactory.getCurrentSession().delete(logicToken);
 	}
 	
 	/**
-	 * @see org.openmrs.logic.db.LogicRuleTokenDAO#saveLogicRuleToken(org.openmrs.logic.LogicRuleToken)
+	 * @see LogicRuleTokenDAO#saveLogicRuleToken(LogicRuleToken)
 	 */
 	public LogicRuleToken saveLogicRuleToken(LogicRuleToken logicToken) throws DAOException {
 		sessionFactory.getCurrentSession().saveOrUpdate(logicToken);
@@ -71,7 +124,7 @@ public class HibernateLogicRuleTokenDAO implements LogicRuleTokenDAO {
 	}
 	
 	/**
-	 * @see org.openmrs.logic.db.LogicRuleTokenDAO#getLogicRuleToken(java.lang.String)
+	 * @see LogicRuleTokenDAO#getLogicRuleToken(String)
 	 */
 	public LogicRuleToken getLogicRuleToken(String token) {
 		return (LogicRuleToken) sessionFactory.getCurrentSession().createQuery(
@@ -80,7 +133,7 @@ public class HibernateLogicRuleTokenDAO implements LogicRuleTokenDAO {
 	}
 	
 	/**
-	 * @see org.openmrs.logic.db.LogicRuleTokenDAO#getAllTags()
+	 * @see LogicRuleTokenDAO#getAllTags()
 	 */
 	public List<String> getAllTags() {
 		List<String> allTags = new ArrayList<String>();
@@ -95,7 +148,7 @@ public class HibernateLogicRuleTokenDAO implements LogicRuleTokenDAO {
 	}
 	
 	/**
-	 * @see org.openmrs.logic.db.LogicRuleTokenDAO#getAllTokens()
+	 * @see LogicRuleTokenDAO#getAllTokens()
 	 */
 	@SuppressWarnings("unchecked")
 	public List<String> getAllTokens() {
@@ -105,7 +158,7 @@ public class HibernateLogicRuleTokenDAO implements LogicRuleTokenDAO {
 	}
 	
 	/**
-	 * @see org.openmrs.logic.db.LogicRuleTokenDAO#getTags(java.lang.String)
+	 * @see LogicRuleTokenDAO#getTags(String)
 	 */
 	public List<String> getTags(String partialTag) {
 		List<String> allTags = new ArrayList<String>();
@@ -124,7 +177,7 @@ public class HibernateLogicRuleTokenDAO implements LogicRuleTokenDAO {
 	}
 	
 	/**
-	 * @see org.openmrs.logic.db.LogicRuleTokenDAO#getTagsByTokens(java.util.Set)
+	 * @see LogicRuleTokenDAO#getTagsByTokens(Set)
 	 */
 	public List<String> getTagsByTokens(Set<String> tokens) {
 		List<String> allTags = new ArrayList<String>();
@@ -140,7 +193,7 @@ public class HibernateLogicRuleTokenDAO implements LogicRuleTokenDAO {
 	}
 	
 	/**
-	 * @see org.openmrs.logic.db.LogicRuleTokenDAO#getTokens(java.lang.String)
+	 * @see LogicRuleTokenDAO#getTokens(String)
 	 */
 	@SuppressWarnings("unchecked")
 	public List<String> getTokens(String partialToken) {
@@ -151,7 +204,7 @@ public class HibernateLogicRuleTokenDAO implements LogicRuleTokenDAO {
 	}
 	
 	/**
-	 * @see org.openmrs.logic.db.LogicRuleTokenDAO#getTokensByTag(java.lang.String)
+	 * @see LogicRuleTokenDAO#getTokensByTag(String)
 	 */
 	public List<String> getTokensByTag(String tag) {
 		Set<String> tags = new HashSet<String>();
@@ -161,7 +214,7 @@ public class HibernateLogicRuleTokenDAO implements LogicRuleTokenDAO {
 	}
 	
 	/**
-	 * @see org.openmrs.logic.db.LogicRuleTokenDAO#getTokensByTags(java.util.Set)
+	 * @see LogicRuleTokenDAO#getTokensByTags(Set)
 	 */
 	@SuppressWarnings("unchecked")
 	public List<String> getTokensByTags(Set<String> tags) {

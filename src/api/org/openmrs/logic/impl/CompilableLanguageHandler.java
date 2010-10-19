@@ -15,8 +15,8 @@ package org.openmrs.logic.impl;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.ConceptDerived;
 import org.openmrs.logic.CompilingClassLoader;
+import org.openmrs.logic.LogicRule;
 import org.openmrs.logic.Rule;
 
 /**
@@ -44,19 +44,18 @@ public abstract class CompilableLanguageHandler implements LanguageHandler {
 	 * [logic.default.ruleJavaDirectory (global property)]/org/openmrs/rule/example/PregnantMan.java
 	 * </pre>
 	 * 
-	 * @param conceptDerived the concept derived that need to be processed
+	 * @param logicRule the LogicRule that need to be processed
 	 */
-	public abstract void prepareSource(ConceptDerived conceptDerived);
+	public abstract void prepareSource(LogicRule logicRule);
 	
 	/**
-	 * @see org.openmrs.logic.impl.LanguageHandler#handle(org.openmrs.ConceptDerived)
+	 * @see LanguageHandler#handle(LogicRule)
 	 */
-	@Override
-	public Rule handle(ConceptDerived conceptDerived) {
+	public Rule handle(LogicRule logicRule) {
 		CompilingClassLoader classLoader = new CompilingClassLoader();
 		try {
-			prepareSource(conceptDerived);
-			Class<?> c = classLoader.loadClass(conceptDerived.getClassName());
+			prepareSource(logicRule);
+			Class<?> c = classLoader.loadClass(logicRule.getClassName());
 			Object obj = c.newInstance();
 			return (Rule) obj;
 		}

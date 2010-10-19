@@ -4,7 +4,7 @@
   <concept_class concept_class_id="1" name="Finding" description="A medical discovery" creator="1" date_created="2005-01-01 00:00:00.0" retired="false" uuid="69a87d75-985f-481f-82a0-7e3d2e38db97"/>
   <concept_datatype concept_datatype_id="1" name="Numeric" hl7_abbreviation="NM" description="Numeric value, including integer or float" creator="1" date_created="2005-01-01 00:00:00.0" retired="false" uuid="f1f622c7-4899-40fd-a324-ada900b0f211"/>
   <concept_description concept_description_id="1" concept_id="1" description="cd4 count" locale="en" creator="1" date_created="2005-01-01 00:00:00.0" uuid="e0cf865e-d32e-4e41-8a74-8ad713a56b0c"/>
-  <concept_name concept_id="1" name="CD4 COUNT" locale="en" locale_preferred="1" creator="1" date_created="2005-01-01 00:00:00.0" concept_name_id="1" voided="false" uuid="f40b4c26-2c08-4346-b044-b56bee9fb628"/>
+  <concept_name concept_id="1" name="CD4 COUNT" locale="en" creator="1" date_created="2005-01-01 00:00:00.0" concept_name_id="1" voided="false" uuid="f40b4c26-2c08-4346-b044-b56bee9fb628"/>
   <concept_name_tag concept_name_tag_id="1" tag="default" description="name to use when nothing else is available" creator="1" date_created="2007-05-01 00:00:00.0" voided="false" uuid="441e68c9-64ca-4e9e-b11d-3d4dd1ab4d8d"/>
   <concept_name_tag concept_name_tag_id="2" tag="short" description="preferred short name for a concept" creator="1" date_created="2007-05-01 00:00:00.0" voided="false" uuid="c98dfe8d-09f0-4146-88fe-0814156ffe58"/>
   <concept_name_tag concept_name_tag_id="3" tag="synonym" description="a different word with similar meaning" creator="1" date_created="2007-05-01 00:00:00.0" voided="false" uuid="8c9b425f-6d29-4f60-be4a-e741a3b09158"/>

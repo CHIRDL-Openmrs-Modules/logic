@@ -13,42 +13,77 @@
  */
 package org.openmrs.logic.impl;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Date;
 
 import org.openmrs.ConceptDerived;
+import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicConstants;
+import org.openmrs.logic.LogicRule;
 import org.openmrs.util.OpenmrsUtil;
 
 /**
- * Class to create rule java source file from arden syntax. This class use arden parser in core to
+ * Class to create rule java source file from Arden syntax. This class use Arden parser in core to
  * generate the java source file
  */
 public class ArdenLanguageHandler extends CompilableLanguageHandler {
 	
+	public static final String MLM_EXTENSION = ".mlm";
+	
 	/**
-	 * @see org.openmrs.logic.impl.CompilableLanguageHandler#prepareSource(org.openmrs.ConceptDerived)
+	 * @see CompilableLanguageHandler#prepareSource(ConceptDerived)
 	 */
-	@Override
-	public void prepareSource(ConceptDerived conceptDerived) {
+	public void prepareSource(LogicRule logicRule) {
 		log.info("Processing arden rule ...");
 		
-		String javaDirectory = Context.getAdministrationService().getGlobalProperty(
-		    LogicConstants.RULE_DEFAULT_SOURCE_FOLDER);
+		AdministrationService as = Context.getAdministrationService();
+		String javaDirectory = as.getGlobalProperty(LogicConstants.RULE_DEFAULT_SOURCE_FOLDER);
 		File sourceDirectory = OpenmrsUtil.getDirectoryInApplicationDataDirectory(javaDirectory);
 		
-		String fullClassName = conceptDerived.getClassName();
+		String fullClassName = logicRule.getClassName();
 		String fullClassPath = fullClassName.replace('.', File.separatorChar);
 		
+		File mlmFile = new File(sourceDirectory, fullClassPath + MLM_EXTENSION);
 		File javaFile = new File(sourceDirectory, fullClassPath + JAVA_EXTENSION);
 		
-		Date modifiedDate = conceptDerived.getDateChanged();
-		if (modifiedDate == null)
-			modifiedDate = conceptDerived.getDateCreated();
-		// only compile when the java file is not exist or the concept derived is updated after the source file last modified
-		if (!javaFile.exists() || modifiedDate.after(new Date(javaFile.lastModified())))
-			Context.getArdenService().compile(conceptDerived.getRuleContent(), sourceDirectory.getAbsolutePath());
+		Date modifiedDate = logicRule.getDateChanged();
+		if (modifiedDate == null) {
+			modifiedDate = logicRule.getDateCreated();
+		}
+		// only compile when the file is not exist or the concept derived is updated after the source file last modified
+		boolean mlmChanged = (!mlmFile.exists() || modifiedDate.after(new Date(mlmFile.lastModified())));
+		boolean javaChanged = (!javaFile.exists() || modifiedDate.after(new Date(javaFile.lastModified())));
+
+		if  (mlmChanged || javaChanged) {
+			// First, write the Arden rule out to a file, since the 1.6 version of the Arden Service requires a file for processing
+			BufferedWriter writer = null;
+			try {
+				File parentFile = mlmFile.getParentFile();
+				if (!parentFile.exists()) {
+					parentFile.mkdirs();
+				}
+				writer = new BufferedWriter(new FileWriter(mlmFile));
+				writer.write(logicRule.getRuleContent());
+			}
+			catch (IOException e) {
+				log.error("Failed saving java rule file ...", e);
+			}
+			finally {
+				if (writer != null) {
+					try {
+						writer.close();
+					}
+					catch (IOException e) {
+						log.error("Failed closing writer...", e);
+					}
+				}
+			}
+			Context.getArdenService().compileFile(mlmFile.getAbsolutePath(), javaFile.getParent());
+		}
 	}
 	
 }

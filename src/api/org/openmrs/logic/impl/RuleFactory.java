@@ -20,11 +20,10 @@ import org.apache.commons.lang.ClassUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Concept;
-import org.openmrs.ConceptDerived;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.CompilingClassLoader;
 import org.openmrs.logic.LogicException;
+import org.openmrs.logic.LogicRule;
 import org.openmrs.logic.LogicRuleToken;
 import org.openmrs.logic.Rule;
 import org.openmrs.logic.StatefulRule;
@@ -86,15 +85,13 @@ class RuleFactory {
 		LogicRuleToken logicToken = logicRuleTokenDAO.getLogicRuleToken(token);
 		// token is not registered yet. try to find a concept derived with that token
 		if (logicToken == null) {
-			// test if this token is a concept derived or no
-			Concept concept = Context.getConceptService().getConcept(token);
-			if (concept instanceof ConceptDerived) {
-				ConceptDerived conceptDerived = (ConceptDerived) concept;
-				LanguageHandler handler = LanguageHandlerInstance.getHandler(conceptDerived.getLanguage());
-				return handler.handle(conceptDerived);
+			// TODO: Confirm that we want to lookup a LogicRule by name here
+			LogicRule logicRule = logicRuleTokenDAO.getLogicRule(token);
+			if (logicRule != null) {
+				LanguageHandler handler = LanguageHandlerInstance.getHandler(logicRule.getLanguage());
+				return handler.handle(logicRule);
 			}
-			// token is not null but token is concept derived, throw exception
-			throw new LogicException("Token is not registered and token is not concept derived ...");
+			throw new LogicException("Token is not registered and token is not a LogicRule ...");
 		}
 		
 		// try with the default class loader

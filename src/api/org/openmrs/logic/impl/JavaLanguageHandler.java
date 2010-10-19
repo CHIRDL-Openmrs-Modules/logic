@@ -19,9 +19,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 
-import org.openmrs.ConceptDerived;
+import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicConstants;
+import org.openmrs.logic.LogicRule;
 import org.openmrs.util.OpenmrsUtil;
 
 /**
@@ -31,33 +32,34 @@ import org.openmrs.util.OpenmrsUtil;
 public class JavaLanguageHandler extends CompilableLanguageHandler {
 	
 	/**
-	 * @see org.openmrs.logic.impl.CompilableLanguageHandler#prepareSource(org.openmrs.ConceptDerived)
+	 * @see CompilableLanguageHandler#prepareSource(LogicRule)
 	 */
-	@Override
-	public void prepareSource(ConceptDerived conceptDerived) {
+	public void prepareSource(LogicRule logicRule) {
 		
-		String javaDirectory = Context.getAdministrationService().getGlobalProperty(
-		    LogicConstants.RULE_DEFAULT_SOURCE_FOLDER);
+		AdministrationService as = Context.getAdministrationService();
+		String javaDirectory = as.getGlobalProperty(LogicConstants.RULE_DEFAULT_SOURCE_FOLDER);
 		File sourceDirectory = OpenmrsUtil.getDirectoryInApplicationDataDirectory(javaDirectory);
 		
-		String name = conceptDerived.getClassName();
+		String name = logicRule.getClassName();
 		String path = name.replace('.', File.separatorChar);
 		
 		File javaFile = new File(sourceDirectory, path + JAVA_EXTENSION);
 		
-		Date modifiedDate = conceptDerived.getDateChanged();
-		if (modifiedDate == null)
-			modifiedDate = conceptDerived.getDateCreated();
+		Date modifiedDate = logicRule.getDateChanged();
+		if (modifiedDate == null) {
+			modifiedDate = logicRule.getDateCreated();
+		}
 		
 		// only compile when the java file is not exist or the concept derived is updated after the source file last modified
-		if (!javaFile.exists() || modifiedDate.after(new Date(javaFile.lastModified())))
+		if (!javaFile.exists() || modifiedDate.after(new Date(javaFile.lastModified()))) {
 			try {
 				BufferedWriter writer = new BufferedWriter(new FileWriter(javaFile));
-				writer.write(conceptDerived.getRuleContent());
+				writer.write(logicRule.getRuleContent());
 				writer.close();
 			}
 			catch (IOException e) {
 				log.error("Failed saving java rule file ...", e);
 			}
+		}
 	}
 }

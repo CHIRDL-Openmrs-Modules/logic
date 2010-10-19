@@ -5,12 +5,13 @@ import java.io.File;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openmrs.ConceptDerived;
 import org.openmrs.Patient;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicConstants;
 import org.openmrs.logic.LogicCriteria;
+import org.openmrs.logic.LogicRule;
+import org.openmrs.logic.LogicRuleService;
 import org.openmrs.logic.LogicService;
 import org.openmrs.logic.Rule;
 import org.openmrs.logic.datasource.ObsDataSource;
@@ -31,8 +32,7 @@ public class LogicServiceImplTest extends BaseModuleContextSensitiveTest {
 		executeDataSet("org/openmrs/logic/include/ConceptDerivedTest.xml");
 		executeDataSet("org/openmrs/logic/include/GlobalPropertiesTest.xml");
 		executeDataSet("org/openmrs/logic/include/LogicStandardDatasets.xml");
-		authenticate();
-		
+		authenticate();	
 	}
 	
 	/**
@@ -91,16 +91,16 @@ public class LogicServiceImplTest extends BaseModuleContextSensitiveTest {
 	 */
 	@Test
 	@SkipBaseSetup
-	@Verifies(value = "should return Rule when concept derived name are passed", method = "getRule(String)")
+	@Verifies(value = "should return Rule when LogicRule name is passed", method = "getRule(String)")
 	public void getRule_shouldReturnRuleWhenConceptDerivedNameArePassed() throws Exception {
 		// delete the class and java file in the default rule class output folder
 		AdministrationService adminService = Context.getAdministrationService();
 		String ruleJavaDir = adminService.getGlobalProperty("logic.default.ruleJavaDirectory");
 		String ruleClassDir = adminService.getGlobalProperty("logic.default.ruleClassDirectory");
 		
-		ConceptDerived conceptDerived = Context.getConceptService().getConceptDerived(111);
-		String javaFilename = conceptDerived.getClassName().replace('.', File.separatorChar) + ".java";
-		String classFilename = conceptDerived.getClassName().replace('.', File.separatorChar) + ".class";
+		LogicRule logicRule = Context.getService(LogicRuleService.class).getLogicRule(1);
+		String javaFilename = logicRule.getClassName().replace('.', File.separatorChar) + ".java";
+		String classFilename = logicRule.getClassName().replace('.', File.separatorChar) + ".class";
 		
 		File javaFile = new File(OpenmrsUtil.getDirectoryInApplicationDataDirectory(ruleJavaDir), javaFilename);
 		if (javaFile.exists())
@@ -113,7 +113,7 @@ public class LogicServiceImplTest extends BaseModuleContextSensitiveTest {
 		Assert.assertFalse(classFile.exists());
 		
 		LogicService logicService = Context.getLogicService();
-		Rule rule = logicService.getRule("PREGNANT WOMAN");
+		Rule rule = logicService.getRule("Baseline Hgb Reminder Rule");
 		Assert.assertNotNull(rule);
 		Assert.assertEquals("org.openmrs.logic.rule.BaselineHgbReminder", rule.getClass().getName());
 		Assert.assertFalse(ReferenceRule.class.isAssignableFrom(rule.getClass()));
@@ -131,9 +131,9 @@ public class LogicServiceImplTest extends BaseModuleContextSensitiveTest {
 		String ruleJavaDir = adminService.getGlobalProperty(LogicConstants.RULE_DEFAULT_SOURCE_FOLDER);
 		String ruleClassDir = adminService.getGlobalProperty(LogicConstants.RULE_DEFAULT_CLASS_FOLDER);
 		
-		ConceptDerived conceptDerived = Context.getConceptService().getConceptDerived(111);
-		String javaFilename = conceptDerived.getClassName().replace('.', File.separatorChar) + ".java";
-		String classFilename = conceptDerived.getClassName().replace('.', File.separatorChar) + ".class";
+		LogicRule logicRule = Context.getService(LogicRuleService.class).getLogicRule(1);
+		String javaFilename = logicRule.getClassName().replace('.', File.separatorChar) + ".java";
+		String classFilename = logicRule.getClassName().replace('.', File.separatorChar) + ".class";
 		
 		File oldJavaFile = new File(OpenmrsUtil.getDirectoryInApplicationDataDirectory(ruleJavaDir), javaFilename);
 		if (oldJavaFile.exists())
@@ -146,7 +146,7 @@ public class LogicServiceImplTest extends BaseModuleContextSensitiveTest {
 		Assert.assertFalse(oldClassFile.exists());
 		
 		LogicService logicService = Context.getLogicService();
-		Rule rule = logicService.getRule("PREGNANT WOMAN");
+		Rule rule = logicService.getRule("Baseline Hgb Reminder Rule");
 		Assert.assertNotNull(rule);
 		Assert.assertEquals("org.openmrs.logic.rule.BaselineHgbReminder", rule.getClass().getName());
 		Assert.assertFalse(ReferenceRule.class.isAssignableFrom(rule.getClass()));
@@ -158,7 +158,7 @@ public class LogicServiceImplTest extends BaseModuleContextSensitiveTest {
 		Assert.assertTrue(classFile.exists());
 		
 		// this time the rule java and class file should not be re-created
-		rule = logicService.getRule("PREGNANT WOMAN");
+		rule = logicService.getRule("Baseline Hgb Reminder Rule");
 		Assert.assertNotNull(rule);
 		Assert.assertEquals("org.openmrs.logic.rule.BaselineHgbReminder", rule.getClass().getName());
 		Assert.assertFalse(ReferenceRule.class.isAssignableFrom(rule.getClass()));

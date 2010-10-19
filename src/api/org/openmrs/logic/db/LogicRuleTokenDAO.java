@@ -18,6 +18,7 @@ import java.util.Set;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.api.db.DAOException;
+import org.openmrs.logic.LogicRule;
 import org.openmrs.logic.LogicRuleToken;
 import org.openmrs.logic.LogicService;
 
@@ -29,6 +30,40 @@ import org.openmrs.logic.LogicService;
  * @see {@link Context}
  */
 public interface LogicRuleTokenDAO {
+	
+	/**
+	 * @param id the primary key of the LogicRule to look up
+	 * @return the LogicRule whose primary key id matches the passed id
+	 * @throws DAOException
+	 */
+	public LogicRule getLogicRule(Integer id) throws DAOException;
+	
+	/**
+	 * @param name the name of the LogicRule to look up
+	 * @return the LogicRule whose name matches the passed name
+	 * @throws DAOException
+	 */
+	public LogicRule getLogicRule(String name) throws DAOException;
+	
+	/**
+	 * @param includeRetired if true, includes retired LogicRules
+	 * @return all LogicRules saved to the database
+	 * @throws DAOException
+	 */
+	public List<LogicRule> getAllLogicRules(boolean includeRetired) throws DAOException;
+	
+	/**
+	 * @param logicRule the LogicRule to save to the database
+	 * @return the saved LogicRule
+	 * @throws DAOException
+	 */
+	public LogicRule saveLogicRule(LogicRule logicRule) throws DAOException;
+	
+	/**
+	 * @param logicRule the LogicRule to delete from the database
+	 * @throws DAOException
+	 */
+	public void purgeLogicRule(LogicRule logicRule) throws DAOException;
 	
 	/**
 	 * Save a logic token definition from the database.

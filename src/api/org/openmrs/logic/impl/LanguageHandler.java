@@ -13,23 +13,23 @@
  */
 package org.openmrs.logic.impl;
 
-import org.openmrs.ConceptDerived;
+import org.openmrs.logic.LogicRule;
 import org.openmrs.logic.Rule;
 
 /**
- * Root class for all concept derived's language handler. The contract for this class is all concept
- * derived must be converted to a Rule object. Implementing class can define their own way to create
+ * Root interface for all LogicRule language handlers. The contract for this class is all LogicRules
+ * must be converted to a Rule object. Implementing classes can define their own ways to create
  * the Rule object and register the class for future use.
  */
 public interface LanguageHandler {
 	
 	/**
-	 * Handle the concept derived. This handler will control how Rule object will be created.
-	 * Different type of concept derived's language can register their own language handler.
+	 * Handle the LogicRule. This handler will control how the Rule object will be created.
+	 * Different types of language can register their own language handler.
 	 * 
-	 * @param conceptDerived the concept derived that will be processed
-	 * @return the rule object or null if no rule object can be created for the concept derived
+	 * @param logicRule the LogicRule that will be processed
+	 * @return the rule object or null if no rule object can be created for the LogicRule
 	 */
-	Rule handle(ConceptDerived conceptDerived);
+	Rule handle(LogicRule logicRule);
 	
 }

@@ -48,7 +48,7 @@ public class RuleFactoryTest extends BaseModuleContextSensitiveTest {
 		// register the concept derived as a rule
 		executeDataSet("org/openmrs/logic/include/ConceptDerivedTest.xml");
 		LogicService logicService = Context.getLogicService();
-		Rule rule = logicService.getRule("PREGNANT WOMAN");
+		Rule rule = logicService.getRule("Baseline Hgb Reminder Rule");
 		Assert.assertNotNull(rule);
 	}
 
