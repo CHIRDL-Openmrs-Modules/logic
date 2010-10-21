@@ -29,7 +29,7 @@ import java.util.GregorianCalendar;
 //-----------------------------------------------------------------------------
 class LogicQueryBaseParser extends Parser;
 options {
-  /*defaultErrorHandler = true; */     // Don't generate parser error handlers
+  defaultErrorHandler = false; // syntax exceptions should break immediately
   buildAST=true;
   
 }
