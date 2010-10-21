@@ -5,7 +5,7 @@
 <!-- ** @author nribeka                                     ** -->
 <!-- ** @version 1.0                                        ** -->
 <!-- ********************************************************* -->
-<project name="logicmodule" default="package-module">
+<project name="logic-0.4.x" default="package-module">
 		
 	<!-- *********************************************************** -->
 	<!-- **                     TARGETS                           ** -->
