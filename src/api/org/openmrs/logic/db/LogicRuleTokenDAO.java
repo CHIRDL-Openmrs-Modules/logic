@@ -20,6 +20,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.logic.LogicRuleToken;
 import org.openmrs.logic.LogicService;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * LogicRuleToken specific function definition. The function is not meant to be used directly. Use
@@ -28,6 +29,7 @@ import org.openmrs.logic.LogicService;
  * @see {@link LogicService}
  * @see {@link Context}
  */
+@Transactional
 public interface LogicRuleTokenDAO {
 	
 	/**
