@@ -15,18 +15,20 @@ package org.openmrs.logic.datasource;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Cohort;
 import org.openmrs.Person;
+import org.openmrs.PersonName;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.db.LogicPersonDAO;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.util.LogicUtil;
-import org.openmrs.logic.datasource.LogicDataSource;
 
 /**
  * Provides access to person demographic data. Valid keys are:
@@ -61,7 +63,7 @@ public class PersonDataSource implements LogicDataSource {
 	
 	static {
 		String[] keyList = new String[] { "gender", "birthdate", "birthdate estimated", "dead", "death date",
-		        "cause of death" };
+		        "cause of death", "name", "given name", "middle name", "family name", "family name2" };
 		for (String k : keyList)
 			keys.add(k);
 	}
@@ -86,11 +88,11 @@ public class PersonDataSource implements LogicDataSource {
 		
 		// put in the result map
 		for (Person person : personList) {
-			if (token.equalsIgnoreCase("GENDER"))
+			if (token.equalsIgnoreCase("gender"))
 				resultMap.put(person.getPersonId(), new Result(person.getGender()));
-			else if (token.equalsIgnoreCase("BIRTHDATE"))
+			else if (token.equalsIgnoreCase("birthdate"))
 				resultMap.put(person.getPersonId(), new Result(person.getBirthdate()));
-			else if (token.equalsIgnoreCase("BIRTHDATE ESTIMATED"))
+			else if (token.equalsIgnoreCase("birthdate estimated"))
 				resultMap.put(person.getPersonId(), new Result(person.getBirthdateEstimated()));
 			else if (token.equalsIgnoreCase("death date"))
 				resultMap.put(person.getPersonId(), new Result(person.getDeathDate()));
@@ -103,6 +105,22 @@ public class PersonDataSource implements LogicDataSource {
 				resultMap.put(person.getPersonId(), deathResult);
 			} else if (token.equalsIgnoreCase("dead")) {
 				resultMap.put(person.getPersonId(), new Result(person.isDead()));
+			} else if (StringUtils.containsIgnoreCase(token, "name")) {
+				PersonName personName = person.getPersonName();
+				
+				String valueText = StringUtils.EMPTY;
+				if (StringUtils.equalsIgnoreCase(token, "name"))
+					valueText = personName.getFullName();
+				else if (StringUtils.equalsIgnoreCase(token, "given name"))
+					valueText = personName.getGivenName();
+				else if (StringUtils.equalsIgnoreCase(token, "middle name"))
+					valueText = personName.getMiddleName();
+				else if (StringUtils.equalsIgnoreCase(token, "family name"))
+					valueText = personName.getFamilyName();
+				else if (StringUtils.equalsIgnoreCase(token, "family name2"))
+					valueText = personName.getFamilyName2();
+				
+				resultMap.put(person.getPersonId(), new Result(new Date(), valueText, personName));
 			}
 			// TODO more keys to be added
 		}
