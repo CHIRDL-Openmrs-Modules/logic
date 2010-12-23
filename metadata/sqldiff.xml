@@ -71,4 +71,19 @@
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		</sql>
 	</diff>
+	
+	<diff>
+		<version>1.3</version>
+		<author>Nyoman Ribeka</author>
+		<date>December 22, 2010</date>
+		<description>
+			Adding new uuid column to the logic_rule_token table
+		</description>
+		<sql>
+			ALTER TABLE logic_rule_token ADD COLUMN uuid CHAR(38) DEFAULT NULL;
+			UPDATE logic_rule_token SET uuid = UUID();
+			ALTER TABLE logic_rule_token MODIFY COLUMN uuid CHAR(38) NOT NULL;
+			CREATE UNIQUE INDEX logic_rule_token_uuid ON logic_rule_token (uuid);
+		</sql>
+	</diff>
 </sqldiff>

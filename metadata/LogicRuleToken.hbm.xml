@@ -27,6 +27,7 @@
 	
     <class name="LogicRuleToken" table="logic_rule_token">   
         <id name="ruleTokenId" type="int" column="logic_rule_token_id"><generator class="native" /></id>
+        <property name="uuid" type="string" length="38" not-null="true" />
         <property name="token" type="java.lang.String" not-null="true" length="256" />
         <property name="className" type="java.lang.String" column="class_name" not-null="true" length="512" />
         <property name="state" type="java.lang.String" length="512" />
