@@ -18,8 +18,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.openmrs.api.context.Context;
-import org.openmrs.logic.TokenRegistration;
 import org.openmrs.logic.TokenService;
+import org.openmrs.logic.token.TokenRegistration;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;

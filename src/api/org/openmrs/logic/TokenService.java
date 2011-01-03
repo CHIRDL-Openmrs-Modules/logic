@@ -19,6 +19,7 @@ import java.util.List;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.logic.rule.LogicRuleRuleProvider;
 import org.openmrs.logic.rule.provider.RuleProvider;
+import org.openmrs.logic.token.TokenRegistration;
 
 /**
  * Service used to register tokens, look them up, and get the rules registered to them

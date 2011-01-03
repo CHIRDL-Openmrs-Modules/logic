@@ -21,12 +21,12 @@ import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.Rule;
-import org.openmrs.logic.TokenRegistration;
 import org.openmrs.logic.TokenService;
 import org.openmrs.logic.db.TokenDAO;
 import org.openmrs.logic.rule.LogicRuleRuleProvider;
 import org.openmrs.logic.rule.ReferenceRule;
 import org.openmrs.logic.rule.provider.RuleProvider;
+import org.openmrs.logic.token.TokenRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -229,7 +229,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	}
 	
 	/**
-	 * @see org.openmrs.logic.TokenService#saveTokenRegistration(org.openmrs.logic.TokenRegistration)
+	 * @see org.openmrs.logic.TokenService#saveTokenRegistration(org.openmrs.logic.token.TokenRegistration)
 	 */
 	@Override
 	public TokenRegistration saveTokenRegistration(TokenRegistration tokenRegistration) {
@@ -237,7 +237,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	}
 
 	/**
-	 * @see org.openmrs.logic.TokenService#deleteTokenRegistration(org.openmrs.logic.TokenRegistration)
+	 * @see org.openmrs.logic.TokenService#deleteTokenRegistration(org.openmrs.logic.token.TokenRegistration)
 	 */
 	@Override
     public void deleteTokenRegistration(TokenRegistration tokenRegistration) {

@@ -12,9 +12,9 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.openmrs.logic.TokenRegistration;
 import org.openmrs.logic.db.TokenDAO;
 import org.openmrs.logic.rule.provider.RuleProvider;
+import org.openmrs.logic.token.TokenRegistration;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -29,7 +29,7 @@ public class HibernateTokenDAO implements TokenDAO {
 	}
 	
 	/**
-     * @see org.openmrs.logic.db.TokenDAO#deleteTokenRegistration(org.openmrs.logic.TokenRegistration)
+     * @see org.openmrs.logic.db.TokenDAO#deleteTokenRegistration(org.openmrs.logic.token.TokenRegistration)
      */
     @Override
     @Transactional
@@ -121,7 +121,7 @@ public class HibernateTokenDAO implements TokenDAO {
     }
 
 	/**
-     * @see org.openmrs.logic.db.TokenDAO#saveTokenRegistration(org.openmrs.logic.TokenRegistration)
+     * @see org.openmrs.logic.db.TokenDAO#saveTokenRegistration(org.openmrs.logic.token.TokenRegistration)
      */
     @Override
     @Transactional

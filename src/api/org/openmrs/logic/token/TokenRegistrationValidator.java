@@ -13,7 +13,6 @@
  */
 package org.openmrs.logic.token;
 
-import org.openmrs.logic.TokenRegistration;
 import org.springframework.validation.Errors;
 import org.springframework.validation.ValidationUtils;
 import org.springframework.validation.Validator;

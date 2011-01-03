@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.logic;
+package org.openmrs.logic.token;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -23,12 +23,14 @@ import org.openmrs.User;
 import org.openmrs.logic.rule.provider.RuleProvider;
 
 /**
- * TODO move into token subpackage
- * TODO revise this javadoc
- * This class will hold a single entry for any registered token from the logic service. Each token
- * will be associated will multiple tags. Token is not a
- * <code>Rule<code>. Token is  the ingredient to instantiate a rule. You can think of
- * a LogicToken is a serialized version of a <code>Rule</code>
+ * This class represents a token that has been registered, plus instructions on how to instantiate
+ * a rule from that token.<br/>
+ * Each registered token has a {@link RuleProvider} and a configuration (set by the provider) that the
+ * provider users to instantiate a rule.<br/>
+ * A registered token also stores (as the providerToken property) the original token name that a
+ * RuleProvider requested, which may differ from the registered token if the user edits this
+ * TokenRegistration or if the requested token was already in use.<br/> 
+ * A token may also have multiple tags associated with it. 
  */
 public class TokenRegistration extends BaseOpenmrsObject implements Auditable {
 	

@@ -34,7 +34,6 @@ import org.openmrs.logic.LogicCriteriaImpl;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicService;
 import org.openmrs.logic.Rule;
-import org.openmrs.logic.TokenRegistration;
 import org.openmrs.logic.TokenService;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.queryparser.LogicQueryBaseParser;
@@ -43,6 +42,7 @@ import org.openmrs.logic.queryparser.LogicQueryTreeParser;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.result.Result.Datatype;
 import org.openmrs.logic.rule.RuleParameterInfo;
+import org.openmrs.logic.token.TokenRegistration;
 
 import antlr.BaseAST;
 
