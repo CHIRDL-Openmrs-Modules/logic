@@ -28,6 +28,7 @@ import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.db.LogicPersonDAO;
 import org.openmrs.logic.result.Result;
+import org.openmrs.logic.rule.provider.RuleProvider;
 import org.openmrs.logic.util.LogicUtil;
 
 /**
@@ -41,7 +42,7 @@ import org.openmrs.logic.util.LogicUtil;
  * date equal to the death date. If the patient is not dead, then the result is null.</li>
  * </ul>
  */
-public class PersonDataSource implements LogicDataSource {
+public class PersonDataSource extends DataSourceRuleProvider implements LogicDataSource, RuleProvider {
 	
 	private static final Collection<String> keys = new ArrayList<String>();
 	
@@ -149,5 +150,13 @@ public class PersonDataSource implements LogicDataSource {
 	public boolean hasKey(String key) {
 		return getKeys().contains(key);
 	}
+
+	/**
+     * @see org.openmrs.logic.datasource.DataSourceRuleProvider#getDataSourceName()
+     */
+    @Override
+    public String getDataSourceName() {
+	    return "person";
+    }
 	
 }

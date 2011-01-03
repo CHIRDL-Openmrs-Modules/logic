@@ -146,7 +146,7 @@
 <form action="run.form" method="post" onsubmit="return validate();">
 	<br/>
 	<h3><spring:message code="logic.tester.step2.title"/></h3>	
-	<input type="text" name="logicRule" id="logicRuleField" class="defaultText" title="<spring:message code="logic.tester.step2.hint"/>" autocomplete="off" style="width: 405px; margin-left: 20px;" />
+	<input type="text" name="logicRule" id="logicRuleField" class="defaultText" title="<spring:message code="logic.tester.step2.hint"/>" autocomplete="off" style="width: 405px; margin-left: 20px;" <c:if test="${not empty token}">value="${ token }"</c:if>/>
 	<span class="error" id="logicRuleError" style="display: none;"><spring:message code="error.required" arguments="Logic Rule Token" /></span>
 	
 	<br/><br/>

@@ -17,26 +17,34 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.openmrs.Cohort;
 import org.openmrs.Concept;
+import org.openmrs.ConceptClass;
+import org.openmrs.ConceptName;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicException;
+import org.openmrs.logic.Rule;
+import org.openmrs.logic.TokenService;
 import org.openmrs.logic.db.LogicObsDAO;
 import org.openmrs.logic.result.Result;
+import org.openmrs.logic.rule.ReferenceRule;
+import org.openmrs.logic.rule.provider.AbstractRuleProvider;
+import org.openmrs.logic.rule.provider.RuleProvider;
 import org.openmrs.logic.util.LogicUtil;
-import org.openmrs.logic.datasource.LogicDataSource;
 
 /**
  * Provides access to clinical observations. The keys for this data source are the primary names of
  * all tests within the concept dictionary. Results have a result date equal to the observation
  * datetime and a value based on the observed value.
  */
-public class ObsDataSource implements LogicDataSource {
+public class ObsDataSource extends AbstractRuleProvider implements RuleProvider, LogicDataSource {
 	
 	private static final Collection<String> keys = new ArrayList<String>();
 	
@@ -135,5 +143,68 @@ public class ObsDataSource implements LogicDataSource {
 	public void addKey(String key) {
 		getKeys().add(key);
 	}
+	
+	/**
+     * @see org.openmrs.logic.rule.provider.RuleProvider#getRule(java.lang.String)
+     */
+    @Override
+    public Rule getRule(String configuration) {
+    	return new ReferenceRule("obs." + configuration);
+    }
+
+	/**
+	 * @see org.openmrs.logic.rule.provider.AbstractRuleProvider#afterStartup()
+	 */
+	@Override
+	public void afterStartup() {
+		removeOldTokens();
+	    registerAllRules();
+	}
+	    
+    private void removeOldTokens() {
+		TokenService tokenService = Context.getService(TokenService.class);
+    	tokenService.keepOnlyValidConfigurations(this, logicObsDAO.getAllQuestionConceptIds());
+    }
+    
+    private void registerAllRules() {
+    	TokenService tokenService = Context.getService(TokenService.class);
+		
+		// Register Tokens for all Concepts in specified classes
+		List<ConceptClass> conceptClasses = new ArrayList<ConceptClass>();
+		String classProp = Context.getAdministrationService()
+		        .getGlobalProperty("logic.defaultTokens.conceptClasses");
+		if (StringUtils.isNotEmpty(classProp)) {
+			for (String className : classProp.split(",")) {
+				conceptClasses.add(Context.getConceptService().getConceptClassByName(className));
+			}
+		} else {
+			conceptClasses = Context.getConceptService().getAllConceptClasses();
+		}
+		
+		Locale conceptNameLocale = Locale.US;
+		String localeProp = Context.getAdministrationService().getGlobalProperty(
+		    "logic.defaultTokens.conceptNameLocale");
+		if (localeProp != null) {
+			conceptNameLocale = new Locale(localeProp);
+		}
+
+		int counter = 0;
+		for (ConceptClass currClass : conceptClasses) {
+			for (Concept c : Context.getConceptService().getConceptsByClass(currClass)) {
+				if (!c.getDatatype().isAnswerOnly()) {
+					ConceptName conceptName = c.getPreferredName(conceptNameLocale);
+					if (conceptName != null) {
+						Rule r = new ReferenceRule("obs." + conceptName.getName());
+						tokenService.registerToken(conceptName.getName(), this, c.getConceptId().toString());
+						++counter;
+						if (counter > 50) {
+							counter = 0;
+							Context.flushSession();
+						}
+					}
+				}
+			}
+		}
+    }
 	
 }

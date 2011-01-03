@@ -24,26 +24,37 @@ import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicConstants;
 import org.openmrs.logic.LogicRule;
 import org.openmrs.util.OpenmrsUtil;
+import org.springframework.stereotype.Component;
 
 /**
  * Plain java language handler. The user must write their own java class file and then enter the
  * rule java to the concept derived's rule section when creating a new concept.
  */
+@Component
 public class JavaLanguageHandler extends CompilableLanguageHandler {
 	
 	/**
-	 * @see CompilableLanguageHandler#prepareSource(LogicRule)
+     * @see org.openmrs.logic.impl.LanguageHandler#getName()
+     */
+    @Override
+    public String getName() {
+	    return "Java";
+    }
+    
+    /**
+	 * @see CompilableLanguageHandler#prepareSource(LogicRule,String)
 	 */
-	public void prepareSource(LogicRule logicRule) {
+	public void prepareSource(LogicRule logicRule, String className) {
 		
 		AdministrationService as = Context.getAdministrationService();
 		String javaDirectory = as.getGlobalProperty(LogicConstants.RULE_DEFAULT_SOURCE_FOLDER);
 		File sourceDirectory = OpenmrsUtil.getDirectoryInApplicationDataDirectory(javaDirectory);
 		
-		String name = logicRule.getClassName();
-		String path = name.replace('.', File.separatorChar);
-		
+		String path = className.replace('.', File.separatorChar);
+				
 		File javaFile = new File(sourceDirectory, path + JAVA_EXTENSION);
+		if (!javaFile.getParentFile().exists())
+			javaFile.getParentFile().mkdirs();
 		
 		Date modifiedDate = logicRule.getDateChanged();
 		if (modifiedDate == null) {
@@ -62,4 +73,5 @@ public class JavaLanguageHandler extends CompilableLanguageHandler {
 			}
 		}
 	}
+
 }

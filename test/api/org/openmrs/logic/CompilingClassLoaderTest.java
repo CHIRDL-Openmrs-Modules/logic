@@ -6,7 +6,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
-import org.openmrs.logic.impl.ArdenLanguageHandler;
+import org.openmrs.logic.impl.JavaLanguageHandler;
 import org.openmrs.test.BaseContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 import org.openmrs.test.Verifies;
@@ -31,13 +31,13 @@ public class CompilingClassLoaderTest extends BaseContextSensitiveTest {
 		
 		LogicRule logicRule = Context.getService(LogicRuleService.class).getLogicRule(1);
 		Assert.assertNotNull(logicRule);
-		Assert.assertEquals("Arden", logicRule.getLanguage());
+		Assert.assertEquals("Java", logicRule.getLanguage());
 		
 		AdministrationService adminService = Context.getAdministrationService();
 		String ruleJavaDir = adminService.getGlobalProperty(LogicConstants.RULE_DEFAULT_SOURCE_FOLDER);
 		File ruleSourceDir = OpenmrsUtil.getDirectoryInApplicationDataDirectory(ruleJavaDir);
 		
-		ArdenLanguageHandler h = new ArdenLanguageHandler();
+		JavaLanguageHandler h = new JavaLanguageHandler();
 		h.handle(logicRule);
 		
 		CompilingClassLoader loader = new CompilingClassLoader();
@@ -45,7 +45,7 @@ public class CompilingClassLoaderTest extends BaseContextSensitiveTest {
 		File[] files = ruleSourceDir.listFiles();
 		Assert.assertTrue(files.length > 0);
 		
-		String javaFilename = logicRule.getClassName();
+		String javaFilename = h.getClassName(logicRule);
 		Class<?> c = loader.loadClass(javaFilename);
 		Object object = c.newInstance();
 		Assert.assertNotNull(object);

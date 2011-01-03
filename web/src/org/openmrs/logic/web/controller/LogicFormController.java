@@ -45,9 +45,13 @@ public class LogicFormController {
 	 * @param model The ModelMap to be used by view to render page
 	 */
 	@RequestMapping(value = "/module/logic/logic", method = RequestMethod.GET)
-	public void showTestPage(@RequestParam(required = false, value = "patientId") Integer patientId, ModelMap modelMap) {
+	public void showTestPage(@RequestParam(required = false, value = "patientId") Integer patientId,
+	                         @RequestParam(required = false, value = "token") String token,
+	                         ModelMap modelMap) {
 		modelMap.addAttribute("authenticatedUser", Context.getAuthenticatedUser());
 		modelMap.addAttribute("patientId", patientId == null ? 0 : patientId.intValue());
+		if (token != null)
+			modelMap.addAttribute("token", "&quot;" + token + "&quot;");
 		
 		if (patientId != null && patientId.intValue() > 0) {
 			Patient patient = Context.getPatientService().getPatient(patientId);

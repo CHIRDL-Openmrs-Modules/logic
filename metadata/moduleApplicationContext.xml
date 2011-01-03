@@ -10,70 +10,70 @@
            http://www.springframework.org/schema/context/spring-context-2.5.xsd
            http://www.springframework.org/schema/util
            http://www.springframework.org/schema/util/spring-util-2.0.xsd">
-           
-    <bean id="logicObsDAO" class="org.openmrs.logic.db.hibernate.HibernateLogicObsDAO">
-		<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
-	</bean>
-	<bean id="logicPersonDAO" class="org.openmrs.logic.db.hibernate.HibernateLogicPersonDAO">
-		<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
-	</bean>
-	<bean id="logicEncounterDAO" class="org.openmrs.logic.db.hibernate.HibernateLogicEncounterDAO">
-		<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
-	</bean>
+    
+    <!-- Data Sources -->
 	<bean id="logicObsDataSource" class="org.openmrs.logic.datasource.ObsDataSource">
-		<property name="logicObsDAO"><ref bean="logicObsDAO"></ref></property>
+		<property name="logicObsDAO">
+			<bean class="org.openmrs.logic.db.hibernate.HibernateLogicObsDAO">
+				<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
+			</bean>
+		</property>
 	</bean>
 	<bean id="logicPersonDataSource" class="org.openmrs.logic.datasource.PersonDataSource">
-		<property name="logicPersonDAO"><ref bean="logicPersonDAO"></ref></property>
+		<property name="logicPersonDAO">
+			<bean class="org.openmrs.logic.db.hibernate.HibernateLogicPersonDAO">
+				<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
+			</bean>
+		</property>
 	</bean>
 	<bean id="logicEncounterDataSource" class="org.openmrs.logic.datasource.EncounterDataSource">
-		<property name="logicEncounterDAO"><ref bean="logicEncounterDAO"></ref></property>
+		<property name="logicEncounterDAO">
+			<bean class="org.openmrs.logic.db.hibernate.HibernateLogicEncounterDAO">
+				<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
+			</bean>
+		</property>
 	</bean>
 	<bean id="logicProgramDataSource" class="org.openmrs.logic.datasource.ProgramDataSource" />
-	<bean id="logicRuleTokenTarget" class="org.openmrs.logic.db.hibernate.HibernateLogicRuleTokenDAO">
-		<property name="sessionFactory"><ref bean="sessionFactory" /></property>
-	</bean>
-	<bean id="logicRuleTokenDAO" class="org.springframework.aop.framework.ProxyFactoryBean">
-		<property name="proxyInterfaces"><value>org.openmrs.logic.db.LogicRuleTokenDAO</value></property>
-		<property name="target"><ref local="logicRuleTokenTarget"/></property>
-		<property name="interceptorNames">
-			<list>
-				<value>requiredDataInterceptor</value>
-			</list>
-		</property>
-	</bean>
-	<bean id="ruleFactory" class="org.openmrs.logic.impl.RuleFactory">
-		<property name="logicRuleTokenDAO"><ref bean="logicRuleTokenDAO" /></property>
-	</bean>
-	<bean id="logicServiceTarget" class="org.openmrs.logic.impl.LogicServiceImpl">
-		<property name="ruleFactory"><ref bean="ruleFactory" /></property>
-		<property name="logicDataSources">
-			<map>
-				<entry key="encounter"><ref bean="logicEncounterDataSource" /></entry>
-				<entry key="obs"><ref bean="logicObsDataSource" /></entry>
-				<entry key="person"><ref bean="logicPersonDataSource" /></entry>
-				<entry key="program"><ref bean="logicProgramDataSource" /></entry>
-			</map>
-		</property>
-	</bean>
-	<bean id="logicService" class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
-		<property name="transactionManager"><ref bean="transactionManager"/></property>
-		<property name="target"><ref local="logicServiceTarget"/></property>
-		<property name="preInterceptors">
-			<ref bean="serviceInterceptors" />
-		</property>
-		<property name="transactionAttributeSource"><ref bean="transactionAttributeSource" /></property>
-	</bean>
+	
+	<!-- Register LogicService with OpenMRS ServiceContext -->
 	<bean parent="serviceContext">
-		<property name="logicService"><ref bean="logicService"/></property>
+		<property name="logicService">
+			<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+				<property name="transactionManager"><ref bean="transactionManager"/></property>
+				<property name="target">
+					<bean id="logicServiceTarget" class="org.openmrs.logic.impl.LogicServiceImpl">
+						<property name="logicDataSources">
+							<map>
+								<entry key="encounter"><ref bean="logicEncounterDataSource" /></entry>
+								<entry key="obs"><ref bean="logicObsDataSource" /></entry>
+								<entry key="person"><ref bean="logicPersonDataSource" /></entry>
+								<entry key="program"><ref bean="logicProgramDataSource" /></entry>
+							</map>
+						</property>
+					</bean>
+				</property>
+				<property name="preInterceptors">
+					<ref bean="serviceInterceptors" />
+				</property>
+				<property name="transactionAttributeSource"><ref bean="transactionAttributeSource" /></property>
+			</bean>
+		</property>
+	</bean>
+	
+	<!-- Register TokenService with OpenMRS ServiceContext -->
+	<bean parent="serviceContext">
 		<property name="moduleService">
-			<list merge="true">
-				<value>org.openmrs.logic.LogicRuleService</value> 
+			<list>
+				<value>org.openmrs.logic.TokenService</value> 
 				<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 					<property name="transactionManager"><ref bean="transactionManager"/></property>
 					<property name="target">
-						<bean class="org.openmrs.logic.impl.LogicRuleServiceImpl">
-							<property name="dao"><ref bean="logicRuleTokenDAO"/></property>
+						<bean class="org.openmrs.logic.impl.TokenServiceImpl">
+							<property name="dao">
+								<bean class="org.openmrs.logic.db.hibernate.HibernateTokenDAO">
+									<property name="sessionFactory"><ref bean="sessionFactory" /></property>
+								</bean>
+							</property>
 						</bean>
 					</property>
 					<property name="preInterceptors">
@@ -82,7 +82,34 @@
 					<property name="transactionAttributeSource">
 						<bean class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource"/>
 					</property>
-				</bean>		
+				</bean>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- Register LogicRuleDervice with OpenMRS ServiceContext -->
+	<bean parent="serviceContext">
+		<property name="moduleService">
+			<list>
+				<value>org.openmrs.logic.LogicRuleService</value> 
+				<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
+					<property name="transactionManager"><ref bean="transactionManager"/></property>
+					<property name="target">
+						<bean class="org.openmrs.logic.impl.LogicRuleServiceImpl">
+							<property name="dao">
+								<bean class="org.openmrs.logic.db.hibernate.HibernateLogicRuleDAO">
+									<property name="sessionFactory"><ref bean="sessionFactory" /></property>
+								</bean>
+							</property>
+						</bean>
+					</property>
+					<property name="preInterceptors">
+						<ref bean="serviceInterceptors" />
+					</property>
+					<property name="transactionAttributeSource">
+						<bean class="org.springframework.transaction.annotation.AnnotationTransactionAttributeSource"/>
+					</property>
+				</bean>
 			</list>
 		</property>
 	</bean>

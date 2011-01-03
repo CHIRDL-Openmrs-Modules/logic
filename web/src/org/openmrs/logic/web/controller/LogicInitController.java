@@ -41,8 +41,11 @@ public class LogicInitController {
 	public void runInit() {
 		if (Context.hasPrivilege("View Administration Functions")) {
 			isInitRunning = ProcessStatus.STATUS_ON;
-			LogicUtil.registerDefaultRules();
-			isInitRunning = ProcessStatus.STATUS_OFF;
+			try {
+				LogicUtil.registerDefaultRules();
+			} finally {
+				isInitRunning = ProcessStatus.STATUS_OFF;
+			}
 		}
 	}
 	

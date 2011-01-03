@@ -16,6 +16,7 @@ package org.openmrs.logic.impl;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.logic.CompilingClassLoader;
+import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicRule;
 import org.openmrs.logic.Rule;
 
@@ -45,8 +46,9 @@ public abstract class CompilableLanguageHandler implements LanguageHandler {
 	 * </pre>
 	 * 
 	 * @param logicRule the LogicRule that need to be processed
+	 * @param className the suggested class name
 	 */
-	public abstract void prepareSource(LogicRule logicRule);
+	public abstract void prepareSource(LogicRule logicRule, String className);
 	
 	/**
 	 * @see LanguageHandler#handle(LogicRule)
@@ -54,16 +56,20 @@ public abstract class CompilableLanguageHandler implements LanguageHandler {
 	public Rule handle(LogicRule logicRule) {
 		CompilingClassLoader classLoader = new CompilingClassLoader();
 		try {
-			prepareSource(logicRule);
-			Class<?> c = classLoader.loadClass(logicRule.getClassName());
+			String className = getClassName(logicRule);
+			prepareSource(logicRule, className);
+			Class<?> c = classLoader.loadClass(className);
 			Object obj = c.newInstance();
 			return (Rule) obj;
 		}
 		catch (Exception e) {
 			log.error("Creating rule object failed ...", e);
+			throw new LogicException(e);
 		}
-		// creating rule object throwing exception, return null
-		return null;
 	}
+	
+	public static String getClassName(LogicRule logicRule) {
+	    return "org.openmrs.module.logic.rule.CompiledRule" + logicRule.getId();
+    }
 	
 }

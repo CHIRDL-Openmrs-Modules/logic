@@ -32,6 +32,7 @@ import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.AgeRule;
 import org.openmrs.logic.rule.HIVPositiveRule;
 import org.openmrs.logic.rule.ReferenceRule;
+import org.openmrs.logic.rule.provider.ClassRuleProvider;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.Verifies;
 
@@ -243,81 +244,7 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 			log.error("Error generated", e);
 		}
 	}
-	
-	/**
-	 * @see {@link LogicService#addRule(String,Rule)}
-	 */
-	@Test
-	@Verifies(value = "should not fail when another rule is registered on the same token", method = "addRule(String,Rule)")
-	public void addRule_shouldNotFailWhenAnotherRuleIsRegisteredOnTheSameToken() throws Exception {
-		LogicService logicService = Context.getLogicService();
-		Rule hivRule = logicService.getRule("HIV POSITIVE");
-		Assert.assertNotNull(hivRule);
 		
-		Rule ageRule = logicService.getRule("AGE");
-		Assert.assertNotNull(ageRule);
-		
-		logicService.addRule("HIV POSITIVE", ageRule);
-		Rule storedHivRule = logicService.getRule("HIV POSITIVE");
-		Assert.assertNotNull(storedHivRule);
-		Assert.assertTrue(AgeRule.class.isAssignableFrom(storedHivRule.getClass()));
-	}
-	
-	/**
-	 * @see {@link LogicService#addRule(String,Rule)}
-	 */
-	@Test
-	@Verifies(value = "should persist the rule and associate it with the token", method = "addRule(String,Rule)")
-	public void addRule_shouldPersistTheRuleAndAssociateItWithTheToken() throws Exception {
-		LogicService logicService = Context.getLogicService();
-		
-		Rule hivRule = logicService.getRule("HIV POSITIVE");
-		Assert.assertNotNull(hivRule);
-		
-		logicService.addRule("ANOTHER HIV POSITIVE", hivRule);
-		
-		Rule anotherHivRule = logicService.getRule("ANOTHER HIV POSITIVE");
-		Assert.assertNotNull(anotherHivRule);
-		Assert.assertTrue(HIVPositiveRule.class.isAssignableFrom(anotherHivRule.getClass()));
-	}
-	
-	/**
-	 * @see {@link LogicService#addRule(String,null,Rule)}
-	 */
-	@Test
-	@Verifies(value = "should not fail when no tags is specified", method = "addRule(String,null,Rule)")
-	public void addRule_shouldNotFailWhenNoTagsIsSpecified() throws Exception {
-		LogicService logicService = Context.getLogicService();
-		
-		Rule ageRule = logicService.getRule("AGE");
-		Assert.assertNotNull(ageRule);
-		
-		logicService.addRule("ANOTHER AGE RULE", null, ageRule);
-		
-		Rule anotherAgeRule = logicService.getRule("ANOTHER AGE RULE");
-		Assert.assertNotNull(anotherAgeRule);
-		Assert.assertTrue(AgeRule.class.isAssignableFrom(anotherAgeRule.getClass()));
-	}
-	
-	/**
-	 * @see {@link LogicService#addRule(String,null,Rule)}
-	 */
-	@Test
-	@Verifies(value = "should persist rule with the tags", method = "addRule(String,null,Rule)")
-	public void addRule_shouldPersistRuleWithTheTags() throws Exception {
-		LogicService logicService = Context.getLogicService();
-		
-		String[] newTags = { "tags1", "tags2", "tags3" };
-		
-		Rule rule = logicService.getRule("HIV POSITIVE");
-		Assert.assertNotNull(rule);
-		
-		logicService.addRule("ANOTHER HIV POSITIVE", newTags, rule);
-		int tagsCount = logicService.getTokenTags("HIV POSITIVE").size();
-		
-		Assert.assertEquals(newTags.length, tagsCount);
-	}
-	
 	/**
 	 * @see {@link LogicService#addTokenTag(String,String)}
 	 */
@@ -342,12 +269,15 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 	@Verifies(value = "should return set of tags matching input tag partially", method = "getTags(String)")
 	public void getTags_shouldReturnSetOfTagsMatchingInputTagPartially() throws Exception {
 		LogicService logicService = Context.getLogicService();
+		TokenService tokenService = Context.getService(TokenService.class);
 		
 		String[] similarTags = { "tags01", "tags02", "tags03", "tags04", "tags05" };
 		Rule rule = logicService.getRule("AGE");
 		Assert.assertNotNull(rule);
 		
-		logicService.addRule("ANOTHER AGE", similarTags, rule);
+		tokenService.registerToken("ANOTHER AGE", new ClassRuleProvider(), AgeRule.class.getName());
+		for (String tag : similarTags)
+			logicService.addTokenTag("ANOTHER AGE", tag);
 		
 		List<String> tags = logicService.getTags("tags");
 		
@@ -372,20 +302,12 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 	@Verifies(value = "should return all registered token matching the input partially", method = "getTokens(String)")
 	public void getTokens_shouldReturnAllRegisteredTokenMatchingTheInputPartially() throws Exception {
 		LogicService logicService = Context.getLogicService();
-		
-		int REGISTERED_TOKEN_COUNTER = 5;
-		String TOKEN_NAME = "AGE";
-		
-		Rule rule = logicService.getRule(TOKEN_NAME);
-		Assert.assertNotNull(rule);
-		
-		for (int i = 0; i < REGISTERED_TOKEN_COUNTER; i++) {
-			TOKEN_NAME = TOKEN_NAME + " ANOTHER";
-			logicService.addRule(TOKEN_NAME, rule);
-		}
+
+		Context.getService(TokenService.class).registerToken("One Another", new ClassRuleProvider(), "one");
+		Context.getService(TokenService.class).registerToken("Two Another", new ClassRuleProvider(), "two");
 		
 		List<String> tokens = logicService.getTokens("ANOTHER");
-		Assert.assertEquals(REGISTERED_TOKEN_COUNTER, tokens.size());
+		Assert.assertEquals(2, tokens.size());
 	}
 	
 	/**
@@ -437,11 +359,12 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 	@Verifies(value = "should return set of tags for a certain token", method = "getTokenTags(String)")
 	public void getTokenTags_shouldReturnSetOfTagsForACertainToken() throws Exception {
 		LogicService logicService = Context.getLogicService();
-		Rule ageRule = logicService.getRule("AGE");
 		
 		String[] setOfTags = { "birth", "date", "born" };
 		
-		logicService.addRule("ANOTHER AGE RULE", setOfTags, ageRule);
+		Context.getService(TokenService.class).registerToken("ANOTHER AGE RULE", new ClassRuleProvider(), AgeRule.class.getName());
+		for (String tag : setOfTags)
+			logicService.addTokenTag("ANOTHER AGE RULE", tag);
 		
 		Set<String> retrievedTags = logicService.getTokenTags("ANOTHER AGE RULE");
 		Assert.assertEquals(setOfTags.length, retrievedTags.size());
@@ -469,11 +392,12 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 	@Verifies(value = "should return set of token associated with a tag", method = "getTokensWithTag(String)")
 	public void getTokensWithTag_shouldReturnSetOfTokenAssociatedWithATag() throws Exception {
 		LogicService logicService = Context.getLogicService();
-		Rule ageRule = logicService.getRule("AGE");
 		
 		String[] setOfTags = { "birth", "date", "born" };
 		
-		logicService.addRule("ANOTHER AGE RULE", setOfTags, ageRule);
+		Context.getService(TokenService.class).registerToken("ANOTHER AGE RULE", new ClassRuleProvider(), AgeRule.class.getName());
+		for (String tag : setOfTags)
+			logicService.addTokenTag("ANOTHER AGE RULE", tag);
 		
 		Collection<String> tokens = logicService.getTokensWithTag("birth");
 		Assert.assertEquals(1, tokens.size());
@@ -501,11 +425,12 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 	@Verifies(value = "should remove tag from a token", method = "removeTokenTag(String,String)")
 	public void removeTokenTag_shouldRemoveTagFromAToken() throws Exception {
 		LogicService logicService = Context.getLogicService();
-		Rule ageRule = logicService.getRule("AGE");
 		
 		String[] setOfTags = { "birth", "date", "born" };
 		
-		logicService.addRule("ANOTHER AGE RULE", setOfTags, ageRule);
+		Context.getService(TokenService.class).registerToken("ANOTHER AGE RULE", new ClassRuleProvider(), AgeRule.class.getName());
+		for (String tag : setOfTags)
+			logicService.addTokenTag("ANOTHER AGE RULE", tag);
 		
 		Collection<String> retrievedTags = logicService.getTokenTags("ANOTHER AGE RULE");
 		Assert.assertEquals(setOfTags.length, retrievedTags.size());
@@ -516,22 +441,4 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 		Assert.assertEquals(setOfTags.length - 1, retrievedTags.size());
 	}
 	
-	/**
-	 * @see {@link LogicService#updateRule(String,Rule)}
-	 */
-	@Test
-	@Verifies(value = "should update Rule when another Rule is registered under the same token", method = "updateRule(String,Rule)")
-	public void updateRule_shouldUpdateRuleWhenAnotherRuleIsRegisteredUnderTheSameToken() throws Exception {
-		LogicService logicService = Context.getLogicService();
-		Rule hivRule = logicService.getRule("HIV POSITIVE");
-		Assert.assertNotNull(hivRule);
-		
-		Rule ageRule = logicService.getRule("AGE");
-		Assert.assertNotNull(ageRule);
-		
-		logicService.updateRule("HIV POSITIVE", ageRule);
-		Rule storedHivRule = logicService.getRule("HIV POSITIVE");
-		Assert.assertNotNull(storedHivRule);
-		Assert.assertTrue(AgeRule.class.isAssignableFrom(storedHivRule.getClass()));
-	}
 }

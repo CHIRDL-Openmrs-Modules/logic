@@ -18,8 +18,10 @@ public class AdminList extends AdministrationSectionExt {
 	
 	public Map<String, String> getLinks() {
 		Map<String, String> localHashMap = new LinkedHashMap<String, String>();
+		localHashMap.put("/module/logic/manageTokens.list", "logic.token.manage.title");
+		localHashMap.put("/module/logic/manageLogicRules.list", "logic.rule.manage.title");
+		localHashMap.put("/module/logic/logic.form", "logic.tester.title");
 		localHashMap.put("/module/logic/init.form", "logic.init.title");
-		localHashMap.put("/module/logic/logic.form", "logic.start.title");
 		return localHashMap;
 	}
 }

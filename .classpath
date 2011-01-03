@@ -38,7 +38,7 @@
 	<classpathentry kind="lib" path="lib-common/spring-framework/spring-test.jar"/>
 	<classpathentry kind="lib" path="lib-common/spring-framework/spring-webmvc.jar"/>
 	<classpathentry kind="lib" path="lib-common/junit/junit-4.4.jar"/>
-	<classpathentry kind="lib" path="lib-common/spring-framework/spring-2.5.6.jar" sourcepath="/home/mseaton/.m2/repository/org/springframework/spring/2.5.6/spring-2.5.6-sources.jar"/>
+	<classpathentry kind="lib" path="lib-common/spring-framework/spring-2.5.6.jar"/>
 	<classpathentry kind="lib" path="lib-common/hibernate/hibernate325-mod.jar"/>
 	<classpathentry kind="lib" path="lib-common/commons-lang/commons-lang-2.4.jar"/>
 	<classpathentry kind="lib" path="lib-common/ant-contrib/ant-contrib-1.0b2.jar"/>
@@ -76,5 +76,6 @@
 	<classpathentry kind="lib" path="lib-common/openmrs/openmrs-api-1.6.2.15244-dev.jar" sourcepath="/openmrs-1.6.x"/>
 	<classpathentry kind="lib" path="lib-common/openmrs/tests-openmrs-api-1.6.2.15244-dev.jar" sourcepath="/openmrs-1.6.x"/>
 	<classpathentry kind="lib" path="lib-common/openmrs/web-openmrs-api-1.6.2.15244-dev.jar"/>
+	<classpathentry kind="lib" path="lib/groovy-all-1.7.6.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

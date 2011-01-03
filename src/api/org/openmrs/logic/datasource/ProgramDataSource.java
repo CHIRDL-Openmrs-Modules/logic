@@ -29,6 +29,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.result.Result;
+import org.openmrs.logic.rule.provider.RuleProvider;
 import org.openmrs.logic.util.LogicUtil;
 
 /**
@@ -52,7 +53,7 @@ import org.openmrs.logic.util.LogicUtil;
  *   </li>
  * </ul>
  */
-public class ProgramDataSource implements LogicDataSource {
+public class ProgramDataSource extends DataSourceRuleProvider implements LogicDataSource, RuleProvider {
 	
 	private Log log = LogFactory.getLog(ProgramDataSource.class);
 	
@@ -154,4 +155,12 @@ public class ProgramDataSource implements LogicDataSource {
 		ProgramWorkflowService service = Context.getProgramWorkflowService();
 		return service.getPatientPrograms(patients, null);
 	}
+
+	/**
+     * @see org.openmrs.logic.datasource.DataSourceRuleProvider#getDataSourceName()
+     */
+    @Override
+    public String getDataSourceName() {
+	    return "program";
+    }
 }

@@ -13,8 +13,6 @@
  */
 package org.openmrs.logic;
 
-import java.util.Date;
-
 import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.OpenmrsObject;
 
@@ -29,11 +27,8 @@ public class LogicRule extends BaseOpenmrsMetadata implements java.io.Serializab
 	//***** PROPERTIES *****
 	
 	private Integer id;
-	private String ruleContent;	
+	private String ruleContent;
 	private String language;
-	private Date compileDate;
-	private String compileStatus;
-	private String className;
 	
 	//***** CONSTRUCTORS *****
 	
@@ -114,45 +109,4 @@ public class LogicRule extends BaseOpenmrsMetadata implements java.io.Serializab
 		this.language = language;
 	}
 	
-	/**
-	 * @return date that rule was last compiled
-	 */
-	public Date getCompileDate() {
-		return compileDate;
-	}
-	
-	/**
-	 * @param compileDate date on which rule was compiled
-	 */
-	public void setCompileDate(Date compileDate) {
-		this.compileDate = compileDate;
-	}
-	
-	/**
-	 * @return result status of last compilation of rule
-	 */
-	public String getCompileStatus() {
-		return compileStatus;
-	}
-	
-	/**
-	 * @param compileStatus result status of last compilation of rule
-	 */
-	public void setCompileStatus(String compileStatus) {
-		this.compileStatus = compileStatus;
-	}
-	
-	/**
-	 * @return full name (including package) of class implementing the rule
-	 */
-	public String getClassName() {
-		return className;
-	}
-	
-	/**
-	 * @param className name of class that implements this rule
-	 */
-	public void setClassName(String className) {
-		this.className = className;
-	}
 }

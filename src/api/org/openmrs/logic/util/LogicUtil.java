@@ -14,9 +14,6 @@
 package org.openmrs.logic.util;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -25,24 +22,18 @@ import java.util.concurrent.Executors;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
-import org.openmrs.Concept;
-import org.openmrs.ConceptClass;
-import org.openmrs.ConceptName;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicCriteria;
-import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicTransform;
-import org.openmrs.logic.Rule;
-import org.openmrs.logic.datasource.LogicDataSource;
+import org.openmrs.logic.TokenService;
 import org.openmrs.logic.op.Operator;
 import org.openmrs.logic.result.EmptyResult;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.AgeRule;
 import org.openmrs.logic.rule.HIVPositiveRule;
 import org.openmrs.logic.rule.InvalidReferenceRuleException;
-import org.openmrs.logic.rule.ReferenceRule;
+import org.openmrs.logic.rule.provider.ClassRuleProvider;
 import org.openmrs.util.OpenmrsConstants;
-import org.springframework.util.StringUtils;
 
 /**
  * 
@@ -111,72 +102,11 @@ public class LogicUtil {
 	 * @param p properties from runtime configuration
 	 */
 	public static void registerDefaultRules() throws InvalidReferenceRuleException {
-		
-		Map<String, LogicDataSource> dataSources = Context.getLogicService().getLogicDataSources();
-		
-		// Register tokens for Reference Rules based on available LogicDataSources
-		
-		for (String dataSourceName : dataSources.keySet()) {
-			LogicDataSource dataSource = dataSources.get(dataSourceName);
-			
-			if ("obs".equalsIgnoreCase(dataSourceName)) {
-				int counter = 0;
-				
-				// Register Tokens for all Concepts in specified classes
-				List<ConceptClass> conceptClasses = new ArrayList<ConceptClass>();
-				String classProp = Context.getAdministrationService()
-				        .getGlobalProperty("logic.defaultTokens.conceptClasses");
-				if (StringUtils.hasText(classProp)) {
-					for (String className : classProp.split(",")) {
-						conceptClasses.add(Context.getConceptService().getConceptClassByName(className));
-					}
-				} else {
-					conceptClasses = Context.getConceptService().getAllConceptClasses();
-				}
-				
-				Locale conceptNameLocale = Locale.US;
-				String localeProp = Context.getAdministrationService().getGlobalProperty(
-				    "logic.defaultTokens.conceptNameLocale");
-				if (localeProp != null) {
-					conceptNameLocale = new Locale(localeProp);
-				}
-				
-				for (ConceptClass currClass : conceptClasses) {
-					for (Concept c : Context.getConceptService().getConceptsByClass(currClass)) {
-						if (!c.getDatatype().isAnswerOnly()) {
-							ConceptName conceptName = c.getPreferredName(conceptNameLocale);
-							if (conceptName != null && dataSource.hasKey(conceptName.getName())) {
-								Rule r = new ReferenceRule(dataSourceName + "." + conceptName.getName());
-								registerRule(conceptName.getName(), r);
-								++counter;
-								if (counter > 50) {
-									counter = 0;
-									Context.flushSession();
-								}
-							}
-						}
-					}
-				}
-			} else {
-				for (String key : dataSource.getKeys()) {
-					Rule r = new ReferenceRule(dataSourceName + "." + key);
-					registerRule(key, r);
-				}
-			}
-		}
-		
-		// Register tokens for additional Rule classes
-		registerRule("HIV POSITIVE", new HIVPositiveRule());
-		registerRule("AGE", new AgeRule());
-	}
-	
-	private static void registerRule(String token, Rule rule) {
-		try {
-			Context.getLogicService().addRule(token.toUpperCase(), rule);
-		}
-		catch (LogicException e) {
-			log.debug("Rule with token <" + token.toUpperCase() + "> already in RuleMap.  Ignoring: " + rule);
-		}
+		ClassRuleProvider crp = new ClassRuleProvider();
+		Context.getService(TokenService.class).registerToken("AGE", crp, AgeRule.class.getName());
+		Context.getService(TokenService.class).registerToken("HIV POSITIVE", crp, HIVPositiveRule.class.getName());
+
+		Context.getService(TokenService.class).onStartup();
 	}
 	
 	/**

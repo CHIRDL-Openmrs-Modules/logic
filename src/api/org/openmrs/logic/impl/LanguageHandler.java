@@ -24,6 +24,11 @@ import org.openmrs.logic.Rule;
 public interface LanguageHandler {
 	
 	/**
+     * @return a unique name that identifies this language handler
+     */
+    String getName();
+    
+    /**
 	 * Handle the LogicRule. This handler will control how the Rule object will be created.
 	 * Different types of language can register their own language handler.
 	 * 

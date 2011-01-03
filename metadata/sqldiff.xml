@@ -48,11 +48,8 @@
 			  `uuid` char(38) NOT NULL,
 			  `name` varchar(255) NOT NULL unique,
 			  `description` varchar(1000),
-			  `ruleContent` varchar(2048) NOT NULL,
+			  `rule_content` varchar(2048) NOT NULL,
 			  `language` varchar(255) NOT NULL,
-			  `compileDate` datetime,
-			  `compileStatus` varchar(255),
-			  `className` varchar(1024) NOT NULL,	  
 			  `creator` int(11) NOT NULL default '0',
 			  `date_created` datetime NOT NULL default '0000-00-00 00:00:00',
 			  `changed_by` int(11) default NULL,
@@ -84,6 +81,39 @@
 			UPDATE logic_rule_token SET uuid = UUID();
 			ALTER TABLE logic_rule_token MODIFY COLUMN uuid CHAR(38) NOT NULL;
 			CREATE UNIQUE INDEX logic_rule_token_uuid ON logic_rule_token (uuid);
+		</sql>
+	</diff>
+	
+	<diff>
+		<version>1.4</version>
+		<author>Darius Jazayeri</author>
+		<date>December 30, 2010</date>
+		<description>
+			Creating logic_token_registration table (replacement for logic_rule_token)
+		</description>
+		<sql>
+			CREATE TABLE logic_token_registration (
+			  token_registration_id int(11) NOT NULL AUTO_INCREMENT,
+			  creator int(11) NOT NULL,
+			  date_created datetime NOT NULL default '0002-11-30 00:00:00',
+			  changed_by int(11) default NULL,
+			  date_changed datetime default NULL,
+			  token varchar(512) NOT NULL,
+			  provider_class_name varchar(512) NOT NULL,
+			  provider_token varchar(512) NOT NULL,
+			  configuration varchar(2000) default NULL,
+			  uuid CHAR(38) NOT NULL,
+			  PRIMARY KEY  (token_registration_id),
+			  UNIQUE (uuid),
+			  CONSTRAINT token_registration_creator FOREIGN KEY (creator) REFERENCES users (user_id),
+			  CONSTRAINT token_registration_changed_by FOREIGN KEY (changed_by) REFERENCES users (user_id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+			
+			CREATE TABLE logic_token_registration_tag (
+			  token_registration_id int(11) NOT NULL,
+			  tag varchar(512) NOT NULL,
+			  CONSTRAINT token_registration_tag FOREIGN KEY (token_registration_id) REFERENCES logic_token_registration (token_registration_id)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		</sql>
 	</diff>
 </sqldiff>

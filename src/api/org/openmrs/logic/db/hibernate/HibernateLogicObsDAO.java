@@ -22,12 +22,14 @@ import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Cohort;
 import org.openmrs.Concept;
+import org.openmrs.ConceptDatatype;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.api.EncounterService;
@@ -369,5 +371,15 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 		log.debug("*** Reading observations ***");
 		return logicToHibernate(logicCriteria.getExpression(), who, logicContext);
 	}
-	
+
+	/**
+	 * @see org.openmrs.logic.db.LogicObsDAO#getAllQuestionConceptIds()
+	 */
+	@SuppressWarnings("unchecked")
+    @Override
+	public List<Integer> getAllQuestionConceptIds() {
+		Query query = sessionFactory.getCurrentSession().createQuery("select conceptId from Concept where datatype.uuid != :naUuid");
+		query.setString("naUuid", ConceptDatatype.N_A_UUID);
+	    return query.list();
+	}
 }

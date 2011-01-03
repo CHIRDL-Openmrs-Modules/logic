@@ -32,4 +32,9 @@ public interface LogicObsDAO {
 	 */
 	public List<Obs> getObservations(Cohort who, LogicCriteria logicCriteria, LogicContext logicContext) throws LogicException;
 	
+	/**
+	 * @return ids of all concepts which may be used as questions (i.e. their datatype is not N/A)
+	 */
+	public List<Integer> getAllQuestionConceptIds();
+	
 }

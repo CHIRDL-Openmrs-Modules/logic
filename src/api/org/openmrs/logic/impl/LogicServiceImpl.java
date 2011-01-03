@@ -26,6 +26,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
+import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicContextImpl;
 import org.openmrs.logic.LogicCriteria;
@@ -33,6 +34,8 @@ import org.openmrs.logic.LogicCriteriaImpl;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicService;
 import org.openmrs.logic.Rule;
+import org.openmrs.logic.TokenRegistration;
+import org.openmrs.logic.TokenService;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.queryparser.LogicQueryBaseParser;
 import org.openmrs.logic.queryparser.LogicQueryLexer;
@@ -56,23 +59,14 @@ public class LogicServiceImpl implements LogicService {
 	
 	protected final Log log = LogFactory.getLog(getClass());
 	
-	private RuleFactory ruleFactory;
-	
 	private static Map<String, LogicDataSource> dataSources;
 	
 	/**
-	 * Default constructor. Creates a new RuleFactory (and populates it)
+	 * Default constructor
 	 */
 	public LogicServiceImpl() {
 	}
-	
-	/**
-	 * @param ruleFactory the ruleFactory to set
-	 */
-	public void setRuleFactory(RuleFactory ruleFactory) {
-		this.ruleFactory = ruleFactory;
-	}
-	
+			
 	/**
 	 * Clean up after this class. Set the static var to null so that the classloader can reclaim the
 	 * space.
@@ -96,7 +90,7 @@ public class LogicServiceImpl implements LogicService {
 	 * @see org.openmrs.logic.LogicService#getAllTokens()
 	 */
 	public List<String> getAllTokens() {
-		return ruleFactory.getAllTokens();
+		return Context.getService(TokenService.class).getAllTokens();
 	}
 	
 	/**
@@ -112,14 +106,14 @@ public class LogicServiceImpl implements LogicService {
 	 * @see org.openmrs.logic.LogicService#getTokens(java.lang.String)
 	 */
 	public List<String> getTokens(String partialToken) {
-		return ruleFactory.findTokens(partialToken);
+		return Context.getService(TokenService.class).getTokens(partialToken);
 	}
 	
 	/**
 	 * @see org.openmrs.logic.LogicService#addRule(java.lang.String, org.openmrs.logic.Rule)
 	 */
 	public void addRule(String token, Rule rule) throws LogicException {
-		ruleFactory.addRule(token, rule);
+		throw new UnsupportedOperationException("Use TokenService.registerToken");
 	}
 	
 	/**
@@ -130,21 +124,21 @@ public class LogicServiceImpl implements LogicService {
 	 * @should return Rule when registered concept derived name are passed
 	 */
 	public Rule getRule(String token) throws LogicException {
-		return ruleFactory.getRule(token);
+		return Context.getService(TokenService.class).getRule(token);
 	}
 	
 	/**
 	 * @see org.openmrs.logic.LogicService#updateRule(java.lang.String, org.openmrs.logic.Rule)
 	 */
 	public void updateRule(String token, Rule rule) throws LogicException {
-		ruleFactory.updateRule(token, rule);
+		throw new UnsupportedOperationException("Use TokenService.registerToken");
 	}
 	
 	/**
 	 * @see org.openmrs.logic.LogicService#removeRule(java.lang.String)
 	 */
 	public void removeRule(String token) throws LogicException {
-		ruleFactory.removeRule(token);
+		Context.getService(TokenService.class).removeToken(token);
 	}
 	
 	/**
@@ -231,14 +225,16 @@ public class LogicServiceImpl implements LogicService {
 	 * @see org.openmrs.logic.LogicService#addRule(String, String[], Rule)
 	 */
 	public void addRule(String token, String[] tags, Rule rule) throws LogicException {
-		ruleFactory.addRule(token, tags, rule);
+		throw new UnsupportedOperationException("Use TokenService.registerToken and manually add tags");
 	}
 	
 	/**
 	 * @see org.openmrs.logic.LogicService#addTokenTag(java.lang.String, java.lang.String)
 	 */
 	public void addTokenTag(String token, String tag) {
-		ruleFactory.addTokenTag(token, tag);
+		TokenRegistration tr = Context.getService(TokenService.class).getTokenRegistrationByToken(token);
+		tr.addTag(tag);
+		Context.getService(TokenService.class).saveTokenRegistration(tr);
 	}
 	
 	/**
@@ -254,21 +250,21 @@ public class LogicServiceImpl implements LogicService {
 	 * @see org.openmrs.logic.LogicService#getTags(java.lang.String)
 	 */
 	public List<String> getTags(String partialTag) {
-		return ruleFactory.findTags(partialTag);
+		return Context.getService(TokenService.class).getTags(partialTag);
 	}
 	
 	/**
 	 * @see org.openmrs.logic.LogicService#getTagsByToken(java.lang.String)
 	 */
 	public Collection<String> getTagsByToken(String token) {
-		return ruleFactory.getTagsByToken(token);
+		return Context.getService(TokenService.class).getTokenRegistrationByToken(token).getTags();
 	}
 	
 	/**
 	 * @see org.openmrs.logic.LogicService#getTokenTags(java.lang.String)
 	 */
 	public Set<String> getTokenTags(String token) {
-		return ruleFactory.getTagsByToken(token);
+		return Context.getService(TokenService.class).getTokenRegistrationByToken(token).getTags();
 	}
 	
 	/**
@@ -284,25 +280,27 @@ public class LogicServiceImpl implements LogicService {
 	 * @see org.openmrs.logic.LogicService#getTokensWithTag(java.lang.String)
 	 */
 	public List<String> getTokensWithTag(String tag) {
-		return ruleFactory.getTokensByTag(tag);
+		return Context.getService(TokenService.class).getTokensByTag(tag);
 	}
 	
 	/**
 	 * @see org.openmrs.logic.LogicService#removeTokenTag(java.lang.String, java.lang.String)
 	 */
 	public void removeTokenTag(String token, String tag) {
-		ruleFactory.removeTokenTag(token, tag);
+		TokenRegistration tr = Context.getService(TokenService.class).getTokenRegistrationByToken(token);
+		tr.removeTag(tag);
+		Context.getService(TokenService.class).saveTokenRegistration(tr);
 	}
 	
 	/**
 	 * @see org.openmrs.logic.LogicService#getDefaultDatatype(String)
 	 */
 	public Datatype getDefaultDatatype(String token) {
-		return ruleFactory.getDefaultDatatype(token);
+		return Context.getService(TokenService.class).getRule(token).getDefaultDatatype();
 	}
 	
 	public Set<RuleParameterInfo> getParameterList(String token) {
-		return ruleFactory.getParameterList(token);
+		return Context.getService(TokenService.class).getRule(token).getParameterList();
 	}
 	
 	/**
