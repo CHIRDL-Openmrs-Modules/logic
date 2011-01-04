@@ -25,7 +25,6 @@ import org.openmrs.Cohort;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicTransform;
-import org.openmrs.logic.TokenService;
 import org.openmrs.logic.op.Operator;
 import org.openmrs.logic.result.EmptyResult;
 import org.openmrs.logic.result.Result;
@@ -33,6 +32,7 @@ import org.openmrs.logic.rule.AgeRule;
 import org.openmrs.logic.rule.HIVPositiveRule;
 import org.openmrs.logic.rule.InvalidReferenceRuleException;
 import org.openmrs.logic.rule.provider.ClassRuleProvider;
+import org.openmrs.logic.token.TokenService;
 import org.openmrs.util.OpenmrsConstants;
 
 /**

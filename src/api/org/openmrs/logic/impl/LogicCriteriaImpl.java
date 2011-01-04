@@ -11,12 +11,21 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.logic;
+package org.openmrs.logic.impl;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.Map;
 
+import org.openmrs.logic.Duration;
+import org.openmrs.logic.LogicCriteria;
+import org.openmrs.logic.LogicException;
+import org.openmrs.logic.LogicExpression;
+import org.openmrs.logic.LogicExpressionBinary;
+import org.openmrs.logic.LogicExpressionUnary;
+import org.openmrs.logic.LogicQueryParseException;
+import org.openmrs.logic.LogicQueryParser;
+import org.openmrs.logic.LogicTransform;
 import org.openmrs.logic.op.Operand;
 import org.openmrs.logic.op.OperandCollection;
 import org.openmrs.logic.op.OperandDate;

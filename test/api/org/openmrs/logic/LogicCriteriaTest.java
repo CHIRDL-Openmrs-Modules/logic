@@ -19,6 +19,7 @@ import java.util.Calendar;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.openmrs.logic.impl.LogicCriteriaImpl;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 /**

@@ -1,10 +1,10 @@
-package org.openmrs.logic.db;
+package org.openmrs.logic.token.db;
 
 import java.util.List;
 
-import org.openmrs.logic.TokenService;
 import org.openmrs.logic.rule.provider.RuleProvider;
 import org.openmrs.logic.token.TokenRegistration;
+import org.openmrs.logic.token.TokenService;
 
 /**
  * Data access for TokenRegistration

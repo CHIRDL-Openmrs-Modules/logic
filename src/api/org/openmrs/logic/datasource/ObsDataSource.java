@@ -31,12 +31,12 @@ import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.Rule;
-import org.openmrs.logic.TokenService;
 import org.openmrs.logic.db.LogicObsDAO;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.ReferenceRule;
 import org.openmrs.logic.rule.provider.AbstractRuleProvider;
 import org.openmrs.logic.rule.provider.RuleProvider;
+import org.openmrs.logic.token.TokenService;
 import org.openmrs.logic.util.LogicUtil;
 
 /**

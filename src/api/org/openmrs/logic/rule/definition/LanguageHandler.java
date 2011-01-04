@@ -11,9 +11,8 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.logic.impl;
+package org.openmrs.logic.rule.definition;
 
-import org.openmrs.logic.LogicRule;
 import org.openmrs.logic.Rule;
 
 /**
@@ -35,6 +34,6 @@ public interface LanguageHandler {
 	 * @param logicRule the LogicRule that will be processed
 	 * @return the rule object or null if no rule object can be created for the LogicRule
 	 */
-	Rule handle(LogicRule logicRule);
+	Rule handle(RuleDefinition logicRule);
 	
 }

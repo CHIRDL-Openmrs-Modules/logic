@@ -6,7 +6,9 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
-import org.openmrs.logic.impl.JavaLanguageHandler;
+import org.openmrs.logic.rule.definition.JavaLanguageHandler;
+import org.openmrs.logic.rule.definition.RuleDefinition;
+import org.openmrs.logic.rule.definition.RuleDefinitionService;
 import org.openmrs.test.BaseContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 import org.openmrs.test.Verifies;
@@ -17,7 +19,7 @@ public class CompilingClassLoaderTest extends BaseContextSensitiveTest {
 	@Before
 	public void prepareData() throws Exception {
 		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/logic/include/ConceptDerivedTest.xml");
+		executeDataSet("org/openmrs/logic/include/RuleDefinitionTest.xml");
 		executeDataSet("org/openmrs/logic/include/GlobalPropertiesTest.xml");
 		authenticate();
 	}
@@ -29,7 +31,7 @@ public class CompilingClassLoaderTest extends BaseContextSensitiveTest {
 	@Verifies(value = "should compile and load java file at runtime", method = "loadClass(String,boolean)")
 	public void loadClass_shouldCompileAndLoadJavaFileAtRuntime() throws Exception {
 		
-		LogicRule logicRule = Context.getService(LogicRuleService.class).getLogicRule(1);
+		RuleDefinition logicRule = Context.getService(RuleDefinitionService.class).getRuleDefinition(1);
 		Assert.assertNotNull(logicRule);
 		Assert.assertEquals("Java", logicRule.getLanguage());
 		

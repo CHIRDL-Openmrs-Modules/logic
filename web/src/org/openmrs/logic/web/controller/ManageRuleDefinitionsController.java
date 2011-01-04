@@ -13,26 +13,22 @@
  */
 package org.openmrs.logic.web.controller;
 
-import java.util.List;
-
 import org.openmrs.api.context.Context;
-import org.openmrs.logic.LogicRuleService;
-import org.openmrs.logic.impl.LanguageHandler;
+import org.openmrs.logic.rule.definition.RuleDefinitionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 
 /**
- * Controller for listing, creating, and editing user-defined rules
+ * Controller for listing user-defined rules
  */
 @Controller
-public class ManageLogicRulesController {
+public class ManageRuleDefinitionsController {
 	
-	@RequestMapping(value="/module/logic/manageLogicRules")
+	@RequestMapping(value="/module/logic/manageRuleDefinitions")
 	public void listLogicRules(Model model) {
-		model.addAttribute("rules", Context.getService(LogicRuleService.class).getAllLogicRules(true));
+		model.addAttribute("rules", Context.getService(RuleDefinitionService.class).getAllRuleDefinitions(true));
 	}
 
 }

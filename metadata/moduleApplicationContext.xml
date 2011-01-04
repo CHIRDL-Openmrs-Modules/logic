@@ -64,11 +64,11 @@
 	<bean parent="serviceContext">
 		<property name="moduleService">
 			<list>
-				<value>org.openmrs.logic.TokenService</value> 
+				<value>org.openmrs.logic.token.TokenService</value> 
 				<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 					<property name="transactionManager"><ref bean="transactionManager"/></property>
 					<property name="target">
-						<bean class="org.openmrs.logic.impl.TokenServiceImpl">
+						<bean class="org.openmrs.logic.token.impl.TokenServiceImpl">
 							<property name="dao">
 								<bean class="org.openmrs.logic.db.hibernate.HibernateTokenDAO">
 									<property name="sessionFactory"><ref bean="sessionFactory" /></property>
@@ -87,17 +87,17 @@
 		</property>
 	</bean>
 	
-	<!-- Register LogicRuleDervice with OpenMRS ServiceContext -->
+	<!-- Register RuleDefinitionService with OpenMRS ServiceContext -->
 	<bean parent="serviceContext">
 		<property name="moduleService">
 			<list>
-				<value>org.openmrs.logic.LogicRuleService</value> 
+				<value>org.openmrs.logic.rule.definition.RuleDefinitionService</value> 
 				<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 					<property name="transactionManager"><ref bean="transactionManager"/></property>
 					<property name="target">
-						<bean class="org.openmrs.logic.impl.LogicRuleServiceImpl">
+						<bean class="org.openmrs.logic.rule.definition.impl.RuleDefinitionServiceImpl">
 							<property name="dao">
-								<bean class="org.openmrs.logic.db.hibernate.HibernateLogicRuleDAO">
+								<bean class="org.openmrs.logic.rule.definition.db.hibernate.HibernateRuleDefinitionDAO">
 									<property name="sessionFactory"><ref bean="sessionFactory" /></property>
 								</bean>
 							</property>

@@ -11,12 +11,11 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.logic.impl;
+package org.openmrs.logic.rule.definition;
 
 import groovy.lang.GroovyClassLoader;
 
 import org.openmrs.logic.LogicException;
-import org.openmrs.logic.LogicRule;
 import org.openmrs.logic.Rule;
 import org.springframework.stereotype.Component;
 
@@ -31,7 +30,7 @@ public class GroovyLanguageHandler implements LanguageHandler {
 	private GroovyClassLoader gcl = new GroovyClassLoader();
 	
 	/**
-	 * @see org.openmrs.logic.impl.LanguageHandler#getName()
+	 * @see org.openmrs.logic.rule.definition.LanguageHandler#getName()
 	 */
 	@Override
 	public String getName() {
@@ -39,11 +38,11 @@ public class GroovyLanguageHandler implements LanguageHandler {
 	}
 	
 	/**
-	 * @see org.openmrs.logic.impl.LanguageHandler#handle(org.openmrs.logic.LogicRule)
+	 * @see org.openmrs.logic.rule.definition.LanguageHandler#handle(org.openmrs.logic.rule.definition.RuleDefinition)
 	 */
 	@SuppressWarnings("unchecked")
     @Override
-	public Rule handle(LogicRule logicRule) {
+	public Rule handle(RuleDefinition logicRule) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("package org.openmrs.module.logic.rule;\n");
 		sb.append("import java.util.Map;\n");

@@ -11,28 +11,27 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.logic.rule;
+package org.openmrs.logic.rule.definition;
 
 import org.apache.commons.lang.StringUtils;
-import org.openmrs.logic.LogicRule;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 
 
 /**
- * Validator for {@link LogicRule}
+ * Validator for {@link RuleDefinition}
  */
-public class LogicRuleValidator implements Validator {
+public class RuleDefinitionValidator implements Validator {
 	
 	@Override
 	@SuppressWarnings("unchecked")
 	public boolean supports(Class c) {
-		return c.equals(LogicRule.class);
+		return c.equals(RuleDefinition.class);
 	}
 	
 	@Override
 	public void validate(Object obj, Errors errors) {
-		LogicRule rule = (LogicRule) obj;
+		RuleDefinition rule = (RuleDefinition) obj;
 		if (StringUtils.isEmpty(rule.getName()))
 			errors.rejectValue("name", "error.null");
 		if (StringUtils.isEmpty(rule.getLanguage()))

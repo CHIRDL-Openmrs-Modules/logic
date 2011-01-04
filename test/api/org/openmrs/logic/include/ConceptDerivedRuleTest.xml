@@ -1,5 +1,0 @@
-<?xml version='1.0' encoding='UTF-8'?>
-<dataset>
-  <logic_token_registration token_registration_id="17" creator="1" date_created="2009-08-31 13:29:35.551" token="PREGNANT WOMAN" provider_class_name="org.openmrs.logic.rule.provider.ClassRuleProvider" configuration="org.openmrs.logic.rule.BaselineHgbReminder" provider_token="PREGNANT WOMAN" uuid="1a0b0030-16c1-11e0-a86f-001e378eb67e"/>
-  <logic_token_registration token_registration_id="18" creator="1" date_created="2009-08-31 13:29:35.551" token="PREGNANT MAN" provider_class_name="org.openmrs.logic.rule.provider.ClassRuleProvider" configuration="org.openmrs.logic.rule.BaselineHgbReminder" provider_token="PREGNANT MAN" uuid="1a0b0044-16c1-11e0-a86f-001e378eb67e"/>
-</dataset>

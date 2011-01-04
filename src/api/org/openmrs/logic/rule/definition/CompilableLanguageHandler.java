@@ -11,13 +11,12 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.logic.impl;
+package org.openmrs.logic.rule.definition;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.logic.CompilingClassLoader;
 import org.openmrs.logic.LogicException;
-import org.openmrs.logic.LogicRule;
 import org.openmrs.logic.Rule;
 
 /**
@@ -48,12 +47,12 @@ public abstract class CompilableLanguageHandler implements LanguageHandler {
 	 * @param logicRule the LogicRule that need to be processed
 	 * @param className the suggested class name
 	 */
-	public abstract void prepareSource(LogicRule logicRule, String className);
+	public abstract void prepareSource(RuleDefinition logicRule, String className);
 	
 	/**
-	 * @see LanguageHandler#handle(LogicRule)
+	 * @see LanguageHandler#handle(RuleDefinition)
 	 */
-	public Rule handle(LogicRule logicRule) {
+	public Rule handle(RuleDefinition logicRule) {
 		CompilingClassLoader classLoader = new CompilingClassLoader();
 		try {
 			String className = getClassName(logicRule);
@@ -68,7 +67,7 @@ public abstract class CompilableLanguageHandler implements LanguageHandler {
 		}
 	}
 	
-	public static String getClassName(LogicRule logicRule) {
+	public static String getClassName(RuleDefinition logicRule) {
 	    return "org.openmrs.module.logic.rule.CompiledRule" + logicRule.getId();
     }
 	

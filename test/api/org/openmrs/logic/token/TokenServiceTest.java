@@ -1,4 +1,4 @@
-package org.openmrs.logic;
+package org.openmrs.logic.token;
 
 
 import org.junit.Assert;
@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.rule.AgeRule;
 import org.openmrs.logic.rule.provider.ClassRuleProvider;
+import org.openmrs.logic.token.TokenService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.Verifies;
 

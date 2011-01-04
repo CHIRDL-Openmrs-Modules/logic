@@ -44,7 +44,7 @@
 	</messages>
 	<mappingFiles>
 		TokenRegistration.hbm.xml
-		LogicRule.hbm.xml
+		RuleDefinition.hbm.xml
 	</mappingFiles>
 	<!-- /logic Module Properties -->
 	

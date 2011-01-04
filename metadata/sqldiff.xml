@@ -43,7 +43,7 @@
 			New table to store user-defined logic rules
 		</description>
 		<sql>					
-			CREATE TABLE IF NOT EXISTS `logic_rule` (
+			CREATE TABLE IF NOT EXISTS `logic_rule_definition` (
 			  `id` int(11) NOT NULL auto_increment,
 			  `uuid` char(38) NOT NULL,
 			  `name` varchar(255) NOT NULL unique,
@@ -59,12 +59,12 @@
   			  `date_retired` datetime default NULL,
   			  `retire_reason` varchar(255) default NULL,
 			  PRIMARY KEY  (`id`),
-			  KEY `creator for logic_rule` (`creator`),
-			  KEY `changed_by for logic_rule` (`changed_by`),
-			  KEY `retired_by for logic_rule` (`retired_by`),
-			  CONSTRAINT `creator for logic_rule` FOREIGN KEY (`creator`) REFERENCES `users` (`user_id`),
-			  CONSTRAINT `changed_by for logic_rule` FOREIGN KEY (`changed_by`) REFERENCES `users` (`user_id`),
-			  CONSTRAINT `retired_by for logic_rule` FOREIGN KEY (`retired_by`) REFERENCES `users` (`user_id`)
+			  KEY `creator for rule_definition` (`creator`),
+			  KEY `changed_by for rule_definition` (`changed_by`),
+			  KEY `retired_by for rule_definition` (`retired_by`),
+			  CONSTRAINT `creator for rule_definition` FOREIGN KEY (`creator`) REFERENCES `users` (`user_id`),
+			  CONSTRAINT `changed_by for rule_definition` FOREIGN KEY (`changed_by`) REFERENCES `users` (`user_id`),
+			  CONSTRAINT `retired_by for rule_definition` FOREIGN KEY (`retired_by`) REFERENCES `users` (`user_id`)
 			) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		</sql>
 	</diff>

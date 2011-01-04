@@ -1,4 +1,4 @@
-package org.openmrs.logic.db.hibernate;
+package org.openmrs.logic.token.db.hibernate;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -12,9 +12,9 @@ import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
-import org.openmrs.logic.db.TokenDAO;
 import org.openmrs.logic.rule.provider.RuleProvider;
 import org.openmrs.logic.token.TokenRegistration;
+import org.openmrs.logic.token.db.TokenDAO;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -29,7 +29,7 @@ public class HibernateTokenDAO implements TokenDAO {
 	}
 	
 	/**
-     * @see org.openmrs.logic.db.TokenDAO#deleteTokenRegistration(org.openmrs.logic.token.TokenRegistration)
+     * @see org.openmrs.logic.token.db.TokenDAO#deleteTokenRegistration(org.openmrs.logic.token.TokenRegistration)
      */
     @Override
     @Transactional
@@ -38,7 +38,7 @@ public class HibernateTokenDAO implements TokenDAO {
     }
     
 	/**
-     * @see org.openmrs.logic.db.TokenDAO#getAllTokens()
+     * @see org.openmrs.logic.token.db.TokenDAO#getAllTokens()
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -49,7 +49,7 @@ public class HibernateTokenDAO implements TokenDAO {
     }
 
 	/**
-     * @see org.openmrs.logic.db.TokenDAO#getTokens(java.lang.String)
+     * @see org.openmrs.logic.token.db.TokenDAO#getTokens(java.lang.String)
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -64,7 +64,7 @@ public class HibernateTokenDAO implements TokenDAO {
     }
 
 	/**
-     * @see org.openmrs.logic.db.TokenDAO#getCountOfTokenRegistrations(java.lang.String)
+     * @see org.openmrs.logic.token.db.TokenDAO#getCountOfTokenRegistrations(java.lang.String)
      */
     @Override
     @Transactional(readOnly=true)
@@ -75,7 +75,7 @@ public class HibernateTokenDAO implements TokenDAO {
     }
 
 	/**
-     * @see org.openmrs.logic.db.TokenDAO#getTokenRegistration(java.lang.Integer)
+     * @see org.openmrs.logic.token.db.TokenDAO#getTokenRegistration(java.lang.Integer)
      */
     @Override
     @Transactional(readOnly=true)
@@ -84,7 +84,7 @@ public class HibernateTokenDAO implements TokenDAO {
     }
 
     /**
-     * @see org.openmrs.logic.db.TokenDAO#getTokenRegistrationByUuid(java.lang.String)
+     * @see org.openmrs.logic.token.db.TokenDAO#getTokenRegistrationByUuid(java.lang.String)
      */
     @Override
     @Transactional(readOnly=true)
@@ -95,7 +95,7 @@ public class HibernateTokenDAO implements TokenDAO {
     }
 
 	/**
-     * @see org.openmrs.logic.db.TokenDAO#getTokenRegistrations(java.lang.String, java.lang.Integer, java.lang.Integer)
+     * @see org.openmrs.logic.token.db.TokenDAO#getTokenRegistrations(java.lang.String, java.lang.Integer, java.lang.Integer)
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -110,7 +110,7 @@ public class HibernateTokenDAO implements TokenDAO {
     }
 
 	/**
-     * @see org.openmrs.logic.db.TokenDAO#saveTokenRegistration(org.openmrs.logic.token.TokenRegistration)
+     * @see org.openmrs.logic.token.db.TokenDAO#saveTokenRegistration(org.openmrs.logic.token.TokenRegistration)
      */
     @Override
     @Transactional
@@ -137,7 +137,7 @@ public class HibernateTokenDAO implements TokenDAO {
     }
 
 	/**
-     * @see org.openmrs.logic.db.TokenDAO#getTags(java.lang.String)
+     * @see org.openmrs.logic.token.db.TokenDAO#getTags(java.lang.String)
      */
     @Override
     @Transactional(readOnly=true)
@@ -159,7 +159,7 @@ public class HibernateTokenDAO implements TokenDAO {
     }
 
 	/**
-     * @see org.openmrs.logic.db.TokenDAO#getTokensByTag(java.lang.String)
+     * @see org.openmrs.logic.token.db.TokenDAO#getTokensByTag(java.lang.String)
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -172,7 +172,7 @@ public class HibernateTokenDAO implements TokenDAO {
     }
 
     /**
-     * @see org.openmrs.logic.db.TokenDAO#getTokenRegistrationsByProvider(org.openmrs.logic.rule.provider.RuleProvider)
+     * @see org.openmrs.logic.token.db.TokenDAO#getTokenRegistrationsByProvider(org.openmrs.logic.rule.provider.RuleProvider)
      */
     @SuppressWarnings("unchecked")
     @Override
@@ -192,7 +192,7 @@ public class HibernateTokenDAO implements TokenDAO {
     }
     
     /**
-     * @see org.openmrs.logic.db.TokenDAO#deleteConfigurationsNotIn(org.openmrs.logic.rule.provider.RuleProvider, java.util.List)
+     * @see org.openmrs.logic.token.db.TokenDAO#deleteConfigurationsNotIn(org.openmrs.logic.rule.provider.RuleProvider, java.util.List)
      */
     @Override
     public void deleteConfigurationsNotIn(RuleProvider provider, List<String> validConfigurations) {

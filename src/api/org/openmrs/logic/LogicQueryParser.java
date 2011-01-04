@@ -22,6 +22,7 @@ import java.util.Map.Entry;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.openmrs.logic.LogicCriteria;
+import org.openmrs.logic.impl.LogicCriteriaImpl;
 
 /**
  * Parses strings into a LogicCriteria object. This provides a convenience mechanism for logic
@@ -250,7 +251,7 @@ public class LogicQueryParser {
 	 * @return the equivalent LogicCriteria object for the given logic query string
 	 * @throws LogicQueryParseException
 	 */
-	protected static LogicCriteria parse(String query) throws LogicQueryParseException {
+	public static LogicCriteria parse(String query) throws LogicQueryParseException {
 		
 		// First, we try to recognize the basic query format
 		Matcher queryMatcher = queryPattern.matcher(query);

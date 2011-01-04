@@ -11,15 +11,14 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.logic;
+package org.openmrs.logic.token;
 
 import java.util.Collection;
 import java.util.List;
 
 import org.openmrs.api.OpenmrsService;
-import org.openmrs.logic.rule.LogicRuleRuleProvider;
+import org.openmrs.logic.Rule;
 import org.openmrs.logic.rule.provider.RuleProvider;
-import org.openmrs.logic.token.TokenRegistration;
 
 /**
  * Service used to register tokens, look them up, and get the rules registered to them
@@ -74,7 +73,7 @@ public interface TokenService extends OpenmrsService {
      * @param provider
      * @param providerToken
      */
-    void removeToken(LogicRuleRuleProvider provider, String providerToken);
+    void removeToken(RuleProvider provider, String providerToken);
 	
 	/**
 	 * Get all registered tokens

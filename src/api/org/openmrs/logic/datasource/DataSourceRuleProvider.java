@@ -17,10 +17,10 @@ import java.util.Collection;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.Rule;
-import org.openmrs.logic.TokenService;
 import org.openmrs.logic.rule.ReferenceRule;
 import org.openmrs.logic.rule.provider.AbstractRuleProvider;
 import org.openmrs.logic.rule.provider.RuleProvider;
+import org.openmrs.logic.token.TokenService;
 
 
 /**

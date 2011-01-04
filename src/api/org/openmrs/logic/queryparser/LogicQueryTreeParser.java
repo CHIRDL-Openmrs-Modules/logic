@@ -17,6 +17,7 @@ import antlr.collections.AST;
 import antlr.*;
 import java.lang.Integer;
 import org.openmrs.logic.*;
+import org.openmrs.logic.impl.LogicCriteriaImpl;
 import org.openmrs.logic.op.*;
 import java.util.GregorianCalendar;
 

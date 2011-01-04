@@ -1,11 +1,11 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="/WEB-INF/template/header.jsp"%>
 
-<openmrs:require privilege="View Administration Functions" otherwise="/login.htm" redirect="/module/logic/manageLogicRules.list" />
+<openmrs:require privilege="View Administration Functions" otherwise="/login.htm" redirect="/module/logic/manageRuleDefinitions.list" />
 
 <h2><spring:message code="logic.rule.manage.title"/></h2>
 
-<a href="editLogicRule.form"><spring:message code="logic.rule.manage.add"/></a>
+<a href="editRuleDefinition.form"><spring:message code="logic.rule.manage.add"/></a>
 
 <br/><br/>
 
@@ -15,14 +15,14 @@
 <table class="box">
 	<thead>
 		<tr>
-			<th><spring:message code="logic.LogicRule.name"/></th>
-			<th><spring:message code="logic.LogicRule.language"/></th>
+			<th><spring:message code="logic.RuleDefinition.name"/></th>
+			<th><spring:message code="logic.RuleDefinition.language"/></th>
 		</tr>
 	</thead>
 	<tbody>
 		<c:forEach var="rule" items="${ rules }">
 			<tr>
-				<td><a href="editLogicRule.form?id=${ rule.id }">${ rule.name }</a></td>
+				<td><a href="editRuleDefinition.form?id=${ rule.id }">${ rule.name }</a></td>
 				<td>${ rule.language }</td>
 			</tr>
 		</c:forEach>

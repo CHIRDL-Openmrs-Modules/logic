@@ -50,7 +50,7 @@ import org.openmrs.util.OpenmrsUtil;
  * Implementation based on http://www.ibm.com/developerworks/edu/j-dw-javaclass-i.html and code from Tammy Dugan and Vibha Anand
  * in the dss module.
  * 
- * @see org.openmrs.logic.service.impl.LanguageHandler
+ * @see org.openmrs.logic.rule.definition.service.impl.LanguageHandler
  */
 public class CompilingClassLoader extends ClassLoader {
 	

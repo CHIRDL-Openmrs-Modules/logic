@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.logic;
+package org.openmrs.logic.rule.definition;
 
 import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.OpenmrsObject;
@@ -20,7 +20,7 @@ import org.openmrs.OpenmrsObject;
  * Represents a user-defined Rule which is compiled dynamically at Runtime
  * @version 1.0
  */
-public class LogicRule extends BaseOpenmrsMetadata implements java.io.Serializable {
+public class RuleDefinition extends BaseOpenmrsMetadata implements java.io.Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -35,7 +35,7 @@ public class LogicRule extends BaseOpenmrsMetadata implements java.io.Serializab
 	/**
 	 * Default Constructor
 	 */
-	public LogicRule() { }
+	public RuleDefinition() { }
 	
 	//***** INSTANCE METHODS *****
 	
@@ -44,10 +44,10 @@ public class LogicRule extends BaseOpenmrsMetadata implements java.io.Serializab
 	 */
 	@Override
 	public boolean equals(Object obj) {
-		if (obj == null || !(obj instanceof LogicRule)) {
+		if (obj == null || !(obj instanceof RuleDefinition)) {
 			return false;
 		}
-		LogicRule that = (LogicRule)obj;
+		RuleDefinition that = (RuleDefinition)obj;
 		if (this.getId() != null && that.getId() != null) {
 			return (this.getId().equals(that.getId()));
 		}

@@ -1,21 +1,21 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="/WEB-INF/template/header.jsp"%>
 
-<openmrs:require privilege="View Administration Functions" otherwise="/login.htm" redirect="/module/logic/manageLogicRules.list" />
+<openmrs:require privilege="View Administration Functions" otherwise="/login.htm" redirect="/module/logic/manageRuleDefinitions.list" />
 
-<form method="post" action="deleteLogicRule.form">
+<form method="post" action="deleteRuleDefinition.form">
 	<input type="hidden" name="id" value="${ rule.id }"/>
 	<input type="submit" value="<spring:message code="logic.rule.edit.delete"/>" style="float: right"/>
 </form>
 
-<a href="manageLogicRules.list"><spring:message code="logic.rule.edit.back"/></a>
+<a href="manageRuleDefinitions.list"><spring:message code="logic.rule.edit.back"/></a>
 
 <h2><spring:message code="logic.rule.edit.title"/></h2>
 
 <form method="post">
 	<table>
 		<tr valign="top">
-			<th><spring:message code="logic.LogicRule.name"/></th>
+			<th><spring:message code="logic.RuleDefinition.name"/></th>
 			<td>
 				<spring:bind path="rule.name">
 					<input type="text" name="${status.expression}" value="${status.value}"/>
@@ -24,7 +24,7 @@
 			</td>
 		</tr>
 		<tr valign="top">
-			<th><spring:message code="logic.LogicRule.description"/></th>
+			<th><spring:message code="logic.RuleDefinition.description"/></th>
 			<td>
 				<spring:bind path="rule.description">
 					<textarea rows="3" cols="80" name="${status.expression}">${status.value}</textarea>
@@ -33,7 +33,7 @@
 			</td>
 		</tr>
 		<tr valign="top">
-			<th><spring:message code="logic.LogicRule.language"/></th>
+			<th><spring:message code="logic.RuleDefinition.language"/></th>
 			<td>
 				<spring:bind path="rule.language">
 					<select name="${status.expression}">
@@ -49,7 +49,7 @@
 			</td>
 		</tr>
 		<tr valign="top">
-			<th><spring:message code="logic.LogicRule.ruleContent"/></th>
+			<th><spring:message code="logic.RuleDefinition.ruleContent"/></th>
 			<td>
 				<spring:bind path="rule.ruleContent">
 					<textarea rows="20" cols="80" name="${status.expression}">${status.value}</textarea>
@@ -61,7 +61,7 @@
 			<th></th>
 			<td>
 				<input type="submit" value="<spring:message code="general.save"/>"/>
-				<input type="button" value="<spring:message code="general.cancel"/>" onClick="window.location = 'manageLogicRules.list';"/>
+				<input type="button" value="<spring:message code="general.cancel"/>" onClick="window.location = 'manageRuleDefinitions.list';"/>
 			</td>
 		</tr>
 	</table>

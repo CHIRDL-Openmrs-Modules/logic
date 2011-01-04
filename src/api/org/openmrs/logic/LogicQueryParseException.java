@@ -13,6 +13,8 @@
  */
 package org.openmrs.logic;
 
+import org.openmrs.logic.impl.LogicCriteriaImpl;
+
 /**
  * Thrown if a logic query cannot be parsed.
  * 

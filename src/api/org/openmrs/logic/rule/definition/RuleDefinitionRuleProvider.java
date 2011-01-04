@@ -11,37 +11,34 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.logic.rule;
+package org.openmrs.logic.rule.definition;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicException;
-import org.openmrs.logic.LogicRule;
-import org.openmrs.logic.LogicRuleService;
 import org.openmrs.logic.Rule;
-import org.openmrs.logic.impl.LanguageHandler;
 import org.openmrs.logic.rule.provider.AbstractRuleProvider;
 import org.openmrs.logic.rule.provider.RuleProvider;
 import org.springframework.stereotype.Component;
 
 
 /**
- * A provider for user-defined {@link LogicRule}s.
+ * A provider for user-defined {@link RuleDefinition}s.
  */
 @Component
-public class LogicRuleRuleProvider extends AbstractRuleProvider implements RuleProvider {
+public class RuleDefinitionRuleProvider extends AbstractRuleProvider implements RuleProvider {
 		
 	/**
 	 * @see org.openmrs.logic.rule.provider.RuleProvider#getRule(java.lang.String)
 	 */
 	@Override
 	public Rule getRule(String configuration) {
-		LogicRuleService service = Context.getService(LogicRuleService.class);
-		LogicRule logicRule = service.getLogicRule(Integer.valueOf(configuration));
+		RuleDefinitionService service = Context.getService(RuleDefinitionService.class);
+		RuleDefinition definition = service.getRuleDefinition(Integer.valueOf(configuration));
 		
-		LanguageHandler handler = service.getLanguageHandler(logicRule.getLanguage());
+		LanguageHandler handler = service.getLanguageHandler(definition.getLanguage());
 		if (handler == null)
-			throw new LogicException("Cannot find handler for language: " + logicRule.getLanguage());
-		return handler.handle(logicRule);
+			throw new LogicException("Cannot find handler for language: " + definition.getLanguage());
+		return handler.handle(definition);
 	}
 	
 }

@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.logic.impl;
+package org.openmrs.logic.rule.definition;
 
 import java.io.BufferedWriter;
 import java.io.File;
@@ -22,7 +22,6 @@ import java.util.Date;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicConstants;
-import org.openmrs.logic.LogicRule;
 import org.openmrs.util.OpenmrsUtil;
 import org.springframework.stereotype.Component;
 
@@ -34,7 +33,7 @@ import org.springframework.stereotype.Component;
 public class JavaLanguageHandler extends CompilableLanguageHandler {
 	
 	/**
-     * @see org.openmrs.logic.impl.LanguageHandler#getName()
+     * @see org.openmrs.logic.rule.definition.LanguageHandler#getName()
      */
     @Override
     public String getName() {
@@ -42,9 +41,9 @@ public class JavaLanguageHandler extends CompilableLanguageHandler {
     }
     
     /**
-	 * @see CompilableLanguageHandler#prepareSource(LogicRule,String)
+	 * @see CompilableLanguageHandler#prepareSource(RuleDefinition,String)
 	 */
-	public void prepareSource(LogicRule logicRule, String className) {
+	public void prepareSource(RuleDefinition logicRule, String className) {
 		
 		AdministrationService as = Context.getAdministrationService();
 		String javaDirectory = as.getGlobalProperty(LogicConstants.RULE_DEFAULT_SOURCE_FOLDER);

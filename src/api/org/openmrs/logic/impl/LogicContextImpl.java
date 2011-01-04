@@ -11,7 +11,7 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.logic;
+package org.openmrs.logic.impl;
 
 import java.util.Collection;
 import java.util.Date;
@@ -28,8 +28,12 @@ import org.openmrs.api.context.Context;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.ReferenceRule;
+import org.openmrs.logic.LogicCache;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
+import org.openmrs.logic.LogicException;
+import org.openmrs.logic.LogicService;
+import org.openmrs.logic.Rule;
 
 /**
  * The context within which logic rule and data source evaluations are made. The logic context is

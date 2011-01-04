@@ -14,9 +14,9 @@
 package org.openmrs.logic.web.controller;
 
 import org.openmrs.api.context.Context;
-import org.openmrs.logic.TokenService;
 import org.openmrs.logic.token.TokenRegistration;
 import org.openmrs.logic.token.TokenRegistrationValidator;
+import org.openmrs.logic.token.TokenService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;

@@ -16,11 +16,10 @@ package org.openmrs.logic.web.controller;
 import java.util.List;
 
 import org.openmrs.api.context.Context;
-import org.openmrs.logic.LogicRule;
-import org.openmrs.logic.LogicRuleService;
-import org.openmrs.logic.TokenService;
-import org.openmrs.logic.impl.LanguageHandler;
-import org.openmrs.logic.rule.LogicRuleValidator;
+import org.openmrs.logic.rule.definition.LanguageHandler;
+import org.openmrs.logic.rule.definition.RuleDefinition;
+import org.openmrs.logic.rule.definition.RuleDefinitionService;
+import org.openmrs.logic.rule.definition.RuleDefinitionValidator;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
@@ -34,44 +33,44 @@ import org.springframework.web.bind.annotation.RequestParam;
  * Edit a user-defined logic rule
  */
 @Controller
-public class EditLogicRuleController {
+public class EditRuleDefinitionController {
 	
 	@ModelAttribute("ruleLanguages")
 	public List<LanguageHandler> getRuleLanguages() {
-		return Context.getService(LogicRuleService.class).getAllLanguageHandlers();
+		return Context.getService(RuleDefinitionService.class).getAllLanguageHandlers();
 	}
 	
 	@ModelAttribute("rule")
-	LogicRule getRule(@RequestParam(required=false, value="id") Integer id) {
+	RuleDefinition getRule(@RequestParam(required=false, value="id") Integer id) {
 		if (id != null) {
-			return Context.getService(LogicRuleService.class).getLogicRule(id);
+			return Context.getService(RuleDefinitionService.class).getRuleDefinition(id);
 		} else {
-			return new LogicRule();
+			return new RuleDefinition();
 		}
 	}
 	
-	@RequestMapping(value="/module/logic/editLogicRule.form", method=RequestMethod.GET)
+	@RequestMapping(value="/module/logic/editRuleDefinition.form", method=RequestMethod.GET)
 	public void showEditRulePage() {
 	}
 
-	@RequestMapping(value="/module/logic/editLogicRule.form", method=RequestMethod.POST)
-	public String doEditRulePage(@ModelAttribute("rule") LogicRule rule,
+	@RequestMapping(value="/module/logic/editRuleDefinition.form", method=RequestMethod.POST)
+	public String doEditRulePage(@ModelAttribute("rule") RuleDefinition rule,
 	                             Errors errors,
 	                             Model model) {
-		new LogicRuleValidator().validate(rule, errors);
+		new RuleDefinitionValidator().validate(rule, errors);
 		if (errors.hasErrors()) {
 			model.addAttribute("rule", rule);
 			return null;
 		} else {
-			Context.getService(LogicRuleService.class).saveLogicRule(rule);
-			return "redirect:manageLogicRules.list";
+			Context.getService(RuleDefinitionService.class).saveRuleDefinition(rule);
+			return "redirect:manageRuleDefinitions.list";
 		}
 	}
 	
-	@RequestMapping("/module/logic/deleteLogicRule.form")
-	public String deleteRule(@ModelAttribute("rule") LogicRule rule) {
-		Context.getService(LogicRuleService.class).purgeLogicRule(rule);
-		return "redirect:manageLogicRules.list";
+	@RequestMapping("/module/logic/deleteRuleDefinition.form")
+	public String deleteRule(@ModelAttribute("rule") RuleDefinition rule) {
+		Context.getService(RuleDefinitionService.class).purgeRuleDefinition(rule);
+		return "redirect:manageRuleDefinitions.list";
 	}
 
 }
