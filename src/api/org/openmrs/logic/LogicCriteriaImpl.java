@@ -21,6 +21,7 @@ import org.openmrs.logic.op.Operand;
 import org.openmrs.logic.op.OperandCollection;
 import org.openmrs.logic.op.OperandDate;
 import org.openmrs.logic.op.OperandNumeric;
+import org.openmrs.logic.op.OperandObject;
 import org.openmrs.logic.op.OperandText;
 import org.openmrs.logic.op.Operator;
 
@@ -373,6 +374,13 @@ public class LogicCriteriaImpl implements LogicCriteria {
 	 */
 	public LogicCriteria equalTo(String value) {
 		return appendExpression(Operator.EQUALS, new OperandText(value));
+	}
+	
+	/**
+	 * @see org.openmrs.logic.LogicCriteria#equalTo(String)
+	 */
+	public LogicCriteria equalTo(Object object) {
+		return appendExpression(Operator.EQUALS, new OperandObject(object));
 	}
 	
 	/**
