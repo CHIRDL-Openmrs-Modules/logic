@@ -32,29 +32,25 @@ public interface TokenDAO {
 	TokenRegistration getTokenRegistration(Integer id);
 
 	/**
-	 * @see TokenService#getTokenRegistrationByToken(String)
-	 */
-	TokenRegistration getTokenRegistrationByToken(String token);
-
-	/**
 	 * @see TokenService#getTokenRegistrationByUuid(String)
 	 */
 	TokenRegistration getTokenRegistrationByUuid(String uuid);
 	
-	/**
-	 * @see TokenService#getTokenRegistrationByProvider(RuleProvider, String)
-	 */
-    TokenRegistration getTokenRegistrationByProvider(RuleProvider provider, String providerToken);
-
     /**
 	 * @see TokenService#getTokenRegistrations(String, Integer, Integer)
 	 */
 	List<TokenRegistration> getTokenRegistrations(String query, Integer start, Integer length);
-	
-	/**
-	 * @see TokenService#getTokenRegistrationsByProvider(RuleProvider)
-	 */
-    List<TokenRegistration> getTokenRegistrationsByProvider(RuleProvider ruleProvider);
+
+    /**
+     * Returns all TokenRegistrations that match the specified (nullable) criteria
+     * 
+     * @param token
+     * @param provider
+     * @param providerToken
+     * @param configuration
+     * @return
+     */
+    List<TokenRegistration> getTokenRegistrations(String token, RuleProvider provider, String providerToken, String configuration);
 
     /**
 	 * @see TokenService#saveTokenRegistration(TokenRegistration)

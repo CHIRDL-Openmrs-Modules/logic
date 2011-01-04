@@ -50,6 +50,12 @@ public interface LogicRuleService extends OpenmrsService {
 	public List<LogicRule> getAllLogicRules(boolean includeRetired);
 	
 	/**
+	 * Does the following:
+	 * <ol>
+	 * <li>Saves a LogicRule to the database</li>
+	 * <li>Registers it with {@link TokenService} (by logicRule.name)</li>
+	 * <li>Deletes any previous existing token (by logicRule.id)</li>
+	 * </ol>
 	 * @param logicRule the LogicRule to save to the database
 	 * @return the saved LogicRule
 	 * @throws DAOException

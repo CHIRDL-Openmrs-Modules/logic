@@ -83,17 +83,6 @@ public class HibernateTokenDAO implements TokenDAO {
     	return (TokenRegistration) sessionFactory.getCurrentSession().get(TokenRegistration.class, id);
     }
 
-	/**
-     * @see org.openmrs.logic.db.TokenDAO#getTokenRegistrationByToken(java.lang.String)
-     */
-    @Override
-    @Transactional(readOnly=true)
-    public TokenRegistration getTokenRegistrationByToken(String token) {
-    	Criteria crit = makeCriteria();
-    	crit.add(Restrictions.eq("token", token));
-    	return (TokenRegistration) crit.uniqueResult();
-    }
-
     /**
      * @see org.openmrs.logic.db.TokenDAO#getTokenRegistrationByUuid(java.lang.String)
      */
@@ -182,28 +171,23 @@ public class HibernateTokenDAO implements TokenDAO {
     	return query.list();
     }
 
-	/**
-     * @see org.openmrs.logic.db.TokenDAO#getTokenRegistrationByProvider(org.openmrs.logic.rule.provider.RuleProvider, java.lang.String)
-     */
-    @Override
-    @Transactional(readOnly=true)
-    public TokenRegistration getTokenRegistrationByProvider(RuleProvider provider, String providerToken) {
-	    Criteria crit = makeCriteria();
-	    crit.add(Restrictions.eq("providerClassName", provider.getClass().getName()));
-	    crit.add(Restrictions.eq("providerToken", providerToken));
-	    return (TokenRegistration) crit.uniqueResult();
-    }
-
     /**
      * @see org.openmrs.logic.db.TokenDAO#getTokenRegistrationsByProvider(org.openmrs.logic.rule.provider.RuleProvider)
      */
     @SuppressWarnings("unchecked")
     @Override
     @Transactional(readOnly=true)
-    public List<TokenRegistration> getTokenRegistrationsByProvider(RuleProvider provider) {
+    public List<TokenRegistration> getTokenRegistrations(String token, RuleProvider provider, String providerToken, String configuration) {
     	Criteria crit = makeCriteria();
-    	crit.add(Restrictions.eq("providerClassName", provider.getClass().getName()));
-    	crit.addOrder(Order.asc("providerToken"));
+    	if (token != null)
+    		crit.add(Restrictions.eq("token", token));
+    	if (provider != null)
+    		crit.add(Restrictions.eq("providerClassName", provider.getClass().getName()));
+    	if (providerToken != null)
+    		crit.add(Restrictions.eq("providerToken", providerToken));
+    	if (configuration != null)
+    		crit.add(Restrictions.eq("configuration", configuration));
+    	crit.addOrder(Order.asc("token"));
     	return crit.list();
     }
     

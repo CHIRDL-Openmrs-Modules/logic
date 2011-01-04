@@ -25,6 +25,7 @@ import org.openmrs.logic.LogicRuleService;
 import org.openmrs.logic.TokenService;
 import org.openmrs.logic.db.LogicRuleDAO;
 import org.openmrs.logic.rule.LogicRuleRuleProvider;
+import org.openmrs.logic.token.TokenRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -75,8 +76,16 @@ public class LogicRuleServiceImpl extends BaseOpenmrsService implements LogicRul
 	 * @see LogicRuleService#saveLogicRule(LogicRule)
 	 */
 	public LogicRule saveLogicRule(LogicRule logicRule) {
+		TokenService tokenService = Context.getService(TokenService.class);
+		TokenRegistration existingRegistration = null;
+		if (logicRule.getId() != null)
+			existingRegistration = tokenService.getTokenRegistrationByProviderAndConfiguration(ruleProvider, logicRule.getId().toString());
 		logicRule = dao.saveLogicRule(logicRule);
-		Context.getService(TokenService.class).registerToken(logicRule.getName(), ruleProvider, logicRule.getId().toString());
+		boolean replace = existingRegistration != null && !existingRegistration.getProviderToken().equals(logicRule.getName());
+		if (replace)
+			tokenService.deleteTokenRegistration(existingRegistration);
+		if (replace || existingRegistration == null)
+			tokenService.registerToken(logicRule.getName(), ruleProvider, logicRule.getId().toString());
 		return logicRule;
 	}
 

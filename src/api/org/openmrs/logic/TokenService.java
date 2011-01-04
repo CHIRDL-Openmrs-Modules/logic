@@ -123,9 +123,18 @@ public interface TokenService extends OpenmrsService {
 	 * @param providerToken
 	 * @return
 	 */
-	TokenRegistration getTokenRegistrationByProvider(RuleProvider provider, String providerToken);
+	TokenRegistration getTokenRegistrationByProviderAndToken(RuleProvider provider, String providerToken);
 	
 	/**
+     * Get the TokenRegistration registered by the given provider with the given configuration
+     * 
+     * @param ruleProvider
+     * @param configuration
+     * @return
+     */
+    TokenRegistration getTokenRegistrationByProviderAndConfiguration(RuleProvider ruleProvider, String configuration);
+
+    /**
 	 * Save a TokenRegistration to the database.
 	 * 
 	 * @param tokenRegistration

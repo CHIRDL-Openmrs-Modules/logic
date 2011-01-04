@@ -85,7 +85,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 			return new ReferenceRule(token.substring(2));
 		}
 		
-		TokenRegistration tr = dao.getTokenRegistrationByToken(token);
+		TokenRegistration tr = justOne(dao.getTokenRegistrations(token, null, null, null));
 		if (tr == null) {
 			throw new LogicException("Unregistered token: " + token);
 		}
@@ -98,7 +98,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
      */
     @Override
     public Rule getRule(RuleProvider provider, String providerToken) {
-	    TokenRegistration tr = dao.getTokenRegistrationByProvider(provider, providerToken);
+	    TokenRegistration tr = justOne(dao.getTokenRegistrations(null, provider, providerToken, null));
 	    if (tr == null) {
 	    	throw new LogicException("Cannot find token with provider=" + provider + " and providerToken=" + providerToken);
 	    }
@@ -127,7 +127,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
      */
     @Override
     public TokenRegistration registerToken(String token, RuleProvider provider, String configuration) {
-    	TokenRegistration existing = getTokenRegistrationByProvider(provider, token);
+    	TokenRegistration existing = getTokenRegistrationByProviderAndToken(provider, token);
     	if (existing == null) {
     		// we haven't registered this before
     		TokenRegistration registered = getTokenRegistrationByToken(token);
@@ -150,7 +150,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
     		return Context.getService(TokenService.class).saveTokenRegistration(existing);
     	}
     }
-
+    
     /**
      * Find a free token similar to the one requested. (Assumes that requested itself is unavailable.)
      * 
@@ -181,7 +181,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	 */
 	@Override
 	public TokenRegistration getTokenRegistrationByToken(String token) {
-		return dao.getTokenRegistrationByToken(token);
+		return justOne(dao.getTokenRegistrations(token, null, null, null));
 	}
 	
 	/**
@@ -193,12 +193,21 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	}
 	
 	/**
-	 * @see org.openmrs.logic.TokenService#getTokenRegistrationByProvider(org.openmrs.logic.rule.provider.RuleProvider, java.lang.String)
+	 * @see org.openmrs.logic.TokenService#getTokenRegistrationByProviderAndToken(org.openmrs.logic.rule.provider.RuleProvider, java.lang.String)
 	 */
 	@Override
-	public TokenRegistration getTokenRegistrationByProvider(RuleProvider provider, String providerToken) {
-	    return dao.getTokenRegistrationByProvider(provider, providerToken);
+	public TokenRegistration getTokenRegistrationByProviderAndToken(RuleProvider provider, String providerToken) {
+	    return justOne(dao.getTokenRegistrations(null, provider, providerToken, null));
 	}
+	
+    /**
+     * @see org.openmrs.logic.TokenService#getTokenRegistrationByProviderAndConfiguration(org.openmrs.logic.rule.LogicRuleRuleProvider, java.lang.String)
+     */
+    @Override
+    public TokenRegistration getTokenRegistrationByProviderAndConfiguration(RuleProvider provider,
+                                                                            String configuration) {
+        return justOne(dao.getTokenRegistrations(null, provider, null, configuration));
+    }
 	
 	/**
 	 * @see org.openmrs.logic.TokenService#getTokenRegistrations(java.lang.String, java.lang.Integer, java.lang.Integer)
@@ -223,7 +232,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	 */
 	@Override
 	public void removeToken(LogicRuleRuleProvider provider, String providerToken) {
-		TokenRegistration tr = getTokenRegistrationByProvider(provider, providerToken);
+		TokenRegistration tr = getTokenRegistrationByProviderAndToken(provider, providerToken);
 		if (tr != null)
 			deleteTokenRegistration(tr);
 	}
@@ -273,7 +282,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
      */
     @Override
     public List<TokenRegistration> getTokenRegistrationsByProvider(RuleProvider ruleProvider) {
-        return dao.getTokenRegistrationsByProvider(ruleProvider);
+        return dao.getTokenRegistrations(null, ruleProvider, null, null);
     }
     
     /**
@@ -302,5 +311,13 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	    for (Object o : validConfigurations)
 	    	validConfigsAsStrings.add(o.toString());
 	    dao.deleteConfigurationsNotIn(provider, validConfigsAsStrings);
+	}
+	
+	private <T> T justOne(Collection<T> collection) {
+		if (collection == null || collection.size() == 0)
+			return null;
+		else if (collection.size() == 1)
+			return collection.iterator().next();
+		else throw new LogicException("Should not return more than one");
 	}
 }
