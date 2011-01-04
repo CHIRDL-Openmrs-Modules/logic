@@ -43,7 +43,8 @@
 		<file>messages.properties</file>
 	</messages>
 	<mappingFiles>
-		Logic.hbm.xml
+		TokenRegistration.hbm.xml
+		LogicRule.hbm.xml
 	</mappingFiles>
 	<!-- /logic Module Properties -->
 	
