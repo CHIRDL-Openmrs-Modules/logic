@@ -43,7 +43,7 @@
 			New table to store user-defined logic rules
 		</description>
 		<sql>					
-			CREATE TABLE IF NOT EXISTS `logic_rule_definition` (
+			CREATE TABLE `logic_rule_definition` (
 			  `id` int(11) NOT NULL auto_increment,
 			  `uuid` char(38) NOT NULL,
 			  `name` varchar(255) NOT NULL unique,

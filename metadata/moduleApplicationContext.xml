@@ -70,7 +70,7 @@
 					<property name="target">
 						<bean class="org.openmrs.logic.token.impl.TokenServiceImpl">
 							<property name="dao">
-								<bean class="org.openmrs.logic.db.hibernate.HibernateTokenDAO">
+								<bean class="org.openmrs.logic.token.db.hibernate.HibernateTokenDAO">
 									<property name="sessionFactory"><ref bean="sessionFactory" /></property>
 								</bean>
 							</property>
