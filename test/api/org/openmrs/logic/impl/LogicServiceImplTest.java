@@ -1,26 +1,18 @@
 package org.openmrs.logic.impl;
 
-import java.io.File;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Patient;
-import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
-import org.openmrs.logic.LogicConstants;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicService;
 import org.openmrs.logic.Rule;
 import org.openmrs.logic.datasource.ObsDataSource;
 import org.openmrs.logic.result.Result;
-import org.openmrs.logic.rule.ReferenceRule;
-import org.openmrs.logic.rule.definition.RuleDefinition;
-import org.openmrs.logic.rule.definition.RuleDefinitionService;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 import org.openmrs.test.Verifies;
-import org.openmrs.util.OpenmrsUtil;
 
 public class LogicServiceImplTest extends BaseModuleContextSensitiveTest {
 	

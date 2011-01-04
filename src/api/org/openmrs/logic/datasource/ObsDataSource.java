@@ -30,21 +30,19 @@ import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicException;
-import org.openmrs.logic.Rule;
 import org.openmrs.logic.db.LogicObsDAO;
 import org.openmrs.logic.result.Result;
-import org.openmrs.logic.rule.ReferenceRule;
-import org.openmrs.logic.rule.provider.AbstractRuleProvider;
+import org.openmrs.logic.rule.provider.RegisterAtStartupReferenceRuleProvider;
 import org.openmrs.logic.rule.provider.RuleProvider;
-import org.openmrs.logic.token.TokenService;
 import org.openmrs.logic.util.LogicUtil;
 
 /**
  * Provides access to clinical observations. The keys for this data source are the primary names of
  * all tests within the concept dictionary. Results have a result date equal to the observation
  * datetime and a value based on the observed value.
+ * TODO either make {@link RegisterAtStartupReferenceRuleProvider} more efficient, or else write a custom {@link #afterStartup()} method.
  */
-public class ObsDataSource extends AbstractRuleProvider implements RuleProvider, LogicDataSource {
+public class ObsDataSource extends RegisterAtStartupReferenceRuleProvider implements RuleProvider, LogicDataSource {
 	
 	private static final Collection<String> keys = new ArrayList<String>();
 	
@@ -145,31 +143,29 @@ public class ObsDataSource extends AbstractRuleProvider implements RuleProvider,
 	}
 	
 	/**
-     * @see org.openmrs.logic.rule.provider.RuleProvider#getRule(java.lang.String)
-     */
-    @Override
-    public Rule getRule(String configuration) {
-    	return new ReferenceRule("obs." + configuration);
-    }
-
-	/**
-	 * @see org.openmrs.logic.rule.provider.AbstractRuleProvider#afterStartup()
+	 * @see org.openmrs.logic.rule.provider.ReferenceRuleProvider#getReferenceRulePrefix()
 	 */
 	@Override
-	public void afterStartup() {
-		removeOldTokens();
-	    registerAllRules();
+	public String getReferenceRulePrefix() {
+	    return "obs";
 	}
-	    
-    private void removeOldTokens() {
-		TokenService tokenService = Context.getService(TokenService.class);
-    	tokenService.keepOnlyValidConfigurations(this, logicObsDAO.getAllQuestionConceptIds());
-    }
-    
-    private void registerAllRules() {
-    	TokenService tokenService = Context.getService(TokenService.class);
+	
+	/**
+	 * @see org.openmrs.logic.rule.provider.RegisterAtStartupReferenceRuleProvider#getAllKeysAndTokens()
+	 */
+	@Override
+	public Map<String, String> getAllKeysAndTokens() {
+	    Map<String, String> ret = new HashMap<String, String>();
+
+	    // determine which locale use for names from
+		Locale conceptNameLocale = Locale.US;
+		String localeProp = Context.getAdministrationService().getGlobalProperty(
+		    "logic.defaultTokens.conceptNameLocale");
+		if (localeProp != null) {
+			conceptNameLocale = new Locale(localeProp);
+		}
 		
-		// Register Tokens for all Concepts in specified classes
+		// get all Concepts in specified classes
 		List<ConceptClass> conceptClasses = new ArrayList<ConceptClass>();
 		String classProp = Context.getAdministrationService()
 		        .getGlobalProperty("logic.defaultTokens.conceptClasses");
@@ -180,31 +176,18 @@ public class ObsDataSource extends AbstractRuleProvider implements RuleProvider,
 		} else {
 			conceptClasses = Context.getConceptService().getAllConceptClasses();
 		}
-		
-		Locale conceptNameLocale = Locale.US;
-		String localeProp = Context.getAdministrationService().getGlobalProperty(
-		    "logic.defaultTokens.conceptNameLocale");
-		if (localeProp != null) {
-			conceptNameLocale = new Locale(localeProp);
-		}
 
-		int counter = 0;
 		for (ConceptClass currClass : conceptClasses) {
 			for (Concept c : Context.getConceptService().getConceptsByClass(currClass)) {
 				if (!c.getDatatype().isAnswerOnly()) {
 					ConceptName conceptName = c.getPreferredName(conceptNameLocale);
-					if (conceptName != null) {
-						Rule r = new ReferenceRule("obs." + conceptName.getName());
-						tokenService.registerToken(conceptName.getName(), this, c.getConceptId().toString());
-						++counter;
-						if (counter > 50) {
-							counter = 0;
-							Context.flushSession();
-						}
-					}
+					if (conceptName != null)
+						ret.put(c.getConceptId().toString(), conceptName.getName());
 				}
 			}
 		}
-    }
+    
+	    return ret;
+	}
 	
 }

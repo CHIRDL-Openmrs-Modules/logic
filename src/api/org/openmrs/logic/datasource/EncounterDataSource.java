@@ -32,6 +32,7 @@ import org.openmrs.logic.LogicException;
 import org.openmrs.logic.db.LogicEncounterDAO;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.provider.RuleProvider;
+import org.openmrs.logic.rule.provider.SimpleReferenceRuleProvider;
 import org.openmrs.logic.util.LogicUtil;
 
 /**
@@ -58,7 +59,7 @@ import org.openmrs.logic.util.LogicUtil;
  *   </li>
  * </ul>
  */
-public class EncounterDataSource extends DataSourceRuleProvider implements LogicDataSource, RuleProvider {
+public class EncounterDataSource extends SimpleReferenceRuleProvider implements LogicDataSource, RuleProvider {
 	
 	private static final Collection<String> keys = new ArrayList<String>();
 	
@@ -184,11 +185,11 @@ public class EncounterDataSource extends DataSourceRuleProvider implements Logic
 	}
 
 	/**
-     * @see org.openmrs.logic.datasource.DataSourceRuleProvider#getDataSourceName()
-     */
-    @Override
-    public String getDataSourceName() {
+	 * @see org.openmrs.logic.rule.provider.RegisterAtStartupReferenceRuleProvider#getReferenceRulePrefix()
+	 */
+	@Override
+	public String getReferenceRulePrefix() {
 	    return "encounter";
-    }
-	
+	}
+		
 }
