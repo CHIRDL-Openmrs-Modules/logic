@@ -16,9 +16,8 @@ package org.openmrs.logic.rule.definition;
 import org.openmrs.logic.Rule;
 
 /**
- * Root interface for all LogicRule language handlers. The contract for this class is all LogicRules
- * must be converted to a Rule object. Implementing classes can define their own ways to create
- * the Rule object and register the class for future use.
+ * Interface that defines the capability to compile a {@link RuleDefinition} into a {@link Rule}.
+ * TODO see if we can replace this with ScriptEngine/Compilable from JSR-223 in Java 6
  */
 public interface LanguageHandler {
 	
@@ -28,12 +27,12 @@ public interface LanguageHandler {
     String getName();
     
     /**
-	 * Handle the LogicRule. This handler will control how the Rule object will be created.
+	 * Handle the {@link RuleDefinition}. This handler will control how the Rule object will be created.
 	 * Different types of language can register their own language handler.
 	 * 
-	 * @param logicRule the LogicRule that will be processed
-	 * @return the rule object or null if no rule object can be created for the LogicRule
+	 * @param ruleDefinition the {@link RuleDefinition} that will be processed
+	 * @return the rule object or null if no rule object can be created for the {@link RuleDefinition}
 	 */
-	Rule handle(RuleDefinition logicRule);
+	Rule compile(RuleDefinition ruleDefinition);
 	
 }

@@ -38,11 +38,11 @@ public class GroovyLanguageHandler implements LanguageHandler {
 	}
 	
 	/**
-	 * @see org.openmrs.logic.rule.definition.LanguageHandler#handle(org.openmrs.logic.rule.definition.RuleDefinition)
+	 * @see org.openmrs.logic.rule.definition.LanguageHandler#compile(RuleDefinition)
 	 */
 	@SuppressWarnings("unchecked")
     @Override
-	public Rule handle(RuleDefinition logicRule) {
+	public Rule compile(RuleDefinition ruleDefinition) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("package org.openmrs.module.logic.rule;\n");
 		sb.append("import java.util.Map;\n");
@@ -51,9 +51,9 @@ public class GroovyLanguageHandler implements LanguageHandler {
 		sb.append("import org.openmrs.logic.rule.*;\n");
 		sb.append("import org.openmrs.logic.result.*;\n");
 		sb.append("\n");
-		sb.append("public class GroovyRule" + logicRule.getId() + " extends AbstractRule {\n");
+		sb.append("public class GroovyRule" + ruleDefinition.getId() + " extends AbstractRule {\n");
 		sb.append("    public Result eval(LogicContext context, Patient patient, Map<String, Object> parameters) throws LogicException {\n");
-		sb.append(logicRule.getRuleContent());
+		sb.append(ruleDefinition.getRuleContent());
 		sb.append("    }\n");
 		sb.append("}");
 		try {

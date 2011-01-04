@@ -38,7 +38,7 @@ public class RuleDefinitionRuleProvider extends AbstractRuleProvider implements 
 		LanguageHandler handler = service.getLanguageHandler(definition.getLanguage());
 		if (handler == null)
 			throw new LogicException("Cannot find handler for language: " + definition.getLanguage());
-		return handler.handle(definition);
+		return handler.compile(definition);
 	}
 	
 }

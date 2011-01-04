@@ -44,19 +44,19 @@ public abstract class CompilableLanguageHandler implements LanguageHandler {
 	 * [logic.default.ruleJavaDirectory (global property)]/org/openmrs/rule/example/PregnantMan.java
 	 * </pre>
 	 * 
-	 * @param logicRule the LogicRule that need to be processed
+	 * @param ruleDefinition the LogicRule that need to be processed
 	 * @param className the suggested class name
 	 */
-	public abstract void prepareSource(RuleDefinition logicRule, String className);
+	public abstract void prepareSource(RuleDefinition ruleDefinition, String className);
 	
 	/**
-	 * @see LanguageHandler#handle(RuleDefinition)
+	 * @see LanguageHandler#compile(RuleDefinition)
 	 */
-	public Rule handle(RuleDefinition logicRule) {
+	public Rule compile(RuleDefinition ruleDefinition) {
 		CompilingClassLoader classLoader = new CompilingClassLoader();
 		try {
-			String className = getClassName(logicRule);
-			prepareSource(logicRule, className);
+			String className = getClassName(ruleDefinition);
+			prepareSource(ruleDefinition, className);
 			Class<?> c = classLoader.loadClass(className);
 			Object obj = c.newInstance();
 			return (Rule) obj;
@@ -67,8 +67,8 @@ public abstract class CompilableLanguageHandler implements LanguageHandler {
 		}
 	}
 	
-	public static String getClassName(RuleDefinition logicRule) {
-	    return "org.openmrs.module.logic.rule.CompiledRule" + logicRule.getId();
+	public static String getClassName(RuleDefinition ruleDefinition) {
+	    return "org.openmrs.module.logic.rule.CompiledRule" + ruleDefinition.getId();
     }
 	
 }

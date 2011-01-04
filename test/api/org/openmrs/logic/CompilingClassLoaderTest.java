@@ -40,7 +40,7 @@ public class CompilingClassLoaderTest extends BaseContextSensitiveTest {
 		File ruleSourceDir = OpenmrsUtil.getDirectoryInApplicationDataDirectory(ruleJavaDir);
 		
 		JavaLanguageHandler h = new JavaLanguageHandler();
-		h.handle(logicRule);
+		h.compile(logicRule);
 		
 		CompilingClassLoader loader = new CompilingClassLoader();
 		
