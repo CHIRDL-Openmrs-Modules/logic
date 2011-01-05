@@ -198,8 +198,7 @@ public class CompilingClassLoader extends ClassLoader {
 			try {
 				// Try to compile it.  If this doesn't work, then
 				// we must declare failure.  (It's not good enough to use
-		
-				// and already-existing, but out-of-date, class file)
+				// an already-existing, but out-of-date, class file)
 				if (!compile(javaFile.getAbsolutePath()) || !classFile.exists())
 					throw new ClassNotFoundException("Compilation process failed for " + javaFilename);
 			}

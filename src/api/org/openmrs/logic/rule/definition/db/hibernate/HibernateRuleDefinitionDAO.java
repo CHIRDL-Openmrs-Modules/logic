@@ -50,15 +50,10 @@ public class HibernateRuleDefinitionDAO implements RuleDefinitionDAO {
 	 * @see RuleDefinitionDAO#getRuleDefinition(String)
 	 */
 	@Override
-	@SuppressWarnings("unchecked")
 	public RuleDefinition getRuleDefinition(String name) throws DAOException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RuleDefinition.class);
 		criteria.add(Expression.eq("name", name));
-		List<RuleDefinition> found = criteria.list();
-		if (found == null || found.isEmpty()) {
-			return null;
-		}
-		return found.get(0);
+		return (RuleDefinition) criteria.uniqueResult();
 	}
 
 	/**
@@ -69,7 +64,7 @@ public class HibernateRuleDefinitionDAO implements RuleDefinitionDAO {
 	public List<RuleDefinition> getAllRuleDefinitions(boolean includeRetired) throws DAOException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RuleDefinition.class);
 		if (!includeRetired) {
-			criteria.add(Expression.like("retired", false));
+			criteria.add(Expression.eq("retired", false));
 		}
 		criteria.addOrder(Order.asc("name"));
 		return criteria.list();

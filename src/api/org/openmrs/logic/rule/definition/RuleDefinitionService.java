@@ -42,8 +42,13 @@ public interface RuleDefinitionService extends OpenmrsService {
 	public RuleDefinition getRuleDefinition(String name);
 	
 	/**
+     * @return all {@link RuleDefinition}s in the database, including retired ones
+     */
+    List<RuleDefinition> getAllRuleDefinitions();
+
+    /**
 	 * @param includeRetired if true, includes retired {@link RuleDefinition}s
-	 * @return all {@link RuleDefinition}s saved to the database
+	 * @return all {@link RuleDefinition}s saved to the database possibly including retired ones
 	 * @throws DAOException
 	 */
 	@Transactional(readOnly=true)

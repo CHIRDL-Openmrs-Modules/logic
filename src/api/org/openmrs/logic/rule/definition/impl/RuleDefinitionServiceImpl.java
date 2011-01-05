@@ -47,6 +47,7 @@ public class RuleDefinitionServiceImpl extends BaseOpenmrsService implements Rul
 	/**
 	 * @see RuleDefinitionService#getRuleDefinition(Integer)
 	 */
+	@Override
 	public RuleDefinition getRuleDefinition(Integer id) {
 		return dao.getRuleDefinition(id);
 	}
@@ -54,6 +55,7 @@ public class RuleDefinitionServiceImpl extends BaseOpenmrsService implements Rul
 	/**
 	 * @see RuleDefinitionService#getRuleDefinition(String)
 	 */
+	@Override
 	public RuleDefinition getRuleDefinition(String name) {
 		return dao.getRuleDefinition(name);
 	}
@@ -61,14 +63,16 @@ public class RuleDefinitionServiceImpl extends BaseOpenmrsService implements Rul
 	/**
 	 * @return all user-defined {@link RuleDefinition}s saved to the database
 	 */
+	@Override
 	public List<RuleDefinition> getAllRuleDefinitions() {
-		return getAllRuleDefinitions(false);
+		return getAllRuleDefinitions(true);
 	}
 	
 	/**
 	 * @param includeRetired if true, includes retired {@link RuleDefinition}s
 	 * @return all user-defined {@link RuleDefinition}s saved to the database
 	 */
+	@Override
 	public List<RuleDefinition> getAllRuleDefinitions(boolean includeRetired) {
 		return dao.getAllRuleDefinitions(includeRetired);
 	}
@@ -76,6 +80,7 @@ public class RuleDefinitionServiceImpl extends BaseOpenmrsService implements Rul
 	/**
 	 * @see RuleDefinitionService#saveRuleDefinition(RuleDefinition)
 	 */
+	@Override
 	public RuleDefinition saveRuleDefinition(RuleDefinition ruleDefinition) {
 		TokenService tokenService = Context.getService(TokenService.class);
 		TokenRegistration existingRegistration = null;
@@ -93,6 +98,7 @@ public class RuleDefinitionServiceImpl extends BaseOpenmrsService implements Rul
 	/**
 	 * @see RuleDefinitionService#purgeRuleDefinition(RuleDefinition)
 	 */
+	@Override
 	public void purgeRuleDefinition(RuleDefinition ruleDefinition) {
 		dao.deleteRuleDefinition(ruleDefinition);
 		Context.getService(TokenService.class).removeToken(ruleProvider, ruleDefinition.getName());
@@ -116,7 +122,7 @@ public class RuleDefinitionServiceImpl extends BaseOpenmrsService implements Rul
      * @see org.openmrs.logic.rule.definition.RuleDefinitionService#getAllLanguageHandlers()
      */
     @Override
-    public List<LanguageHandler> getAllLanguageHandlers() {
+	public List<LanguageHandler> getAllLanguageHandlers() {
 	    return Collections.unmodifiableList(languageHandlers);
     }
 

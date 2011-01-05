@@ -382,8 +382,7 @@ public class LogicServiceImpl implements LogicService {
 			return lc;
 		}
 		catch (Exception e) {
-			log.error(e.getStackTrace());
-			return null;
+			throw new LogicException("Could not parse expression", e);
 		}
 	}
 }
