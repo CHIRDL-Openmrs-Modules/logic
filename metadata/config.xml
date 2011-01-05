@@ -11,14 +11,14 @@
 	<description>
 			
 	</description>
-	<activator>@MODULE_PACKAGE@.LogicModuleActivator</activator>
+	<activator>org.openmrs.module.logic.LogicModuleActivator</activator>
 	<updateURL>https://dev.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL>
 
 	<require_version>1.6.0</require_version>
 	
     <extension>
         <point>org.openmrs.admin.list</point>
-        <class>org.openmrs.logic.extension.html.AdminList</class>
+        <class>org.openmrs.module.logic.AdminList</class>
     </extension>
     
     <!-- Global Properties -->
