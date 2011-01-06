@@ -128,6 +128,12 @@ public class LogicContextImpl implements LogicContext {
 		Result result = getCache().get(patient, criteria, parameters);
 		
 		if (result == null) {
+			// if criteria has an index date, that will override the context's index date for this evaluation
+			Date originalIndexDate = getIndexDate();
+			Date criteriaIndexDate = getIndexDate(criteria);
+			if (criteriaIndexDate != null)
+				setIndexDate(criteriaIndexDate);
+
 			Integer targetPatientId = patient.getPatientId();
 			log.debug("Context database read (pid = " + targetPatientId + ")");
 			Rule rule = Context.getLogicService().getRule(criteria.getRootToken());
@@ -146,6 +152,10 @@ public class LogicContextImpl implements LogicContext {
 			}
 			result = resultMap.get(targetPatientId);
 			getCache().put(criteria, parameters, rule.getTTL(), resultMap);
+			
+			// if we overrode the index date, restore it
+			if (criteriaIndexDate != null)
+				setIndexDate(originalIndexDate);
 		}
 		
 		return result;
@@ -269,4 +279,42 @@ public class LogicContextImpl implements LogicContext {
 		return cache;
 	}
 
+	/**
+	 * Get the indexDate specified in this criteria. (Hack: for now this means any AsOf date we can find.)
+	 * 
+	 * @param criteria
+	 * @return
+	 */
+	private Date getIndexDate(LogicCriteria criteria) {
+		return getIndexDate(criteria.getExpression());
+	}
+
+	/**
+     * Recursively look for an indexDate in expression (i.e. the right operand of any ASOF operator we can find)
+     * 
+     * @param expression
+     * @return any indexDate specified in this expression
+     */
+    private Date getIndexDate(LogicExpression expression) {
+	    if (Operator.ASOF.equals(expression.getOperator())) {
+	    	return (OperandDate) expression.getRightOperand();
+	    } else {
+	    	Operand operand = expression.getRightOperand();
+	    	if (operand instanceof LogicExpression) {
+	    		Date date = getIndexDate((LogicExpression) operand);
+	    		if (date != null)
+	    			return date;
+	    	}
+	    	if (expression instanceof LogicExpressionBinary) {
+	    		operand = ((LogicExpressionBinary) expression).getLeftOperand();
+	    		if (operand instanceof LogicExpression) {
+		    		Date date = getIndexDate((LogicExpression) operand);
+		    		if (date != null)
+		    			return date;
+		    	}
+	    	}
+	    }
+	    return null;
+    }
+    
 }
