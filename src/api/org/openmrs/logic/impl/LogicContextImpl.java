@@ -23,17 +23,21 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
-import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
-import org.openmrs.logic.datasource.LogicDataSource;
-import org.openmrs.logic.result.Result;
-import org.openmrs.logic.rule.ReferenceRule;
 import org.openmrs.logic.LogicCache;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicException;
+import org.openmrs.logic.LogicExpression;
+import org.openmrs.logic.LogicExpressionBinary;
 import org.openmrs.logic.LogicService;
 import org.openmrs.logic.Rule;
+import org.openmrs.logic.datasource.LogicDataSource;
+import org.openmrs.logic.op.Operand;
+import org.openmrs.logic.op.OperandDate;
+import org.openmrs.logic.op.Operator;
+import org.openmrs.logic.result.Result;
+import org.openmrs.logic.rule.ReferenceRule;
 
 /**
  * The context within which logic rule and data source evaluations are made. The logic context is
@@ -70,7 +74,7 @@ public class LogicContextImpl implements LogicContext {
 	 * Patients being processed within this logic context
 	 */
 	private Cohort patients;
-	
+		
 	/**
 	 * Cache used by this log context
 	 * 
@@ -122,15 +126,14 @@ public class LogicContextImpl implements LogicContext {
 	 */
 	public Result eval(Patient patient, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
 		Result result = getCache().get(patient, criteria, parameters);
-		PatientService patientService = Context.getPatientService();
 		
 		if (result == null) {
 			Integer targetPatientId = patient.getPatientId();
 			log.debug("Context database read (pid = " + targetPatientId + ")");
 			Rule rule = Context.getLogicService().getRule(criteria.getRootToken());
 			Map<Integer, Result> resultMap = new Hashtable<Integer, Result>();
-			for (Integer pid : patients.getMemberIds()) {
-				Patient currPatient = patientService.getPatient(pid);
+
+			for (Patient currPatient : Context.getPatientSetService().getPatients(patients.getMemberIds())) {
 				Result r = Result.emptyResult();
 				if (rule instanceof ReferenceRule) {
 					r = ((ReferenceRule) rule).eval(this, currPatient, criteria);
@@ -139,16 +142,15 @@ public class LogicContextImpl implements LogicContext {
 					r = applyCriteria(r, criteria);
 				}
 				
-				resultMap.put(pid, r);
-				if (pid.equals(targetPatientId))
-					result = resultMap.get(pid);
+				resultMap.put(currPatient.getPatientId(), r);
 			}
+			result = resultMap.get(targetPatientId);
 			getCache().put(criteria, parameters, rule.getTTL(), resultMap);
 		}
 		
 		return result;
 	}
-	
+
 	/**
 	 * Criteria are applied to results of rules <em>after</em> the rule has been evaluated, since
 	 * rules are not expected to interpret all possible criteria
@@ -266,5 +268,5 @@ public class LogicContextImpl implements LogicContext {
 			cache = new LogicCache();
 		return cache;
 	}
-	
+
 }
