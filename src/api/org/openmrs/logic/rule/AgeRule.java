@@ -36,7 +36,7 @@ public class AgeRule implements Rule {
 	 */
 	public Result eval(LogicContext context, Patient patient, Map<String, Object> parameters) throws LogicException {
 		
-		Date birthdate = context.read(patient, context.getLogicDataSource("person"), "BIRTHDATE").toDatetime();
+		Date birthdate = patient.getBirthdate();
 		
 		if (birthdate == null) {
 			return Result.emptyResult();
