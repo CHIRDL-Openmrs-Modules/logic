@@ -26,6 +26,12 @@ import org.openmrs.logic.rule.provider.RuleProvider;
 public interface TokenService extends OpenmrsService {
 
 	/**
+	 * Run the afterStartup() method on all RuleProviders, generally getting them to re-register all
+	 * their rules.
+	 */
+	void initialize();
+	
+	/**
 	 * Gets a rule given a (user-facing) token. RuleProviders and modules should typically use
 	 * {@link #getRule(RuleProvider, String)} instead, since there is no guarantee that the user
 	 * hasn't changed token names since you registered a rule.

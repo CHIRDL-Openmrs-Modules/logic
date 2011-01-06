@@ -64,7 +64,7 @@ public abstract class AbstractRule implements Rule {
 	 */
 	@Override
 	public int getTTL() {
-		return 0; // TODO increase the TTL so RuleFactory can cache these
+		return 30; // TODO increase the TTL so RuleFactory can cache these
 	}
 	
 }

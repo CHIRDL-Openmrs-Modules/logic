@@ -13,10 +13,14 @@
  */
 package org.openmrs.logic.token.impl;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.logic.LogicException;
@@ -33,6 +37,8 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Implementation of {@link TokenService}
  */
 public class TokenServiceImpl extends BaseOpenmrsService implements TokenService {
+	
+	private final Log log = LogFactory.getLog(getClass());
 	
 	@Autowired
 	private List<RuleProvider> ruleProviders;
@@ -51,11 +57,60 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	 */
 	@Override
 	public void onStartup() {
+		initialize();
+	}
+	
+	/**
+	 * @see org.openmrs.logic.token.TokenService#initialize()
+	 */
+	@Override
+	public void initialize() {
 	    for (RuleProvider provider : ruleProviders) {
-	    	provider.afterStartup();
+	    	startupProviderAsDaemon(provider);
 	    }
 	}
 	
+	/**
+     * Calls provider.afterStartup() in a Daemon thread (or, if we are pre-OpenMRS 1.8 another way)
+     * 
+     * @param provider
+     */
+    private void startupProviderAsDaemon(final RuleProvider provider) {
+		try {
+			Method m = Class.forName("org.openmrs.api.context.Daemon").getMethod("runInNewDaemonThread");
+			m.invoke(null, new Runnable() {
+				public void run() {
+					log.debug("Starting " + provider.getClass());
+					provider.afterStartup();
+					log.debug("Finished starting " + provider.getClass());
+				};
+			});
+		} catch (IllegalAccessException ex) {
+			startupProviderWithoutDaemon(provider);
+		} catch (IllegalArgumentException ex) {
+			startupProviderWithoutDaemon(provider);
+		} catch (ClassNotFoundException ex) {
+			startupProviderWithoutDaemon(provider);
+		} catch (NoSuchMethodException ex) {
+			startupProviderWithoutDaemon(provider);
+		} catch (InvocationTargetException ex) {
+			log.error("Error starting " + provider.getClass(), ex.getCause());
+		}
+    }
+
+	/**
+     * Starts up a rule provider without using Daemon.runInNewDaemonThread (pre OpenMRS 1.8)
+     * 
+     * @param provider
+     */
+    private void startupProviderWithoutDaemon(RuleProvider provider) {
+	    try {
+	    	provider.afterStartup();
+	    } catch (Exception ex) {
+	    	log.error("Error starting " + provider.getClass(), ex);
+	    }
+    }
+
 	/**
 	 * @see org.openmrs.logic.token.TokenService#getTokens(java.lang.String)
 	 */
@@ -83,11 +138,12 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 		if (token.startsWith("%%")) {
 			return new ReferenceRule(token.substring(2));
 		}
-		
+
 		TokenRegistration tr = justOne(dao.getTokenRegistrations(token, null, null, null));
 		if (tr == null) {
 			throw new LogicException("Unregistered token: " + token);
 		}
+		
 		return getRule(tr);
 	}
 
@@ -100,7 +156,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	    TokenRegistration tr = justOne(dao.getTokenRegistrations(null, provider, providerToken, null));
 	    if (tr == null) {
 	    	throw new LogicException("Cannot find token with provider=" + provider + " and providerToken=" + providerToken);
-	    }
+	    } 
 	    return getRule(tr);
     }
 
@@ -319,4 +375,5 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 			return collection.iterator().next();
 		else throw new LogicException("Should not return more than one");
 	}
+	
 }

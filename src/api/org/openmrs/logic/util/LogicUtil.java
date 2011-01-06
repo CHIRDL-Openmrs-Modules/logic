@@ -14,6 +14,7 @@
 package org.openmrs.logic.util;
 
 import java.io.File;
+import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
@@ -32,7 +33,10 @@ import org.openmrs.logic.rule.AgeRule;
 import org.openmrs.logic.rule.HIVPositiveRule;
 import org.openmrs.logic.rule.InvalidReferenceRuleException;
 import org.openmrs.logic.rule.provider.ClassRuleProvider;
+import org.openmrs.logic.task.InitializeLogicRuleProvidersTask;
 import org.openmrs.logic.token.TokenService;
+import org.openmrs.scheduler.SchedulerException;
+import org.openmrs.scheduler.TaskDefinition;
 import org.openmrs.util.OpenmrsConstants;
 
 /**
@@ -106,7 +110,7 @@ public class LogicUtil {
 		Context.getService(TokenService.class).registerToken("AGE", crp, AgeRule.class.getName());
 		Context.getService(TokenService.class).registerToken("HIV POSITIVE", crp, HIVPositiveRule.class.getName());
 
-		Context.getService(TokenService.class).onStartup();
+		Context.getService(TokenService.class).initialize();
 	}
 	
 	/**
@@ -149,4 +153,28 @@ public class LogicUtil {
 		
 		return executed;
 	}
+
+	/**
+     * This is a hacky way of making sure we can run something Context-sensitive, as a superuser, after
+     * module startup, in 1.6 and later.
+     */
+    public static void initialize() {
+		TaskDefinition def = Context.getSchedulerService().getTaskByName(InitializeLogicRuleProvidersTask.NAME);
+		if (def == null) {
+			def = new TaskDefinition();
+			def.setName(InitializeLogicRuleProvidersTask.NAME);
+			def.setTaskClass(InitializeLogicRuleProvidersTask.class.getName());
+			def.setStartOnStartup(false);
+			def.setStarted(true);
+		}
+
+		def.setStartTime(new Date(System.currentTimeMillis() + 30000));
+		// in 1.6.x it's impossible to schedule a task to run just once, but not right now. Instead we set a very large repeat interval.
+		def.setRepeatInterval(1999999999l);
+		try {
+			Context.getSchedulerService().scheduleTask(def);
+		} catch (SchedulerException ex) {
+			log.error("Error scheduling logic initialization task at startup", ex);
+		}
+    }
 }
