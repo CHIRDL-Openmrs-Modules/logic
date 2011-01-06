@@ -92,8 +92,10 @@ public class LogicCache {
 	}
 	
 	private void logCacheContents() {
+		if (log.isDebugEnabled()) {
 		log.debug("Logic Cache - " + getCache().size() + " entries");
-		for (LogicCacheEntryKey key : getCache().keySet())
-			log.debug("  " + key.toString() + " - " + getCache().get(key));
+			for (LogicCacheEntryKey key : getCache().keySet())
+				log.debug("  " + key.toString() + " - " + getCache().get(key));
+		}
 	}
 }
