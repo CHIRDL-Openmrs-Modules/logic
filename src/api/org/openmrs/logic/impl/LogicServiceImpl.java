@@ -39,6 +39,7 @@ import org.openmrs.logic.queryparser.LogicQueryTreeParser;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.result.Result.Datatype;
 import org.openmrs.logic.rule.RuleParameterInfo;
+import org.openmrs.logic.rule.provider.ReferenceRuleProvider;
 import org.openmrs.logic.token.TokenRegistration;
 import org.openmrs.logic.token.TokenService;
 
@@ -327,10 +328,16 @@ public class LogicServiceImpl implements LogicService {
 	
 	/**
 	 * @see org.openmrs.logic.LogicService#setLogicDataSources(Map)
+	 * @should fail if you try to register a reference rule provider whose prefix does not match its key
 	 */
 	public void setLogicDataSources(Map<String, LogicDataSource> dataSources) throws LogicException {
 		for (Map.Entry<String, LogicDataSource> entry : dataSources.entrySet()) {
-			registerLogicDataSource(entry.getKey(), entry.getValue());
+			String name = entry.getKey();
+			LogicDataSource dataSource = entry.getValue();
+			if (dataSource instanceof ReferenceRuleProvider)
+				if (!((ReferenceRuleProvider) dataSource).getReferenceRulePrefix().equals(name))
+					throw new LogicException("Trying to register a ReferenceRuleProvider with a different key than its prefix");
+			registerLogicDataSource(name, dataSource);
 		}
 	}
 	

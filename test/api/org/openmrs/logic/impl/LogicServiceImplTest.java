@@ -1,14 +1,20 @@
 package org.openmrs.logic.impl;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicCriteria;
+import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicService;
 import org.openmrs.logic.Rule;
+import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.datasource.ObsDataSource;
+import org.openmrs.logic.datasource.PersonDataSource;
 import org.openmrs.logic.result.Result;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
@@ -75,6 +81,18 @@ public class LogicServiceImplTest extends BaseModuleContextSensitiveTest {
 		LogicService logicService = Context.getLogicService();
 		Rule rule = logicService.getRule("%%obs.CD4 COUNT");
 		Assert.assertNotNull(rule);
-	}		
+	}
+
+	/**
+     * @see {@link LogicServiceImpl#setLogicDataSources(Map<QString;QLogicDataSource;>)}
+     * 
+     */
+    @Test(expected=LogicException.class)
+    @Verifies(value = "should fail if you try to register a reference rule provider whose prefix does not match its key", method = "setLogicDataSources(Map<QString;QLogicDataSource;>)")
+    public void setLogicDataSources_shouldFailIfYouTryToRegisterAReferenceRuleProviderWhosePrefixDoesNotMatchItsKey() {
+    	Map<String, LogicDataSource> wrong = new HashMap<String, LogicDataSource>();
+    	wrong.put("obs", new PersonDataSource());
+        Context.getLogicService().setLogicDataSources(wrong); 
+    }		
 	
 }
