@@ -29,7 +29,18 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class RuleDefinitionRuleProvider extends AbstractRuleProvider implements RuleProvider {
-		
+	
+	private Date lastRuleDefinitionChange = null;
+	
+	/**
+	 * Notify this class that a rule definition has changed. (The class stores the date of the
+	 * most recent rule change, so it can handle {@link #hasRuleChanged(String, Date)} without
+	 * hitting the database most of the time.
+	 */
+	public void notifyRuleDefinitionChanged() {
+		this.lastRuleDefinitionChange = new Date();
+	}
+	
 	/**
 	 * @see org.openmrs.logic.rule.provider.RuleProvider#getRule(java.lang.String)
 	 */
@@ -49,6 +60,8 @@ public class RuleDefinitionRuleProvider extends AbstractRuleProvider implements 
 	 */
 	@Override
 	public boolean hasRuleChanged(String configuration, Date sinceDate) {
+		if (lastRuleDefinitionChange == null || lastRuleDefinitionChange.before(sinceDate))
+			return false;
 		RuleDefinitionService service = Context.getService(RuleDefinitionService.class);
 		RuleDefinition definition = service.getRuleDefinition(Integer.valueOf(configuration));
 		Date changed = definition.getDateChanged();

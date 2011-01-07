@@ -166,7 +166,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
     }
 
     /**
-     * Instantiates a rule, given a TokenRegistration 
+     * Instantiates a {@link Rule}, given a TokenRegistration. Results are cached.
      * 
      * @param tokenRegistration
      * @return
@@ -179,13 +179,14 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 		
 		String token = tokenRegistration.getToken();
 		
-		Date now = new Date(); // make sure we get the date an instance before we hit the provider
+		Date now = new Date(); // make sure we get the date *before* we hit the provider
 		CachedRule cached = ruleCache.get(token);
 		if (cached != null) {
-			if (provider.hasRuleChanged(tokenRegistration.getConfiguration(), cached.dateLoaded)) {
+			if (provider.hasRuleChanged(tokenRegistration.getConfiguration(), cached.dateValid)) {
 				ruleCache.remove(token);
 			} else {
-				// we have a cached rule, and it's valid
+				// we have a cached rule, and it's still valid
+				cached.dateValid = now;
 				return cached.rule;
 			}
 		}
@@ -402,11 +403,11 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	private class CachedRule {
 
 		public Rule rule;
-		public Date dateLoaded;
+		public Date dateValid;
 
 		public CachedRule(Rule rule, Date date) {
 			this.rule = rule;
-			this.dateLoaded = date;
+			this.dateValid = date;
 		}
 	}
 }
