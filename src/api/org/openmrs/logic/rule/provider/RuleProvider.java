@@ -13,6 +13,8 @@
  */
 package org.openmrs.logic.rule.provider;
 
+import java.util.Date;
+
 import org.openmrs.logic.Rule;
 
 /**
@@ -32,6 +34,18 @@ public interface RuleProvider {
      * @return
      */
     Rule getRule(String configuration);
+    
+    /**
+     * If the *definition* of your rules change over time (for example your rule is a script whose
+     * source code is in a database table), then you need to implement this method.
+     * 
+     * If your rules do not change, you should always return false for this method.
+     * 
+     * @param configuration
+     * @param sinceDate
+     * @return whether the rule specified by configuration has changed since sinceDate
+     */
+    boolean hasRuleChanged(String configuration, Date sinceDate);
 
 	/**
      * Will be called by the logic service after all its machinery is started up.

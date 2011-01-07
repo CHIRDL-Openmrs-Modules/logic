@@ -13,15 +13,26 @@
  */
 package org.openmrs.logic.rule.provider;
 
+import java.util.Date;
+
 
 
 /**
- * This class provides no-op implementations of all event notification methods.
+ * This class provides no-op implementations of all event notification methods, and an always-return-false
+ * implementation of {@link #hasRuleChanged(String, Date)}
  * 
  * RuleProviders should extend this class to be be protected against changes in the RuleProvider
  * interface, in case we add more event notification methods in the future.
  */
 public abstract class AbstractRuleProvider implements RuleProvider {
+	
+	/**
+	 * @see org.openmrs.logic.rule.provider.RuleProvider#hasRuleChanged(java.lang.String, java.util.Date)
+	 */
+	@Override
+	public boolean hasRuleChanged(String configuration, Date sinceDate) {
+	    return false;
+	}
 	
 	/**
 	 * @see org.openmrs.logic.rule.provider.RuleProvider#afterStartup()
@@ -30,5 +41,5 @@ public abstract class AbstractRuleProvider implements RuleProvider {
 	public void afterStartup() {
 	    // do nothing
 	}
-	
+		
 }
