@@ -1,7 +1,9 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="/WEB-INF/template/header.jsp"%>
 
-<openmrs:require privilege="View Administration Functions" otherwise="/login.htm" redirect="/module/logic/manageLogicRules.list" />
+<openmrs:require privilege="Manage Tokens" otherwise="/login.htm" redirect="/module/logic/manageLogicRules.list" />
+
+<%@ include file="localHeader.jsp"%>
 
 <form method="post" action="deleteToken.form">
 	<input type="hidden" name="id" value="${ tokenRegistration.id }"/>

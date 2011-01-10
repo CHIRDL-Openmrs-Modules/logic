@@ -13,6 +13,8 @@
 
 <openmrs:require privilege="View Administration Functions" otherwise="/login.htm" redirect="/admin/index.htm" />
 
+<%@ include file="localHeader.jsp"%>
+
 <h2><spring:message code="logic.start.title"/></h2>
 
 <br/><h3><spring:message code="logic.tester.results.title"/></h3>

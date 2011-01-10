@@ -1,11 +1,13 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="/WEB-INF/template/header.jsp"%>
 
+<openmrs:require privilege="Manage Tokens" otherwise="/login.htm" redirect="/module/logic/manageTokens.list" />
+
+<%@ include file="localHeader.jsp"%>
+
 <openmrs:htmlInclude file="/moduleResources/logic/css/datatables.css" />
 <openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js" />
 <openmrs:htmlInclude file="/moduleResources/logic/js/jquery.dataTables.min.js" />
-
-<openmrs:require privilege="View Administration Functions" otherwise="/login.htm" redirect="/module/logic/manageTokens.list" />
 
 <script>
 	$j = jQuery.noConflict();

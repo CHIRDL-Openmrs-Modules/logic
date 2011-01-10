@@ -1,7 +1,9 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="/WEB-INF/template/header.jsp"%>
 
-<openmrs:require privilege="View Administration Functions" otherwise="/login.htm" redirect="/module/logic/manageRuleDefinitions.list" />
+<openmrs:require privilege="Manage Rule Definitions" otherwise="/login.htm" redirect="/module/logic/manageRuleDefinitions.list" />
+
+<%@ include file="localHeader.jsp"%>
 
 <h2><spring:message code="logic.rule.manage.title"/></h2>
 

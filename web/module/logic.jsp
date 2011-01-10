@@ -1,7 +1,7 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="/WEB-INF/template/header.jsp"%>
 
-<openmrs:require privilege="View Administration Functions" otherwise="/login.htm" redirect="/admin/index.htm" />
+<%@ include file="localHeader.jsp"%>
 
 <openmrs:htmlInclude file="/scripts/dojo/dojo.js" />
 <openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js" />
