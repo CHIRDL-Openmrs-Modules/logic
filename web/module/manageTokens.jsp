@@ -19,7 +19,7 @@
 				"bSort": false,
 				"bPaginate": true,
 				"bLengthChange": false,
-				"iDisplayLength": 25,
+				"iDisplayLength": 20,
 				"oSearch": { sSearch: "" },
 				"aoColumns": [
 					{ "fnRender": function(oObj) { return '<a href="logic.form?token=' + oObj.aData[1] + '"><spring:message code="logic.token.manage.test"/></a>'; } },
