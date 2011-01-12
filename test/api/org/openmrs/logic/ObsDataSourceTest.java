@@ -30,7 +30,6 @@ import org.openmrs.logic.impl.LogicCriteriaImpl;
 import org.openmrs.logic.result.Result;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
-import org.openmrs.test.TestUtil;
 
 /**
  * Tests the ObsDataSource functionality
@@ -64,8 +63,6 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContextImpl context = new LogicContextImpl(patients);
 		Map<Integer, Result> result = lds.read(context, patients, new LogicCriteriaImpl("CD4 COUNT"));
 		context = null;
-		
-		TestUtil.printOutTableContents(getConnection(), "obs");
 		
 		assertNotNull(result);
 		assertEquals(2, result.size());

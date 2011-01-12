@@ -26,6 +26,13 @@
 			</bean>
 		</property>
 	</bean>
+	<bean id="logicPatientDataSource" class="org.openmrs.logic.datasource.PatientDataSource">
+		<property name="logicPatientDAO">
+			<bean class="org.openmrs.logic.db.hibernate.HibernateLogicPatientDAO">
+				<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
+			</bean>
+		</property>
+	</bean>
 	<bean id="logicEncounterDataSource" class="org.openmrs.logic.datasource.EncounterDataSource">
 		<property name="logicEncounterDAO">
 			<bean class="org.openmrs.logic.db.hibernate.HibernateLogicEncounterDAO">
@@ -47,6 +54,7 @@
 								<entry key="encounter"><ref bean="logicEncounterDataSource" /></entry>
 								<entry key="obs"><ref bean="logicObsDataSource" /></entry>
 								<entry key="person"><ref bean="logicPersonDataSource" /></entry>
+								<entry key="patient"><ref bean="logicPatientDataSource" /></entry>
 								<entry key="program"><ref bean="logicProgramDataSource" /></entry>
 							</map>
 						</property>

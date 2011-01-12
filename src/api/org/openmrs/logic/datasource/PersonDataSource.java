@@ -65,7 +65,7 @@ public class PersonDataSource extends SimpleReferenceRuleProvider implements Log
 	
 	static {
 		String[] keyList = new String[] { "gender", "birthdate", "birthdate estimated", "dead", "death date",
-		        "cause of death", "name", "given name", "middle name", "family name", "family name2" };
+		        "cause of death", "given name", "middle name", "family name", "family name2" };
 		for (String k : keyList)
 			keys.add(k);
 	}
@@ -79,6 +79,10 @@ public class PersonDataSource extends SimpleReferenceRuleProvider implements Log
 	 * @should get dead
 	 * @should get death_date
 	 * @should get cause_of_death
+	 * @should get first name
+	 * @should get middle name
+	 * @should get family name
+	 * @should get family name2
 	 */
 	public Map<Integer, Result> read(LogicContext context, Cohort who, LogicCriteria criteria) {
 		
@@ -111,9 +115,7 @@ public class PersonDataSource extends SimpleReferenceRuleProvider implements Log
 				PersonName personName = person.getPersonName();
 				
 				String valueText = StringUtils.EMPTY;
-				if (StringUtils.equalsIgnoreCase(token, "name"))
-					valueText = personName.getFullName();
-				else if (StringUtils.equalsIgnoreCase(token, "given name"))
+				if (StringUtils.equalsIgnoreCase(token, "given name"))
 					valueText = personName.getGivenName();
 				else if (StringUtils.equalsIgnoreCase(token, "middle name"))
 					valueText = personName.getMiddleName();
@@ -141,6 +143,7 @@ public class PersonDataSource extends SimpleReferenceRuleProvider implements Log
 	/**
 	 * @see org.openmrs.logic.datasource.LogicDataSource#getKeys()
 	 */
+	@Override
 	public Collection<String> getKeys() {
 		return keys;
 	}
@@ -151,13 +154,13 @@ public class PersonDataSource extends SimpleReferenceRuleProvider implements Log
 	public boolean hasKey(String key) {
 		return getKeys().contains(key);
 	}
-
+	
 	/**
-     * @see org.openmrs.logic.datasource.DataSourceRuleProvider#getDataSourceName()
-     */
-    @Override
-    public String getReferenceRulePrefix() {
-	    return "person";
-    }
+	 * @see org.openmrs.logic.datasource.DataSourceRuleProvider#getDataSourceName()
+	 */
+	@Override
+	public String getReferenceRulePrefix() {
+		return "person";
+	}
 	
 }

@@ -13,6 +13,7 @@ import org.openmrs.logic.impl.LogicCriteriaImpl;
 import org.openmrs.logic.result.Result;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
+import org.openmrs.test.Verifies;
 
 public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 	
@@ -148,6 +149,87 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicCriteria criteria = new LogicCriteriaImpl("DEATH DATE");
 		Result result = context.read(who, lds, criteria);
 		Assert.assertEquals(Context.getDateFormat().parse("07/11/2008"), result.toDatetime());
+		
+		who = Context.getPatientService().getPatient(2);
+		context = new LogicContextImpl(who);
+		result = context.read(who, lds, criteria);
+		Assert.assertTrue(result.isEmpty());
+	}
+	
+	/**
+	 * @see {@link PersonDataSource#read(LogicContext,Cohort,LogicCriteria)}
+	 */
+	@Test
+	@Verifies(value = "should get family name", method = "read(LogicContext,Cohort,LogicCriteria)")
+	public void read_shouldGetFamilyName() throws Exception {
+		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
+		Patient who = Context.getPatientService().getPatient(4);
+		
+		LogicContext context = new LogicContextImpl(who);
+		LogicCriteria criteria = new LogicCriteriaImpl("FAMILY NAME").equalTo("Doe");
+		Result result = context.read(who, lds, criteria);
+		Assert.assertEquals("Doe", result.toString());
+		
+		who = Context.getPatientService().getPatient(2);
+		context = new LogicContextImpl(who);
+		criteria = new LogicCriteriaImpl("FAMILY NAME").equalTo("Does");
+		result = context.read(who, lds, criteria);
+		Assert.assertTrue(result.isEmpty());
+	}
+	
+	/**
+	 * @see {@link PersonDataSource#read(LogicContext,Cohort,LogicCriteria)}
+	 */
+	@Test
+	@Verifies(value = "should get family name2", method = "read(LogicContext,Cohort,LogicCriteria)")
+	public void read_shouldGetFamilyName2() throws Exception {
+		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
+		Patient who = Context.getPatientService().getPatient(2);
+		
+		LogicContext context = new LogicContextImpl(who);
+		LogicCriteria criteria = new LogicCriteriaImpl("FAMILY NAME2").equalTo("Jr.");
+		Result result = context.read(who, lds, criteria);
+		Assert.assertEquals("Jr.", result.toString());
+		
+		who = Context.getPatientService().getPatient(4);
+		context = new LogicContextImpl(who);
+		result = context.read(who, lds, criteria);
+		Assert.assertTrue(result.isEmpty());
+	}
+	
+	/**
+	 * @see {@link PersonDataSource#read(LogicContext,Cohort,LogicCriteria)}
+	 */
+	@Test
+	@Verifies(value = "should get first name", method = "read(LogicContext,Cohort,LogicCriteria)")
+	public void read_shouldGetFirstName() throws Exception {
+		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
+		Patient who = Context.getPatientService().getPatient(3);
+		
+		LogicContext context = new LogicContextImpl(who);
+		LogicCriteria criteria = new LogicCriteriaImpl("GIVEN NAME").equalTo("Other John");
+		Result result = context.read(who, lds, criteria);
+		Assert.assertEquals("Other John", result.toString());
+		
+		who = Context.getPatientService().getPatient(4);
+		context = new LogicContextImpl(who);
+		result = context.read(who, lds, criteria);
+		Assert.assertTrue(result.isEmpty());
+	}
+	
+	/**
+	 * @see {@link PersonDataSource#read(LogicContext,Cohort,LogicCriteria)}
+	 */
+	@Test
+	@Verifies(value = "should get middle name", method = "read(LogicContext,Cohort,LogicCriteria)")
+	public void read_shouldGetMiddleName() throws Exception {
+		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
+		Patient who = Context.getPatientService().getPatient(4);
+		
+		LogicContext context = new LogicContextImpl(who);
+		LogicCriteria criteria = new LogicCriteriaImpl("MIDDLE NAME").equalTo("Ugly");
+		Result result = context.read(who, lds, criteria);
+		Assert.assertEquals("Ugly", result.toString());
 		
 		who = Context.getPatientService().getPatient(2);
 		context = new LogicContextImpl(who);

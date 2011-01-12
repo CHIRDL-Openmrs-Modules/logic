@@ -26,31 +26,22 @@ import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
-import org.openmrs.Person;
+import org.openmrs.Patient;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicExpression;
 import org.openmrs.logic.LogicTransform;
-import org.openmrs.logic.db.LogicPersonDAO;
+import org.openmrs.logic.db.LogicPatientDAO;
 import org.openmrs.logic.op.Operator;
 import org.openmrs.logic.util.LogicExpressionToCriterion;
 
 /**
  * 
  */
-public class HibernateLogicPersonDAO extends LogicExpressionToCriterion implements LogicPersonDAO {
+public class HibernateLogicPatientDAO extends LogicExpressionToCriterion implements LogicPatientDAO {
 	
 	static {
-		map.put("GENDER", "gender");
-		map.put("BIRTHDATE", "birthdate");
-		map.put("BIRTHDATE ESTIMATED", "birthdateEstimated");
-		map.put("DEAD", "dead");
-		map.put("DEATH DATE", "deathDate");
-		map.put("CAUSE OF DEATH", "causeOfDeath");
-		map.put("GIVEN NAME", "name.givenName");
-		map.put("MIDDLE NAME", "name.middleName");
-		map.put("FAMILY NAME", "name.familyName");
-		map.put("FAMILY NAME2", "name.familyName2");
+		map.put("IDENTIFIER", "identifier.identifier");
 	}
 	
 	protected final Log log = LogFactory.getLog(getClass());
@@ -72,9 +63,9 @@ public class HibernateLogicPersonDAO extends LogicExpressionToCriterion implemen
 	// Helper function, converts logic service's criteria into Hibernate's
 	// criteria
 	@SuppressWarnings("unchecked")
-	private List<Person> logicToHibernate(LogicExpression expression, Collection<Integer> personIds) {
-		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Person.class);
-		criteria.createAlias("names", "name");
+	private List<Patient> logicToHibernate(LogicExpression expression, Collection<Integer> patientIds) {
+		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(Patient.class);
+		criteria.createAlias("identifiers", "identifier");
 		
 		Date indexDate = Calendar.getInstance().getTime();
 		Operator transformOperator = null;
@@ -98,23 +89,23 @@ public class HibernateLogicPersonDAO extends LogicExpressionToCriterion implemen
 		if (c != null) {
 			criteria.add(c);
 		}
-		List<Person> results = new ArrayList<Person>();
+		List<Patient> results = new ArrayList<Patient>();
 		
-		criteria.add(Restrictions.in("personId", personIds));
+		criteria.add(Restrictions.in("patientId", patientIds));
 		results.addAll(criteria.list());
 		
 		//return a single result per patient for these operators
 		//I don't see an easy way to do this in hibernate so I am
-		//doing some postprocessing
+		//doing some post processing
 		if (transformOperator == Operator.FIRST || transformOperator == Operator.LAST) {
-			HashMap<Integer, ArrayList<Person>> nResultMap = new HashMap<Integer, ArrayList<Person>>();
+			HashMap<Integer, ArrayList<Patient>> nResultMap = new HashMap<Integer, ArrayList<Patient>>();
 			
-			for (Person currResult : results) {
-				Integer currPersonId = currResult.getPersonId();
-				ArrayList<Person> prevResults = nResultMap.get(currPersonId);
+			for (Patient currResult : results) {
+				Integer currPatientId = currResult.getPatientId();
+				ArrayList<Patient> prevResults = nResultMap.get(currPatientId);
 				if (prevResults == null) {
-					prevResults = new ArrayList<Person>();
-					nResultMap.put(currPersonId, prevResults);
+					prevResults = new ArrayList<Patient>();
+					nResultMap.put(currPatientId, prevResults);
 				}
 				
 				if (prevResults.size() < numResults) {
@@ -125,8 +116,8 @@ public class HibernateLogicPersonDAO extends LogicExpressionToCriterion implemen
 			if (nResultMap.values().size() > 0) {
 				results.clear();
 				
-				for (ArrayList<Person> currPatientPerson : nResultMap.values()) {
-					results.addAll(currPatientPerson);
+				for (ArrayList<Patient> currPatientPatient : nResultMap.values()) {
+					results.addAll(currPatientPatient);
 				}
 			}
 		}
@@ -135,10 +126,10 @@ public class HibernateLogicPersonDAO extends LogicExpressionToCriterion implemen
 	
 	/**
 	 * @throws LogicException
-	 * @see org.openmrs.api.db.PersonDAO#getPeople(String, Boolean)
+	 * @see org.openmrs.api.db.PatientDAO#getPeople(String, Boolean)
 	 */
-	public List<Person> getPersons(Collection<Integer> personIds, LogicCriteria logicCriteria) throws LogicException {
-		return logicToHibernate(logicCriteria.getExpression(), personIds);
+	public List<Patient> getPatients(Collection<Integer> patientIds, LogicCriteria logicCriteria) throws LogicException {
+		return logicToHibernate(logicCriteria.getExpression(), patientIds);
 	}
 	
 }
