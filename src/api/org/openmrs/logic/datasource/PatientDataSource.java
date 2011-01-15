@@ -13,7 +13,7 @@
  */
 package org.openmrs.logic.datasource;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +40,7 @@ public class PatientDataSource extends SimpleDataSourceRuleProvider implements L
 	
 	public static final String NAME = "patient";
 	
-	private static final Collection<String> keys = new ArrayList<String>();
+	private static final Collection<String> keys = Arrays.asList("identifier");
 	
 	private LogicPatientDAO logicPatientDAO;
 	
@@ -57,13 +57,7 @@ public class PatientDataSource extends SimpleDataSourceRuleProvider implements L
 	public void setLogicPatientDAO(LogicPatientDAO logicPatientDAO) {
 		this.logicPatientDAO = logicPatientDAO;
 	}
-	
-	static {
-		String[] keyList = new String[] { "identifier" };
-		for (String k : keyList)
-			keys.add(k);
-	}
-	
+		
 	/**
 	 * @see org.openmrs.logic.datasource.LogicDataSource#read(LogicContext, Cohort, LogicCriteria)
 	 * @should read identifier
