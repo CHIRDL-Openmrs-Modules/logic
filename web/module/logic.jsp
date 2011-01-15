@@ -16,8 +16,8 @@
     .defaultTextActive { color: #a1a1a1; font-style: italic; }
 </style>
 
-<openmrs:htmlInclude file="/scripts/jquery/autocomplete/jquery.autocomplete.css" />
-<openmrs:htmlInclude file="/scripts/jquery/autocomplete/jquery.autocomplete.min.js" /> 
+<openmrs:htmlInclude file="${pageContext.request.contextPath}/moduleResources/logic/css/jquery.autocomplete.css"/>
+<openmrs:htmlInclude file="${pageContext.request.contextPath}/moduleResources/logic/js/jquery.autocomplete.pack.js"/>
 
 <script type="text/javascript">
 	var patientId = 0;
