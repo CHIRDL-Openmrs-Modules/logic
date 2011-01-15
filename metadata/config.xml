@@ -7,7 +7,7 @@
 	<name>Logic Module</name>
 	<version>0.5</version>
 	<package>org.openmrs.@MODULE_ID@</package>
-	<author>OpenMRS Core Developer</author>
+	<author>OpenMRS</author>
 	<description>
 			
 	</description>
