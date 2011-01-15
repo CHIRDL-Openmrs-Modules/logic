@@ -92,7 +92,8 @@ public class RuleDefinitionServiceImpl extends BaseOpenmrsService implements Rul
 			tokenService.deleteTokenRegistration(existingRegistration);
 		if (replace || existingRegistration == null)
 			tokenService.registerToken(ruleDefinition.getName(), ruleProvider, ruleDefinition.getId().toString());
-		ruleProvider.notifyRuleDefinitionChanged();
+		// make sure to clear any cached rules TokenService has (necessary if replace is false)
+		tokenService.notifyRuleDefinitionChanged(ruleProvider, ruleDefinition.getName());
 		return ruleDefinition;
 	}
 

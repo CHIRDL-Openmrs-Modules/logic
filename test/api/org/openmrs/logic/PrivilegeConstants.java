@@ -11,22 +11,20 @@
  *
  * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
  */
-package org.openmrs.logic.rule.provider;
+package org.openmrs.logic;
+
+import org.openmrs.Privilege;
+
 
 /**
- * This class provides no-op implementations of all event notification methods.
- * 
- * RuleProviders should extend this class to be be protected against changes in the RuleProvider
- * interface, in case we add more event notification methods in the future.
+ * Constants for {@link Privilege} names related to Logic.
  */
-public abstract class AbstractRuleProvider implements RuleProvider {
-		
-	/**
-	 * @see org.openmrs.logic.rule.provider.RuleProvider#afterStartup()
-	 */
-	@Override
-	public void afterStartup() {
-	    // do nothing
-	}
-		
+public class PrivilegeConstants {
+
+	public static final String MANAGE_TOKENS = "Manage Tokens";
+	
+	public static final String VIEW_RULE_DEFINITIONS = "View Rule Definitions";
+	
+	public static final String MANAGE_RULE_DEFINITIONS = "Manage Rule Definitions";
+	
 }

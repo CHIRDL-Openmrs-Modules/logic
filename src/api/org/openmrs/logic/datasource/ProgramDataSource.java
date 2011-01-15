@@ -30,7 +30,7 @@ import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.provider.RuleProvider;
-import org.openmrs.logic.rule.provider.SimpleReferenceRuleProvider;
+import org.openmrs.logic.rule.provider.SimpleDataSourceRuleProvider;
 import org.openmrs.logic.util.LogicUtil;
 
 /**
@@ -54,7 +54,9 @@ import org.openmrs.logic.util.LogicUtil;
  *   </li>
  * </ul>
  */
-public class ProgramDataSource extends SimpleReferenceRuleProvider implements LogicDataSource, RuleProvider {
+public class ProgramDataSource extends SimpleDataSourceRuleProvider implements LogicDataSource, RuleProvider {
+	
+	public static final String NAME = "program";
 	
 	private Log log = LogFactory.getLog(ProgramDataSource.class);
 	
@@ -157,11 +159,4 @@ public class ProgramDataSource extends SimpleReferenceRuleProvider implements Lo
 		return service.getPatientPrograms(patients, null);
 	}
 
-	/**
-     * @see org.openmrs.logic.datasource.DataSourceRuleProvider#getDataSourceName()
-     */
-    @Override
-    public String getReferenceRulePrefix() {
-	    return "program";
-    }
 }

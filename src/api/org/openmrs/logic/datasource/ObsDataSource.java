@@ -32,7 +32,7 @@ import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.db.LogicObsDAO;
 import org.openmrs.logic.result.Result;
-import org.openmrs.logic.rule.provider.RegisterAtStartupReferenceRuleProvider;
+import org.openmrs.logic.rule.provider.RegisterAtStartupDataSourceRuleProvider;
 import org.openmrs.logic.rule.provider.RuleProvider;
 import org.openmrs.logic.util.LogicUtil;
 
@@ -40,9 +40,11 @@ import org.openmrs.logic.util.LogicUtil;
  * Provides access to clinical observations. The keys for this data source are the primary names of
  * all tests within the concept dictionary. Results have a result date equal to the observation
  * datetime and a value based on the observed value.
- * TODO either make {@link RegisterAtStartupReferenceRuleProvider} more efficient, or else write a custom {@link #afterStartup()} method.
+ * TODO either make {@link RegisterAtStartupDataSourceRuleProvider} more efficient, or else write a custom {@link #afterStartup()} method.
  */
-public class ObsDataSource extends RegisterAtStartupReferenceRuleProvider implements RuleProvider, LogicDataSource {
+public class ObsDataSource extends RegisterAtStartupDataSourceRuleProvider implements RuleProvider, LogicDataSource {
+	
+	public static final String NAME = "obs";
 	
 	private static final Collection<String> keys = new ArrayList<String>();
 	
@@ -143,15 +145,7 @@ public class ObsDataSource extends RegisterAtStartupReferenceRuleProvider implem
 	}
 	
 	/**
-	 * @see org.openmrs.logic.rule.provider.ReferenceRuleProvider#getReferenceRulePrefix()
-	 */
-	@Override
-	public String getReferenceRulePrefix() {
-	    return "obs";
-	}
-	
-	/**
-	 * @see org.openmrs.logic.rule.provider.RegisterAtStartupReferenceRuleProvider#getAllKeysAndTokens()
+	 * @see org.openmrs.logic.rule.provider.RegisterAtStartupDataSourceRuleProvider#getAllKeysAndTokens()
 	 */
 	@Override
 	public Map<String, String> getAllKeysAndTokens() {

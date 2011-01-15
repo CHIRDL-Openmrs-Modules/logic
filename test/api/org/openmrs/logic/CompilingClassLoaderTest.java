@@ -4,17 +4,19 @@ import java.io.File;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.rule.definition.JavaLanguageHandler;
 import org.openmrs.logic.rule.definition.RuleDefinition;
 import org.openmrs.logic.rule.definition.RuleDefinitionService;
-import org.openmrs.test.BaseContextSensitiveTest;
+import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 import org.openmrs.test.Verifies;
 import org.openmrs.util.OpenmrsUtil;
 
-public class CompilingClassLoaderTest extends BaseContextSensitiveTest {
+public class CompilingClassLoaderTest extends BaseModuleContextSensitiveTest {
 	
 	@Before
 	public void prepareData() throws Exception {
@@ -29,6 +31,8 @@ public class CompilingClassLoaderTest extends BaseContextSensitiveTest {
 	 */
 	@SkipBaseSetup
 	@Verifies(value = "should compile and load java file at runtime", method = "loadClass(String,boolean)")
+	@Test
+	@Ignore
 	public void loadClass_shouldCompileAndLoadJavaFileAtRuntime() throws Exception {
 		
 		RuleDefinition logicRule = Context.getService(RuleDefinitionService.class).getRuleDefinition(1);

@@ -16,12 +16,15 @@ package org.openmrs.logic.token;
 import java.util.Collection;
 import java.util.List;
 
+import org.openmrs.annotation.Authorized;
 import org.openmrs.api.OpenmrsService;
+import org.openmrs.logic.PrivilegeConstants;
 import org.openmrs.logic.Rule;
 import org.openmrs.logic.rule.provider.RuleProvider;
 
 /**
  * Service used to register tokens, look them up, and get the rules registered to them
+ * [There are no @Transactional annotations on this service because they are in HibernateTokenDAO.]
  */
 public interface TokenService extends OpenmrsService {
 
@@ -63,14 +66,27 @@ public interface TokenService extends OpenmrsService {
 	 * @return the TokenRegistration created
 	 * 
 	 * @should register a rule
+	 * @should expire cached rule for this token
 	 */
+	@Authorized(PrivilegeConstants.MANAGE_TOKENS)
 	TokenRegistration registerToken(String token, RuleProvider provider, String configuration);
+	
+	/**
+	 * This service caches rules it gets from its {@link RuleProvider}s. If the definition of one
+	 * of those rules changes (e.g. it is based on a Java file which is changed on disk) then you
+	 * must call this method to clear it from the cache
+	 * 
+	 * @param provider
+	 * @param providerToken
+	 */
+	void notifyRuleDefinitionChanged(RuleProvider provider, String providerToken);
 	
 	/**
 	 * Deletes the TokenRegistration for the given token
 	 * 
 	 * @param token
 	 */
+	@Authorized(PrivilegeConstants.MANAGE_TOKENS)
 	void removeToken(String token);
 	
 	/**
@@ -79,6 +95,7 @@ public interface TokenService extends OpenmrsService {
      * @param provider
      * @param providerToken
      */
+	@Authorized(PrivilegeConstants.MANAGE_TOKENS)
     void removeToken(RuleProvider provider, String providerToken);
 	
 	/**
@@ -145,6 +162,7 @@ public interface TokenService extends OpenmrsService {
 	 * @param tokenRegistration
 	 * @return
 	 */
+    @Authorized(PrivilegeConstants.MANAGE_TOKENS)
 	TokenRegistration saveTokenRegistration(TokenRegistration tokenRegistration);
 	
 	/**
@@ -152,6 +170,7 @@ public interface TokenService extends OpenmrsService {
 	 * 
 	 * @param tokenRegistration
 	 */
+    @Authorized(PrivilegeConstants.MANAGE_TOKENS)
 	void deleteTokenRegistration(TokenRegistration tokenRegistration);
 	
 	/**
@@ -201,6 +220,7 @@ public interface TokenService extends OpenmrsService {
      * @param provider
      * @param validConfigurations any configurations not equal to the toString() of an element in this collection will be removed 
      */
+    @Authorized(PrivilegeConstants.MANAGE_TOKENS)
     void keepOnlyValidConfigurations(RuleProvider provider, Collection<?> validConfigurations);
 	
 }

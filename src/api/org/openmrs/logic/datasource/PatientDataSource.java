@@ -27,7 +27,7 @@ import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.db.LogicPatientDAO;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.provider.RuleProvider;
-import org.openmrs.logic.rule.provider.SimpleReferenceRuleProvider;
+import org.openmrs.logic.rule.provider.SimpleDataSourceRuleProvider;
 import org.openmrs.logic.util.LogicUtil;
 
 /**
@@ -36,7 +36,9 @@ import org.openmrs.logic.util.LogicUtil;
  * <li><strong>identifier</strong> &mdash; text result of patient identifiers</li>
  * </ul>
  */
-public class PatientDataSource extends SimpleReferenceRuleProvider implements LogicDataSource, RuleProvider {
+public class PatientDataSource extends SimpleDataSourceRuleProvider implements LogicDataSource, RuleProvider {
+	
+	public static final String NAME = "patient";
 	
 	private static final Collection<String> keys = new ArrayList<String>();
 	
@@ -106,14 +108,6 @@ public class PatientDataSource extends SimpleReferenceRuleProvider implements Lo
 	 */
 	public boolean hasKey(String key) {
 		return getKeys().contains(key);
-	}
-	
-	/**
-	 * @see org.openmrs.logic.datasource.DataSourceRuleProvider#getDataSourceName()
-	 */
-	@Override
-	public String getReferenceRulePrefix() {
-		return "patient";
 	}
 	
 }

@@ -39,9 +39,9 @@ import org.openmrs.logic.queryparser.LogicQueryTreeParser;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.result.Result.Datatype;
 import org.openmrs.logic.rule.RuleParameterInfo;
-import org.openmrs.logic.rule.provider.ReferenceRuleProvider;
 import org.openmrs.logic.token.TokenRegistration;
 import org.openmrs.logic.token.TokenService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import antlr.BaseAST;
 
@@ -57,8 +57,11 @@ import antlr.BaseAST;
 public class LogicServiceImpl implements LogicService {
 	
 	protected final Log log = LogFactory.getLog(getClass());
+
+	@Autowired
+	private List<LogicDataSource> allLogicDataSources;
 	
-	private static Map<String, LogicDataSource> dataSources;
+	private transient Map<String, LogicDataSource> dataSources;
 	
 	/**
 	 * Default constructor
@@ -303,11 +306,12 @@ public class LogicServiceImpl implements LogicService {
 	}
 	
 	/**
+	 * @deprecated data sources are now auto-registered via Spring
 	 * @see org.openmrs.logic.LogicService#registerLogicDataSource(java.lang.String,
 	 *      org.openmrs.logic.datasource.LogicDataSource)
 	 */
 	public void registerLogicDataSource(String name, LogicDataSource dataSource) throws LogicException {
-		getLogicDataSources().put(name, dataSource);
+		// do nothing
 	}
 	
 	/**
@@ -321,31 +325,35 @@ public class LogicServiceImpl implements LogicService {
 	 * @see org.openmrs.logic.LogicService#getLogicDataSources()
 	 */
 	public Map<String, LogicDataSource> getLogicDataSources() {
-		if (dataSources == null)
+		if (dataSources == null) {
 			dataSources = new Hashtable<String, LogicDataSource>();
+			for (LogicDataSource ds : allLogicDataSources) {
+				String name = null;
+                try {
+	                name = (String) ds.getClass().getField("NAME").get(ds);
+                } catch (Exception ex) { }
+                if (name == null)
+                	throw new LogicException("All data sources must declare a unique public static NAME property");
+				dataSources.put(name, ds);
+			}
+		}
 		return dataSources;
 	}
 	
 	/**
+	 * @deprecated data sources are now auto-registered via Spring
 	 * @see org.openmrs.logic.LogicService#setLogicDataSources(Map)
-	 * @should fail if you try to register a reference rule provider whose prefix does not match its key
 	 */
 	public void setLogicDataSources(Map<String, LogicDataSource> dataSources) throws LogicException {
-		for (Map.Entry<String, LogicDataSource> entry : dataSources.entrySet()) {
-			String name = entry.getKey();
-			LogicDataSource dataSource = entry.getValue();
-			if (dataSource instanceof ReferenceRuleProvider)
-				if (!((ReferenceRuleProvider) dataSource).getReferenceRulePrefix().equals(name))
-					throw new LogicException("Trying to register a ReferenceRuleProvider with a different key than its prefix");
-			registerLogicDataSource(name, dataSource);
-		}
+		// do nothing
 	}
 	
 	/**
+	 * @deprecated data sources are now auto-registered via Spring
 	 * @see org.openmrs.logic.LogicService#removeLogicDataSource(java.lang.String)
 	 */
 	public void removeLogicDataSource(String name) {
-		dataSources.remove(name);
+		// do nothing
 	}
 	
 	/**

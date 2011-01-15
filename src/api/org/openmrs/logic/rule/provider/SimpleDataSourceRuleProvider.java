@@ -25,13 +25,7 @@ import org.openmrs.logic.rule.ReferenceRule;
  * {@link ReferenceRule}s, with preferred tokens identical to the keys.
  * (E.g. prefix="person", key="birthdate" -> token="birthdate", reference rule="person.birthdate") 
  */
-public abstract class SimpleReferenceRuleProvider extends RegisterAtStartupReferenceRuleProvider {
-	
-	/**
-	 * @see org.openmrs.logic.rule.provider.RegisterAtStartupReferenceRuleProvider#getReferenceRulePrefix()
-	 */
-	@Override
-	public abstract String getReferenceRulePrefix();
+public abstract class SimpleDataSourceRuleProvider extends RegisterAtStartupDataSourceRuleProvider {
 	
 	/**
 	 * @return a complete set of the keys this data source supports
@@ -39,7 +33,7 @@ public abstract class SimpleReferenceRuleProvider extends RegisterAtStartupRefer
 	public abstract Collection<String> getKeys();
 	
 	/**
-	 * @see org.openmrs.logic.rule.provider.RegisterAtStartupReferenceRuleProvider#getAllKeysAndTokens()
+	 * @see org.openmrs.logic.rule.provider.RegisterAtStartupDataSourceRuleProvider#getAllKeysAndTokens()
 	 */
 	@Override
 	public Map<String, String> getAllKeysAndTokens() {

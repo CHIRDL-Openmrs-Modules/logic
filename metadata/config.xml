@@ -21,6 +21,20 @@
         <class>org.openmrs.module.logic.AdminList</class>
     </extension>
     
+    <!-- Privileges -->
+    <privilege>
+		<name>Manage Tokens</name>
+		<description>Allows registering and removal of tokens</description>
+	</privilege>
+	<privilege>
+		<name>Manage Rule Definitions</name>
+		<description>Allows creation and editing of user-defined rules</description>
+	</privilege>
+	<privilege>
+		<name>View Rule Definitions</name>
+		<description>Allows viewing of user-defined rules. (This privilege is not necessary to run rules under normal usage.)</description>
+	</privilege>
+    
     <!-- Global Properties -->
 	<globalProperty>
 		<property>logic.defaultTokens.conceptClasses</property> <!-- Must start with `moduleId.` -->

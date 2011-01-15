@@ -15,8 +15,10 @@ package org.openmrs.logic.rule.definition;
 
 import java.util.List;
 
+import org.openmrs.annotation.Authorized;
 import org.openmrs.api.OpenmrsService;
 import org.openmrs.api.db.DAOException;
+import org.openmrs.logic.PrivilegeConstants;
 import org.openmrs.logic.token.TokenService;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,7 @@ public interface RuleDefinitionService extends OpenmrsService {
 	 * @throws DAOException
 	 */
 	@Transactional(readOnly=true)
+	@Authorized(PrivilegeConstants.VIEW_RULE_DEFINITIONS)
 	public RuleDefinition getRuleDefinition(Integer id);
 	
 	/**
@@ -39,11 +42,13 @@ public interface RuleDefinitionService extends OpenmrsService {
 	 * @throws DAOException
 	 */
 	@Transactional(readOnly=true)
+	@Authorized(PrivilegeConstants.VIEW_RULE_DEFINITIONS)
 	public RuleDefinition getRuleDefinition(String name);
 	
 	/**
      * @return all {@link RuleDefinition}s in the database, including retired ones
      */
+	@Authorized(PrivilegeConstants.VIEW_RULE_DEFINITIONS)
     List<RuleDefinition> getAllRuleDefinitions();
 
     /**
@@ -52,6 +57,7 @@ public interface RuleDefinitionService extends OpenmrsService {
 	 * @throws DAOException
 	 */
 	@Transactional(readOnly=true)
+	@Authorized(PrivilegeConstants.VIEW_RULE_DEFINITIONS)
 	public List<RuleDefinition> getAllRuleDefinitions(boolean includeRetired);
 	
 	/**
@@ -66,6 +72,7 @@ public interface RuleDefinitionService extends OpenmrsService {
 	 * @throws DAOException
 	 */
 	@Transactional
+	@Authorized(PrivilegeConstants.MANAGE_RULE_DEFINITIONS)
 	public RuleDefinition saveRuleDefinition(RuleDefinition ruleDefinition);
 	
 	/**
@@ -73,6 +80,7 @@ public interface RuleDefinitionService extends OpenmrsService {
 	 * @throws DAOException
 	 */
 	@Transactional
+	@Authorized(PrivilegeConstants.MANAGE_RULE_DEFINITIONS)
 	public void purgeRuleDefinition(RuleDefinition ruleDefinition);
 	
 	/**

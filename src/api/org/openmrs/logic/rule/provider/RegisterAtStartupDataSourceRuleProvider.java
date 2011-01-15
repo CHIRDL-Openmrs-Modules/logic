@@ -22,13 +22,7 @@ import java.util.Map;
  * If you have a very large number of keys, you should probably not extend this class, but rather
  * implement some inexpensive startup process that avoids unnecessarily re-registering tokens.
  */
-public abstract class RegisterAtStartupReferenceRuleProvider extends ReferenceRuleProvider {
-	
-	/**
-	 * @see org.openmrs.logic.rule.provider.ReferenceRuleProvider#getReferenceRulePrefix()
-	 */
-	@Override
-	public abstract String getReferenceRulePrefix();
+public abstract class RegisterAtStartupDataSourceRuleProvider extends DataSourceRuleProvider {
 	
 	/**
 	 * @return a complete set of all keys this {@link RuleProvider} supports, mapped to their preferred tokens

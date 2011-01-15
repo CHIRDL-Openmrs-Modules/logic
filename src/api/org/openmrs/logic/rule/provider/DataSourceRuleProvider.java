@@ -16,6 +16,7 @@ package org.openmrs.logic.rule.provider;
 import java.util.Map;
 
 import org.openmrs.api.context.Context;
+import org.openmrs.logic.LogicException;
 import org.openmrs.logic.Rule;
 import org.openmrs.logic.rule.ReferenceRule;
 import org.openmrs.logic.token.TokenService;
@@ -24,20 +25,23 @@ import org.openmrs.logic.token.TokenService;
 /**
  * Helper class for {@link RuleProvider}s that return {@link ReferenceRule}s
  */
-public abstract class ReferenceRuleProvider extends AbstractRuleProvider {
-	
-	/**
-     * @return the prefix this provider puts before configuration on all its reference rules. 
-     */
-    public abstract String getReferenceRulePrefix();
+public abstract class DataSourceRuleProvider extends AbstractRuleProvider {
 
+	String getName() {
+		try {
+			return (String) getClass().getField("NAME").get(this);
+		} catch (Exception ex) {
+			throw new LogicException("Must declare a public static NAME field");
+		}
+	}
+	
     /**
 	 * Returns referenceRulePrefix + dot + configuration
 	 * @see org.openmrs.logic.rule.provider.RuleProvider#getRule(java.lang.String)
 	 */
 	@Override
 	public Rule getRule(String configuration) {
-		return new ReferenceRule(getReferenceRulePrefix() + "." + configuration);
+		return new ReferenceRule(getName() + "." + configuration);
 	}
 
 	/**

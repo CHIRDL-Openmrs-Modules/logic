@@ -17,7 +17,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +47,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	
 	private TokenDAO dao;
 	
-	private Map<String, CachedRule> ruleCache = new HashMap<String, CachedRule>();
+	private Map<String, Rule> ruleCache = new HashMap<String, Rule>();
 	
 	/**
 	 * @param dao the TokenDAO to set
@@ -73,6 +72,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	    for (RuleProvider provider : ruleProviders) {
 	    	startupProviderAsDaemon(provider);
 	    }
+	    ruleCache.clear();
 	}
 	
 	/**
@@ -179,21 +179,13 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 		
 		String token = tokenRegistration.getToken();
 		
-		Date now = new Date(); // make sure we get the date *before* we hit the provider
-		CachedRule cached = ruleCache.get(token);
-		if (cached != null) {
-			if (provider.hasRuleChanged(tokenRegistration.getConfiguration(), cached.dateValid)) {
-				ruleCache.remove(token);
-			} else {
-				// we have a cached rule, and it's still valid
-				cached.dateValid = now;
-				return cached.rule;
-			}
-		}
+		Rule cached = ruleCache.get(token);
+		if (cached != null)
+			return cached;
 		
 		Rule rule = provider.getRule(tokenRegistration.getConfiguration());
 		if (rule != null) {
-			ruleCache.put(token, new CachedRule(rule, now));
+			ruleCache.put(token, rule);
 		}
 		
 		return rule;
@@ -221,6 +213,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
     	} else {
     		// we've already registered this token, so we overwrite that registration
     		if (existing.getConfiguration().equals(configuration)) {
+    			ruleCache.remove(existing.getToken());
     			// don't do an unnecessary update if nothing has changed
     			return existing;
     		}
@@ -302,7 +295,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	public void removeToken(String token) {
 		TokenRegistration tr = getTokenRegistrationByToken(token);
 		if (tr != null)
-			deleteTokenRegistration(tr);
+			Context.getService(TokenService.class).deleteTokenRegistration(tr);
 	}
 	
 	/**
@@ -312,7 +305,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	public void removeToken(RuleProvider provider, String providerToken) {
 		TokenRegistration tr = getTokenRegistrationByProviderAndToken(provider, providerToken);
 		if (tr != null)
-			deleteTokenRegistration(tr);
+			Context.getService(TokenService.class).deleteTokenRegistration(tr);
 	}
 	
 	/**
@@ -320,7 +313,9 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	 */
 	@Override
 	public TokenRegistration saveTokenRegistration(TokenRegistration tokenRegistration) {
-		return dao.saveTokenRegistration(tokenRegistration);
+		TokenRegistration ret = dao.saveTokenRegistration(tokenRegistration);
+		ruleCache.remove(tokenRegistration.getToken());
+		return ret;
 	}
 
 	/**
@@ -329,6 +324,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	@Override
     public void deleteTokenRegistration(TokenRegistration tokenRegistration) {
 	    dao.deleteTokenRegistration(tokenRegistration);
+	    ruleCache.remove(tokenRegistration.getToken());
     }
 
 	/**
@@ -391,6 +387,17 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	    dao.deleteConfigurationsNotIn(provider, validConfigsAsStrings);
 	}
 	
+	/**
+	 * @see org.openmrs.logic.token.TokenService#notifyRuleDefinitionChanged(org.openmrs.logic.rule.provider.RuleProvider, java.lang.String)
+	 */
+	@Override
+	public void notifyRuleDefinitionChanged(RuleProvider provider, String providerToken) {
+		TokenRegistration tr = getTokenRegistrationByProviderAndToken(provider, providerToken);
+		if (tr == null)
+			throw new LogicException("No token registered for provider=" + provider.getClass().getName() + " providerToken=" + providerToken);
+	    ruleCache.remove(tr.getToken());
+	}
+	
 	private <T> T justOne(Collection<T> collection) {
 		if (collection == null || collection.size() == 0)
 			return null;
@@ -399,15 +406,4 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 		else throw new LogicException("Should not return more than one");
 	}
 
-		
-	private class CachedRule {
-
-		public Rule rule;
-		public Date dateValid;
-
-		public CachedRule(Rule rule, Date date) {
-			this.rule = rule;
-			this.dateValid = date;
-		}
-	}
 }

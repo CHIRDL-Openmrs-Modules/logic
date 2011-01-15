@@ -13,8 +13,6 @@
  */
 package org.openmrs.logic.rule.provider;
 
-import java.util.Date;
-
 import org.openmrs.logic.Rule;
 
 /**
@@ -27,26 +25,16 @@ import org.openmrs.logic.Rule;
 public interface RuleProvider {
 	
 	/**
-     * Instantiates a rule, based on the provided configuration. This method is expected to be
-     * relatively expensive, so the returned rule may be cached by the logic infrastructure.
+     * Instantiates a rule, based on the provided configuration. Since this method is expected to be
+     * relatively expensive, the logic infrastructure will cache the returned rule. If the definition
+     * of the rule for 'configuration' changes after this method has been called, you should call
+     * TokenService.notifyRuleDefinitionChanged() **** TODO @see ****.
      * 
      * @param configuration
      * @return
      */
     Rule getRule(String configuration);
     
-    /**
-     * If the *definition* of your rules change over time (for example your rule is a script whose
-     * source code is in a database table), then you need to implement this method.
-     * 
-     * If your rules do not change, you should always return false for this method.
-     * 
-     * @param configuration
-     * @param sinceDate
-     * @return whether the rule specified by configuration has changed since sinceDate
-     */
-    boolean hasRuleChanged(String configuration, Date sinceDate);
-
 	/**
      * Will be called by the logic service after all its machinery is started up.
      */
