@@ -52,7 +52,7 @@ public class GroovyLanguageHandler implements LanguageHandler {
 		sb.append("import org.openmrs.logic.result.*;\n");
 		sb.append("\n");
 		sb.append("public class GroovyRule" + ruleDefinition.getId() + " extends AbstractRule {\n");
-		sb.append("    public Result eval(LogicContext context, Patient patient, Map<String, Object> parameters) throws LogicException {\n");
+		sb.append("    public Result eval(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {\n");
 		sb.append(ruleDefinition.getRuleContent());
 		sb.append("    }\n");
 		sb.append("}");
