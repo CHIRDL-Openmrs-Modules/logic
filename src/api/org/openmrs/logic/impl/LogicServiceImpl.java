@@ -328,11 +328,13 @@ public class LogicServiceImpl implements LogicService {
 		if (dataSources == null) {
 			dataSources = new Hashtable<String, LogicDataSource>();
 			for (LogicDataSource ds : allLogicDataSources) {
+				// we need to get the data sources NAME by reflection, otherwise we get the static value
+				// from the LogicDataSource interface
 				String name = null;
                 try {
 	                name = (String) ds.getClass().getField("NAME").get(ds);
                 } catch (Exception ex) { }
-                if (name == null)
+                if (name == null || name.equals(LogicDataSource.NAME))
                 	throw new LogicException("All data sources must declare a unique public static NAME property");
 				dataSources.put(name, ds);
 			}
