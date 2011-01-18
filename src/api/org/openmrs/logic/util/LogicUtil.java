@@ -17,6 +17,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -159,22 +160,35 @@ public class LogicUtil {
      * module startup, in 1.6 and later.
      */
     public static void initialize() {
-		TaskDefinition def = Context.getSchedulerService().getTaskByName(InitializeLogicRuleProvidersTask.NAME);
-		if (def == null) {
-			def = new TaskDefinition();
-			def.setName(InitializeLogicRuleProvidersTask.NAME);
-			def.setTaskClass(InitializeLogicRuleProvidersTask.class.getName());
-			def.setStartOnStartup(false);
-			def.setStarted(true);
-		}
-
-		def.setStartTime(new Date(System.currentTimeMillis() + 30000));
-		// in 1.6.x it's impossible to schedule a task to run just once, but not right now. Instead we set a very large repeat interval.
-		def.setRepeatInterval(1999999999l);
-		try {
-			Context.getSchedulerService().scheduleTask(def);
-		} catch (SchedulerException ex) {
-			log.error("Error scheduling logic initialization task at startup", ex);
+    	try {
+    		// use proxy privileges for 1.6.x compatibility (starting in 1.7.x module startup and
+    		// scheduled tasks are run as the daemon user)
+    		Context.addProxyPrivilege(OpenmrsConstants.PRIV_MANAGE_SCHEDULER);
+    		
+			TaskDefinition def = Context.getSchedulerService().getTaskByName(InitializeLogicRuleProvidersTask.NAME);
+			if (def == null) {
+				def = new TaskDefinition();
+				def.setName(InitializeLogicRuleProvidersTask.NAME);
+				def.setTaskClass(InitializeLogicRuleProvidersTask.class.getName());
+				def.setStartOnStartup(false);
+				def.setStarted(true);
+			}
+	
+			def.setStartTime(new Date(System.currentTimeMillis() + 30000));
+			// in 1.6.x it's impossible to schedule a task to run just once, but not right now. Instead we set a very large repeat interval.
+			def.setRepeatInterval(1999999999l);
+			try {
+				if (def.getUuid() == null) {
+					// manual workaround for a bug in 1.6.x
+					def.setUuid(UUID.randomUUID().toString());
+				}
+				Context.getSchedulerService().scheduleTask(def);
+			} catch (SchedulerException ex) {
+				log.error("Error scheduling logic initialization task at startup", ex);
+			}
+			
+		} finally {
+			Context.removeProxyPrivilege(OpenmrsConstants.PRIV_MANAGE_SCHEDULER);
 		}
     }
 }
