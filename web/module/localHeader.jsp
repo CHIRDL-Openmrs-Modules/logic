@@ -22,7 +22,7 @@
 		</a>
 	</li>
 	<openmrs:hasPrivilege privilege="Manage Tokens">
-		<li <c:if test='<%= request.getRequestURI().contains("init") %>'>class="active"</c:if>>
+		<li <c:if test='<%= request.getRequestURI().contains("logic/init") %>'>class="active"</c:if>>
 			<a href="${pageContext.request.contextPath}/module/logic/init.form">
 				<spring:message code="logic.init.title"/>
 			</a>
