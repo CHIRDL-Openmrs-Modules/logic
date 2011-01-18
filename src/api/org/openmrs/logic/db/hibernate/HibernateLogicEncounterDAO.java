@@ -47,11 +47,14 @@ import org.openmrs.logic.op.OperandNumeric;
 import org.openmrs.logic.op.OperandText;
 import org.openmrs.logic.op.Operator;
 import org.openmrs.logic.util.LogicExpressionToCriterion;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 /**
  * This class builds the hibernate statements needed to execute logic evaluations for the
  * EncounterDatasource
  */
+@Repository
 public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion implements LogicEncounterDAO {
 	
 	protected final Log log = LogFactory.getLog(getClass());
@@ -59,6 +62,7 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 	/**
 	 * Hibernate session factory
 	 */
+	@Autowired
 	private SessionFactory sessionFactory;
 	
 	/**

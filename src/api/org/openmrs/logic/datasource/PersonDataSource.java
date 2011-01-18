@@ -31,6 +31,8 @@ import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.provider.RuleProvider;
 import org.openmrs.logic.rule.provider.SimpleDataSourceRuleProvider;
 import org.openmrs.logic.util.LogicUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 /**
  * Provides access to person demographic data. Valid keys are:
@@ -43,12 +45,14 @@ import org.openmrs.logic.util.LogicUtil;
  * date equal to the death date. If the patient is not dead, then the result is null.</li>
  * </ul>
  */
+@Repository
 public class PersonDataSource extends SimpleDataSourceRuleProvider implements LogicDataSource, RuleProvider {
 	
 	public static final String NAME = "person";
 	
 	private static final Collection<String> keys = new ArrayList<String>();
 	
+	@Autowired
 	private LogicPersonDAO logicPersonDAO;
 	
 	/**

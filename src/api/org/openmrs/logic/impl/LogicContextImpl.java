@@ -38,6 +38,7 @@ import org.openmrs.logic.op.OperandDate;
 import org.openmrs.logic.op.Operator;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.ReferenceRule;
+import org.openmrs.util.OpenmrsUtil;
 
 /**
  * The context within which logic rule and data source evaluations are made. The logic context is
@@ -68,12 +69,12 @@ public class LogicContextImpl implements LogicContext {
 	 * context; otherwise, this is null
 	 */
 	@SuppressWarnings("unused")
-	private LogicContext parentContext = null;
+    private LogicContext parentContext = null;
 	
 	/**
 	 * Patients being processed within this logic context
 	 */
-	private Cohort patients;
+	private PatientCohort patients;
 		
 	/**
 	 * Cache used by this log context
@@ -83,12 +84,28 @@ public class LogicContextImpl implements LogicContext {
 	private LogicCache cache;
 	
 	/**
+	 * Creates a {@link LogicContext} that inherits from parentContext (meaning that it shares a
+	 * cohort of patients, a cache, and its global parameters, and changes to those in the new
+	 * context will be reflected in the parent context).
+	 * If newIndexDate is non-null, then it will override the index date from the parent context.
+	 * @param parentContext
+	 * @param newIndexDate
+	 */
+	private LogicContextImpl(LogicContextImpl parentContext, Date newIndexDate) {
+		this.parentContext = parentContext;
+		this.globalParameters = parentContext.globalParameters;
+		this.patients = parentContext.patients;
+		this.cache = parentContext.cache;
+		this.indexDate = newIndexDate != null ? newIndexDate : parentContext.indexDate;
+	}
+	
+	/**
 	 * Constructs a logic context applied to a single patient
 	 * 
 	 * @param patient
 	 */
 	public LogicContextImpl(Patient patient) {
-		this.patients = new Cohort();
+		this.patients = new PatientCohort();
 		this.globalParameters = new HashMap<String, Object>();
 		patients.addMember(patient.getPatientId());
 		setIndexDate(new Date());
@@ -100,62 +117,73 @@ public class LogicContextImpl implements LogicContext {
 	 * @param patients
 	 */
 	public LogicContextImpl(Cohort patients) {
-		this.patients = patients;
+		if (patients instanceof PatientCohort)
+			this.patients = (PatientCohort) patients;
+		else
+			this.patients = new PatientCohort(patients);
 		this.globalParameters = new HashMap<String, Object>();
 		setIndexDate(new Date());
 	}
 	
 	/**
-	 * @see org.openmrs.logic.LogicContext#eval(org.openmrs.Patient, java.lang.String)
+	 * @see org.openmrs.logic.LogicContext#getPatient(java.lang.Integer)
 	 */
-	public Result eval(Patient patient, String token) throws LogicException {
-		return eval(patient, new LogicCriteriaImpl(token), null);
+	@Override
+	public Patient getPatient(Integer patientId) {
+		return patients.getPatient(patientId);
 	}
 	
 	/**
-	 * @see org.openmrs.logic.LogicContext#eval(org.openmrs.Patient, java.lang.String,
+	 * @see org.openmrs.logic.LogicContext#eval(java.lang.Integer, java.lang.String)
+	 */
+	public Result eval(Integer patientId, String token) throws LogicException {
+		return eval(patientId, new LogicCriteriaImpl(token), null);
+	}
+	
+	/**
+	 * @see org.openmrs.logic.LogicContext#eval(java.lang.Integer, java.lang.String,
 	 *      java.util.Map)
 	 */
-	public Result eval(Patient patient, String token, Map<String, Object> parameters) throws LogicException {
-		return eval(patient, new LogicCriteriaImpl(token), parameters);
+	public Result eval(Integer patientId, String token, Map<String, Object> parameters) throws LogicException {
+		return eval(patientId, new LogicCriteriaImpl(token), parameters);
 	}
 	
 	/**
-	 * @see org.openmrs.logic.LogicContext#eval(org.openmrs.Patient,
+	 * @see org.openmrs.logic.LogicContext#eval(java.lang.Integer,
 	 *      org.openmrs.logic.LogicCriteria, java.util.Map)
+	 * @should evaluate a rule that requires a new index date in a new logic context
 	 */
-	public Result eval(Patient patient, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
-		Result result = getCache().get(patient, criteria, parameters);
+	public Result eval(Integer patientId, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
+		Result result = getCache().get(patientId, criteria, parameters);
 		
 		if (result == null) {
-			// if criteria has an index date, that will override the context's index date for this evaluation
-			Date originalIndexDate = getIndexDate();
+			// if criteria specifies an index date, and it differs from the current index date, we need to
+			// evaluate this in a newly-created logic context
 			Date criteriaIndexDate = getIndexDate(criteria);
-			if (criteriaIndexDate != null)
-				setIndexDate(criteriaIndexDate);
+			if (criteriaIndexDate != null && !OpenmrsUtil.nullSafeEquals(criteriaIndexDate, getIndexDate())) {
 
-			Integer targetPatientId = patient.getPatientId();
-			log.debug("Context database read (pid = " + targetPatientId + ")");
-			Rule rule = Context.getLogicService().getRule(criteria.getRootToken());
-			Map<Integer, Result> resultMap = new Hashtable<Integer, Result>();
+				return new LogicContextImpl(this, criteriaIndexDate).eval(patientId, criteria, parameters);
 
-			for (Patient currPatient : Context.getPatientSetService().getPatients(patients.getMemberIds())) {
-				Result r = Result.emptyResult();
-				if (rule instanceof ReferenceRule) {
-					r = ((ReferenceRule) rule).eval(this, currPatient, criteria);
-				} else {
-					r = rule.eval(this, currPatient, parameters);
-					r = applyCriteria(r, criteria);
+			} else {
+
+				Rule rule = Context.getLogicService().getRule(criteria.getRootToken());
+				Map<Integer, Result> resultMap = new Hashtable<Integer, Result>();
+	
+				for (Integer currPatientId : patients.getMemberIds()) {
+					Result r = Result.emptyResult();
+					if (rule instanceof ReferenceRule) {
+						r = ((ReferenceRule) rule).eval(this, currPatientId, criteria);
+					} else {
+						r = rule.eval(this, currPatientId, parameters);
+						r = applyCriteria(r, criteria);
+					}
+					
+					resultMap.put(currPatientId, r);
 				}
+				result = resultMap.get(patientId);
+				getCache().put(criteria, parameters, rule.getTTL(), resultMap);
 				
-				resultMap.put(currPatient.getPatientId(), r);
 			}
-			result = resultMap.get(targetPatientId);
-			getCache().put(criteria, parameters, rule.getTTL(), resultMap);
-			
-			// if we overrode the index date, restore it
-			if (criteriaIndexDate != null)
-				setIndexDate(originalIndexDate);
 		}
 		
 		return result;
@@ -182,46 +210,46 @@ public class LogicContextImpl implements LogicContext {
 	}
 	
 	/**
-	 * @see org.openmrs.logic.LogicContext#read(org.openmrs.Patient,
+	 * @see org.openmrs.logic.LogicContext#read(java.lang.Integer,
 	 *      org.openmrs.logic.datasource.LogicDataSource, java.lang.String)
 	 */
-	public Result read(Patient patient, LogicDataSource dataSource, String key) throws LogicException {
-		return read(patient, dataSource, new LogicCriteriaImpl(key));
+	public Result read(Integer patientId, LogicDataSource dataSource, String key) throws LogicException {
+		return read(patientId, dataSource, new LogicCriteriaImpl(key));
 	}
 	
 	/**
-	 * @see org.openmrs.logic.LogicContext#read(org.openmrs.Patient, java.lang.String)
+	 * @see org.openmrs.logic.LogicContext#read(java.lang.Integer, java.lang.String)
 	 */
-	public Result read(Patient patient, String key) throws LogicException {
+	public Result read(Integer patientId, String key) throws LogicException {
 		
 		LogicService logicService = Context.getLogicService();
 		LogicDataSource dataSource = logicService.getLogicDataSource("obs");
-		return read(patient, dataSource, key);
+		return read(patientId, dataSource, key);
 	}
 	
 	/**
-	 * @see org.openmrs.logic.LogicContext#read(org.openmrs.Patient,
+	 * @see org.openmrs.logic.LogicContext#read(java.lang.Integer,
 	 *      org.openmrs.logic.LogicCriteria)
 	 */
-	public Result read(Patient patient, LogicCriteria criteria) throws LogicException {
+	public Result read(Integer patientId, LogicCriteria criteria) throws LogicException {
 		LogicService logicService = Context.getLogicService();
 		LogicDataSource dataSource = logicService.getLogicDataSource("obs");
-		return read(patient, dataSource, criteria);
+		return read(patientId, dataSource, criteria);
 	}
 	
 	/**
-	 * @see org.openmrs.logic.LogicContext#read(org.openmrs.Patient,
+	 * @see org.openmrs.logic.LogicContext#read(java.lang.Integer,
 	 *      org.openmrs.logic.datasource.LogicDataSource, org.openmrs.logic.LogicCriteria)
 	 */
-	public Result read(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
-		Result result = getCache().get(patient, dataSource, criteria);
-		log
-		        .debug("Reading from data source: " + criteria.getRootToken() + " (" + (result == null ? "NOT" : "")
+	public Result read(Integer patientId, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
+		Result result = getCache().get(patientId, dataSource, criteria);
+		if (log.isDebugEnabled())
+			log.debug("Reading from data source: " + criteria.getRootToken() + " (" + (result == null ? "NOT" : "")
 		                + " cached)");
 		if (result == null) {
 			Map<Integer, Result> resultMap = dataSource.read(this, patients, criteria);
 			getCache().put(dataSource, criteria, resultMap);
-			result = resultMap.get(patient.getPatientId());
+			result = resultMap.get(patientId);
 		}
 		if (result == null)
 			result = Result.emptyResult();

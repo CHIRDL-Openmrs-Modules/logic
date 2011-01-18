@@ -49,10 +49,13 @@ import org.openmrs.logic.op.OperandNumeric;
 import org.openmrs.logic.op.OperandText;
 import org.openmrs.logic.op.Operator;
 import org.openmrs.logic.util.LogicExpressionToCriterion;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  */
+@Repository
 public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements LogicObsDAO {
 	
 	private static final String COMPONENT_ENCOUNTER_ID = "encounterId";
@@ -64,6 +67,7 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 	/**
 	 * Hibernate session factory
 	 */
+	@Autowired
 	private SessionFactory sessionFactory;
 	
 	/**

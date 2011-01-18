@@ -35,12 +35,12 @@ public class PatientDataSourceTest extends BaseModuleContextSensitiveTest {
 		
 		LogicContext context = new LogicContextImpl(who);
 		LogicCriteria criteria = new LogicCriteriaImpl("IDENTIFIER").equalTo("123456");
-		Result result = context.read(who, lds, criteria);
+		Result result = context.read(who.getPatientId(), lds, criteria);
 		Assert.assertEquals("123456", result.toString());
 		
 		who = Context.getPatientService().getPatient(2);
 		context = new LogicContextImpl(who);
-		result = context.read(who, lds, criteria);
+		result = context.read(who.getPatientId(), lds, criteria);
 		Assert.assertTrue(result.isEmpty());
 	}
 }

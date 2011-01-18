@@ -169,7 +169,7 @@ public class LogicServiceImpl implements LogicService {
 	 */
 	public Result eval(Patient who, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
 		LogicContext context = new LogicContextImpl(who);
-		Result result = context.eval(who, criteria, parameters);
+		Result result = context.eval(who.getPatientId(), criteria, parameters);
 		context = null;
 		return result;
 	}
@@ -204,7 +204,7 @@ public class LogicServiceImpl implements LogicService {
 		LogicContext context = new LogicContextImpl(who);
 		Map<Integer, Result> resultMap = new Hashtable<Integer, Result>();
 		for (Integer pid : who.getMemberIds())
-			resultMap.put(pid, context.eval(new Patient(pid), criteria, parameters));
+			resultMap.put(pid, context.eval(pid, criteria, parameters));
 		context = null;
 		return resultMap;
 	}

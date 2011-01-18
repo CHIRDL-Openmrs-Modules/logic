@@ -32,6 +32,8 @@ import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.provider.RuleProvider;
 import org.openmrs.logic.rule.provider.SimpleDataSourceRuleProvider;
 import org.openmrs.logic.util.LogicUtil;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 /**
  * Provides access to patient program data
@@ -54,6 +56,7 @@ import org.openmrs.logic.util.LogicUtil;
  *   </li>
  * </ul>
  */
+@Repository
 public class ProgramDataSource extends SimpleDataSourceRuleProvider implements LogicDataSource, RuleProvider {
 	
 	public static final String NAME = "program";

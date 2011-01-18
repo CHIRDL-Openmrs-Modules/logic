@@ -71,18 +71,18 @@ public class ReferenceRule implements StatefulRule {
 	}
 	
 	/**
-	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, org.openmrs.Patient,
+	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, java.lang.Integer,
 	 *      java.util.Map)
 	 */
-	public Result eval(LogicContext context, Patient patient, Map<String, Object> parameters) throws LogicException {
+	public Result eval(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
 		
 		log.info("Evaluating " + key + " ... ");
-		return context.read(patient, dataSource, new LogicCriteriaImpl(key));
+		return context.read(patientId, dataSource, new LogicCriteriaImpl(key));
 	}
 	
-	public Result eval(LogicContext context, Patient patient, LogicCriteria criteria) throws LogicException {
+	public Result eval(LogicContext context, Integer patientId, LogicCriteria criteria) throws LogicException {
 		
-		return context.read(patient, dataSource, criteria);
+		return context.read(patientId, dataSource, criteria);
 	}
 	
 	/**

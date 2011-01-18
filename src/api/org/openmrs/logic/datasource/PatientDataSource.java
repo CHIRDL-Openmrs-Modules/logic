@@ -29,6 +29,8 @@ import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.provider.RuleProvider;
 import org.openmrs.logic.rule.provider.SimpleDataSourceRuleProvider;
 import org.openmrs.logic.util.LogicUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 /**
  * Provides access to patient data. Valid keys are:
@@ -36,12 +38,14 @@ import org.openmrs.logic.util.LogicUtil;
  * <li><strong>identifier</strong> &mdash; text result of patient identifiers</li>
  * </ul>
  */
+@Repository
 public class PatientDataSource extends SimpleDataSourceRuleProvider implements LogicDataSource, RuleProvider {
 	
 	public static final String NAME = "patient";
 	
 	private static final Collection<String> keys = Arrays.asList("identifier");
-	
+
+	@Autowired
 	private LogicPatientDAO logicPatientDAO;
 	
 	/**

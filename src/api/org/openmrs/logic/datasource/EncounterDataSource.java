@@ -34,6 +34,8 @@ import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.provider.RuleProvider;
 import org.openmrs.logic.rule.provider.SimpleDataSourceRuleProvider;
 import org.openmrs.logic.util.LogicUtil;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 /**
  * Provides access to encounter metadata.
@@ -59,12 +61,14 @@ import org.openmrs.logic.util.LogicUtil;
  *   </li>
  * </ul>
  */
+@Repository
 public class EncounterDataSource extends SimpleDataSourceRuleProvider implements LogicDataSource, RuleProvider {
 	
 	public static final String NAME = "encounter";
 	
 	private static final Collection<String> keys = new ArrayList<String>();
 	
+	@Autowired
 	private LogicEncounterDAO logicEncounterDAO;
 	
 	public static final String ENCOUNTER_KEY = "encounter";

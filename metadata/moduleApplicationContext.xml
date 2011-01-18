@@ -10,55 +10,14 @@
            http://www.springframework.org/schema/context/spring-context-2.5.xsd
            http://www.springframework.org/schema/util
            http://www.springframework.org/schema/util/spring-util-2.0.xsd">
-    
-    <!-- Data Sources -->
-	<bean id="logicObsDataSource" class="org.openmrs.logic.datasource.ObsDataSource">
-		<property name="logicObsDAO">
-			<bean class="org.openmrs.logic.db.hibernate.HibernateLogicObsDAO">
-				<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
-			</bean>
-		</property>
-	</bean>
-	<bean id="logicPersonDataSource" class="org.openmrs.logic.datasource.PersonDataSource">
-		<property name="logicPersonDAO">
-			<bean class="org.openmrs.logic.db.hibernate.HibernateLogicPersonDAO">
-				<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
-			</bean>
-		</property>
-	</bean>
-	<bean id="logicPatientDataSource" class="org.openmrs.logic.datasource.PatientDataSource">
-		<property name="logicPatientDAO">
-			<bean class="org.openmrs.logic.db.hibernate.HibernateLogicPatientDAO">
-				<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
-			</bean>
-		</property>
-	</bean>
-	<bean id="logicEncounterDataSource" class="org.openmrs.logic.datasource.EncounterDataSource">
-		<property name="logicEncounterDAO">
-			<bean class="org.openmrs.logic.db.hibernate.HibernateLogicEncounterDAO">
-				<property name="sessionFactory"><ref bean="sessionFactory"/></property>	
-			</bean>
-		</property>
-	</bean>
-	<bean id="logicProgramDataSource" class="org.openmrs.logic.datasource.ProgramDataSource" />
-	
+    	
 	<!-- Register LogicService with OpenMRS ServiceContext -->
 	<bean parent="serviceContext">
 		<property name="logicService">
 			<bean class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">
 				<property name="transactionManager"><ref bean="transactionManager"/></property>
 				<property name="target">
-					<bean id="logicServiceTarget" class="org.openmrs.logic.impl.LogicServiceImpl">
-						<property name="logicDataSources">
-							<map>
-								<entry key="encounter"><ref bean="logicEncounterDataSource" /></entry>
-								<entry key="obs"><ref bean="logicObsDataSource" /></entry>
-								<entry key="person"><ref bean="logicPersonDataSource" /></entry>
-								<entry key="patient"><ref bean="logicPatientDataSource" /></entry>
-								<entry key="program"><ref bean="logicProgramDataSource" /></entry>
-							</map>
-						</property>
-					</bean>
+					<bean id="logicServiceTarget" class="org.openmrs.logic.impl.LogicServiceImpl"/>
 				</property>
 				<property name="preInterceptors">
 					<ref bean="serviceInterceptors" />

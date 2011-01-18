@@ -16,7 +16,6 @@ package org.openmrs.logic.rule;
 import java.util.Map;
 import java.util.Set;
 
-import org.openmrs.Patient;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.Rule;
@@ -30,10 +29,10 @@ import org.openmrs.logic.result.Result.Datatype;
 public abstract class AbstractRule implements Rule {
 	
 	/**
-	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, org.openmrs.Patient, java.util.Map)
+	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, Integer, Map)
 	 */
 	@Override
-	public abstract Result eval(LogicContext context, Patient patient, Map<String, Object> parameters) throws LogicException;
+	public abstract Result eval(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException;
 	
 	/**
 	 * @see org.openmrs.logic.Rule#getDefaultDatatype()

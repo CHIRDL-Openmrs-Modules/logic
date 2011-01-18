@@ -17,11 +17,10 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Set;
 
-import org.openmrs.Patient;
 import org.openmrs.PatientProgram;
+import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.Rule;
-import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.result.Result.Datatype;
 
@@ -31,12 +30,13 @@ import org.openmrs.logic.result.Result.Datatype;
 public class EnrolledBeforeDateRule implements Rule {
 	
 	/**
-	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, org.openmrs.Patient,
+	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, java.lang.Integer,
 	 *      java.util.Map)
 	 */
-	public Result eval(LogicContext context, Patient patient, Map<String, Object> parameters) throws LogicException {
+	@Override
+	public Result eval(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
 		
-		Result lastProgram = context.read(patient, context.getLogicDataSource("program"),
+		Result lastProgram = context.read(patientId, context.getLogicDataSource("program"),
 		    (String) parameters.get("programName")).latest();
 		
 		PatientProgram p = (PatientProgram) lastProgram.toObject();

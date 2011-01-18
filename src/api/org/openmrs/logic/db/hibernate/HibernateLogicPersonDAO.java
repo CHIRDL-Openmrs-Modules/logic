@@ -34,10 +34,13 @@ import org.openmrs.logic.LogicTransform;
 import org.openmrs.logic.db.LogicPersonDAO;
 import org.openmrs.logic.op.Operator;
 import org.openmrs.logic.util.LogicExpressionToCriterion;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 /**
  * 
  */
+@Repository
 public class HibernateLogicPersonDAO extends LogicExpressionToCriterion implements LogicPersonDAO {
 	
 	static {
@@ -58,6 +61,7 @@ public class HibernateLogicPersonDAO extends LogicExpressionToCriterion implemen
 	/**
 	 * Hibernate session factory
 	 */
+	@Autowired
 	private SessionFactory sessionFactory;
 	
 	/**

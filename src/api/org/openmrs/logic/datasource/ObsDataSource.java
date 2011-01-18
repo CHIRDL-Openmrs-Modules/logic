@@ -35,6 +35,7 @@ import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.provider.RegisterAtStartupDataSourceRuleProvider;
 import org.openmrs.logic.rule.provider.RuleProvider;
 import org.openmrs.logic.util.LogicUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * Provides access to clinical observations. The keys for this data source are the primary names of
@@ -48,6 +49,7 @@ public class ObsDataSource extends RegisterAtStartupDataSourceRuleProvider imple
 	
 	private static final Collection<String> keys = new ArrayList<String>();
 	
+	@Autowired
 	private LogicObsDAO logicObsDAO;
 	
 	public void setLogicObsDAO(LogicObsDAO logicObsDAO) {

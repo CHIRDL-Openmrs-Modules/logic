@@ -18,8 +18,6 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Patient;
-import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.Rule;
@@ -36,35 +34,38 @@ public class HIVPositiveRule implements Rule {
 	private Log log = LogFactory.getLog(this.getClass());
 	
 	/**
-	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, org.openmrs.Patient,
+	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, java.lang.Integer,
 	 *      java.util.Map)
 	 */
-	public Result eval(LogicContext context, Patient patient, Map<String, Object> parameters) throws LogicException {
+	@Override
+	public Result eval(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
 		Result allDiagnoses = Result.emptyResult();
 		Boolean ageOK = null;
 		
 		try {
-			ageOK = context.read(patient, context.getLogicDataSource("obs"), new LogicCriteriaImpl("AGE").gt(1)).toBoolean();
+			ageOK = context.read(patientId, context.getLogicDataSource("obs"), new LogicCriteriaImpl("AGE").gt(1)).toBoolean();
 			if (!ageOK)
 				return Result.emptyResult();
 			
 			// we find the first HIV diagnosis
-			allDiagnoses.add(Context.getLogicService().eval(patient,
-			    new LogicCriteriaImpl("PROBLEM ADDED").contains("HUMAN IMMUNODEFICIENCY VIRUS").first()));
-			allDiagnoses.add(Context.getLogicService().eval(patient,
-			    new LogicCriteriaImpl("PROBLEM ADDED").contains("HIV INFECTED").first()));
-			allDiagnoses.add(Context.getLogicService().eval(patient,
-			    new LogicCriteriaImpl("PROBLEM ADDED").contains("ASYMPTOMATIC HIV INFECTION").first()));
+			allDiagnoses.add(context.eval(patientId,
+				new LogicCriteriaImpl("PROBLEM ADDED").contains("HUMAN IMMUNODEFICIENCY VIRUS").first(), null));
+			allDiagnoses.add(context.eval(patientId, 
+			    new LogicCriteriaImpl("PROBLEM ADDED").contains("HIV INFECTED").first(), null));
+			allDiagnoses.add(context.eval(patientId,
+			    new LogicCriteriaImpl("PROBLEM ADDED").contains("ASYMPTOMATIC HIV INFECTION").first(), null));
 			
 			// first viral load
-			allDiagnoses.add(Context.getLogicService().eval(patient, new LogicCriteriaImpl("HIV VIRAL LOAD").first()));
+			allDiagnoses.add(context.eval(patientId,
+				new LogicCriteriaImpl("HIV VIRAL LOAD").first(), null));
 			
 			// first qualitative viral load
-			allDiagnoses.add(Context.getLogicService().eval(patient,
-			    new LogicCriteriaImpl("HIV VIRAL LOAD, QUALITATIVE").first()));
+			allDiagnoses.add(context.eval(patientId,
+			    new LogicCriteriaImpl("HIV VIRAL LOAD, QUALITATIVE").first(), null));
 			
 			// first CD4 COUNT < 200
-			allDiagnoses.add(Context.getLogicService().eval(patient, new LogicCriteriaImpl("CD4 COUNT").lt(200).first()));
+			allDiagnoses.add(context.eval(patientId,
+				new LogicCriteriaImpl("CD4 COUNT").lt(200).first(), null));
 			
 			return allDiagnoses.earliest();
 			

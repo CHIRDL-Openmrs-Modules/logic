@@ -39,7 +39,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT");
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 2, result.size());
 		Assert.assertEquals("Last result incorrect", Double.valueOf(600d), result.latest().toNumber());
 	}
@@ -54,7 +54,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").first();
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 1, result.size());
 		Assert.assertEquals("Result incorrect", Double.valueOf(100d), result.toNumber());
 	}
@@ -69,7 +69,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").last();
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 1, result.size());
 		Assert.assertEquals("Result incorrect", Double.valueOf(600d), result.toNumber());
 	}
@@ -84,7 +84,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").last().lt(200);
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 1, result.size());
 	}
 	
@@ -98,7 +98,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").lt(200).last();
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 1, result.size());
 		Assert.assertEquals("Result incorrect", Double.valueOf(100d), result.toNumber());
 	}
@@ -113,7 +113,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").gt(200);
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 1, result.size());
 		Assert.assertEquals("Result incorrect", Double.valueOf(600d), result.toNumber());
 	}
@@ -128,7 +128,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").lt(200);
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 1, result.size());
 		Assert.assertEquals("Result incorrect", Double.valueOf(100d), result.toNumber());
 	}
@@ -143,7 +143,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").after(Context.getDateFormat().parse("01/01/2007"));
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 2, result.size());
 		Assert.assertEquals("Result incorrect", Double.valueOf(600d), result.toNumber());
 	}
@@ -158,7 +158,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").before(Context.getDateFormat().parse("03/03/2007"));
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 1, result.size());
 		Assert.assertEquals("Result incorrect", Double.valueOf(100d), result.toNumber());
 	}
@@ -173,7 +173,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").equalTo(100d);
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 1, result.size());
 		Assert.assertEquals("Result incorrect", Double.valueOf(100d), result.toNumber());
 	}
@@ -188,12 +188,12 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").gte(600);
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 1, result.size());
 		Assert.assertEquals("Result incorrect", Double.valueOf(600d), result.toNumber());
 		
 		criteria = new LogicCriteriaImpl("CD4 COUNT").gte(601);
-		result = context.read(who, criteria);
+		result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 0, result.size());
 	}
 	
@@ -207,12 +207,12 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").lte(100);
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 1, result.size());
 		Assert.assertEquals("Result incorrect", Double.valueOf(100d), result.toNumber());
 		
 		criteria = new LogicCriteriaImpl("CD4 COUNT").lte(99);
-		result = context.read(who, criteria);
+		result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 0, result.size());
 	}
 	
@@ -226,7 +226,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").count();
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of results returned", 1, result.size());
 		Assert.assertEquals("Result incorrect", Double.valueOf(2d), result.toNumber());
 	}
@@ -241,7 +241,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").count();
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of results returned", 1, result.size());
 		Assert.assertEquals("Result incorrect", Double.valueOf(0d), result.toNumber());
 	}
@@ -256,7 +256,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").average();
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertTrue("Wrong result returned", result.isEmpty());
 	}
 	
@@ -270,7 +270,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").average();
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of results returned", 1, result.size());
 		Assert.assertEquals("Result incorrect", Double.valueOf(350.0d), result.toNumber());
 	}
@@ -286,16 +286,16 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").gt(200).after(
 		    Context.getDateFormat().parse("01/01/2007"));
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 2, result.size());
 		Assert.assertEquals("Result incorrect", Double.valueOf(600d), result.toNumber());
 		
 		criteria = new LogicCriteriaImpl("CD4 COUNT").gt(200).after(Context.getDateFormat().parse("01/01/2008"));
-		result = context.read(who, criteria);
+		result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 0, result.size());
 		
 		criteria = new LogicCriteriaImpl("CD4 COUNT").gt(900).after(Context.getDateFormat().parse("01/01/2007"));
-		result = context.read(who, criteria);
+		result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 2, result.size());
 	}
 	
@@ -308,7 +308,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		Patient who = Context.getPatientService().getPatient(4);
 		LogicContext context = new LogicContextImpl(who);
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").first(3);
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 3, result.size());
 		Assert.assertEquals("Result incorrectly ordered", Double.valueOf(100d), result.get(0).toNumber());
 		Assert.assertEquals("Result incorrectly ordered", Double.valueOf(300d), result.get(1).toNumber());
@@ -316,7 +316,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		
 		// there are only 4
 		criteria = new LogicCriteriaImpl("CD4 COUNT").first(5);
-		result = context.read(who, criteria);
+		result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 4, result.size());
 	}
 	
@@ -330,7 +330,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").last(3);
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 3, result.size());
 		Assert.assertEquals("Result incorrectly ordered", Double.valueOf(400d), result.get(0).toNumber());
 		Assert.assertEquals("Result incorrectly ordered", Double.valueOf(200d), result.get(1).toNumber());
@@ -338,7 +338,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		
 		// there are only 4
 		criteria = new LogicCriteriaImpl("CD4 COUNT").last(5);
-		result = context.read(who, criteria);
+		result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 4, result.size());
 	}
 	
@@ -352,7 +352,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").first(2).lt(400);
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 2, result.size());
 		Assert.assertEquals("Result incorrectly ordered", Double.valueOf(100d), result.get(0).toNumber());
 	}
@@ -367,7 +367,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").lt(250).first(2);
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 2, result.size());
 		Assert.assertEquals("Result incorrectly ordered", Double.valueOf(100d), result.get(0).toNumber());
 		Assert.assertEquals("Result incorrectly ordered", Double.valueOf(200d), result.get(1).toNumber());
@@ -384,7 +384,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").last().before(
 		    Context.getDateFormat().parse("01/01/2005"));
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 0, result.size());
 	}
 	
@@ -399,7 +399,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").before(Context.getDateFormat().parse("01/01/2007"))
 		        .last();
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 1, result.size());
 		Assert.assertEquals("Result incorrectly ordered", Double.valueOf(300d), result.toNumber());
 		
@@ -416,7 +416,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who);
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT");
-		Result result = context.read(who, criteria);
+		Result result = context.read(who.getPatientId(), criteria);
 		
 		int counter = 0;
 		Result previousResult = null;

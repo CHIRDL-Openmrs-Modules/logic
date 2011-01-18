@@ -19,10 +19,8 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Patient;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.result.Result;
-import org.openmrs.logic.LogicCriteria;
 
 /**
  * A caching mechanism used by LogicContext to avoid recalculating a re-fetching the same results
@@ -36,14 +34,14 @@ public class LogicCache {
 	
 	private Map<LogicCacheEntryKey, Map<Integer, Result>> cache;
 	
-	public Result get(Patient patient, LogicCriteria criteria, Map<String, Object> parameters) {
+	public Result get(Integer patientId, LogicCriteria criteria, Map<String, Object> parameters) {
 		LogicCacheEntryKey key = new LogicCacheEntryKey(criteria, parameters, 0);
-		return get(key, patient.getPatientId());
+		return get(key, patientId);
 	}
 	
-	public Result get(Patient patient, LogicDataSource dataSource, LogicCriteria criteria) {
+	public Result get(Integer patientId, LogicDataSource dataSource, LogicCriteria criteria) {
 		LogicCacheEntryKey key = new LogicCacheEntryKey(dataSource, criteria);
-		Result r = get(key, patient.getPatientId());
+		Result r = get(key, patientId);
 		log.debug("Searching cache for " + key.toString() + " - " + (r == null ? "NOT" : "") + " found");
 		logCacheContents();
 		return r;
