@@ -40,9 +40,11 @@ public class InitializeLogicRuleProvidersTask extends StatefulTask implements Ta
 		}
 		if (!supportsDaemon) {
 			Context.openSession();
+			authenticate();
 		}
-		authenticate();
+
 		Context.getService(TokenService.class).onStartup();
+		
 		if (!supportsDaemon) {
 			Context.closeSession();
 		}
