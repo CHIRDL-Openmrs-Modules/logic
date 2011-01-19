@@ -35,7 +35,7 @@ public class LogicContextImplTest extends BaseModuleContextSensitiveTest {
 		new EncounterDataSource().afterStartup();
 		Context.getService(TokenService.class).registerToken("age", new ClassRuleProvider(), AgeRule.class.getName());
 		Rule rule = new AgeAtFirstEncounter();
-		Result result = rule.eval(new LogicContextImpl(new Patient(7)), 7, null);
+		Result result = rule.eval(new LogicContextImpl(7), 7, null);
 		Assert.assertEquals(Double.valueOf(31), result.toNumber());
 	}
 	

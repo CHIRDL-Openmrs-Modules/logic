@@ -34,7 +34,7 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 	public void read_shouldGetBirthdate() throws Exception {
 		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
 		Patient who = Context.getPatientService().getPatient(2);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("BIRTHDATE");
 		Result result = context.read(who.getPatientId(), lds, criteria);
@@ -50,7 +50,7 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 	public void read_shouldGetBirthdate_estimated() throws Exception {
 		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
 		Patient who = Context.getPatientService().getPatient(2);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("BIRTHDATE ESTIMATED");
 		Result result = context.read(who.getPatientId(), lds, criteria);
@@ -66,7 +66,7 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 	public void read_shouldGetGender() throws Exception {
 		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
 		Patient who = Context.getPatientService().getPatient(2);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("GENDER");
 		Result result = context.read(who.getPatientId(), lds, criteria);
@@ -82,7 +82,7 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 	public void read_shouldGetGenderEqualsValue() throws Exception {
 		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
 		Patient who = Context.getPatientService().getPatient(2);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("GENDER").equalTo("M");
 		Result result = context.read(who.getPatientId(), lds, criteria);
@@ -102,14 +102,14 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 	public void read_shouldGetCause_of_death() throws Exception {
 		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
 		Patient who = Context.getPatientService().getPatient(6);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CAUSE OF DEATH");
 		Result result = context.read(who.getPatientId(), lds, criteria);
 		Assert.assertEquals("ASPIRIN", result.toString());
 		
 		who = Context.getPatientService().getPatient(2);
-		context = new LogicContextImpl(who);
+		context = new LogicContextImpl(who.getPatientId());
 		result = context.read(who.getPatientId(), lds, criteria);
 		Assert.assertTrue(result.isEmpty());
 	}
@@ -123,14 +123,14 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 	public void read_shouldGetDead() throws Exception {
 		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
 		Patient who = Context.getPatientService().getPatient(6);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("DEAD");
 		Result result = context.read(who.getPatientId(), lds, criteria);
 		Assert.assertTrue(result.toBoolean());
 		
 		who = Context.getPatientService().getPatient(2);
-		context = new LogicContextImpl(who);
+		context = new LogicContextImpl(who.getPatientId());
 		result = context.read(who.getPatientId(), lds, criteria);
 		Assert.assertTrue(result.isEmpty());
 	}
@@ -144,14 +144,14 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 	public void read_shouldGetDeath_date() throws Exception {
 		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
 		Patient who = Context.getPatientService().getPatient(6);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("DEATH DATE");
 		Result result = context.read(who.getPatientId(), lds, criteria);
 		Assert.assertEquals(Context.getDateFormat().parse("07/11/2008"), result.toDatetime());
 		
 		who = Context.getPatientService().getPatient(2);
-		context = new LogicContextImpl(who);
+		context = new LogicContextImpl(who.getPatientId());
 		result = context.read(who.getPatientId(), lds, criteria);
 		Assert.assertTrue(result.isEmpty());
 	}
@@ -165,13 +165,13 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
 		Patient who = Context.getPatientService().getPatient(4);
 		
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		LogicCriteria criteria = new LogicCriteriaImpl("FAMILY NAME").equalTo("Doe");
 		Result result = context.read(who.getPatientId(), lds, criteria);
 		Assert.assertEquals("Doe", result.toString());
 		
 		who = Context.getPatientService().getPatient(2);
-		context = new LogicContextImpl(who);
+		context = new LogicContextImpl(who.getPatientId());
 		criteria = new LogicCriteriaImpl("FAMILY NAME").equalTo("Does");
 		result = context.read(who.getPatientId(), lds, criteria);
 		Assert.assertTrue(result.isEmpty());
@@ -186,13 +186,13 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
 		Patient who = Context.getPatientService().getPatient(2);
 		
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		LogicCriteria criteria = new LogicCriteriaImpl("FAMILY NAME2").equalTo("Jr.");
 		Result result = context.read(who.getPatientId(), lds, criteria);
 		Assert.assertEquals("Jr.", result.toString());
 		
 		who = Context.getPatientService().getPatient(4);
-		context = new LogicContextImpl(who);
+		context = new LogicContextImpl(who.getPatientId());
 		result = context.read(who.getPatientId(), lds, criteria);
 		Assert.assertTrue(result.isEmpty());
 	}
@@ -206,13 +206,13 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
 		Patient who = Context.getPatientService().getPatient(3);
 		
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		LogicCriteria criteria = new LogicCriteriaImpl("GIVEN NAME").equalTo("Other John");
 		Result result = context.read(who.getPatientId(), lds, criteria);
 		Assert.assertEquals("Other John", result.toString());
 		
 		who = Context.getPatientService().getPatient(4);
-		context = new LogicContextImpl(who);
+		context = new LogicContextImpl(who.getPatientId());
 		result = context.read(who.getPatientId(), lds, criteria);
 		Assert.assertTrue(result.isEmpty());
 	}
@@ -226,13 +226,13 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
 		Patient who = Context.getPatientService().getPatient(4);
 		
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		LogicCriteria criteria = new LogicCriteriaImpl("MIDDLE NAME").equalTo("Ugly");
 		Result result = context.read(who.getPatientId(), lds, criteria);
 		Assert.assertEquals("Ugly", result.toString());
 		
 		who = Context.getPatientService().getPatient(2);
-		context = new LogicContextImpl(who);
+		context = new LogicContextImpl(who.getPatientId());
 		result = context.read(who.getPatientId(), lds, criteria);
 		Assert.assertTrue(result.isEmpty());
 	}

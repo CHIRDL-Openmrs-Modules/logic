@@ -77,7 +77,7 @@ public class LogicContextImpl implements LogicContext {
 	private PatientCohort patients;
 		
 	/**
-	 * Cache used by this log context
+	 * Cache used by this logic context
 	 * 
 	 * @see org.openmrs.logic.LogicCache
 	 */
@@ -102,12 +102,12 @@ public class LogicContextImpl implements LogicContext {
 	/**
 	 * Constructs a logic context applied to a single patient
 	 * 
-	 * @param patient
+	 * @param patientId
 	 */
-	public LogicContextImpl(Patient patient) {
+	public LogicContextImpl(Integer patientId) {
 		this.patients = new PatientCohort();
 		this.globalParameters = new HashMap<String, Object>();
-		patients.addMember(patient.getPatientId());
+		patients.addMember(patientId);
 		setIndexDate(new Date());
 	}
 	

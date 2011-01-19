@@ -144,48 +144,84 @@ public class LogicServiceImpl implements LogicService {
 	}
 	
 	/**
+	 * @see org.openmrs.logic.LogicService#eval(java.lang.Integer, java.lang.String)
+	 */
+	@Override
+	public Result eval(Integer patientId, String expression) throws LogicException {
+	    return eval(patientId, parse(expression));
+	}
+	
+	/**
+	 * @see org.openmrs.logic.LogicService#eval(java.lang.Integer, java.lang.String, java.util.Map)
+	 */
+	@Override
+	public Result eval(Integer patientId, String expression, Map<String, Object> params) throws LogicException {
+		LogicCriteria criteria = parse(expression);
+		criteria.setLogicParameters(params);
+	    return eval(patientId, criteria);
+	}
+	
+	/**
+	 * @see org.openmrs.logic.LogicService#eval(java.lang.Integer, org.openmrs.logic.LogicCriteria)
+	 */
+	@Override
+	public Result eval(Integer patientId, LogicCriteria criteria) throws LogicException {
+	    return eval(patientId, criteria, criteria.getLogicParameters());
+	}
+	
+	/**
+	 * @see org.openmrs.logic.LogicService#eval(java.lang.Integer, org.openmrs.logic.LogicCriteria, java.util.Map)
+	 */
+	@Override
+	public Result eval(Integer patientId, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
+		LogicContext context = new LogicContextImpl(patientId);
+		Result result = context.eval(patientId, criteria, parameters);
+		context = null;
+		return result;
+	}
+	
+	/**
 	 * @see org.openmrs.logic.LogicService#eval(org.openmrs.Patient, java.lang.String)
 	 */
-	public Result eval(Patient who, String token) throws LogicException {
-		return eval(who, new LogicCriteriaImpl(token));
+	public Result eval(Patient who, String expression) throws LogicException {
+		return eval(who.getPatientId(), expression);
 	}
 	
 	/**
 	 * @see org.openmrs.logic.LogicService#eval(Patient, String, Map)
 	 */
-	public Result eval(Patient who, String token, Map<String, Object> parameters) throws LogicException {
-		return eval(who, new LogicCriteriaImpl(token, parameters));
+	public Result eval(Patient who, String expression, Map<String, Object> parameters) throws LogicException {
+		return eval(who.getPatientId(), expression, parameters);
 	}
 	
 	/**
 	 * @see org.openmrs.logic.LogicService#eval(Patient, LogicCriteriaImpl)
 	 */
 	public Result eval(Patient who, LogicCriteria criteria) throws LogicException {
-		return eval(who, criteria, criteria.getLogicParameters());
+		return eval(who.getPatientId(), criteria);
 	}
 	
 	/**
 	 * @see org.openmrs.logic.LogicService#eval(Patient, LogicCriteria, Map)
 	 */
 	public Result eval(Patient who, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
-		LogicContext context = new LogicContextImpl(who);
-		Result result = context.eval(who.getPatientId(), criteria, parameters);
-		context = null;
-		return result;
+		return eval(who.getPatientId(), criteria, parameters);
 	}
 	
 	/**
 	 * @see org.openmrs.logic.LogicService#eval(org.openmrs.Cohort, java.lang.String)
 	 */
-	public Map<Integer, Result> eval(Cohort who, String token) throws LogicException {
-		return eval(who, new LogicCriteriaImpl(token));
+	public Map<Integer, Result> eval(Cohort who, String expression) throws LogicException {
+		return eval(who, parse(expression));
 	}
 	
 	/**
 	 * @see org.openmrs.logic.LogicService#eval(org.openmrs.Cohort, java.lang.String, java.util.Map)
 	 */
-	public Map<Integer, Result> eval(Cohort who, String token, Map<String, Object> parameters) throws LogicException {
-		return eval(who, new LogicCriteriaImpl(token, parameters));
+	public Map<Integer, Result> eval(Cohort who, String expression, Map<String, Object> parameters) throws LogicException {
+		LogicCriteria criteria = parse(expression);
+		criteria.setLogicParameters(parameters);
+		return eval(who, criteria);
 	}
 	
 	/**

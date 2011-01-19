@@ -36,7 +36,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetAllObs() throws Exception {
 		Patient who = Context.getPatientService().getPatient(3);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT");
 		Result result = context.read(who.getPatientId(), criteria);
@@ -51,7 +51,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetFirstObs() throws Exception {
 		Patient who = Context.getPatientService().getPatient(3);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").first();
 		Result result = context.read(who.getPatientId(), criteria);
@@ -66,7 +66,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetLastObs() throws Exception {
 		Patient who = Context.getPatientService().getPatient(3);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").last();
 		Result result = context.read(who.getPatientId(), criteria);
@@ -81,7 +81,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetLastObsIfItIsLtValue() throws Exception {
 		Patient who = Context.getPatientService().getPatient(3);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").last().lt(200);
 		Result result = context.read(who.getPatientId(), criteria);
@@ -95,7 +95,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetLastObsOfThoseLtValue() throws Exception {
 		Patient who = Context.getPatientService().getPatient(3);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").lt(200).last();
 		Result result = context.read(who.getPatientId(), criteria);
@@ -110,7 +110,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetObsGtValue() throws Exception {
 		Patient who = Context.getPatientService().getPatient(3);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").gt(200);
 		Result result = context.read(who.getPatientId(), criteria);
@@ -125,7 +125,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetObsLtValue() throws Exception {
 		Patient who = Context.getPatientService().getPatient(3);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").lt(200);
 		Result result = context.read(who.getPatientId(), criteria);
@@ -140,7 +140,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetObsAfterDate() throws Exception {
 		Patient who = Context.getPatientService().getPatient(3);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").after(Context.getDateFormat().parse("01/01/2007"));
 		Result result = context.read(who.getPatientId(), criteria);
@@ -155,7 +155,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetObsBeforeDate() throws Exception {
 		Patient who = Context.getPatientService().getPatient(3);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").before(Context.getDateFormat().parse("03/03/2007"));
 		Result result = context.read(who.getPatientId(), criteria);
@@ -170,7 +170,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetObsEqValue() throws Exception {
 		Patient who = Context.getPatientService().getPatient(3);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").equalTo(100d);
 		Result result = context.read(who.getPatientId(), criteria);
@@ -185,7 +185,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetObsGeValue() throws Exception {
 		Patient who = Context.getPatientService().getPatient(3);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").gte(600);
 		Result result = context.read(who.getPatientId(), criteria);
@@ -204,7 +204,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetObsLeValue() throws Exception {
 		Patient who = Context.getPatientService().getPatient(3);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").lte(100);
 		Result result = context.read(who.getPatientId(), criteria);
@@ -223,7 +223,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetCountOfObsWhenObs() throws Exception {
 		Patient who = Context.getPatientService().getPatient(3);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").count();
 		Result result = context.read(who.getPatientId(), criteria);
@@ -238,7 +238,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetCountOfZeroWhenNoObs() throws Exception {
 		Patient who = Context.getPatientService().getPatient(2);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").count();
 		Result result = context.read(who.getPatientId(), criteria);
@@ -253,7 +253,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetAverageOfNullWhenNoObs() throws Exception {
 		Patient who = Context.getPatientService().getPatient(2);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").average();
 		Result result = context.read(who.getPatientId(), criteria);
@@ -267,7 +267,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetAverageOfObs() throws Exception {
 		Patient who = Context.getPatientService().getPatient(3);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").average();
 		Result result = context.read(who.getPatientId(), criteria);
@@ -282,7 +282,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetObsGtValueAfterDate() throws Exception {
 		Patient who = Context.getPatientService().getPatient(3);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").gt(200).after(
 		    Context.getDateFormat().parse("01/01/2007"));
@@ -306,7 +306,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetFirstNObs() throws Exception {
 		Patient who = Context.getPatientService().getPatient(4);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").first(3);
 		Result result = context.read(who.getPatientId(), criteria);
 		Assert.assertEquals("Wrong number of CD4s returned", 3, result.size());
@@ -327,7 +327,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetLastNObs() throws Exception {
 		Patient who = Context.getPatientService().getPatient(4);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").last(3);
 		Result result = context.read(who.getPatientId(), criteria);
@@ -349,7 +349,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetFirstNObsIfTheyAreLtValue() throws Exception {
 		Patient who = Context.getPatientService().getPatient(4);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").first(2).lt(400);
 		Result result = context.read(who.getPatientId(), criteria);
@@ -364,7 +364,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetFirstNObsOfThoseLtValue() throws Exception {
 		Patient who = Context.getPatientService().getPatient(4);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").lt(250).first(2);
 		Result result = context.read(who.getPatientId(), criteria);
@@ -380,7 +380,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetLastObsIfItIsBeforeDate() throws Exception {
 		Patient who = Context.getPatientService().getPatient(4);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").last().before(
 		    Context.getDateFormat().parse("01/01/2005"));
@@ -395,7 +395,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void read_shouldGetLastObsOfThoseBeforeDate() throws Exception {
 		Patient who = Context.getPatientService().getPatient(4);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT").before(Context.getDateFormat().parse("01/01/2007"))
 		        .last();
@@ -413,7 +413,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
     @Verifies(value = "should get return obs ordered by datetime", method = "read(LogicContext,Cohort,LogicCriteria)")
     public void read_shouldGetReturnObsOrderedByDatetime() throws Exception {
 		Patient who = Context.getPatientService().getPatient(4);
-		LogicContext context = new LogicContextImpl(who);
+		LogicContext context = new LogicContextImpl(who.getPatientId());
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CD4 COUNT");
 		Result result = context.read(who.getPatientId(), criteria);
