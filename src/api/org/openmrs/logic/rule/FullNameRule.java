@@ -33,8 +33,9 @@ public class FullNameRule implements Rule {
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, org.openmrs.Patient,
 	 *      java.util.Map)
 	 */
-	public Result eval(LogicContext context, Patient patient, Map<String, Object> parameters) throws LogicException {
-		
+	@Override
+	public Result eval(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
+		Patient patient = context.getPatient(patientId);
 		PersonName personName = patient.getPersonName();
 		if (personName != null)
 			return new Result(personName.getFullName());
