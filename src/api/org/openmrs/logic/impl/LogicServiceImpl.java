@@ -18,6 +18,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -57,7 +58,7 @@ import antlr.BaseAST;
 public class LogicServiceImpl implements LogicService {
 	
 	protected final Log log = LogFactory.getLog(getClass());
-
+	
 	@Autowired
 	private List<LogicDataSource> allLogicDataSources;
 	
@@ -68,7 +69,7 @@ public class LogicServiceImpl implements LogicService {
 	 */
 	public LogicServiceImpl() {
 	}
-			
+	
 	/**
 	 * Clean up after this class. Set the static var to null so that the classloader can reclaim the
 	 * space.
@@ -148,7 +149,7 @@ public class LogicServiceImpl implements LogicService {
 	 */
 	@Override
 	public Result eval(Integer patientId, String expression) throws LogicException {
-	    return eval(patientId, parse(expression));
+		return eval(patientId, parse(expression));
 	}
 	
 	/**
@@ -158,7 +159,39 @@ public class LogicServiceImpl implements LogicService {
 	public Result eval(Integer patientId, String expression, Map<String, Object> params) throws LogicException {
 		LogicCriteria criteria = parse(expression);
 		criteria.setLogicParameters(params);
-	    return eval(patientId, criteria);
+		return eval(patientId, criteria);
+	}
+	
+	/**
+	 * @see org.openmrs.logic.LogicService#eval(java.lang.Integer, java.util.Map,
+	 *      java.lang.String[])
+	 */
+	@Override
+	public Map<String, Result> eval(Integer patientId, Map<String, Object> parameters, String... expressions) throws LogicException {
+		LogicContext context = new LogicContextImpl(patientId);
+		
+		Map<String, Result> ret = new LinkedHashMap<String, Result>();
+		for (int i = 0; i < expressions.length; ++i) {
+			String expr = expressions[i];
+			LogicCriteria criteria = parse(expr);
+			ret.put(expr, context.eval(patientId, criteria, parameters));
+		}
+		return ret;
+	}
+	
+	/**
+	 * @see org.openmrs.logic.LogicService#eval(java.lang.Integer, java.util.Map, org.openmrs.logic.LogicCriteria[])
+	 */
+	@Override
+	public Map<LogicCriteria, Result> eval(Integer patientId, Map<String, Object> parameters, LogicCriteria... criteria) throws LogicException {
+		LogicContext context = new LogicContextImpl(patientId);
+		
+		Map<LogicCriteria, Result> ret = new LinkedHashMap<LogicCriteria, Result>();
+		for (int i = 0; i < criteria.length; ++i) {
+			LogicCriteria criterion = criteria[i];
+			ret.put(criterion, context.eval(patientId, criterion, parameters));
+		}
+		return ret;
 	}
 	
 	/**
@@ -166,11 +199,12 @@ public class LogicServiceImpl implements LogicService {
 	 */
 	@Override
 	public Result eval(Integer patientId, LogicCriteria criteria) throws LogicException {
-	    return eval(patientId, criteria, criteria.getLogicParameters());
+		return eval(patientId, criteria, criteria.getLogicParameters());
 	}
 	
 	/**
-	 * @see org.openmrs.logic.LogicService#eval(java.lang.Integer, org.openmrs.logic.LogicCriteria, java.util.Map)
+	 * @see org.openmrs.logic.LogicService#eval(java.lang.Integer, org.openmrs.logic.LogicCriteria,
+	 *      java.util.Map)
 	 */
 	@Override
 	public Result eval(Integer patientId, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
@@ -367,11 +401,12 @@ public class LogicServiceImpl implements LogicService {
 				// we need to get the data sources NAME by reflection, otherwise we get the static value
 				// from the LogicDataSource interface
 				String name = null;
-                try {
-	                name = (String) ds.getClass().getField("NAME").get(ds);
-                } catch (Exception ex) { }
-                if (name == null || name.equals(LogicDataSource.NAME))
-                	throw new LogicException("All data sources must declare a unique public static NAME property");
+				try {
+					name = (String) ds.getClass().getField("NAME").get(ds);
+				}
+				catch (Exception ex) {}
+				if (name == null || name.equals(LogicDataSource.NAME))
+					throw new LogicException("All data sources must declare a unique public static NAME property");
 				dataSources.put(name, ds);
 			}
 		}
