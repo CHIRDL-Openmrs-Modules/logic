@@ -36,6 +36,7 @@ import org.openmrs.logic.rule.provider.RegisterAtStartupDataSourceRuleProvider;
 import org.openmrs.logic.rule.provider.RuleProvider;
 import org.openmrs.logic.util.LogicUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 /**
  * Provides access to clinical observations. The keys for this data source are the primary names of
@@ -43,6 +44,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  * datetime and a value based on the observed value.
  * TODO either make {@link RegisterAtStartupDataSourceRuleProvider} more efficient, or else write a custom {@link #afterStartup()} method.
  */
+@Repository
 public class ObsDataSource extends RegisterAtStartupDataSourceRuleProvider implements RuleProvider, LogicDataSource {
 	
 	public static final String NAME = "obs";
