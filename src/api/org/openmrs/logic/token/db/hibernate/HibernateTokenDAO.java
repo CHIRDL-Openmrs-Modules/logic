@@ -180,7 +180,7 @@ public class HibernateTokenDAO implements TokenDAO {
     public List<TokenRegistration> getTokenRegistrations(String token, RuleProvider provider, String providerToken, String configuration) {
     	Criteria crit = makeCriteria();
     	if (token != null)
-    		crit.add(Restrictions.eq("token", token));
+    		crit.add(Restrictions.ilike("token", token, MatchMode.EXACT));
     	if (provider != null)
     		crit.add(Restrictions.eq("providerClassName", provider.getClass().getName()));
     	if (providerToken != null)

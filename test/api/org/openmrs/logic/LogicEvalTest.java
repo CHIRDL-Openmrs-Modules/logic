@@ -72,7 +72,7 @@ public class LogicEvalTest extends BaseModuleContextSensitiveTest {
 		//System.out.println();
 		//long l = System.currentTimeMillis();
 		//System.out.println(new Date());
-		Map<Integer, Result> m = Context.getLogicService().eval(cohort, "TEMPERATURE (C)");
+		Map<Integer, Result> m = Context.getLogicService().eval(cohort, "\"TEMPERATURE (C)\"");
 		Assert.assertNotNull(m);
 		Assert.assertTrue(m.size() > 0);
 		//System.out.println(m.toString());

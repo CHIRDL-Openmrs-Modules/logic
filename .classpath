@@ -74,8 +74,8 @@
 	<classpathentry kind="lib" path="lib-common/junit/dbunit-2.4.4.jar"/>
 	<classpathentry kind="lib" path="lib-common/junit/hsqldb-1.8.0.10.jar"/>
 	<classpathentry kind="lib" path="lib/groovy-all-1.7.6.jar"/>
-	<classpathentry kind="lib" path="lib-common/openmrs/openmrs-api-1.6.2.15986-dev.jar"/>
-	<classpathentry kind="lib" path="lib-common/openmrs/tests-openmrs-api-1.6.2.15986-dev.jar"/>
-	<classpathentry kind="lib" path="lib-common/openmrs/web-openmrs-api-1.6.2.15986-dev.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs/openmrs-api-1.6.3.17711-dev.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs/tests-openmrs-api-1.6.3.17711-dev.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs/web-openmrs-api-1.6.3.17711-dev.jar"/>
 	<classpathentry kind="output" path="build"/>
 </classpath>

@@ -154,7 +154,7 @@ public class LogicBasicTest extends BaseModuleContextSensitiveTest {
 		//long l = System.currentTimeMillis();
 		//System.out.println(new Date());
 		LogicService ls = Context.getLogicService();
-		Map<Integer, Result> m = ls.eval(cohort, "WEIGHT (KG)");
+		Map<Integer, Result> m = ls.eval(cohort, "\"WEIGHT (KG)\"");
 		Assert.assertNotNull(m);
 		Assert.assertTrue(m.size() > 0);
 		//System.out.println(m.toString());
