@@ -14,7 +14,7 @@
 	<activator>org.openmrs.module.logic.LogicModuleActivator</activator>
 	<updateURL>https://dev.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL>
 
-	<require_version>1.6.0</require_version>
+	<require_version>1.6.3.17711</require_version>
 	
     <extension>
         <point>org.openmrs.admin.list</point>
