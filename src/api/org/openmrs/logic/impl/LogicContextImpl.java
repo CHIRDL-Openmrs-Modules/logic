@@ -13,6 +13,7 @@
  */
 package org.openmrs.logic.impl;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -85,9 +86,11 @@ public class LogicContextImpl implements LogicContext {
 	
 	/**
 	 * Creates a {@link LogicContext} that inherits from parentContext (meaning that it shares a
-	 * cohort of patients, a cache, and its global parameters, and changes to those in the new
-	 * context will be reflected in the parent context).
+	 * cohort of patients, and its global parameters, and changes to those in the new context will
+	 * be reflected in the parent context).
 	 * If newIndexDate is non-null, then it will override the index date from the parent context.
+	 * This LogicContext has its own cache, although eventually it should share a cache with its
+	 * parent (once caches support index dates in some way)
 	 * @param parentContext
 	 * @param newIndexDate
 	 */
@@ -95,7 +98,8 @@ public class LogicContextImpl implements LogicContext {
 		this.parentContext = parentContext;
 		this.globalParameters = parentContext.globalParameters;
 		this.patients = parentContext.patients;
-		this.cache = parentContext.cache;
+		// once we fix the cache to also contain either the context or the index date in its cache keys, we should share our parent's cache
+		// this.cache = parentContext.cache;
 		this.indexDate = newIndexDate != null ? newIndexDate : parentContext.indexDate;
 	}
 	
@@ -108,7 +112,7 @@ public class LogicContextImpl implements LogicContext {
 		this.patients = new PatientCohort();
 		this.globalParameters = new HashMap<String, Object>();
 		patients.addMember(patientId);
-		setIndexDate(new Date());
+		setIndexDate(newIndexDate());
 	}
 	
 	/**
@@ -122,7 +126,19 @@ public class LogicContextImpl implements LogicContext {
 		else
 			this.patients = new PatientCohort(patients);
 		this.globalParameters = new HashMap<String, Object>();
-		setIndexDate(new Date());
+		setIndexDate(newIndexDate());
+	}
+	
+	/**
+	 * @return the default indexDate, i.e. the first second of today. (The real today, not today().)
+	 */
+	private Date newIndexDate() {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+		return cal.getTime();
 	}
 	
 	/**
@@ -152,6 +168,7 @@ public class LogicContextImpl implements LogicContext {
 	 * @see org.openmrs.logic.LogicContext#eval(java.lang.Integer,
 	 *      org.openmrs.logic.LogicCriteria, java.util.Map)
 	 * @should evaluate a rule that requires a new index date in a new logic context
+	 * @should behave right when a rule and a subrule with a different index date evaluate the same criteria
 	 */
 	public Result eval(Integer patientId, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
 		Result result = getCache().get(patientId, criteria, parameters);

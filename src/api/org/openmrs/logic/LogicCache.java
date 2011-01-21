@@ -42,7 +42,8 @@ public class LogicCache {
 	public Result get(Integer patientId, LogicDataSource dataSource, LogicCriteria criteria) {
 		LogicCacheEntryKey key = new LogicCacheEntryKey(dataSource, criteria);
 		Result r = get(key, patientId);
-		log.debug("Searching cache for " + key.toString() + " - " + (r == null ? "NOT" : "") + " found");
+		if (log.isDebugEnabled())
+			log.debug("Searching cache for " + key.toString() + " - " + (r == null ? "NOT" : "") + " found");
 		logCacheContents();
 		return r;
 	}
@@ -69,7 +70,8 @@ public class LogicCache {
 	}
 	
 	private void put(LogicCacheEntryKey key, Map<Integer, Result> value) {
-		log.debug("Adding to logic cache: " + key.toString());
+		if (log.isDebugEnabled())
+			log.debug("Adding to logic cache: " + key.toString());
 		getCache().put(key, value);
 	}
 	
@@ -91,7 +93,7 @@ public class LogicCache {
 	
 	private void logCacheContents() {
 		if (log.isDebugEnabled()) {
-		log.debug("Logic Cache - " + getCache().size() + " entries");
+			log.debug("Logic Cache - " + getCache().size() + " entries");
 			for (LogicCacheEntryKey key : getCache().keySet())
 				log.debug("  " + key.toString() + " - " + getCache().get(key));
 		}

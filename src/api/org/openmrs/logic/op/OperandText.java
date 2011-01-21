@@ -13,6 +13,8 @@
  */
 package org.openmrs.logic.op;
 
+import org.openmrs.util.OpenmrsUtil;
+
 /**
  * @see Operand
  */
@@ -28,6 +30,25 @@ public class OperandText implements Operand {
 	 */
 	public OperandText(String string) {
 		this.string = string;
+	}
+	
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		return string == null ? 0 : string.hashCode();
+	}
+	
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object other) {
+		if (other != null && other instanceof OperandText)
+			return OpenmrsUtil.nullSafeEquals(this.string, ((OperandText) other).string);
+		else
+			return false;
 	}
 	
 	/**

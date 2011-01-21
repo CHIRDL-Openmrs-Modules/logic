@@ -18,6 +18,7 @@ import java.util.List;
 
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
+import org.openmrs.util.OpenmrsUtil;
 
 /**
  * @see Operand
@@ -43,6 +44,25 @@ public class OperandConcept implements Operand {
 	 */
 	public OperandConcept(Concept concept) {
 		this.concept = concept;
+	}
+	
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+	    return concept == null ? 0 : concept.hashCode();
+	}
+	
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object other) {
+		if (other != null && other instanceof OperandConcept)
+			return OpenmrsUtil.nullSafeEquals(this.concept, ((OperandConcept) other).concept);
+		else
+			return false;
 	}
 	
 	/**

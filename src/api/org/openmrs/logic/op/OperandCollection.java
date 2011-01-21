@@ -14,6 +14,9 @@
 package org.openmrs.logic.op;
 
 import java.util.Collection;
+import java.util.Iterator;
+
+import org.openmrs.util.OpenmrsUtil;
 
 
 /**
@@ -25,6 +28,42 @@ public class OperandCollection implements Operand {
 	
 	public OperandCollection(Collection<?> strings) {
 		collection = strings;
+	}
+	
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		if (collection != null)
+			for (Object o : collection)
+				result = prime * result + o.hashCode();
+		return result;
+	}
+	
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+	    if (obj != null && obj instanceof OperandCollection) {
+	    	OperandCollection other = (OperandCollection) obj;
+	    	if (this.collection == null || other.collection == null || this.collection.size() != other.collection.size())
+	    		return false;
+	    	Iterator<?> i = this.collection.iterator();
+	    	Iterator<?> j = other.collection.iterator();
+	    	while (i.hasNext()) { // we know that sizes are equal from our previous check
+	    		Object a = i.next();
+	    		Object b = j.next();
+	    		if (!OpenmrsUtil.nullSafeEquals(a, b))
+	    			return false;
+	    	}
+	    	return true;
+	    } else {
+	    	return false;
+	    }
 	}
 	
 	public Collection<?> asCollection() {

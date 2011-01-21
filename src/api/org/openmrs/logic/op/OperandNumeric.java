@@ -16,6 +16,8 @@ package org.openmrs.logic.op;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.openmrs.util.OpenmrsUtil;
+
 /**
  *
  */
@@ -47,6 +49,25 @@ public class OperandNumeric implements Operand {
 	
 	public OperandNumeric(Integer value) {
 		this.value = value.doubleValue();
+	}
+	
+	/**
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+	    return value == null ? 0 : value.hashCode();
+	}
+	
+	/**
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object other) {
+		if (other != null && other instanceof OperandNumeric)
+			return OpenmrsUtil.nullSafeEquals(this.value, ((OperandNumeric) other).value);
+		else
+			return false;
 	}
 	
 	public Double asDouble() {
