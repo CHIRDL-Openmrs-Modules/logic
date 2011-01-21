@@ -127,7 +127,7 @@
 	
 </script>
 
-<h2><spring:message code="logic.start.title"/></h2>
+<h2><spring:message code="logic.tester.title"/></h2>
 
 <p><spring:message code="logic.tester.instructions"/></p>
 
