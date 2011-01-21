@@ -14,7 +14,11 @@
 	<activator>org.openmrs.module.logic.LogicModuleActivator</activator>
 	<updateURL>https://dev.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL>
 
-	<require_version>1.6.0</require_version>
+	<!-- This module also works with the 1.6.x branch starting from 1.6.3.17711, but we can't release a
+		 version like that to the repository, because it would auto-upgrade 1.7.0 and 1.7.1, and that
+		 would break things. The following line can be commented out to build that special version -->
+	<!-- <require_version>1.6.3.17711</require_version> -->
+	<require_version>1.7.2.17710-1.8.*</require_version>
 	
     <extension>
         <point>org.openmrs.admin.list</point>
