@@ -22,6 +22,7 @@ import org.hibernate.criterion.Order;
 import org.openmrs.api.db.DAOException;
 import org.openmrs.logic.rule.definition.RuleDefinition;
 import org.openmrs.logic.rule.definition.db.RuleDefinitionDAO;
+import org.springframework.transaction.annotation.Transactional;
 
 
 /**
@@ -42,6 +43,7 @@ public class HibernateRuleDefinitionDAO implements RuleDefinitionDAO {
 	 * @see RuleDefinitionDAO#getRuleDefinition(Integer)
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public RuleDefinition getRuleDefinition(Integer id) throws DAOException {
 		return (RuleDefinition) sessionFactory.getCurrentSession().get(RuleDefinition.class, id);
 	}
@@ -50,6 +52,7 @@ public class HibernateRuleDefinitionDAO implements RuleDefinitionDAO {
 	 * @see RuleDefinitionDAO#getRuleDefinition(String)
 	 */
 	@Override
+	@Transactional(readOnly=true)
 	public RuleDefinition getRuleDefinition(String name) throws DAOException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RuleDefinition.class);
 		criteria.add(Expression.eq("name", name));
@@ -61,6 +64,7 @@ public class HibernateRuleDefinitionDAO implements RuleDefinitionDAO {
 	 */
 	@Override
 	@SuppressWarnings("unchecked")
+	@Transactional(readOnly=true)
 	public List<RuleDefinition> getAllRuleDefinitions(boolean includeRetired) throws DAOException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RuleDefinition.class);
 		if (!includeRetired) {
@@ -74,6 +78,7 @@ public class HibernateRuleDefinitionDAO implements RuleDefinitionDAO {
 	 * @see RuleDefinitionDAO#saveRuleDefinition(RuleDefinition)
 	 */
 	@Override
+	@Transactional
 	public RuleDefinition saveRuleDefinition(RuleDefinition ruleDefinition) throws DAOException {
 		sessionFactory.getCurrentSession().saveOrUpdate(ruleDefinition);
 		return ruleDefinition;
@@ -83,6 +88,7 @@ public class HibernateRuleDefinitionDAO implements RuleDefinitionDAO {
 	 * @see RuleDefinitionDAO#deleteRuleDefinition(RuleDefinition)
 	 */
 	@Override
+	@Transactional
 	public void deleteRuleDefinition(RuleDefinition ruleDefinition) throws DAOException {
 		sessionFactory.getCurrentSession().delete(ruleDefinition);	
 	}

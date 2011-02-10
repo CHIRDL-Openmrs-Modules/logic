@@ -195,9 +195,11 @@ public class HibernateTokenDAO implements TokenDAO {
      * @see org.openmrs.logic.token.db.TokenDAO#deleteConfigurationsNotIn(org.openmrs.logic.rule.provider.RuleProvider, java.util.List)
      */
     @Override
+    @Transactional
     public void deleteConfigurationsNotIn(RuleProvider provider, List<String> validConfigurations) {
         Query query = sessionFactory.getCurrentSession().createQuery("delete from TokenRegistration where providerClassName = :providerClassName and configuration not in (:validConfigs)");
         query.setString("providerClassName", provider.getClass().getName());
-        query.setParameter("validConfigs", validConfigurations);
+        query.setParameterList("validConfigs", validConfigurations);
+        query.executeUpdate();
     }
 }
