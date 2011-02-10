@@ -113,10 +113,10 @@ public class CompilingClassLoader extends ClassLoader {
 	}
 	
 	// Spawn a process to compile the java source code file
-	// specified in the 'javaFile' parameter.  Return a true if
-	// the compilation worked, false otherwise.
-	private boolean compile(String javaFile) throws IOException {
-		boolean compiled = false;
+	// specified in the 'javaFile' parameter.  Return null if
+	// the compilation worked, or the compile errors otherwise.
+	private String compile(String javaFile) throws IOException {
+		String errorMessage = null;
 		String ruleClassDir = Context.getAdministrationService().getGlobalProperty(LogicConstants.RULE_DEFAULT_CLASS_FOLDER);
 		String ruleJavaDir = Context.getAdministrationService().getGlobalProperty(LogicConstants.RULE_DEFAULT_SOURCE_FOLDER);
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
@@ -143,21 +143,25 @@ public class CompilingClassLoader extends ClassLoader {
 			fileManager.setLocation(StandardLocation.CLASS_PATH, classpathFiles);
 			// create the compilation task
 			CompilationTask compilationTask = compiler.getTask(null, fileManager, diagnosticCollector, Arrays.asList(options), null, fileManager.getJavaFileObjects(javaFile));
-			compiled = compilationTask.call();
-			for (Diagnostic<?> diagnostic : diagnosticCollector.getDiagnostics()) {
-				log.error("Error line: " + diagnostic.getLineNumber());
-				log.error("Error message: " + diagnostic.getMessage(Context.getLocale()));
-			}
+			boolean success = compilationTask.call();
 			fileManager.close();
+			if (success) {
+				return null;
+			} else {
+				errorMessage = "";
+				for (Diagnostic<?> diagnostic : diagnosticCollector.getDiagnostics()) {
+					errorMessage += diagnostic.getLineNumber() + ": " + diagnostic.getMessage(Context.getLocale()) + "\n";
+				}
+				return errorMessage;
+			}
 		} else {
 			File outputFolder = OpenmrsUtil.getDirectoryInApplicationDataDirectory(ruleClassDir);
 			String[] commands = { "javac", "-classpath", System.getProperty("java.class.path"), "-d", outputFolder.getAbsolutePath(), javaFile };
 			// Start up the compiler
 			File workingDirectory = OpenmrsUtil.getDirectoryInApplicationDataDirectory(ruleJavaDir);
-			compiled = LogicUtil.executeCommand(commands, workingDirectory);
+			boolean success = LogicUtil.executeCommand(commands, workingDirectory);
+			return success ? null : "Compilation error. (You must be using the JDK to see details.)";
 		}
-		
-		return compiled;
 	}
 	
 	// The heart of the ClassLoader -- automatically compile
@@ -199,7 +203,10 @@ public class CompilingClassLoader extends ClassLoader {
 				// Try to compile it.  If this doesn't work, then
 				// we must declare failure.  (It's not good enough to use
 				// an already-existing, but out-of-date, class file)
-				if (!compile(javaFile.getAbsolutePath()) || !classFile.exists())
+				String error = compile(javaFile.getAbsolutePath());
+				if (error != null)
+					throw new LogicException(error);
+				if (!classFile.exists())
 					throw new ClassNotFoundException("Compilation process failed for " + javaFilename);
 			}
 			catch (IOException ie) {

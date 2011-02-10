@@ -54,8 +54,8 @@
 			<th><spring:message code="logic.RuleDefinition.ruleContent"/></th>
 			<td>
 				<spring:bind path="rule.ruleContent">
+					<c:if test="${status.errorMessage != ''}"><span style="float:right" class="error"><pre>${ fn:replace(fn:replace(status.errorMessage, ">", "&gt;"), "<", "&lt;") }</pre></span></c:if>
 					<textarea rows="20" cols="80" name="${status.expression}">${status.value}</textarea>
-					<c:if test="${status.errorMessage != ''}"><span class="error">${status.errorMessage}</span></c:if>
 				</spring:bind>
 			</td>
 		</tr>
