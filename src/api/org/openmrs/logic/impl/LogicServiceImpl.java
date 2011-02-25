@@ -147,7 +147,6 @@ public class LogicServiceImpl implements LogicService {
 	/**
 	 * @see org.openmrs.logic.LogicService#eval(java.lang.Integer, java.lang.String)
 	 */
-	@Override
 	public Result eval(Integer patientId, String expression) throws LogicException {
 		return eval(patientId, parse(expression));
 	}
@@ -155,7 +154,6 @@ public class LogicServiceImpl implements LogicService {
 	/**
 	 * @see org.openmrs.logic.LogicService#eval(java.lang.Integer, java.lang.String, java.util.Map)
 	 */
-	@Override
 	public Result eval(Integer patientId, String expression, Map<String, Object> params) throws LogicException {
 		LogicCriteria criteria = parse(expression);
 		criteria.setLogicParameters(params);
@@ -166,7 +164,6 @@ public class LogicServiceImpl implements LogicService {
 	 * @see org.openmrs.logic.LogicService#eval(java.lang.Integer, java.util.Map,
 	 *      java.lang.String[])
 	 */
-	@Override
 	public Map<String, Result> eval(Integer patientId, Map<String, Object> parameters, String... expressions) throws LogicException {
 		LogicContext context = new LogicContextImpl(patientId);
 		
@@ -182,7 +179,6 @@ public class LogicServiceImpl implements LogicService {
 	/**
 	 * @see org.openmrs.logic.LogicService#eval(java.lang.Integer, java.util.Map, org.openmrs.logic.LogicCriteria[])
 	 */
-	@Override
 	public Map<LogicCriteria, Result> eval(Integer patientId, Map<String, Object> parameters, LogicCriteria... criteria) throws LogicException {
 		LogicContext context = new LogicContextImpl(patientId);
 		
@@ -197,7 +193,6 @@ public class LogicServiceImpl implements LogicService {
 	/**
 	 * @see org.openmrs.logic.LogicService#eval(java.lang.Integer, org.openmrs.logic.LogicCriteria)
 	 */
-	@Override
 	public Result eval(Integer patientId, LogicCriteria criteria) throws LogicException {
 		return eval(patientId, criteria, criteria.getLogicParameters());
 	}
@@ -206,7 +201,6 @@ public class LogicServiceImpl implements LogicService {
 	 * @see org.openmrs.logic.LogicService#eval(java.lang.Integer, org.openmrs.logic.LogicCriteria,
 	 *      java.util.Map)
 	 */
-	@Override
 	public Result eval(Integer patientId, LogicCriteria criteria, Map<String, Object> parameters) throws LogicException {
 		LogicContext context = new LogicContextImpl(patientId);
 		Result result = context.eval(patientId, criteria, parameters);

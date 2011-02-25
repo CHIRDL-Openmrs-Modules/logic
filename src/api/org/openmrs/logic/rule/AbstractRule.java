@@ -31,13 +31,11 @@ public abstract class AbstractRule implements Rule {
 	/**
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, Integer, Map)
 	 */
-	@Override
 	public abstract Result eval(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException;
 	
 	/**
 	 * @see org.openmrs.logic.Rule#getDefaultDatatype()
 	 */
-	@Override
 	public Datatype getDefaultDatatype() {
 		return null;
 	}
@@ -45,7 +43,6 @@ public abstract class AbstractRule implements Rule {
 	/**
 	 * @see org.openmrs.logic.Rule#getDependencies()
 	 */
-	@Override
 	public String[] getDependencies() {
 		return null;
 	}
@@ -53,7 +50,6 @@ public abstract class AbstractRule implements Rule {
 	/**
 	 * @see org.openmrs.logic.Rule#getParameterList()
 	 */
-	@Override
 	public Set<RuleParameterInfo> getParameterList() {
 		return null;
 	}
@@ -61,7 +57,6 @@ public abstract class AbstractRule implements Rule {
 	/**
 	 * @see org.openmrs.logic.Rule#getTTL()
 	 */
-	@Override
 	public int getTTL() {
 		return 30; // TODO increase the TTL so RuleFactory can cache these
 	}

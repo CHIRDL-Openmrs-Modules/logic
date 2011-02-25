@@ -29,13 +29,11 @@ import org.springframework.validation.Validator;
  */
 public class RuleDefinitionValidator implements Validator {
 	
-	@Override
 	@SuppressWarnings("unchecked")
 	public boolean supports(Class c) {
 		return c.equals(RuleDefinition.class);
 	}
 	
-	@Override
 	public void validate(Object obj, Errors errors) {
 		RuleDefinition rule = (RuleDefinition) obj;
 

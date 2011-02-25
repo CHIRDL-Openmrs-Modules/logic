@@ -59,7 +59,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
 	 * @see org.openmrs.api.impl.BaseOpenmrsService#onStartup()
 	 */
-	@Override
 	public void onStartup() {
 		initialize();
 	}
@@ -67,7 +66,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
 	 * @see org.openmrs.logic.token.TokenService#initialize()
 	 */
-	@Override
 	public void initialize() {
 	    for (RuleProvider provider : ruleProviders) {
 	    	startupProviderAsDaemon(provider);
@@ -119,7 +117,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
 	 * @see org.openmrs.logic.token.TokenService#getTokens(java.lang.String)
 	 */
-	@Override
 	public List<String> getTokens(String query) {
 		return dao.getTokens(query);
 	}
@@ -127,7 +124,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
 	 * @see org.openmrs.logic.token.TokenService#getCountOfTokenRegistrations(java.lang.String)
 	 */
-	@Override
 	public int getCountOfTokenRegistrations(String query) {
 		return dao.getCountOfTokenRegistrations(query);
 	}
@@ -135,7 +131,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
 	 * @see org.openmrs.logic.token.TokenService#getRule(java.lang.String)
 	 */
-	@Override
 	public Rule getRule(String token) {
 		if (token == null)
 			throw new LogicException("Token cannot be null");
@@ -156,7 +151,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
      * @see org.openmrs.logic.token.TokenService#getRule(org.openmrs.logic.rule.provider.RuleProvider, java.lang.String)
      */
-    @Override
     public Rule getRule(RuleProvider provider, String providerToken) {
 	    TokenRegistration tr = justOne(dao.getTokenRegistrations(null, provider, providerToken, null));
 	    if (tr == null) {
@@ -195,7 +189,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
      * @see org.openmrs.logic.token.TokenService#registerToken(java.lang.String, org.openmrs.logic.rule.provider.RuleProvider, java.lang.String)
      */
-    @Override
     public TokenRegistration registerToken(String token, RuleProvider provider, String configuration) {
     	TokenRegistration existing = getTokenRegistrationByProviderAndToken(provider, token);
     	if (existing == null) {
@@ -242,7 +235,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
 	 * @see org.openmrs.logic.token.TokenService#getTokenRegistration(java.lang.Integer)
 	 */
-	@Override
 	public TokenRegistration getTokenRegistration(Integer id) {
 		return dao.getTokenRegistration(id);
 	}
@@ -250,7 +242,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
 	 * @see org.openmrs.logic.token.TokenService#getTokenRegistrationByToken(java.lang.String)
 	 */
-	@Override
 	public TokenRegistration getTokenRegistrationByToken(String token) {
 		return justOne(dao.getTokenRegistrations(token, null, null, null));
 	}
@@ -258,7 +249,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
 	 * @see org.openmrs.logic.token.TokenService#getTokenRegistrationByUuid(java.lang.String)
 	 */
-	@Override
 	public TokenRegistration getTokenRegistrationByUuid(String uuid) {
 		return dao.getTokenRegistrationByUuid(uuid);
 	}
@@ -266,7 +256,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
 	 * @see org.openmrs.logic.token.TokenService#getTokenRegistrationByProviderAndToken(org.openmrs.logic.rule.provider.RuleProvider, java.lang.String)
 	 */
-	@Override
 	public TokenRegistration getTokenRegistrationByProviderAndToken(RuleProvider provider, String providerToken) {
 	    return justOne(dao.getTokenRegistrations(null, provider, providerToken, null));
 	}
@@ -274,7 +263,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
     /**
      * @see org.openmrs.logic.token.TokenService#getTokenRegistrationByProviderAndConfiguration(org.openmrs.logic.rule.definition.RuleDefinitionRuleProvider, java.lang.String)
      */
-    @Override
     public TokenRegistration getTokenRegistrationByProviderAndConfiguration(RuleProvider provider,
                                                                             String configuration) {
         return justOne(dao.getTokenRegistrations(null, provider, null, configuration));
@@ -283,7 +271,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
 	 * @see org.openmrs.logic.token.TokenService#getTokenRegistrations(java.lang.String, java.lang.Integer, java.lang.Integer)
 	 */
-	@Override
 	public List<TokenRegistration> getTokenRegistrations(String query, Integer start, Integer length) {
 		return dao.getTokenRegistrations(query, start, length);
 	}
@@ -291,7 +278,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
 	 * @see org.openmrs.logic.token.TokenService#removeToken(java.lang.String)
 	 */
-	@Override
 	public void removeToken(String token) {
 		TokenRegistration tr = getTokenRegistrationByToken(token);
 		if (tr != null)
@@ -301,7 +287,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
 	 * @see org.openmrs.logic.token.TokenService#removeToken(org.openmrs.logic.rule.definition.RuleDefinitionRuleProvider, java.lang.String)
 	 */
-	@Override
 	public void removeToken(RuleProvider provider, String providerToken) {
 		TokenRegistration tr = getTokenRegistrationByProviderAndToken(provider, providerToken);
 		if (tr != null)
@@ -311,7 +296,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
 	 * @see org.openmrs.logic.token.TokenService#saveTokenRegistration(org.openmrs.logic.token.TokenRegistration)
 	 */
-	@Override
 	public TokenRegistration saveTokenRegistration(TokenRegistration tokenRegistration) {
 		TokenRegistration ret = dao.saveTokenRegistration(tokenRegistration);
 		ruleCache.remove(tokenRegistration.getToken());
@@ -321,7 +305,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
 	 * @see org.openmrs.logic.token.TokenService#deleteTokenRegistration(org.openmrs.logic.token.TokenRegistration)
 	 */
-	@Override
     public void deleteTokenRegistration(TokenRegistration tokenRegistration) {
 	    dao.deleteTokenRegistration(tokenRegistration);
 	    ruleCache.remove(tokenRegistration.getToken());
@@ -330,7 +313,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
      * @see org.openmrs.logic.token.TokenService#getAllTokens()
      */
-    @Override
     public List<String> getAllTokens() {
 	    return dao.getAllTokens();
     }
@@ -338,7 +320,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
      * @see org.openmrs.logic.token.TokenService#getTags(java.lang.String)
      */
-    @Override
     public List<String> getTags(String partialTag) {
 	    return dao.getTags(partialTag);
     }
@@ -346,7 +327,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
      * @see org.openmrs.logic.token.TokenService#getTokensByTag(java.lang.String)
      */
-    @Override
     public List<String> getTokensByTag(String tag) {
 	    return dao.getTokensByTag(tag);
     }
@@ -354,7 +334,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
     /**
      * @see org.openmrs.logic.token.TokenService#getTokenRegistrationsByProvider(org.openmrs.logic.rule.provider.RuleProvider)
      */
-    @Override
     public List<TokenRegistration> getTokenRegistrationsByProvider(RuleProvider ruleProvider) {
         return dao.getTokenRegistrations(null, ruleProvider, null, null);
     }
@@ -379,7 +358,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
 	 * @see org.openmrs.logic.token.TokenService#keepOnlyValidConfigurations(org.openmrs.logic.rule.provider.RuleProvider, java.util.Collection)
 	 */
-	@Override
 	public void keepOnlyValidConfigurations(RuleProvider provider, Collection<?> validConfigurations) {
 	    List<String> validConfigsAsStrings = new ArrayList<String>();
 	    for (Object o : validConfigurations)
@@ -390,7 +368,6 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
 	 * @see org.openmrs.logic.token.TokenService#notifyRuleDefinitionChanged(org.openmrs.logic.rule.provider.RuleProvider, java.lang.String)
 	 */
-	@Override
 	public void notifyRuleDefinitionChanged(RuleProvider provider, String providerToken) {
 		TokenRegistration tr = getTokenRegistrationByProviderAndToken(provider, providerToken);
 		if (tr == null)

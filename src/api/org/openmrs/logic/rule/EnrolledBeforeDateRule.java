@@ -33,7 +33,6 @@ public class EnrolledBeforeDateRule implements Rule {
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, java.lang.Integer,
 	 *      java.util.Map)
 	 */
-	@Override
 	public Result eval(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
 		
 		Result lastProgram = context.read(patientId, context.getLogicDataSource("program"),

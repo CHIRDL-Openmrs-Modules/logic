@@ -144,7 +144,6 @@ public class LogicContextImpl implements LogicContext {
 	/**
 	 * @see org.openmrs.logic.LogicContext#getPatient(java.lang.Integer)
 	 */
-	@Override
 	public Patient getPatient(Integer patientId) {
 		return patients.getPatient(patientId);
 	}

@@ -31,7 +31,6 @@ public class HibernateTokenDAO implements TokenDAO {
 	/**
      * @see org.openmrs.logic.token.db.TokenDAO#deleteTokenRegistration(org.openmrs.logic.token.TokenRegistration)
      */
-    @Override
     @Transactional
     public void deleteTokenRegistration(TokenRegistration tokenRegistration) {
 	    sessionFactory.getCurrentSession().delete(tokenRegistration);
@@ -41,7 +40,6 @@ public class HibernateTokenDAO implements TokenDAO {
      * @see org.openmrs.logic.token.db.TokenDAO#getAllTokens()
      */
     @SuppressWarnings("unchecked")
-    @Override
     @Transactional(readOnly=true)
     public List<String> getAllTokens() {
 	    Query query = sessionFactory.getCurrentSession().createQuery("select token from TokenRegistration");
@@ -52,7 +50,6 @@ public class HibernateTokenDAO implements TokenDAO {
      * @see org.openmrs.logic.token.db.TokenDAO#getTokens(java.lang.String)
      */
     @SuppressWarnings("unchecked")
-    @Override
     @Transactional(readOnly=true)
     public List<String> getTokens(String query) {
 		Query q = sessionFactory.getCurrentSession().createQuery("select token from TokenRegistration where lower(token) like :query");
@@ -66,7 +63,6 @@ public class HibernateTokenDAO implements TokenDAO {
 	/**
      * @see org.openmrs.logic.token.db.TokenDAO#getCountOfTokenRegistrations(java.lang.String)
      */
-    @Override
     @Transactional(readOnly=true)
     public int getCountOfTokenRegistrations(String query) {
 	    Criteria crit = makeCriteria(query);
@@ -77,7 +73,6 @@ public class HibernateTokenDAO implements TokenDAO {
 	/**
      * @see org.openmrs.logic.token.db.TokenDAO#getTokenRegistration(java.lang.Integer)
      */
-    @Override
     @Transactional(readOnly=true)
     public TokenRegistration getTokenRegistration(Integer id) {
     	return (TokenRegistration) sessionFactory.getCurrentSession().get(TokenRegistration.class, id);
@@ -86,7 +81,6 @@ public class HibernateTokenDAO implements TokenDAO {
     /**
      * @see org.openmrs.logic.token.db.TokenDAO#getTokenRegistrationByUuid(java.lang.String)
      */
-    @Override
     @Transactional(readOnly=true)
     public TokenRegistration getTokenRegistrationByUuid(String uuid) {
     	Criteria crit = makeCriteria();
@@ -98,7 +92,6 @@ public class HibernateTokenDAO implements TokenDAO {
      * @see org.openmrs.logic.token.db.TokenDAO#getTokenRegistrations(java.lang.String, java.lang.Integer, java.lang.Integer)
      */
     @SuppressWarnings("unchecked")
-    @Override
     @Transactional(readOnly=true)
     public List<TokenRegistration> getTokenRegistrations(String query, Integer start, Integer length) {
     	Criteria criteria = makeCriteria(query);
@@ -112,7 +105,6 @@ public class HibernateTokenDAO implements TokenDAO {
 	/**
      * @see org.openmrs.logic.token.db.TokenDAO#saveTokenRegistration(org.openmrs.logic.token.TokenRegistration)
      */
-    @Override
     @Transactional
     public TokenRegistration saveTokenRegistration(TokenRegistration tokenRegistration) {
 	    sessionFactory.getCurrentSession().saveOrUpdate(tokenRegistration);
@@ -139,7 +131,6 @@ public class HibernateTokenDAO implements TokenDAO {
 	/**
      * @see org.openmrs.logic.token.db.TokenDAO#getTags(java.lang.String)
      */
-    @Override
     @Transactional(readOnly=true)
     public List<String> getTags(String partialTag) {
     	// TODO this is inefficient
@@ -162,7 +153,6 @@ public class HibernateTokenDAO implements TokenDAO {
      * @see org.openmrs.logic.token.db.TokenDAO#getTokensByTag(java.lang.String)
      */
     @SuppressWarnings("unchecked")
-    @Override
     @Transactional(readOnly=true)
     public List<String> getTokensByTag(String tag) {
     	String hql = "select token from TokenRegistration where :tag in elements(tags)";
@@ -175,7 +165,6 @@ public class HibernateTokenDAO implements TokenDAO {
      * @see org.openmrs.logic.token.db.TokenDAO#getTokenRegistrationsByProvider(org.openmrs.logic.rule.provider.RuleProvider)
      */
     @SuppressWarnings("unchecked")
-    @Override
     @Transactional(readOnly=true)
     public List<TokenRegistration> getTokenRegistrations(String token, RuleProvider provider, String providerToken, String configuration) {
     	Criteria crit = makeCriteria();
@@ -194,7 +183,6 @@ public class HibernateTokenDAO implements TokenDAO {
     /**
      * @see org.openmrs.logic.token.db.TokenDAO#deleteConfigurationsNotIn(org.openmrs.logic.rule.provider.RuleProvider, java.util.List)
      */
-    @Override
     @Transactional
     public void deleteConfigurationsNotIn(RuleProvider provider, List<String> validConfigurations) {
         Query query = sessionFactory.getCurrentSession().createQuery("delete from TokenRegistration where providerClassName = :providerClassName and configuration not in (:validConfigs)");

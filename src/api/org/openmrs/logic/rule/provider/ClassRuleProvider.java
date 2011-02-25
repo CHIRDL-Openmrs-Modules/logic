@@ -33,7 +33,6 @@ public class ClassRuleProvider extends AbstractRuleProvider implements RuleProvi
 	 * @param ruleConfiguration the rule class name, possibly followed by a space and then the rule state
 	 * @return an instantiated rule
 	 */
-	@Override
 	public Rule getRule(String ruleConfiguration) {
 		if (ruleConfiguration == null)
 			throw new IllegalArgumentException("class name must be provided");
