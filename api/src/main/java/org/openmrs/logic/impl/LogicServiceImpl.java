@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import antlr.BaseAST;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
@@ -43,8 +44,6 @@ import org.openmrs.logic.rule.RuleParameterInfo;
 import org.openmrs.logic.token.TokenRegistration;
 import org.openmrs.logic.token.TokenService;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import antlr.BaseAST;
 
 /**
  * Default implementation of the LogicService. This class should not be used directly. This class,
@@ -223,7 +222,7 @@ public class LogicServiceImpl implements LogicService {
 	}
 	
 	/**
-	 * @see org.openmrs.logic.LogicService#eval(Patient, LogicCriteriaImpl)
+	 * @see org.openmrs.logic.LogicService#eval(Patient, LogicCriteria)
 	 */
 	public Result eval(Patient who, LogicCriteria criteria) throws LogicException {
 		return eval(who.getPatientId(), criteria);

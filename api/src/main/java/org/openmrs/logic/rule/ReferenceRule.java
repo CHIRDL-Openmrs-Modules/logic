@@ -18,7 +18,6 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
@@ -75,13 +74,10 @@ public class ReferenceRule implements StatefulRule {
 	 *      java.util.Map)
 	 */
 	public Result eval(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
-		
-		log.info("Evaluating " + key + " ... ");
 		return context.read(patientId, dataSource, new LogicCriteriaImpl(key));
 	}
-	
+
 	public Result eval(LogicContext context, Integer patientId, LogicCriteria criteria) throws LogicException {
-		
 		return context.read(patientId, dataSource, criteria);
 	}
 	

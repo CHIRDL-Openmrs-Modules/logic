@@ -13,6 +13,8 @@
  */
 package org.openmrs.logic.datasource;
 
+import java.util.Map;
+
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Cohort;
@@ -27,8 +29,6 @@ import org.openmrs.logic.impl.LogicCriteriaImpl;
 import org.openmrs.logic.op.OperandDate;
 import org.openmrs.logic.result.Result;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
-
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 
@@ -91,7 +91,7 @@ public class EncounterDataSourceTest extends BaseModuleContextSensitiveTest {
 		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounterProvider").last());
 		assertEquals(1, results.size());
 		assertEquals(1, results.get(7).size());
-		assertEquals("Hippocrates  of Cos", results.get(7).get(0).toString());
+		assertEquals("Hippocrates of Cos", results.get(7).get(0).toString());
 	}
 	
 	/**

@@ -99,8 +99,7 @@ public class LogicCriteriaImpl implements LogicCriteria {
 	}
 	
 	/**
-	 * @see org.openmrs.logic.LogicCriteria#appendExpression(org.openmrs.logic.op.Operator,
-	 *      java.lang.Object)
+	 * @see org.openmrs.logic.LogicCriteria#appendExpression(org.openmrs.logic.op.Operator, org.openmrs.logic.op.Operand)
 	 */
 	public LogicCriteria appendExpression(Operator operator, Operand operand) {
 		this.expression = new LogicExpressionBinary(this.expression, operand, operator);

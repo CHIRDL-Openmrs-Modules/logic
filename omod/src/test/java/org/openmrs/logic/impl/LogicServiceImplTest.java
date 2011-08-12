@@ -3,7 +3,6 @@ package org.openmrs.logic.impl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicService;
@@ -39,16 +38,16 @@ public class LogicServiceImplTest extends BaseModuleContextSensitiveTest {
 		obsDataSource.addKey("WEIGHT (KG)");
 		
 		LogicCriteria criteria = Context.getLogicService().parse("\"WEIGHT (KG)\"");
-		Result result = Context.getLogicService().eval(new Patient(3), criteria);
+		Result result = Context.getLogicService().eval(3, criteria);
 		Assert.assertEquals(2, result.size());
 		
 		LogicCriteria lastCriteria = Context.getLogicService().parse("LAST \"WEIGHT (KG)\"");
-		Result lastResult = Context.getLogicService().eval(new Patient(3), lastCriteria);
+		Result lastResult = Context.getLogicService().eval(3, lastCriteria);
 		Assert.assertEquals(1, lastResult.size());
 		Assert.assertEquals(70.0d, lastResult.toNumber().doubleValue(), 0);
 		
 		LogicCriteria firstCriteria = Context.getLogicService().parse("FIRST \"WEIGHT (KG)\"");
-		Result firstResult = Context.getLogicService().eval(new Patient(3), firstCriteria);
+		Result firstResult = Context.getLogicService().eval(3, firstCriteria);
 		Assert.assertEquals(firstResult.size(), 1);
 		Assert.assertEquals(60.0d, firstResult.toNumber().doubleValue(), 0);
 	}

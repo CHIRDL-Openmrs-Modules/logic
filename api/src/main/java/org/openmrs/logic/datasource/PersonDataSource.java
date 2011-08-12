@@ -158,7 +158,7 @@ public class PersonDataSource extends SimpleDataSourceRuleProvider implements Lo
 	 * @see org.openmrs.logic.datasource.LogicDataSource#hasKey(java.lang.String)
 	 */
 	public boolean hasKey(String key) {
-		return getKeys().contains(key);
+		return getKeys().contains(key.toLowerCase());
 	}
 
 }

@@ -188,6 +188,7 @@ public class LogicContextImpl implements LogicContext {
 				for (Integer currPatientId : patients.getMemberIds()) {
 					Result r = Result.emptyResult();
 					if (rule instanceof ReferenceRule) {
+						// TODO: we are ignoring all the parameters here. fail!
 						r = ((ReferenceRule) rule).eval(this, currPatientId, criteria);
 					} else {
 						r = rule.eval(this, currPatientId, parameters);

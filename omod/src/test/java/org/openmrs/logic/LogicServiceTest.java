@@ -20,18 +20,15 @@ import java.util.Map;
 import java.util.Set;
 
 import junit.framework.Assert;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Cohort;
-import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.impl.LogicCriteriaImpl;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.AgeRule;
-import org.openmrs.logic.rule.HIVPositiveRule;
 import org.openmrs.logic.rule.ReferenceRule;
 import org.openmrs.logic.rule.provider.ClassRuleProvider;
 import org.openmrs.logic.token.TokenService;
@@ -67,11 +64,11 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 		patients.addMember(2);
 		
 		try {
-			Result r = logicService.eval(new Patient(2), "CD4 COUNT");
+			Result r = logicService.eval(2, new LogicCriteriaImpl("CD4 COUNT"));
 			Assert.assertNotNull(r);
 			Assert.assertEquals(0, r.size());
 			
-			result = logicService.eval(patients, "CD4 COUNT");
+			result = logicService.eval(patients, new LogicCriteriaImpl("CD4 COUNT"));
 			Assert.assertNotNull(result);
 			
 			result = logicService.eval(patients, new LogicCriteriaImpl("CD4 COUNT").lt(170));
@@ -116,7 +113,7 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 			        .contains("HUMAN IMMUNODEFICIENCY VIRUS"));
 			Assert.assertNotNull(result);
 			
-			result = logicService.eval(patients, "CD4 COUNT");
+			result = logicService.eval(patients, new LogicCriteriaImpl("CD4 COUNT"));
 			Assert.assertNotNull(result);
 			
 			result = logicService.eval(patients, new LogicCriteriaImpl("CD4 COUNT").within(Duration.months(1)));
@@ -140,10 +137,10 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 		patients.addMember(2);
 		
 		try {
-			result = logicService.eval(patients, "BIRTHDATE");
+			result = logicService.eval(patients, new LogicCriteriaImpl("BIRTHDATE"));
 			Assert.assertNotNull(result);
 			
-			result = logicService.eval(patients, "AGE");
+			result = logicService.eval(patients, new LogicCriteriaImpl("AGE"));
 			Assert.assertNotNull(result);
 			
 			result = logicService.eval(patients, new LogicCriteriaImpl("AGE").gt(10));
@@ -160,7 +157,7 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 			// test the index date functionality
 			Calendar index = Calendar.getInstance();
 			index.set(1970, 0, 1);
-			result = logicService.eval(patients, "BIRTHDATE");
+			result = logicService.eval(patients, new LogicCriteriaImpl("BIRTHDATE"));
 			Assert.assertNotNull(result);
 			
 			result = logicService.eval(patients, new LogicCriteriaImpl("BIRTHDATE").within(Duration.years(5)));
@@ -205,7 +202,7 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 			result = logicService.eval(patients, new LogicCriteriaImpl("CD4 COUNT").lt(200).first());
 			Assert.assertNotNull(result);
 			
-			result = logicService.eval(patients, "HIV POSITIVE");
+			result = logicService.eval(patients, new LogicCriteriaImpl("HIV POSITIVE"));
 			Assert.assertNotNull(result);
 		}
 		catch (LogicException e) {
@@ -214,9 +211,8 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 	}
 	
 	/**
-	 * TODO make this test use assert statements instead of printing to stdout
+	 * TODO: should we still support this kind of notation?
 	 */
-	@Test
 	public void shouldReferenceRule() {
 		LogicService logicService = Context.getLogicService();
 		Cohort patients = new Cohort();
@@ -232,7 +228,7 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 			result = logicService.eval(patients, new LogicCriteriaImpl("%%obs.CD4 COUNT").first());
 			Assert.assertNotNull(result);
 			
-			result = logicService.eval(patients, "%%person.BIRTHDATE");
+			result = logicService.eval(patients, new LogicCriteriaImpl("%%person.BIRTHDATE"));
 			Assert.assertNotNull(result);
 			
 			Calendar cal = Calendar.getInstance();
@@ -384,7 +380,7 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 	@Verifies(value = "should return all registered token", method = "getAllTokens()")
 	public void getAllTokens_shouldReturnAllRegisteredToken() throws Exception {
 		Collection<String> tokens = Context.getLogicService().getAllTokens();
-		Assert.assertEquals(16, tokens.size());
+		Assert.assertEquals(19, tokens.size());
 	}
 	
 	/**
