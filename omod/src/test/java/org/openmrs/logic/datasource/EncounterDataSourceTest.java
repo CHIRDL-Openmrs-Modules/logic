@@ -91,7 +91,7 @@ public class EncounterDataSourceTest extends BaseModuleContextSensitiveTest {
 		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounterProvider").last());
 		assertEquals(1, results.size());
 		assertEquals(1, results.get(7).size());
-		assertEquals("Hippocrates of Cos", results.get(7).get(0).toString());
+		assertEquals("Hippocrates  of Cos", results.get(7).get(0).toString());
 	}
 	
 	/**

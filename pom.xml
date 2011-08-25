@@ -36,41 +36,27 @@
 				<scope>compile</scope>
 			</dependency>
 			-->
-			<dependency>
-				<groupId>org.openmrs.api</groupId>
-				<artifactId>openmrs-api</artifactId>
-				<version>${openMRSVersion}</version>
-				<type>jar</type>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.openmrs.web</groupId>
-				<artifactId>openmrs-web</artifactId>
-				<version>${openMRSVersion}</version>
-				<type>jar</type>
-				<scope>provided</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.openmrs.api</groupId>
-				<artifactId>openmrs-api</artifactId>
-				<version>${openMRSVersion}</version>
-				<type>test-jar</type>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.openmrs.web</groupId>
-				<artifactId>openmrs-web</artifactId>
-				<version>${openMRSVersion}</version>
-				<type>test-jar</type>
-				<scope>test</scope>
-			</dependency>
-			<dependency>
-				<groupId>org.openmrs.test</groupId>
-				<artifactId>openmrs-test</artifactId>
-				<version>${openMRSVersion}</version>
-				<type>pom</type>
-				<scope>test</scope>
-			</dependency>
+            <dependency>
+                <groupId>org.openmrs.api</groupId>
+                <artifactId>openmrs-api</artifactId>
+                <version>${openMRSVersion}</version>
+                <type>jar</type>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.web</groupId>
+                <artifactId>openmrs-web</artifactId>
+                <version>${openMRSVersion}</version>
+                <type>jar</type>
+                <scope>provided</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.openmrs.test</groupId>
+                <artifactId>openmrs-test</artifactId>
+                <version>${openMRSVersion}</version>
+                <type>pom</type>
+                <scope>test</scope>
+            </dependency>
 			<dependency>
 				<groupId>org.codehaus.groovy</groupId>
 				<artifactId>groovy</artifactId>
@@ -87,7 +73,7 @@
 	</dependencyManagement>
 
 	<properties>
-		<openMRSVersion>1.8.0-SNAPSHOT</openMRSVersion>
+		<openMRSVersion>1.6.3</openMRSVersion>
 	</properties>
 
 	<build>
@@ -97,8 +83,8 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<configuration>
-						<target>1.5</target>
-						<source>1.5</source>
+						<target>1.6</target>
+						<source>1.6</source>
 					</configuration>
 				</plugin>
 				<plugin>
