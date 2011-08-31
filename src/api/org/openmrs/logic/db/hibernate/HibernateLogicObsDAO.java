@@ -380,7 +380,6 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 	 * @see org.openmrs.logic.db.LogicObsDAO#getAllQuestionConceptIds()
 	 */
 	@SuppressWarnings("unchecked")
-    @Override
 	public List<Integer> getAllQuestionConceptIds() {
 		Query query = sessionFactory.getCurrentSession().createQuery("select conceptId from Concept where datatype.uuid != :naUuid");
 		query.setString("naUuid", ConceptDatatype.N_A_UUID);

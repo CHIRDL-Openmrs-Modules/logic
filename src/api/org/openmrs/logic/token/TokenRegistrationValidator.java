@@ -26,7 +26,6 @@ public class TokenRegistrationValidator implements Validator {
 	 * @see org.springframework.validation.Validator#supports(java.lang.Class)
 	 */
 	@SuppressWarnings("unchecked")
-    @Override
 	public boolean supports(Class c) {
 		return c.equals(TokenRegistration.class);
 	}
@@ -34,7 +33,6 @@ public class TokenRegistrationValidator implements Validator {
 	/**
 	 * @see org.springframework.validation.Validator#validate(java.lang.Object, org.springframework.validation.Errors)
 	 */
-	@Override
 	public void validate(Object obj, Errors errors) {
 		ValidationUtils.rejectIfEmpty(errors, "token", "error.null");
 		ValidationUtils.rejectIfEmpty(errors, "providerClassName", "error.null");

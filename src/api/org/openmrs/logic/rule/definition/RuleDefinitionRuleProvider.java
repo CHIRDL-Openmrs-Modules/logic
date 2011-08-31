@@ -31,7 +31,6 @@ public class RuleDefinitionRuleProvider extends AbstractRuleProvider implements 
 	/**
 	 * @see org.openmrs.logic.rule.provider.RuleProvider#getRule(java.lang.String)
 	 */
-	@Override
 	public Rule getRule(String configuration) {
 		RuleDefinitionService service = Context.getService(RuleDefinitionService.class);
 		RuleDefinition definition = service.getRuleDefinition(Integer.valueOf(configuration));

@@ -37,7 +37,6 @@ public class HIVPositiveRule implements Rule {
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, java.lang.Integer,
 	 *      java.util.Map)
 	 */
-	@Override
 	public Result eval(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
 		Result allDiagnoses = Result.emptyResult();
 		Boolean ageOK = null;

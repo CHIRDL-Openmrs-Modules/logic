@@ -39,7 +39,6 @@ public abstract class DataSourceRuleProvider extends AbstractRuleProvider {
 	 * Returns referenceRulePrefix + dot + configuration
 	 * @see org.openmrs.logic.rule.provider.RuleProvider#getRule(java.lang.String)
 	 */
-	@Override
 	public Rule getRule(String configuration) {
 		return new ReferenceRule(getName() + "." + configuration);
 	}

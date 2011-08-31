@@ -41,7 +41,6 @@ public class HibernateRuleDefinitionDAO implements RuleDefinitionDAO {
 	/**
 	 * @see RuleDefinitionDAO#getRuleDefinition(Integer)
 	 */
-	@Override
 	public RuleDefinition getRuleDefinition(Integer id) throws DAOException {
 		return (RuleDefinition) sessionFactory.getCurrentSession().get(RuleDefinition.class, id);
 	}
@@ -49,7 +48,6 @@ public class HibernateRuleDefinitionDAO implements RuleDefinitionDAO {
 	/**
 	 * @see RuleDefinitionDAO#getRuleDefinition(String)
 	 */
-	@Override
 	public RuleDefinition getRuleDefinition(String name) throws DAOException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RuleDefinition.class);
 		criteria.add(Expression.eq("name", name));
@@ -59,7 +57,6 @@ public class HibernateRuleDefinitionDAO implements RuleDefinitionDAO {
 	/**
 	 * @see RuleDefinitionDAO#getAllRuleDefinitions(boolean)
 	 */
-	@Override
 	@SuppressWarnings("unchecked")
 	public List<RuleDefinition> getAllRuleDefinitions(boolean includeRetired) throws DAOException {
 		Criteria criteria = sessionFactory.getCurrentSession().createCriteria(RuleDefinition.class);
@@ -73,7 +70,6 @@ public class HibernateRuleDefinitionDAO implements RuleDefinitionDAO {
 	/**
 	 * @see RuleDefinitionDAO#saveRuleDefinition(RuleDefinition)
 	 */
-	@Override
 	public RuleDefinition saveRuleDefinition(RuleDefinition ruleDefinition) throws DAOException {
 		sessionFactory.getCurrentSession().saveOrUpdate(ruleDefinition);
 		return ruleDefinition;
@@ -82,7 +78,6 @@ public class HibernateRuleDefinitionDAO implements RuleDefinitionDAO {
 	/**
 	 * @see RuleDefinitionDAO#deleteRuleDefinition(RuleDefinition)
 	 */
-	@Override
 	public void deleteRuleDefinition(RuleDefinition ruleDefinition) throws DAOException {
 		sessionFactory.getCurrentSession().delete(ruleDefinition);	
 	}

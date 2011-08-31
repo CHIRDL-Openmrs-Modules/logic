@@ -24,7 +24,6 @@ public abstract class AbstractRuleProvider implements RuleProvider {
 	/**
 	 * @see org.openmrs.logic.rule.provider.RuleProvider#afterStartup()
 	 */
-	@Override
 	public void afterStartup() {
 	    // do nothing
 	}

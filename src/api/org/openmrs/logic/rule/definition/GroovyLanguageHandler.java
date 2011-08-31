@@ -32,7 +32,6 @@ public class GroovyLanguageHandler implements LanguageHandler {
 	/**
 	 * @see org.openmrs.logic.rule.definition.LanguageHandler#getName()
 	 */
-	@Override
 	public String getName() {
 		return "Groovy";
 	}
@@ -41,7 +40,6 @@ public class GroovyLanguageHandler implements LanguageHandler {
 	 * @see org.openmrs.logic.rule.definition.LanguageHandler#compile(RuleDefinition)
 	 */
 	@SuppressWarnings("unchecked")
-    @Override
 	public Rule compile(RuleDefinition ruleDefinition) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("package org.openmrs.module.logic.rule;\n");

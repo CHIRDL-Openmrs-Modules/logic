@@ -35,7 +35,6 @@ public class JavaLanguageHandler extends CompilableLanguageHandler {
 	/**
      * @see org.openmrs.logic.rule.definition.LanguageHandler#getName()
      */
-    @Override
     public String getName() {
 	    return "Java";
     }
