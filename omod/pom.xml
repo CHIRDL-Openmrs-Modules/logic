@@ -41,6 +41,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>${project.parent.artifactId}-${project.parent.version}</finalName>
 		<resources>
 			<resource>
 				<directory>src/main/resources</directory>
@@ -104,10 +105,10 @@
 	</build>
 
 	<properties>
-		<MODULE_ID>${project.artifactId}</MODULE_ID>
+		<MODULE_ID>${project.parent.artifactId}</MODULE_ID>
 		<MODULE_NAME>Logic Module</MODULE_NAME>
 		<MODULE_VERSION>${project.parent.version}</MODULE_VERSION>
-		<MODULE_PACKAGE>${project.parent.groupId}.${project.artifactId}</MODULE_PACKAGE>
+		<MODULE_PACKAGE>${project.parent.groupId}</MODULE_PACKAGE>
 	</properties>
 
 </project>
