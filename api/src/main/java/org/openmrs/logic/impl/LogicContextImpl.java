@@ -13,11 +13,13 @@
  */
 package org.openmrs.logic.impl;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
@@ -34,9 +36,12 @@ import org.openmrs.logic.LogicExpressionBinary;
 import org.openmrs.logic.LogicService;
 import org.openmrs.logic.Rule;
 import org.openmrs.logic.datasource.LogicDataSource;
+import org.openmrs.logic.op.ComparisonOperator;
 import org.openmrs.logic.op.Operand;
 import org.openmrs.logic.op.OperandDate;
+import org.openmrs.logic.op.OperandNumeric;
 import org.openmrs.logic.op.Operator;
+import org.openmrs.logic.result.EmptyResult;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.ReferenceRule;
 import org.openmrs.util.OpenmrsUtil;
@@ -134,10 +139,10 @@ public class LogicContextImpl implements LogicContext {
 	 */
 	private Date newIndexDate() {
 		Calendar cal = Calendar.getInstance();
-		cal.set(Calendar.HOUR_OF_DAY, 0);
-		cal.set(Calendar.MINUTE, 0);
-		cal.set(Calendar.SECOND, 0);
-		cal.set(Calendar.MILLISECOND, 0);
+		cal.set(Calendar.HOUR_OF_DAY, 23);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
+		cal.set(Calendar.MILLISECOND, 999);
 		return cal.getTime();
 	}
 	
@@ -213,12 +218,73 @@ public class LogicContextImpl implements LogicContext {
 	 * @param result
 	 * @param criteria
 	 * @return
+	 * 
+	 * @should handle numeric comparisons to a single numeric result
 	 */
 	private Result applyCriteria(Result result, LogicCriteria criteria) {
-		// TODO: apply criteria to result
-		return result;
+		LogicExpression expression = criteria.getExpression();
+		if (expression == null || expression.getOperator() == null)
+			return result;
+		
+		// ASOF has already been handled by setting an index date 
+		if (expression.getOperator().equals(Operator.ASOF))
+			return result;
+		
+		if (expression.getRightOperand() == null)
+			throw new IllegalArgumentException("Don't know how to handle logic expression: " + expression);
+		if (expression.getOperator() instanceof ComparisonOperator && expression.getRightOperand() instanceof OperandNumeric) {
+			return filterNumeric(result, (ComparisonOperator) expression.getOperator(), ((OperandNumeric) expression.getRightOperand()).asDouble());
+		}
+		throw new IllegalArgumentException("Don't know how to handle logic expression: " + expression);
 	}
 	
+	/**
+     * Filters input by the given operator and operand
+     * 
+     * @param input
+     * @param operator
+     * @param operand
+     * @return
+     */
+    private Result filterNumeric(Result input, ComparisonOperator operator, Double operand) {
+    	List<Result> matches = new ArrayList<Result>();
+
+	    // single-valued results have size=0 (and I can't fix this because that code is in core)
+	    int size = input.size();
+	    if (size == 0)
+	    	size = 1;
+	    
+	    for (int i = 0; i < size; ++i) {
+	    	Result candidate = input.get(i);
+	    	// now we can actually do the comparison
+	    	if (ComparisonOperator.LT.equals(operator)) {
+	    		if (candidate.toNumber() < operand)
+	    			matches.add(candidate);
+	    	} else if (ComparisonOperator.LTE.equals(operator)) {
+	    		if (candidate.toNumber() <= operand)
+	    			matches.add(candidate);
+	    	} else if (ComparisonOperator.GT.equals(operator)) {
+	    		if (candidate.toNumber() > operand)
+	    			matches.add(candidate);
+	    	} else if (ComparisonOperator.GTE.equals(operator)) {
+	    		if (candidate.toNumber() >= operand)
+	    			matches.add(candidate);
+	    	} else if (ComparisonOperator.EQUALS.equals(operator)) {
+	    		if (candidate.toNumber().equals(operand))
+	    			matches.add(candidate);
+	    	} else {
+	    		throw new IllegalArgumentException("Don't know how to handle operator: " + operator);
+	    	}
+	    }
+	    
+	    if (matches.size() == 0)
+	    	return new EmptyResult(); // workaround for the fact that "new Result().toBoolean()" returns null instead of false
+	    else if (matches.size() == 1)
+	    	return matches.get(0);
+	    else
+	    	return new Result(matches);
+    }
+
 	/**
 	 * @see org.openmrs.logic.LogicContext#getLogicDataSource(java.lang.String)
 	 */
