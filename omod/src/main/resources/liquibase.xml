@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog/1.9"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog/1.9
-                  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-1.9.xsd">
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-2.0.xsd
+    http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
  
     <changeSet id="drop_logic_rule_token_tag" author="nribeka">
+        <preConditions onFail="MARK_RAN"><tableExists tableName="logic_rule_token_tag"/></preConditions>
         <dropTable tableName="logic_rule_token_tag" />
     </changeSet>
 
     <changeSet id="drop_logic_rule_token" author="nribeka">
+        <preConditions onFail="MARK_RAN"><tableExists tableName="logic_rule_token"/></preConditions>
         <dropTable tableName="logic_rule_token" />
     </changeSet>
 
     <changeSet id="create_logic_rule_token" author="nribeka">
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="logic_rule_token"/></not></preConditions>
         <createTable tableName="logic_rule_token">
             <column name="logic_rule_token_id" autoIncrement="true" type="int">
                 <constraints nullable="false" primaryKey="true"/>
@@ -43,6 +48,7 @@
     </changeSet>
 
     <changeSet id="create-logic-rule-token-tag" author="nribeka">
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="logic_rule_token_tag"/></not></preConditions>
         <createTable tableName="logic_rule_token_tag">
             <column name="logic_rule_token_id" type="int">
                 <constraints nullable="false"/>
@@ -56,6 +62,7 @@
     </changeSet>
 
     <changeSet id="create-logic-rule-definition" author="mseaton">
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="logic_rule_definition"/></not></preConditions>
         <createTable tableName="logic_rule_definition">
             <column name="id" type="int" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
@@ -106,6 +113,7 @@
     </changeSet>
 
     <changeSet id="create-logic_token_registration" author="djazayeri">
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="logic_token_registration"/></not></preConditions>
         <createTable tableName="logic_token_registration">
             <column name="token_registration_id" autoIncrement="true" type="int">
                 <constraints nullable="false" primaryKey="true"/>
@@ -139,6 +147,7 @@
     </changeSet>
 
     <changeSet id="create-logic_token_registration_tag" author="djazayeri">
+        <preConditions onFail="MARK_RAN"><not><tableExists tableName="logic_token_registration_tag"/></not></preConditions>
         <createTable tableName="logic_token_registration_tag">
             <column name="token_registration_id" type="int">
                 <constraints nullable="false"/>
