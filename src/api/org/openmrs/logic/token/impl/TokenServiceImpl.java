@@ -139,6 +139,11 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 		if (token.startsWith("%%")) {
 			return new ReferenceRule(token.substring(2));
 		}
+		
+		Rule cached = ruleCache.get(token);
+		if (cached != null) {
+			return cached;
+		}
 
 		TokenRegistration tr = justOne(dao.getTokenRegistrations(token, null, null, null));
 		if (tr == null) {
