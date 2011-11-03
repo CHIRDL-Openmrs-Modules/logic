@@ -290,7 +290,7 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 	 * @return the Concept that matches the passed token
 	 */
 	protected Concept getConceptForToken(String token) {
-		return Context.getConceptService().getConcept(token);
+		return Context.getConceptService().getConceptByName(token);
 	}
 	
 	// Helper function, converts logic service's criteria into Hibernate's
