@@ -13,7 +13,7 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>org.openmrs.module.logic</groupId>
+			<groupId>org.openmrs.module</groupId>
 			<artifactId>logic-api</artifactId>
 			<version>${project.parent.version}</version>
 		</dependency>
