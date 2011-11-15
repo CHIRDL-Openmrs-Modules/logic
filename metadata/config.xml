@@ -5,7 +5,7 @@
 	<!-- logic Module Properties -->
 	<id>logic</id>
 	<name>Logic Module</name>
-	<version>0.5</version>
+	<version>0.5.0.1</version>
 	<package>org.openmrs.@MODULE_ID@</package>
 	<author>OpenMRS</author>
 	<description>
@@ -18,7 +18,7 @@
 		 version like that to the repository, because it would auto-upgrade 1.7.0 and 1.7.1, and that
 		 would break things. The following line can be commented out to build that special version -->
 	<!-- <require_version>1.6.3.17711</require_version> -->
-	<require_version>1.7.2.17710-1.8.*</require_version>
+	<require_version>1.7.2.17710</require_version>
 	
     <extension>
         <point>org.openmrs.admin.list</point>
