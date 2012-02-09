@@ -32,11 +32,6 @@
             <artifactId>openmrs-test</artifactId>
             <type>pom</type>
         </dependency>
-        <dependency>
-            <groupId>org.codehaus.groovy</groupId>
-            <artifactId>groovy</artifactId>
-            <type>jar</type>
-        </dependency>
 	</dependencies>
 
 	<build>

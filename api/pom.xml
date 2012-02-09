@@ -36,7 +36,8 @@
         </dependency>
 		<dependency>
 			<groupId>org.codehaus.groovy</groupId>
-			<artifactId>groovy</artifactId>
+			<artifactId>groovy-all</artifactId>
+			<version>1.7.6</version>
 			<type>jar</type>
 		</dependency>
 	</dependencies>
