@@ -3,7 +3,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>logic</artifactId>
-	<version>0.5.2-SNAPSHOT</version>
+	<version>0.5.2</version>
 	<packaging>pom</packaging>
 	<name>Logic Module</name>
 	<description>Parent project for Logic Module</description>
@@ -11,9 +11,9 @@
 	<url>http://openmrs.org</url>
 
 	<scm>
-		<connection>scm:svn:http://svn.openmrs.org/openmrs-modules/logic/trunk/</connection>
-		<developerConnection>scm:svn:http://svn.openmrs.org/openmrs-modules/logic/trunk/</developerConnection>
-		<url>http://svn.openmrs.org/openmrs-modules/logic/trunk/</url>
+		<connection>scm:svn:http://svn.openmrs.org/openmrs-modules/logic/tags/0.5.2</connection>
+		<developerConnection>scm:svn:http://svn.openmrs.org/openmrs-modules/logic/tags/0.5.2</developerConnection>
+		<url>http://svn.openmrs.org/openmrs-modules/logic/tags/0.5.2</url>
 	</scm>
 
 	<modules>
