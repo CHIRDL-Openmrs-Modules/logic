@@ -229,4 +229,14 @@ public interface TokenService extends OpenmrsService {
 	@Authorized(PrivilegeConstants.MANAGE_TOKENS)
 	void keepOnlyValidConfigurations(RuleProvider provider, Collection<?> validConfigurations);
 	
+	/**
+	 * Gets the {@link RuleProvider} matching the specified configuration and associated to a
+	 * provider with a class name matching the specified providerClassName
+	 * 
+	 * @param ruleProviderClassName the provider class name to match against
+	 * @param ruleConfiguration the configuration to match against
+	 * @return the matching RuleProvider
+	 * @should get the rule matching the parameter values
+	 */
+	public Rule getRule(String ruleProviderClassName, String ruleConfiguration);
 }

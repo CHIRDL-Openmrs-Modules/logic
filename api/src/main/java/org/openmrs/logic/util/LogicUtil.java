@@ -24,7 +24,15 @@ import java.util.concurrent.Executors;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
+import org.openmrs.Encounter;
+import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
+import org.openmrs.calculation.api.patient.PatientCalculationContext;
+import org.openmrs.calculation.patient.PatientCalculation;
+import org.openmrs.calculation.result.EncounterResult;
+import org.openmrs.calculation.result.ListResult;
+import org.openmrs.calculation.result.ObsResult;
+import org.openmrs.calculation.result.SimpleResult;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicTransform;
 import org.openmrs.logic.op.Operator;
@@ -110,7 +118,7 @@ public class LogicUtil {
 		ClassRuleProvider crp = new ClassRuleProvider();
 		Context.getService(TokenService.class).registerToken("AGE", crp, AgeRule.class.getName());
 		Context.getService(TokenService.class).registerToken("HIV POSITIVE", crp, HIVPositiveRule.class.getName());
-
+		
 		Context.getService(TokenService.class).initialize();
 	}
 	
@@ -154,17 +162,17 @@ public class LogicUtil {
 		
 		return executed;
 	}
-
+	
 	/**
-     * This is a hacky way of making sure we can run something Context-sensitive, as a superuser, after
-     * module startup, in 1.6 and later.
-     */
-    public static void initialize() {
-    	try {
-    		// use proxy privileges for 1.6.x compatibility (starting in 1.7.x module startup and
-    		// scheduled tasks are run as the daemon user)
-    		Context.addProxyPrivilege(OpenmrsConstants.PRIV_MANAGE_SCHEDULER);
-    		
+	 * This is a hacky way of making sure we can run something Context-sensitive, as a superuser,
+	 * after module startup, in 1.6 and later.
+	 */
+	public static void initialize() {
+		try {
+			// use proxy privileges for 1.6.x compatibility (starting in 1.7.x module startup and
+			// scheduled tasks are run as the daemon user)
+			Context.addProxyPrivilege(OpenmrsConstants.PRIV_MANAGE_SCHEDULER);
+			
 			TaskDefinition def = Context.getSchedulerService().getTaskByName(InitializeLogicRuleProvidersTask.NAME);
 			if (def == null) {
 				def = new TaskDefinition();
@@ -173,7 +181,7 @@ public class LogicUtil {
 				def.setStartOnStartup(false);
 				def.setStarted(true);
 			}
-	
+			
 			def.setStartTime(new Date(System.currentTimeMillis() + 30000));
 			// in 1.6.x it's impossible to schedule a task to run just once, but not right now. Instead we set a very large repeat interval.
 			def.setRepeatInterval(1999999999l);
@@ -183,12 +191,68 @@ public class LogicUtil {
 					def.setUuid(UUID.randomUUID().toString());
 				}
 				Context.getSchedulerService().scheduleTask(def);
-			} catch (SchedulerException ex) {
+			}
+			catch (SchedulerException ex) {
 				log.error("Error scheduling logic initialization task at startup", ex);
 			}
 			
-		} finally {
+		}
+		finally {
 			Context.removeProxyPrivilege(OpenmrsConstants.PRIV_MANAGE_SCHEDULER);
 		}
-    }
+	}
+	
+	/**
+	 * Utility method that converts a logic result to a calculation result
+	 * 
+	 * @param logicResult the logic result to convert
+	 * @param logicCalculation the patient PatientCalculation to set on the result
+	 * @param calculationContext the PatientCalculationContext to set on the result
+	 * @return the equivalent CalculationResult
+	 */
+	public static org.openmrs.calculation.result.Result convertToCalculationResult(Result logicResult,
+	                                                                               PatientCalculation calculation,
+	                                                                               PatientCalculationContext calculationContext) {
+		Object value = null;
+		switch (logicResult.getDatatype()) {
+			case BOOLEAN:
+				value = logicResult.toBoolean();
+				break;
+			case CODED:
+				value = logicResult.toConcept();
+				break;
+			case DATETIME:
+				value = logicResult.toDatetime();
+				break;
+			case NUMERIC:
+				value = logicResult.toNumber();
+				break;
+			case TEXT:
+				value = logicResult.toString();
+				break;
+			default:
+				value = logicResult.toObject();
+		}
+		
+		//if we have a single result
+		if (value != null) {
+			if (value instanceof Encounter)
+				return new EncounterResult((Encounter) value, calculation, calculationContext);
+			else if (value instanceof Obs)
+				return new ObsResult((Obs) value, calculation, calculationContext);
+			
+			return new SimpleResult(value, calculation, calculationContext);
+		}
+		
+		//if we have a list
+		if (logicResult.size() > 0) {
+			ListResult listResult = new ListResult();
+			for (Result result : logicResult) {
+				listResult.add(convertToCalculationResult(result, calculation, calculationContext));
+			}
+			return listResult;
+		}
+		
+		return new org.openmrs.calculation.result.EmptyResult();
+	}
 }

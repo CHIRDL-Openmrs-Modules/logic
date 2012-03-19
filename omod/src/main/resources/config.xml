@@ -20,6 +20,11 @@
 	<!-- <require_version>1.6.3.17711</require_version> -->
 	<require_version>1.7.2.17710</require_version>
 	
+	<!-- Required modules -->
+	<require_modules>
+	   	<require_module version="1.0.0-SNAPSHOT">org.openmrs.calculation</require_module>
+	</require_modules>
+	
     <extension>
         <point>org.openmrs.admin.list</point>
         <class>org.openmrs.module.logic.AdminList</class>

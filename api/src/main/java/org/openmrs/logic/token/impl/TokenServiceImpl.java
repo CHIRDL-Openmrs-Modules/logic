@@ -405,4 +405,29 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 			throw new LogicException("Should not return more than one");
 	}
 	
+	/**
+	 * @see org.openmrs.logic.token.TokenService#getRule(java.lang.String, java.lang.String)
+	 */
+	@Override
+	public Rule getRule(String ruleProviderClassName, String ruleConfiguration) {
+		RuleProvider ruleProvider = getRuleProvider(ruleProviderClassName);
+		if (ruleProvider == null)
+			return null;
+		return ruleProvider.getRule(ruleConfiguration);
+	}
+	
+	/**
+	 * Gets the provider with a matching class name.
+	 * 
+	 * @param tokenRegistration
+	 * @return
+	 */
+	private RuleProvider getRuleProvider(String ruleProviderClassName) {
+		for (RuleProvider provider : ruleProviders) {
+			if (provider.getClass().getName().equals(ruleProviderClassName)) {
+				return provider;
+			}
+		}
+		return null;
+	}
 }
