@@ -17,7 +17,7 @@ import org.openmrs.api.context.Context;
 import org.openmrs.calculation.BaseCalculation;
 import org.openmrs.calculation.ConfigurableCalculation;
 import org.openmrs.calculation.InvalidCalculationException;
-import org.openmrs.calculation.definition.SimpleParameterDefinition;
+import org.openmrs.calculation.parameter.SimpleParameterDefinition;
 import org.openmrs.calculation.patient.PatientCalculation;
 import org.openmrs.logic.Rule;
 import org.openmrs.logic.rule.RuleParameterInfo;

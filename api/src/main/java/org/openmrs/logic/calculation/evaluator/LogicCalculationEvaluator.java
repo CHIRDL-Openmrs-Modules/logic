@@ -18,11 +18,11 @@ import java.util.Map;
 import org.openmrs.Cohort;
 import org.openmrs.annotation.Handler;
 import org.openmrs.api.context.Context;
-import org.openmrs.calculation.api.patient.PatientCalculationContext;
 import org.openmrs.calculation.patient.PatientCalculation;
+import org.openmrs.calculation.patient.PatientCalculationContext;
 import org.openmrs.calculation.patient.PatientCalculationEvaluator;
 import org.openmrs.calculation.result.CohortResult;
-import org.openmrs.calculation.result.EmptyResult;
+import org.openmrs.calculation.result.EmptyCalculationResult;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.calculation.LogicCalculation;
 import org.openmrs.logic.impl.LogicContextImpl;
@@ -62,7 +62,7 @@ public class LogicCalculationEvaluator implements PatientCalculationEvaluator {
 				}
 				
 				if (logicResult == null || logicResult.isNull()) {
-					results.put(patientId, new EmptyResult());
+					results.put(patientId, new EmptyCalculationResult());
 				} else {
 					results.put(patientId,
 					    LogicUtil.convertToCalculationResult(logicResult, calculation, calculationContext));

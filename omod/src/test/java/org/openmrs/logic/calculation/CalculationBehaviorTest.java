@@ -17,8 +17,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 import org.openmrs.api.context.Context;
-import org.openmrs.calculation.api.patient.PatientCalculationService;
-import org.openmrs.calculation.result.Result;
+import org.openmrs.calculation.patient.PatientCalculationService;
+import org.openmrs.calculation.result.CalculationResult;
 import org.openmrs.logic.Rule;
 import org.openmrs.logic.calculation.provider.LogicCalculationProvider;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
@@ -37,7 +37,7 @@ public class CalculationBehaviorTest extends BaseModuleContextSensitiveTest {
 		int expected = Context.getPatientService().getPatient(patientId).getAge();
 		LogicCalculation calculation = (LogicCalculation) new LogicCalculationProvider().getCalculation(
 		    "org.openmrs.logic.rule.provider.ClassRuleProvider", "org.openmrs.logic.rule.AgeRule");
-		Result result = Context.getService(PatientCalculationService.class).evaluate(patientId, calculation);
+		CalculationResult result = Context.getService(PatientCalculationService.class).evaluate(patientId, calculation);
 		Assert.assertEquals(expected, result.asType(Double.class).intValue());
 	}
 }

@@ -27,8 +27,10 @@ import org.openmrs.Cohort;
 import org.openmrs.Encounter;
 import org.openmrs.Obs;
 import org.openmrs.api.context.Context;
-import org.openmrs.calculation.api.patient.PatientCalculationContext;
 import org.openmrs.calculation.patient.PatientCalculation;
+import org.openmrs.calculation.patient.PatientCalculationContext;
+import org.openmrs.calculation.result.CalculationResult;
+import org.openmrs.calculation.result.EmptyCalculationResult;
 import org.openmrs.calculation.result.EncounterResult;
 import org.openmrs.calculation.result.ListResult;
 import org.openmrs.calculation.result.ObsResult;
@@ -210,9 +212,8 @@ public class LogicUtil {
 	 * @param calculationContext the PatientCalculationContext to set on the result
 	 * @return the equivalent CalculationResult
 	 */
-	public static org.openmrs.calculation.result.Result convertToCalculationResult(Result logicResult,
-	                                                                               PatientCalculation calculation,
-	                                                                               PatientCalculationContext calculationContext) {
+	public static CalculationResult convertToCalculationResult(Result logicResult, PatientCalculation calculation,
+	                                                           PatientCalculationContext calculationContext) {
 		Object value = null;
 		switch (logicResult.getDatatype()) {
 			case BOOLEAN:
@@ -253,6 +254,6 @@ public class LogicUtil {
 			return listResult;
 		}
 		
-		return new org.openmrs.calculation.result.EmptyResult();
+		return new EmptyCalculationResult();
 	}
 }
