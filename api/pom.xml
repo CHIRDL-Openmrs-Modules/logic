@@ -39,6 +39,13 @@
 			<version>1.7.6</version>
 			<type>jar</type>
 		</dependency>
+		<dependency>
+			<groupId>org.openmrs</groupId>
+			<artifactId>calculation-api</artifactId>
+			<version>${calculationVersion}</version>
+			<type>jar</type>
+			<scope>provided</scope>
+		</dependency>
 	</dependencies>
 
 </project>
