@@ -35,27 +35,29 @@ public class LogicCache {
 	private Map<LogicCacheEntryKey, Map<Integer, Result>> cache;
 	
 	public Result get(Integer patientId, LogicCriteria criteria, Map<String, Object> parameters) {
-		LogicCacheEntryKey key = new LogicCacheEntryKey(criteria, parameters, 0);
-		return get(key, patientId);
+		return null;
+//		LogicCacheEntryKey key = new LogicCacheEntryKey(criteria, parameters, 0);
+//		return get(key, patientId);
 	}
 	
 	public Result get(Integer patientId, LogicDataSource dataSource, LogicCriteria criteria) {
-		LogicCacheEntryKey key = new LogicCacheEntryKey(dataSource, criteria);
-		Result r = get(key, patientId);
-		if (log.isDebugEnabled())
-			log.debug("Searching cache for " + key.toString() + " - " + (r == null ? "NOT" : "") + " found");
-		logCacheContents();
-		return r;
+		return null;
+//		LogicCacheEntryKey key = new LogicCacheEntryKey(dataSource, criteria);
+//		Result r = get(key, patientId);
+//		if (log.isDebugEnabled())
+//			log.debug("Searching cache for " + key.toString() + " - " + (r == null ? "NOT" : "") + " found");
+//		logCacheContents();
+//		return r;
 	}
 	
 	public void put(LogicDataSource dataSource, LogicCriteria criteria, Map<Integer, Result> resultMap) {
-		LogicCacheEntryKey key = new LogicCacheEntryKey(dataSource, criteria);
-		put(key, resultMap);
+//		LogicCacheEntryKey key = new LogicCacheEntryKey(dataSource, criteria);
+//		put(key, resultMap);
 	}
 	
 	public void put(LogicCriteria criteria, Map<String, Object> parameters, int ttl, Map<Integer, Result> resultMap) {
-		LogicCacheEntryKey key = new LogicCacheEntryKey(criteria, parameters, ttl);
-		put(key, resultMap);
+//		LogicCacheEntryKey key = new LogicCacheEntryKey(criteria, parameters, ttl);
+//		put(key, resultMap);
 	}
 	
 	private Result get(LogicCacheEntryKey key, Integer patientId) {
