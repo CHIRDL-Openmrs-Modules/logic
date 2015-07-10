@@ -6,7 +6,6 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="metadata"/>
 	<classpathentry kind="lib" path="dist"/>
-	<classpathentry kind="lib" path="lib-common/config-1.0.dtd"/>
 	<classpathentry kind="lib" path="lib-common/antlr/antlr_2.7.6.jar"/>
 	<classpathentry kind="lib" path="lib-common/c3p0/c3p0-0.9.1.jar"/>
 	<classpathentry kind="lib" path="lib-common/cglib/cglib-2.1_3.jar"/>
@@ -74,7 +73,7 @@
 	<classpathentry kind="lib" path="lib-common/junit/dbunit-2.4.4.jar"/>
 	<classpathentry kind="lib" path="lib-common/junit/hsqldb-1.8.0.10.jar"/>
 	<classpathentry kind="lib" path="lib/groovy-all-1.7.6.jar"/>
-	<classpathentry kind="lib" path="lib-common/openmrs/openmrs-api-1.6.3.17711-dev.jar"/>
+	<classpathentry kind="lib" path="lib-common/openmrs/openmrs-api-1.7.3.0-dev.jar"/>
 	<classpathentry kind="lib" path="lib-common/openmrs/tests-openmrs-api-1.6.3.17711-dev.jar"/>
 	<classpathentry kind="lib" path="lib-common/openmrs/web-openmrs-api-1.6.3.17711-dev.jar"/>
 	<classpathentry kind="output" path="build"/>
