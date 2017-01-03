@@ -16,7 +16,6 @@
 	<classpathentry kind="lib" path="lib-common/commons-logging/commons-logging-1.0.4.jar"/>
 	<classpathentry kind="lib" path="lib-common/dom4j/dom4j-1.6.1.jar"/>
 	<classpathentry kind="lib" path="lib-common/ehcache/ehcache-1.2.4.jar"/>
-	<classpathentry kind="lib" path="lib-common/hl7api/hapi-0.5.jar"/>
 	<classpathentry kind="lib" path="lib-common/jakarta-log4j/log4j-1.2.13.jar"/>
 	<classpathentry kind="lib" path="lib-common/jakarta-taglibs/taglibs-page-1.1.jar"/>
 	<classpathentry kind="lib" path="lib-common/jakarta-taglibs/taglibs-request-1.1.jar"/>
