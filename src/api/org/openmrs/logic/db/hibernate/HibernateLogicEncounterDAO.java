@@ -28,7 +28,6 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Cohort;
@@ -153,7 +152,7 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 		} else if (operator == Operator.CONTAINS) {
 			if (ENCOUNTER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
 				criteria.createAlias("encounterType", "encounterType");
-				criterion.add(Expression.eq("encounterType.name", ((OperandText) rightOperand).asString()));
+				criterion.add(Restrictions.eq("encounterType.name", ((OperandText) rightOperand).asString()));
 			} else if (LOCATION_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
 				criteria.createAlias("location", "location");
 				criterion.add(Restrictions.eq("location.name", ((OperandText) rightOperand).asString()));
@@ -166,7 +165,7 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 		}  else if (operator == Operator.IN) {
 			if (ENCOUNTER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandCollection) {
 				criteria.createAlias("encounterType", "encounterType");
-				criterion.add(Expression.in("encounterType.name", ((OperandCollection) rightOperand).asCollection()));
+				criterion.add(Restrictions.in("encounterType.name", ((OperandCollection) rightOperand).asCollection()));
 			} else if (LOCATION_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandCollection) {
 				criteria.createAlias("location", "location");
 				criterion.add(Restrictions.in("location.name", ((OperandCollection) rightOperand).asCollection()));
