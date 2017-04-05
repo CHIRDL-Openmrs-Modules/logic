@@ -157,8 +157,9 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 				criteria.createAlias("location", "location");
 				criterion.add(Restrictions.eq("location.name", ((OperandText) rightOperand).asString()));
 			} else if (PROVIDER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandNumeric) {
-				criteria.createAlias("provider", "provider");
-				criterion.add(Restrictions.eq("provider.personId", ((OperandNumeric) rightOperand).asInteger()));
+				criteria.createAlias("encounterProviders", "enc_prov");
+                criteria.createAlias("enc_prov.provider", "prov");
+                criterion.add(Restrictions.eq("prov.providerId", ((OperandNumeric) rightOperand).asInteger()));
 			} else {
 				throw new LogicException("'contains' is not a valid operator on " + token + " and " + rightOperand);
 			}
@@ -170,8 +171,9 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 				criteria.createAlias("location", "location");
 				criterion.add(Restrictions.in("location.name", ((OperandCollection) rightOperand).asCollection()));
 			} else if (PROVIDER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandCollection) {
-				criteria.createAlias("provider", "provider");
-				criterion.add(Restrictions.in("provider.systemId", ((OperandCollection) rightOperand).asCollection()));
+				criteria.createAlias("encounterProviders", "enc_prov");
+                criteria.createAlias("enc_prov.provider", "prov");
+                criterion.add(Restrictions.in("prov.providerId", ((OperandCollection) rightOperand).asCollection()));
 			} else {
 				throw new LogicException("'in' is not a valid operator on " + token + " and " + rightOperand);
 			}
@@ -185,8 +187,9 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 				criteria.createAlias("location", "location");
 				criterion.add(Restrictions.eq("location.name", ((OperandText) rightOperand).asString()));
 			} else if (PROVIDER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
-				criteria.createAlias("provider", "provider");
-				criterion.add(Restrictions.eq("provider.systemId", ((OperandText) rightOperand).asString()));
+				criteria.createAlias("encounterProviders", "enc_prov");
+                criteria.createAlias("enc_prov.provider", "prov");
+                criterion.add(Restrictions.eq("prov.providerId", ((OperandNumeric) rightOperand).asInteger()));
 			} else {
 				throw new LogicException("'equals' is not a valid operator on " + token + " and " + rightOperand);
 			}
