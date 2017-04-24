@@ -28,7 +28,6 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Cohort;
@@ -153,26 +152,28 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 		} else if (operator == Operator.CONTAINS) {
 			if (ENCOUNTER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
 				criteria.createAlias("encounterType", "encounterType");
-				criterion.add(Expression.eq("encounterType.name", ((OperandText) rightOperand).asString()));
+				criterion.add(Restrictions.eq("encounterType.name", ((OperandText) rightOperand).asString()));
 			} else if (LOCATION_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
 				criteria.createAlias("location", "location");
 				criterion.add(Restrictions.eq("location.name", ((OperandText) rightOperand).asString()));
 			} else if (PROVIDER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandNumeric) {
-				criteria.createAlias("provider", "provider");
-				criterion.add(Restrictions.eq("provider.personId", ((OperandNumeric) rightOperand).asInteger()));
+				criteria.createAlias("encounterProviders", "enc_prov");
+                criteria.createAlias("enc_prov.provider", "prov");
+                criterion.add(Restrictions.eq("prov.providerId", ((OperandNumeric) rightOperand).asInteger()));
 			} else {
 				throw new LogicException("'contains' is not a valid operator on " + token + " and " + rightOperand);
 			}
 		}  else if (operator == Operator.IN) {
 			if (ENCOUNTER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandCollection) {
 				criteria.createAlias("encounterType", "encounterType");
-				criterion.add(Expression.in("encounterType.name", ((OperandCollection) rightOperand).asCollection()));
+				criterion.add(Restrictions.in("encounterType.name", ((OperandCollection) rightOperand).asCollection()));
 			} else if (LOCATION_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandCollection) {
 				criteria.createAlias("location", "location");
 				criterion.add(Restrictions.in("location.name", ((OperandCollection) rightOperand).asCollection()));
 			} else if (PROVIDER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandCollection) {
-				criteria.createAlias("provider", "provider");
-				criterion.add(Restrictions.in("provider.systemId", ((OperandCollection) rightOperand).asCollection()));
+				criteria.createAlias("encounterProviders", "enc_prov");
+                criteria.createAlias("enc_prov.provider", "prov");
+                criterion.add(Restrictions.in("prov.providerId", ((OperandCollection) rightOperand).asCollection()));
 			} else {
 				throw new LogicException("'in' is not a valid operator on " + token + " and " + rightOperand);
 			}
@@ -186,8 +187,9 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 				criteria.createAlias("location", "location");
 				criterion.add(Restrictions.eq("location.name", ((OperandText) rightOperand).asString()));
 			} else if (PROVIDER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
-				criteria.createAlias("provider", "provider");
-				criterion.add(Restrictions.eq("provider.systemId", ((OperandText) rightOperand).asString()));
+				criteria.createAlias("encounterProviders", "enc_prov");
+                criteria.createAlias("enc_prov.provider", "prov");
+                criterion.add(Restrictions.eq("prov.providerId", ((OperandNumeric) rightOperand).asInteger()));
 			} else {
 				throw new LogicException("'equals' is not a valid operator on " + token + " and " + rightOperand);
 			}
