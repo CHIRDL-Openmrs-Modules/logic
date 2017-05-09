@@ -85,13 +85,14 @@ public class EncounterDataSourceTest extends BaseModuleContextSensitiveTest {
 	 */
 	@Test
 	public void read_shouldReturnTextResultForEncounterproviderKey() throws Exception {
+		executeDataSet("org/openmrs/logic/include/EncounterDataSourceTest.xml");
 		Cohort patients = new Cohort("7");
 		LogicContext context = new LogicContextImpl(patients);
 		
 		Map<Integer, Result> results = dataSource.read(context, patients, new LogicCriteriaImpl("encounterProvider").last());
 		assertEquals(1, results.size());
 		assertEquals(1, results.get(7).size());
-		assertEquals("Hippocrates  of Cos", results.get(7).get(0).toString());
+		assertEquals("Mr. Hippocrates of Cos", results.get(7).get(0).toString());
 	}
 	
 	/**
@@ -277,6 +278,7 @@ public class EncounterDataSourceTest extends BaseModuleContextSensitiveTest {
 	 */
 	@Test
 	public void read_shouldReturnTextResultForProviderKeyAndContains() throws Exception {
+		executeDataSet("org/openmrs/logic/include/EncounterDataSourceTest.xml");
 		Cohort patients = new Cohort("7");
 		LogicContext context = new LogicContextImpl(patients);
 		context.setIndexDate(Context.getDateFormat().parse("03/08/2008"));
@@ -296,6 +298,7 @@ public class EncounterDataSourceTest extends BaseModuleContextSensitiveTest {
 	 */
 	@Test
 	public void read_shouldReturnTextResultForProviderKeyAndEquals() throws Exception {
+		executeDataSet("org/openmrs/logic/include/EncounterDataSourceTest.xml");
 		Cohort patients = new Cohort("7");
 		LogicContext context = new LogicContextImpl(patients);
 		context.setIndexDate(Context.getDateFormat().parse("03/08/2008"));

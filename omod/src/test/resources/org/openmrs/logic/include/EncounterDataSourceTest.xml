@@ -1,5 +1,14 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <dataset>
-  <!-- an encounter with a null encounter type -->
-  <encounter encounter_id="30" patient_id="7" provider_id="501" location_id="2" form_id="1" encounter_datetime="2008-08-19 00:00:00.0" creator="1" date_created="2008-08-19 12:34:40.0" voided="false" />
+  <person person_id="2" gender="M" birthdate="1970-01-01" birthdate_estimated="false" dead="false" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="f1b719b8-76d0-4515-9a9c-3ce5a50c0b80"/>
+  <person_name person_name_id="2" preferred="true" person_id="2" prefix="Mr." given_name="Hippocrates" middle_name="" family_name="of Cos" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="84dc46b5-5154-4b2d-baf8-358f43a2f7e7"/>
+  <provider provider_id="502" person_id="2" name="Hippocrates  of Cos" creator="1" date_created="2008-08-19 00:00:00.0" retired="false" uuid="66443d12-1896-11e7-93ae-92361f002671" />
+  <encounter_type encounter_type_id="5" name="HL7Message" creator="1" date_created="2008-08-19 00:00:00.0" retired="false" uuid="3d9f8ac6-1894-11e7-93ae-92361f002671" />
+  <encounter encounter_id="30" patient_id="7" location_id="2" form_id="1" encounter_datetime="2008-08-19 00:00:00.0" creator="1" date_created="2008-08-19 12:34:40.0" voided="false" encounter_type="5" uuid="5e76b7e2-1894-11e7-93ae-92361f002671" />
+  <encounter_role encounter_role_id="22" name="Attending Provider" creator="1" date_created="2008-08-19 00:00:00.0" retired="false" uuid="7280c75c-1897-11e7-93ae-92361f002671" />
+  <encounter_provider encounter_provider_id="44" encounter_id="30" provider_id="502" encounter_role_id="22" creator="1" date_created="2008-08-19 00:00:00.0" voided="false" uuid="cce28722-1896-11e7-93ae-92361f002671" />
+  <encounter encounter_id="31" patient_id="7" location_id="2" form_id="1" encounter_datetime="2008-08-15 00:00:00.0" creator="1" date_created="2008-08-19 12:34:40.0" voided="false" encounter_type="5" uuid="5e76b7e2-1894-11e7-93ae-92361f002672" />
+  <encounter_provider encounter_provider_id="45" encounter_id="31" provider_id="502" encounter_role_id="22" creator="1" date_created="2008-08-19 00:00:00.0" voided="false" uuid="cce28722-1896-11e7-93ae-92361f002672" />
+  <encounter encounter_id="32" patient_id="7" location_id="2" form_id="1" encounter_datetime="2008-08-01 00:00:00.0" creator="1" date_created="2008-08-19 12:34:40.0" voided="false" encounter_type="5" uuid="5e76b7e2-1894-11e7-93ae-92361f002673" />
+  <encounter_provider encounter_provider_id="46" encounter_id="32" provider_id="502" encounter_role_id="22" creator="1" date_created="2008-08-19 00:00:00.0" voided="false" uuid="cce28722-1896-11e7-93ae-92361f002673" />
 </dataset>
