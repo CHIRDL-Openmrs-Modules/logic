@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//OpenMRS//DTD OpenMRS Config 1.0//EN" "http://resources.openmrs.org/doctype/config-1.3.dtd">
+<module configVersion="1.3">
+	
+	<!-- logic Module Properties -->
+	<id>@MODULE_ID@</id>
+	<name>@MODULE_NAME@</name>
+	<version>@MODULE_VERSION@</version>
+	<package>@MODULE_PACKAGE@</package>
+	<author>OpenMRS</author>
+	<description>
+			
+	</description>
+	<activator>org.openmrs.module.logic.LogicModuleActivator</activator>
+	<updateURL>https://dev.openmrs.org/modules/download/@MODULE_ID@/update.rdf</updateURL>
+
+	<!-- This module also works with the 1.6.x branch starting from 1.6.3.17711, but we can't release a
+		 version like that to the repository, because it would auto-upgrade 1.7.0 and 1.7.1, and that
+		 would break things. The following line can be commented out to build that special version -->
+	<!-- <require_version>1.6.3.17711</require_version> -->
+	<require_version>1.7.2.17710</require_version>
+	
+    <extension>
+        <point>org.openmrs.admin.list</point>
+        <class>org.openmrs.module.logic.AdminList</class>
+    </extension>
+    
+    <!-- Privileges -->
+    <privilege>
+		<name>Manage Tokens</name>
+		<description>Allows registering and removal of tokens</description>
+	</privilege>
+	<privilege>
+		<name>Manage Rule Definitions</name>
+		<description>Allows creation and editing of user-defined rules</description>
+	</privilege>
+	<privilege>
+		<name>View Rule Definitions</name>
+		<description>Allows viewing of user-defined rules. (This privilege is not necessary to run rules under normal usage.)</description>
+	</privilege>
+    
+    <!-- Global Properties -->
+	<globalProperty>
+		<property>logic.defaultTokens.conceptClasses</property> <!-- Must start with `moduleId.` -->
+		<defaultValue></defaultValue>
+		<description>When registering default tokens for logic, if you specify a comma-separated list of concept class names here, only concepts of those classes will have tokens registered. If you leave this blank, all classes will have tokens registered for their concepts.</description>
+	</globalProperty>
+	<globalProperty>
+		<property>logic.default.ruleClassDirectory</property> <!-- Must start with `moduleId.` -->
+		<defaultValue>logic/class</defaultValue>
+		<description>Default folder where compiled rule will be stored</description>
+	</globalProperty>
+	<globalProperty>
+		<property>logic.default.ruleJavaDirectory</property> <!-- Must start with `moduleId.` -->
+		<defaultValue>logic/sources</defaultValue>
+		<description>Default folder where rule's java file will be stored</description>
+	</globalProperty>
+	
+	<messages>
+		<lang>en</lang>
+		<file>messages.properties</file>
+	</messages>
+	<mappingFiles>
+		TokenRegistration.hbm.xml
+		RuleDefinition.hbm.xml
+	</mappingFiles>
+	<!-- /logic Module Properties -->
+	
+</module>
