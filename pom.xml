@@ -4,7 +4,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>logic</artifactId>
-	<version>${projectVersion}</version>
+	<version>0.5.2-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Logic Module</name>
 	<description>Parent project for Logic Module</description>
@@ -69,8 +69,7 @@
 	</dependencyManagement>
 
 	<properties>
-		<openMRSVersion>1.12.1</openMRSVersion>
-		<projectVersion>0.5.2-SNAPSHOT</projectVersion>
+		<openMRSVersion>1.12.2-SNAPSHOT</openMRSVersion>
 	</properties>
 
 	<build>
