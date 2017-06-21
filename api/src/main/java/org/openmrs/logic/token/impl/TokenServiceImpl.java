@@ -125,7 +125,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	/**
 	 * @see org.openmrs.logic.token.TokenService#getCountOfTokenRegistrations(java.lang.String)
 	 */
-	public int getCountOfTokenRegistrations(String query) {
+	public long getCountOfTokenRegistrations(String query) {
 		return dao.getCountOfTokenRegistrations(query);
 	}
 	

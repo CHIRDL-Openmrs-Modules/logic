@@ -14,16 +14,17 @@
 package org.openmrs.logic.web.controller;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.token.TokenRegistration;
 import org.openmrs.logic.token.TokenService;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 
 /**
@@ -38,50 +39,44 @@ public class ManageTokensController {
 	}
 	
 	@RequestMapping("/module/logic/listTokensQuery")
-	public String listTokensQuery(@RequestParam(value="sSearch", required=false) String query,
+	public @ResponseBody Map<String, Object> listTokensQuery(@RequestParam(value="sSearch", required=false) String query,
 	                              @RequestParam(value="iDisplayStart", required=false) Integer start,
 	                              @RequestParam(value="iDisplayLength", required=false) Integer length,
-	                              @RequestParam(value="sEcho", required=false) String echo,
-	                              Model model) {
-		if (echo == null)
+	                              @RequestParam(value="sEcho", required=false) String echo) {
+		if (echo == null) {
 			echo = "0";
-		TokenService service = Context.getService(TokenService.class);
-		List<TokenRegistration> results = service.getTokenRegistrations(query, start, length);
-		Integer count = service.getCountOfTokenRegistrations(query); // TODO skip if all results returned 
-		
-		StringBuilder sb = new StringBuilder();
-		sb.append("{");
-		sb.append("\"sEcho\": " + echo);
-		sb.append(", \"iTotalRecords\": \"?\"");
-		sb.append(", \"iTotalDisplayRecords\": " + count);
-		sb.append(", \"aaData\": [");
-		for (Iterator<TokenRegistration> i = results.iterator(); i.hasNext(); ) {
-			TokenRegistration r = i.next();
-			List<Object> list = new ArrayList<Object>();
-			list.add("");
-			list.add(r.getToken());
-			list.add(r.getProviderClassName());
-			list.add(r.getConfiguration());
-			list.add(r.getId());
-			sb.append("[");
-			for (Iterator<Object> j = list.iterator(); j.hasNext(); ) {
-				Object o = j.next();
-				if (o instanceof Number)
-					sb.append(o);
-				else
-					sb.append("\"" + o + "\"");
-				if (j.hasNext())
-					sb.append(", ");
-			}
-			sb.append("]");
-			if (i.hasNext())
-				sb.append(", ");
 		}
-		sb.append("]");
-		sb.append("}");
-		model.addAttribute("output", sb);
-		return "/module/logic/output";
+		
+		TokenService service = Context.getService(TokenService.class);
+		List<TokenRegistration> tokens = service.getTokenRegistrations(query, start, length);
+		Long count = service.getCountOfTokenRegistrations(query); // TODO skip if all results returned 
+		
+		// form the results dataset
+		List<Object> results = new ArrayList<Object>();
+		for (TokenRegistration token : tokens) {
+			results.add(splitTokenRegistration(token));
+		}
+		
+		// build the response
+		Map<String, Object> response = new HashMap<String, Object>();
+		response.put("iTotalRecords", service.getCountOfTokenRegistrations(null));
+		response.put("iTotalDisplayRecords", count);
+		response.put("sEcho", echo);
+		response.put("aaData", results.toArray());
+		
+		// send it
+		return response;
 	}
 
-	
+	/**
+	 * Create an object array for a given TokenRegistration
+	 *
+	 * @param token TokenRegistration object
+	 * @return object array for use with datatables
+	 */
+	private Object[] splitTokenRegistration(TokenRegistration token) {
+		// try to stick to basic types; String, Integer, etc (not Date)
+		return new Object[] { "", token.getToken(), token.getProviderClassName(),
+		        token.getConfiguration(), token.getId() };
+	}
 }
