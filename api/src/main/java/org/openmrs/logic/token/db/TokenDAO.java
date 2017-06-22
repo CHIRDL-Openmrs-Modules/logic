@@ -24,7 +24,7 @@ public interface TokenDAO {
 	/**
 	 * @see TokenService#getCountOfTokenRegistrations(String)
 	 */
-	int getCountOfTokenRegistrations(String query);
+	long getCountOfTokenRegistrations(String query);
 
 	/**
 	 * @see TokenService#getTokenRegistration(Integer)

@@ -189,7 +189,7 @@ public interface TokenService extends OpenmrsService {
 	 * @param query
 	 * @return
 	 */
-	int getCountOfTokenRegistrations(String query);
+	long getCountOfTokenRegistrations(String query);
 
 	/**
 	 * Returns all tags that match a given string

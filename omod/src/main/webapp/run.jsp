@@ -15,7 +15,7 @@
 
 <%@ include file="localHeader.jsp"%>
 
-<h2><spring:message code="logic.start.title"/></h2>
+<h2><spring:message code="logic.tester.title"/></h2>
 
 <br/><h3><spring:message code="logic.tester.results.title"/></h3>
 <br />
