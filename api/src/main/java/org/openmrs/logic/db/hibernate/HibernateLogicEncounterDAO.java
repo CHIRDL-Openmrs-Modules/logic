@@ -186,7 +186,7 @@ public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion imple
 			} else if (LOCATION_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
 				criteria.createAlias("location", "location");
 				criterion.add(Restrictions.eq("location.name", ((OperandText) rightOperand).asString()));
-			} else if (PROVIDER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandText) {
+			} else if (PROVIDER_KEY.equalsIgnoreCase(token) && rightOperand instanceof OperandNumeric) {
 				criteria.createAlias("encounterProviders", "enc_prov");
                 criteria.createAlias("enc_prov.provider", "prov");
                 criterion.add(Restrictions.eq("prov.providerId", ((OperandNumeric) rightOperand).asInteger()));
