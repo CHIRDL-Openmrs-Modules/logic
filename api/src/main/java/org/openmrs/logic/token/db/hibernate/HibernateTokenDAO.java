@@ -64,10 +64,10 @@ public class HibernateTokenDAO implements TokenDAO {
      * @see org.openmrs.logic.token.db.TokenDAO#getCountOfTokenRegistrations(java.lang.String)
      */
     @Transactional(readOnly=true)
-    public int getCountOfTokenRegistrations(String query) {
+    public long getCountOfTokenRegistrations(String query) {
 	    Criteria crit = makeCriteria(query);
 	    crit.setProjection(Projections.rowCount());
-		return (Integer) crit.uniqueResult();
+		return (Long) crit.uniqueResult();
     }
 
 	/**
