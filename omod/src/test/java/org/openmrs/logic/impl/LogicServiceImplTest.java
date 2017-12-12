@@ -39,16 +39,16 @@ public class LogicServiceImplTest extends BaseModuleContextSensitiveTest {
 		obsDataSource.addKey("WEIGHT (KG)");
 		
 		LogicCriteria criteria = Context.getLogicService().parse("\"WEIGHT (KG)\"");
-		Result result = Context.getLogicService().eval(new Patient(3), criteria);
+		Result result = Context.getLogicService().eval(new Patient(3).getPatientId(), criteria); // CHICA-1151 pass in patientId instead of patient
 		Assert.assertEquals(2, result.size());
 		
 		LogicCriteria lastCriteria = Context.getLogicService().parse("LAST \"WEIGHT (KG)\"");
-		Result lastResult = Context.getLogicService().eval(new Patient(3), lastCriteria);
+		Result lastResult = Context.getLogicService().eval(new Patient(3).getPatientId(), lastCriteria); // CHICA-1151 pass in patientId instead of patient
 		Assert.assertEquals(1, lastResult.size());
 		Assert.assertEquals(70.0d, lastResult.toNumber().doubleValue(), 0);
 		
 		LogicCriteria firstCriteria = Context.getLogicService().parse("FIRST \"WEIGHT (KG)\"");
-		Result firstResult = Context.getLogicService().eval(new Patient(3), firstCriteria);
+		Result firstResult = Context.getLogicService().eval(new Patient(3).getPatientId(), firstCriteria); // CHICA-1151 pass in patientId instead of patient
 		Assert.assertEquals(firstResult.size(), 1);
 		Assert.assertEquals(60.0d, firstResult.toNumber().doubleValue(), 0);
 	}

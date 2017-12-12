@@ -40,7 +40,7 @@ public class InitializeLogicRuleProvidersTask extends StatefulTask implements Ta
 		}
 		if (!supportsDaemon) {
 			Context.openSession();
-			authenticate();
+			// authenticate(); // TODO CHICA-1151 Debug this, is it needed?
 		}
 
 		Context.getService(TokenService.class).onStartup();

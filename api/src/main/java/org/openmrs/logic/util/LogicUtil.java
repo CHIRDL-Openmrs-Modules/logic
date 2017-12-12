@@ -163,7 +163,7 @@ public class LogicUtil {
     	try {
     		// use proxy privileges for 1.6.x compatibility (starting in 1.7.x module startup and
     		// scheduled tasks are run as the daemon user)
-    		Context.addProxyPrivilege(OpenmrsConstants.PRIV_MANAGE_SCHEDULER);
+    		// Context.addProxyPrivilege(OpenmrsConstants.PRIV_MANAGE_SCHEDULER); // TODO CHICA-1151 Commenting this out, not sure what to do here yet
     		
 			TaskDefinition def = Context.getSchedulerService().getTaskByName(InitializeLogicRuleProvidersTask.NAME);
 			if (def == null) {
@@ -188,7 +188,7 @@ public class LogicUtil {
 			}
 			
 		} finally {
-			Context.removeProxyPrivilege(OpenmrsConstants.PRIV_MANAGE_SCHEDULER);
+			// Context.removeProxyPrivilege(OpenmrsConstants.PRIV_MANAGE_SCHEDULER); // TODO CHICA-1151 Commenting this out, not sure what to do here yet
 		}
     }
 }

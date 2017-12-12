@@ -78,7 +78,7 @@ public class OperandConcept implements Operand {
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return concept == null ? "null" : concept.getBestName(Context.getLocale()).getName();
+		return concept == null ? "null" : concept.getName(Context.getLocale(), false).getName(); // CHICA-1151 Replace call to getBestName() with getName().
 	}
 	
 	/**

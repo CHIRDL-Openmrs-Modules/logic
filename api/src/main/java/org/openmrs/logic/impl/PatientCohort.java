@@ -20,6 +20,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
+import org.openmrs.api.PatientService;
 import org.openmrs.api.context.Context;
 
 
@@ -72,8 +73,27 @@ public class PatientCohort extends Cohort {
 		if (patients == null) {
 			log.debug("Fetching patients from DAO");
 			patients = new HashMap<Integer, Patient>();
-			for (Patient patient : Context.getPatientSetService().getPatients(getMemberIds()))
-				patients.put(patient.getPatientId(), patient);
+			// TODO CHICA-1151 The PatientSet service no longer exists
+			// ******** This method is causing FullNameRuleTest to fail as well as LogicServiceTest
+			// ********
+			// ********
+			// One option is to create a new method in the PatientService that gets a list of patients by patientIds
+			// ********
+			// ********
+			// As a temporary solution, I'm going to query the PatientService one at a time
+			PatientService patientService = Context.getPatientService();
+			for(Integer patientId : getMemberIds())
+			{
+				Patient patient = patientService.getPatient(patientId);
+				if(patient != null)
+				{
+					patients.put(patient.getPatientId(), patient);
+				}
+				
+			}
+			// ******* Original code
+			//for (Patient patient : Context.getPatientSetService().getPatients(getMemberIds()))
+				//patients.put(patient.getPatientId(), patient);
 		}
 		return patients;
 	}
