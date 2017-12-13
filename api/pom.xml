@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>logic</artifactId>
-		<version>0.5.2</version>
+		<version>0.5.3</version>
 	</parent>
 	<artifactId>logic-api</artifactId>
 	<packaging>jar</packaging>
