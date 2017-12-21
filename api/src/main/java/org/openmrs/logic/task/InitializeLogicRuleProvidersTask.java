@@ -40,7 +40,7 @@ public class InitializeLogicRuleProvidersTask extends StatefulTask implements Ta
 		}
 		if (!supportsDaemon) {
 			Context.openSession();
-			// authenticate(); // TODO CHICA-1151 Debug this, is it needed?
+			// authenticate(); // TODO CHICA-1151 Debug this, is it needed? All threads should run as daemon most of the code in this method could be removed
 		}
 
 		Context.getService(TokenService.class).onStartup();

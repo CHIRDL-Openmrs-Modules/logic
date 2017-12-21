@@ -39,6 +39,7 @@ import org.openmrs.logic.token.TokenService;
 import org.openmrs.scheduler.SchedulerException;
 import org.openmrs.scheduler.TaskDefinition;
 import org.openmrs.util.OpenmrsConstants;
+import org.openmrs.util.PrivilegeConstants;
 
 /**
  * 
@@ -163,7 +164,7 @@ public class LogicUtil {
     	try {
     		// use proxy privileges for 1.6.x compatibility (starting in 1.7.x module startup and
     		// scheduled tasks are run as the daemon user)
-    		// Context.addProxyPrivilege(OpenmrsConstants.PRIV_MANAGE_SCHEDULER); // TODO CHICA-1151 Commenting this out, not sure what to do here yet
+    		Context.addProxyPrivilege(PrivilegeConstants.MANAGE_SCHEDULER); // CHICA-1151 replace OpenmrsConstants.PRIV_MANAGE_SCHEDULER with PrivilegeConstants.MANAGE_SCHEDULER
     		
 			TaskDefinition def = Context.getSchedulerService().getTaskByName(InitializeLogicRuleProvidersTask.NAME);
 			if (def == null) {
@@ -188,7 +189,7 @@ public class LogicUtil {
 			}
 			
 		} finally {
-			// Context.removeProxyPrivilege(OpenmrsConstants.PRIV_MANAGE_SCHEDULER); // TODO CHICA-1151 Commenting this out, not sure what to do here yet
+			Context.removeProxyPrivilege(PrivilegeConstants.MANAGE_SCHEDULER); // CHICA-1151 replace OpenmrsConstants.PRIV_MANAGE_SCHEDULER with PrivilegeConstants.MANAGE_SCHEDULER
 		}
     }
 }
