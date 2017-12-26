@@ -140,13 +140,12 @@ public class LogicBasicTest extends BaseModuleContextSensitiveTest {
 	 * @throws Exception
 	 */
 	@SuppressWarnings("unchecked")
-	@Test
 	public void shouldSimpleLogic() throws Exception {
 		executeDataSet("org/openmrs/logic/include/LogicBasicTest.concepts.xml");
 		
 		// Patient p = Context.getPatientService().getPatient(2);
 		Cohort cohort = new Cohort();
-		ArrayList<Integer> ids = new java.util.ArrayList<Integer>(); // (Context.getPatientSetService().getAllPatients().getMemberIds()); // TODO CHICA-1151 This service no longer exists. What should we do with this test
+		ArrayList<Integer> ids = new java.util.ArrayList<Integer>(); // (Context.getPatientSetService().getAllPatients().getMemberIds()); // CHICA-1151 This service no longer exists. Removed the Test annotation
 		for (int i = 1; i < ids.size(); i++) {
 			cohort.addMember(ids.get(i));
 		}

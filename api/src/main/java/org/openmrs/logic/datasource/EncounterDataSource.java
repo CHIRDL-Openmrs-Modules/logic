@@ -82,6 +82,8 @@ public class EncounterDataSource extends SimpleDataSourceRuleProvider implements
 	
 	public static final String PROVIDER_KEY = "encounterProvider";
 	
+	private static final String ENCOUNTER_ROLE_ATTENDING_PROVIDER = "Attending Provider";
+	
 	static {
 		String[] keyList = new String[] { ENCOUNTER_KEY, LOCATION_KEY, PROVIDER_KEY };
 		
@@ -161,7 +163,7 @@ public class EncounterDataSource extends SimpleDataSourceRuleProvider implements
 				if(encounter != null)
 				{
 					EncounterService es = Context.getEncounterService();
-					EncounterRole encounterRole = es.getEncounterRoleByName("Attending Provider"); // TODO CHICA-1151 Constant for this would be nice
+					EncounterRole encounterRole = es.getEncounterRoleByName(ENCOUNTER_ROLE_ATTENDING_PROVIDER);
 					Set<org.openmrs.Provider> providers = encounter.getProvidersByRole(encounterRole);
 					
 					if(providers != null && providers.size() > 0) // We should only have one encounter provider with the "Attending Provider" role
@@ -173,7 +175,7 @@ public class EncounterDataSource extends SimpleDataSourceRuleProvider implements
 							
 							if(iter.hasNext())
 							{
-								// TODO CHICA-1151 what to do if we find more than one provider?
+								providerSystemId = "(more than one attending provider)";
 							}
 						}
 					}

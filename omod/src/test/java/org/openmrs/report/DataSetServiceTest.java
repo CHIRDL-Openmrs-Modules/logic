@@ -149,7 +149,7 @@ public class DataSetServiceTest extends BaseModuleContextSensitiveTest {
 	 * @throws Exception
 	 */
 	//@Test
-	// TODO CHICA-1151 Looks like most of the code needed for this test has been removed from openmrs
+	// CHICA-1151 most of the code needed for this test has been removed from openmrs
 //	public void shouldMultipleDataSets() throws Exception {
 //		initializeInMemoryDatabase();
 //		executeDataSet("org/openmrs/report/include/ReportTests-patients.xml");
