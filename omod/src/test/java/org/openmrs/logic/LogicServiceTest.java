@@ -67,7 +67,7 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 		patients.addMember(2);
 		
 		try {
-			Result r = logicService.eval(new Patient(2), "CD4 COUNT");
+			Result r = logicService.eval(new Patient(2).getPatientId(), "CD4 COUNT"); // CHICA-1151 pass in patientId instead of patient
 			Assert.assertNotNull(r);
 			Assert.assertEquals(0, r.size());
 			

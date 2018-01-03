@@ -79,7 +79,7 @@ public class LogicFormController {
 				
 				LogicService logicService = Context.getLogicService();
 				
-				Result result = logicService.eval(patient, logicService.parse(logicRule));
+				Result result = logicService.eval(patient.getPatientId(), logicService.parse(logicRule)); // CHICA-1151 pass in patientId instead of patient
 				
 				modelMap.addAttribute("patient", patient);
 				modelMap.addAttribute("logicRule", logicRule);

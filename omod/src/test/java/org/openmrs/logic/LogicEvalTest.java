@@ -52,7 +52,7 @@ public class LogicEvalTest extends BaseModuleContextSensitiveTest {
 		
 		// register temperature as a rule if needed
 		Concept temperature = Context.getConceptService().getConcept(12232);
-		String name = temperature.getBestName(Context.getLocale()).getName();
+		String name = temperature.getName(Context.getLocale(), false).getName(); // CHICA-1151 replaced call to getBestName() with getName()
 		try {
 			Context.getLogicService().getRule(name);
 		}

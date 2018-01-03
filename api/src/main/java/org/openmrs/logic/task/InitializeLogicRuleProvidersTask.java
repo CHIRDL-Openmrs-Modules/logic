@@ -31,23 +31,7 @@ public class InitializeLogicRuleProvidersTask extends StatefulTask implements Ta
 	 */
 	@Override
 	public void execute() {
-		boolean supportsDaemon = false;
-		try {
-			Class.forName("org.openmrs.api.context.Daemon");
-			supportsDaemon = true;
-		} catch (ClassNotFoundException ex) {
-			// we're in 1.6.x
-		}
-		if (!supportsDaemon) {
-			Context.openSession();
-			authenticate();
-		}
-
 		Context.getService(TokenService.class).onStartup();
-		
-		if (!supportsDaemon) {
-			Context.closeSession();
-		}
 	}
 	
 }

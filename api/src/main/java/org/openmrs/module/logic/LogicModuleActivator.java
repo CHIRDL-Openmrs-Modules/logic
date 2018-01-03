@@ -18,13 +18,13 @@ import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicConstants;
 import org.openmrs.logic.util.LogicUtil;
-import org.openmrs.module.Activator;
+import org.openmrs.module.BaseModuleActivator;
 import org.openmrs.util.OpenmrsUtil;
 
 /**
  *
  */
-public class LogicModuleActivator implements Activator {
+public class LogicModuleActivator extends BaseModuleActivator {
 	
 	private static final Log log = LogFactory.getLog(LogicModuleActivator.class);
 	

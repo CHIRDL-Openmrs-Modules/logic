@@ -29,7 +29,7 @@
   <person_name person_name_id="2" preferred="true" person_id="3" given_name="John" middle_name=" " family_name="Doe" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="1614646e-0f11-4456-8c87-fdc77ef0be50"/>
   <patient patient_id="2" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
   <patient patient_id="3" creator="1" date_created="2005-01-01 00:00:00.0" voided="false"/>
-  <patient_identifier_type patient_identifier_type_id="1" name="Test Identifier Type" description="Test description" check_digit="false" creator="1" date_created="2005-01-01 00:00:00.0" required="false" retired="false" uuid="3646bed3-c442-4863-84f5-3ce427634911"/>
+  <patient_identifier_type patient_identifier_type_id="1" name="Test Identifier Type" description="Test description" creator="1" date_created="2005-01-01 00:00:00.0" required="false" retired="false" uuid="3646bed3-c442-4863-84f5-3ce427634911"/>
   <patient_identifier patient_identifier_id="1" patient_id="2" identifier="1234" identifier_type="1" preferred="1" location_id="1" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="92dcf408-92a0-4e15-8b25-b6a3672c583d"/>
   <patient_identifier patient_identifier_id="2" patient_id="3" identifier="12345" identifier_type="1" preferred="1" location_id="1" creator="1" date_created="2005-01-01 00:00:00.0" voided="false" uuid="ec561439-5607-4144-b4dd-f801148a3136"/>
   <encounter_type encounter_type_id="5" name="HL7Message" creator="1" date_created="2008-08-19 00:00:00.0" retired="false" uuid="3d9f8ac6-1894-11e7-93ae-92361f002671" />

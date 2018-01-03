@@ -17,15 +17,20 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import org.openmrs.Cohort;
 import org.openmrs.Encounter;
+import org.openmrs.EncounterRole;
 import org.openmrs.EncounterType;
 import org.openmrs.Location;
 import org.openmrs.Person;
 import org.openmrs.User;
+import org.openmrs.api.EncounterService;
+import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicException;
@@ -76,6 +81,8 @@ public class EncounterDataSource extends SimpleDataSourceRuleProvider implements
 	public static final String LOCATION_KEY = "encounterLocation";
 	
 	public static final String PROVIDER_KEY = "encounterProvider";
+	
+	private static final String ENCOUNTER_ROLE_ATTENDING_PROVIDER = "Attending Provider";
 	
 	static {
 		String[] keyList = new String[] { ENCOUNTER_KEY, LOCATION_KEY, PROVIDER_KEY };
@@ -150,18 +157,43 @@ public class EncounterDataSource extends SimpleDataSourceRuleProvider implements
 				result.add(new Result(encounterDatetime, locationName, location));
 			} else if (PROVIDER_KEY.equalsIgnoreCase(rootToken)) {
 				String providerSystemId = "";
-				Person provider = encounter.getProvider();
+				
+				// CHICA-1151 Need to get the encouner attending provider
+				org.openmrs.Provider provider = null;
+				if(encounter != null)
+				{
+					EncounterService es = Context.getEncounterService();
+					EncounterRole encounterRole = es.getEncounterRoleByName(ENCOUNTER_ROLE_ATTENDING_PROVIDER);
+					Set<org.openmrs.Provider> providers = encounter.getProvidersByRole(encounterRole);
+					
+					if(providers != null && providers.size() > 0) // We should only have one encounter provider with the "Attending Provider" role
+					{
+						Iterator<org.openmrs.Provider> iter = providers.iterator();
+						if(iter.hasNext())
+						{
+							provider = iter.next();
+							
+							if(iter.hasNext())
+							{
+								providerSystemId = "(more than one attending provider)";
+							}
+						}
+					}
+				}
+				
+				Person person = null;
 				
 				// check for null objects
 				if (provider == null) {
 					// TODO should this return a string like this, or just null?
 					providerSystemId = "(no provider)";
 				} else {
-					providerSystemId = provider.getPersonName().getFullName();
+					person = provider.getPerson();
+					providerSystemId = person.getPersonName().getFullName();
 				}
 				
 				// add the provider as the result
-				result.add(new Result(encounterDatetime, providerSystemId, provider));
+				result.add(new Result(encounterDatetime, providerSystemId, person));
 			}
 		}
 		LogicUtil.applyAggregators(finalResult, criteria, patients);
@@ -189,5 +221,4 @@ public class EncounterDataSource extends SimpleDataSourceRuleProvider implements
 	public boolean hasKey(String key) {
 		return getKeys().contains(key);
 	}
-		
 }
