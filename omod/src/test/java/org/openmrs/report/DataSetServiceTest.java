@@ -19,11 +19,11 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.junit.Test;
 import org.openmrs.Cohort;
-import org.openmrs.api.DataSetService;
+//import org.openmrs.api.DataSetService;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.result.Result;
-import org.openmrs.reporting.PatientCharacteristicFilter;
-import org.openmrs.reporting.PatientSearch;
+//import org.openmrs.reporting.PatientCharacteristicFilter;
+//import org.openmrs.reporting.PatientSearch;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 /**
@@ -148,42 +148,43 @@ public class DataSetServiceTest extends BaseModuleContextSensitiveTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Test
-	public void shouldMultipleDataSets() throws Exception {
-		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/report/include/ReportTests-patients.xml");
-		authenticate();
-		EvaluationContext evalContext = new EvaluationContext();
-		DataSetService service = Context.getDataSetService();
-		PatientSearch kids = PatientSearch.createFilterSearch(PatientCharacteristicFilter.class);
-		// TODO: fix this so that it won't fail in 10 years
-		kids.addArgument("maxAge", "10", Integer.class);
-		
-		CohortDataSetDefinition def1 = new CohortDataSetDefinition();
-		def1.setName("Cohorts");
-		def1.addStrategy("kids", kids);
-		DataSet<Object> data1 = service.evaluate(def1, null, evalContext);
-		//System.out.println("---Males---");
-		//for (Map<String, Object> row : data1) {
-		//	for (Map.Entry<String, Object> e : row.entrySet())
-		//		System.out.println(e.getKey() + " -> " + e.getValue());
-		//	System.out.println();
-		//}
-		
-		RowPerObsDataSetDefinition def2 = new RowPerObsDataSetDefinition();
-		def2.setFilter(kids);
-		def2.getQuestions().add(Context.getConceptService().getConcept(5089));
-		DataSet<Object> data2 = service.evaluate(def2, null, evalContext);
-		int count = 0;
-		for (Map<String, Object> row : data2) {
-			++count;
-			if (count > 0)
-				continue;
-			//for (Map.Entry<String, Object> e : row.entrySet())
-			//	System.out.println(e.getKey() + " -> " + e.getValue());
-			//System.out.println();
-		}
-		//System.out.println("count = " + count);
-	}
+	//@Test
+	// CHICA-1151 most of the code needed for this test has been removed from openmrs
+//	public void shouldMultipleDataSets() throws Exception {
+//		initializeInMemoryDatabase();
+//		executeDataSet("org/openmrs/report/include/ReportTests-patients.xml");
+//		authenticate();
+//		EvaluationContext evalContext = new EvaluationContext();
+//		DataSetService service = Context.getDataSetService();
+//		PatientSearch kids = PatientSearch.createFilterSearch(PatientCharacteristicFilter.class);
+//		// TODO: fix this so that it won't fail in 10 years
+//		kids.addArgument("maxAge", "10", Integer.class);
+//		
+//		CohortDataSetDefinition def1 = new CohortDataSetDefinition();
+//		def1.setName("Cohorts");
+//		def1.addStrategy("kids", kids);
+//		DataSet<Object> data1 = service.evaluate(def1, null, evalContext);
+//		//System.out.println("---Males---");
+//		//for (Map<String, Object> row : data1) {
+//		//	for (Map.Entry<String, Object> e : row.entrySet())
+//		//		System.out.println(e.getKey() + " -> " + e.getValue());
+//		//	System.out.println();
+//		//}
+//		
+//		RowPerObsDataSetDefinition def2 = new RowPerObsDataSetDefinition();
+//		def2.setFilter(kids);
+//		def2.getQuestions().add(Context.getConceptService().getConcept(5089));
+//		DataSet<Object> data2 = service.evaluate(def2, null, evalContext);
+//		int count = 0;
+//		for (Map<String, Object> row : data2) {
+//			++count;
+//			if (count > 0)
+//				continue;
+//			//for (Map.Entry<String, Object> e : row.entrySet())
+//			//	System.out.println(e.getKey() + " -> " + e.getValue());
+//			//System.out.println();
+//		}
+//		//System.out.println("count = " + count);
+//	}
 	
 }
