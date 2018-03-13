@@ -86,12 +86,14 @@ public interface RuleDefinitionService extends OpenmrsService {
 	/**
 	 * @return all available LanguageHandlers
 	 */
+	@Authorized()
 	public List<LanguageHandler> getAllLanguageHandlers();
 	
 	/**
 	 * @param name
 	 * @return the LanguageHandler with the specified name
 	 */
+	@Authorized()
 	public LanguageHandler getLanguageHandler(String name);
 	
 }
