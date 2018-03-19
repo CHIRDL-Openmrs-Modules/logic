@@ -32,6 +32,7 @@ public interface TokenService extends OpenmrsService {
 	 * Run the afterStartup() method on all RuleProviders, generally getting them to re-register all
 	 * their rules.
 	 */
+	@Authorized()
 	void initialize();
 	
 	/**
@@ -41,6 +42,7 @@ public interface TokenService extends OpenmrsService {
 	 * @param token
 	 * @return
 	 */
+	@Authorized()
 	Rule getRule(String token);
 	
 	/**
@@ -51,6 +53,7 @@ public interface TokenService extends OpenmrsService {
 	 * @param providerToken
 	 * @return
 	 */
+	@Authorized()
 	Rule getRule(RuleProvider provider, String providerToken);
 	
 	/**
@@ -79,6 +82,7 @@ public interface TokenService extends OpenmrsService {
 	 * @param provider
 	 * @param providerToken
 	 */
+	@Authorized()
 	void notifyRuleDefinitionChanged(RuleProvider provider, String providerToken);
 	
 	/**
@@ -103,6 +107,7 @@ public interface TokenService extends OpenmrsService {
 	 * 
 	 * @return list of all registered rule tokens
 	 */
+	@Authorized()
 	List<String> getAllTokens();
 	
 	/**
@@ -112,6 +117,7 @@ public interface TokenService extends OpenmrsService {
 	 * @param query
 	 * @return
 	 */
+	@Authorized()
 	List<String> getTokens(String query);
 
 	/**
@@ -120,6 +126,7 @@ public interface TokenService extends OpenmrsService {
 	 * @param id
 	 * @return
 	 */
+	@Authorized()
 	TokenRegistration getTokenRegistration(Integer id);
 
 	/**
@@ -128,6 +135,7 @@ public interface TokenService extends OpenmrsService {
 	 * @param uuid
 	 * @return
 	 */
+	@Authorized()
 	TokenRegistration getTokenRegistrationByUuid(String uuid);
 	
 	/**
@@ -136,6 +144,7 @@ public interface TokenService extends OpenmrsService {
 	 * @param token
 	 * @return
 	 */
+	@Authorized()
 	TokenRegistration getTokenRegistrationByToken(String token);
 	
 	/**
@@ -145,6 +154,7 @@ public interface TokenService extends OpenmrsService {
 	 * @param providerToken
 	 * @return
 	 */
+	@Authorized()
 	TokenRegistration getTokenRegistrationByProviderAndToken(RuleProvider provider, String providerToken);
 	
 	/**
@@ -154,6 +164,7 @@ public interface TokenService extends OpenmrsService {
      * @param configuration
      * @return
      */
+	@Authorized()
     TokenRegistration getTokenRegistrationByProviderAndConfiguration(RuleProvider ruleProvider, String configuration);
 
     /**
@@ -181,6 +192,7 @@ public interface TokenService extends OpenmrsService {
 	 * @param length
 	 * @return
 	 */
+    @Authorized()
 	List<TokenRegistration> getTokenRegistrations(String query, Integer start, Integer length);
 	
 	/**
@@ -189,6 +201,7 @@ public interface TokenService extends OpenmrsService {
 	 * @param query
 	 * @return
 	 */
+    @Authorized()
 	long getCountOfTokenRegistrations(String query);
 
 	/**
@@ -197,6 +210,7 @@ public interface TokenService extends OpenmrsService {
 	 * @param partialTag any tags containing this string will be returned
 	 * @return <code>List<String></code> of the matching tags
 	 */
+    @Authorized()
 	List<String> getTags(String partialTag);
 
 	/**
@@ -205,12 +219,14 @@ public interface TokenService extends OpenmrsService {
 	 * @param tag <code>String</code> tag to search for
 	 * @return <code>List<String></code> object of all tokens related to the given tag
 	 */
+    @Authorized()
     List<String> getTokensByTag(String tag);
 
 	/**
      * @param ruleProvider
      * @return all token registrations registered by the given provider
      */
+    @Authorized()
     List<TokenRegistration> getTokenRegistrationsByProvider(RuleProvider ruleProvider);
 
 	/**

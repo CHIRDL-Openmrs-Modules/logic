@@ -1,7 +1,7 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="/WEB-INF/template/header.jsp"%>
 
-<openmrs:require privilege="Manage Rule Definitions" otherwise="/login.htm" redirect="/module/logic/manageRuleDefinitions.list" />
+<openmrs:require privilege="Manage LOGIC" otherwise="/login.htm" redirect="/module/logic/manageRuleDefinitions.list" />
 
 <%@ include file="localHeader.jsp"%>
 
