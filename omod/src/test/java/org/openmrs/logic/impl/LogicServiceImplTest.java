@@ -1,9 +1,13 @@
 package org.openmrs.logic.impl;
 
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Patient;
+import org.openmrs.annotation.Authorized;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.LogicService;
@@ -75,6 +79,18 @@ public class LogicServiceImplTest extends BaseModuleContextSensitiveTest {
 		LogicService logicService = Context.getLogicService();
 		Rule rule = logicService.getRule("%%obs.CD4 COUNT");
 		Assert.assertNotNull(rule);
+	}
+	
+	@Test
+	@SkipBaseSetup
+	public void checkAuthorizationAnnotations() throws Exception {
+		Method[] allMethods = LogicService.class.getDeclaredMethods();
+		for (Method method : allMethods) {
+		    if (Modifier.isPublic(method.getModifiers())) {
+		        Authorized authorized = method.getAnnotation(Authorized.class);
+		        Assert.assertNotNull("Authorized annotation not found on method " + method.getName(), authorized);
+		    }
+		}
 	}
 	
 }

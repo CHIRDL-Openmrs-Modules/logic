@@ -1,6 +1,8 @@
 <%@ include file="/WEB-INF/template/include.jsp"%>
 <%@ include file="/WEB-INF/template/header.jsp"%>
 
+<openmrs:require privilege="Manage LOGIC" otherwise="/login.htm" redirect="/module/logic/logic.form" />
+
 <%@ include file="localHeader.jsp"%>
 
 <openmrs:htmlInclude file="/scripts/dojo/dojo.js" />
