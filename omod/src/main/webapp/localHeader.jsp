@@ -1,8 +1,10 @@
+<%@ include file="/WEB-INF/template/include.jsp"%>
+<openmrs:require privilege="Manage LOGIC" otherwise="/login.htm" redirect="/module/logic/manageTokens.list" />
 <ul id="menu">
 	<li class="first">
 		<a href="${pageContext.request.contextPath}/admin"><spring:message code="admin.title.short"/></a>
 	</li>
-	<openmrs:hasPrivilege privilege="Manage Tokens">
+	<openmrs:hasPrivilege privilege="Manage LOGIC">
 		<li <c:if test='<%= request.getRequestURI().contains("Token") %>'>class="active"</c:if>>
 			<a href="${pageContext.request.contextPath}/module/logic/manageTokens.list">
 				<spring:message code="logic.token.manage.title"/>
@@ -16,12 +18,14 @@
 			</a>
 		</li>
 	</openmrs:hasPrivilege>
+	<openmrs:hasPrivilege privilege="Manage LOGIC">
 	<li <c:if test='<%= request.getRequestURI().contains("logic/logic") %>'>class="active"</c:if>>
 		<a href="${pageContext.request.contextPath}/module/logic/logic.form">
 			<spring:message code="logic.tester.title"/>
 		</a>
 	</li>
-	<openmrs:hasPrivilege privilege="Manage Tokens">
+	</openmrs:hasPrivilege>
+	<openmrs:hasPrivilege privilege="Manage LOGIC">
 		<li <c:if test='<%= request.getRequestURI().contains("logic/init") %>'>class="active"</c:if>>
 			<a href="${pageContext.request.contextPath}/module/logic/init.form">
 				<spring:message code="logic.init.title"/>
