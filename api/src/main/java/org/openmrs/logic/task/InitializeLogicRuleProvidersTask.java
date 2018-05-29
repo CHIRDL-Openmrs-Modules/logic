@@ -16,14 +16,15 @@ package org.openmrs.logic.task;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.token.TokenService;
 import org.openmrs.scheduler.StatefulTask;
+import org.openmrs.scheduler.Task;
 
 
 /**
  *
  */
-public class InitializeLogicRuleProvidersTask extends StatefulTask {
+public class InitializeLogicRuleProvidersTask extends StatefulTask implements Task {
 	
-	public static final String NAME = "Initialize Logic Rule Providers";
+	public static String NAME = "Initialize Logic Rule Providers";
 	
 	/**
 	 * @see org.openmrs.scheduler.tasks.AbstractTask#execute()
