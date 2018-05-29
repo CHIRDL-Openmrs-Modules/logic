@@ -17,7 +17,8 @@ import org.apache.commons.logging.LogFactory;
 
 public class JSONWriter {
 
-	private Log log = LogFactory.getLog(this.getClass());
+	private static final Log lOG = LogFactory.getLog(JSONWriter.class);
+	
     private StringBuffer buf = new StringBuffer();
     private Stack<Object> calls = new Stack<>();
     boolean emitClassName = true;
@@ -53,16 +54,27 @@ public class JSONWriter {
     }
 
 	private void value(Object object) {
-        if (object == null) add("null");
-        else if (object instanceof Class) string(object);
-        else if (object instanceof Boolean) bool(((Boolean) object).booleanValue());
-        else if (object instanceof Number) add(object);
-        else if (object instanceof String) string(object);
-        else if (object instanceof Character) string(object);
-        else if (object instanceof Map) map((Map<?, ?>) object);
-        else if (object.getClass().isArray()) array(object);
-        else if (object instanceof Iterable) array(((Iterable<?>) object).iterator());
-        else bean(object);
+        if (object == null) {
+        	add("null");
+        } else if (object instanceof Class) {
+        	string(object);
+        } else if (object instanceof Boolean) {
+        	bool(((Boolean) object).booleanValue());
+        } else if (object instanceof Number) {
+        	add(object);
+        } else if (object instanceof String) {
+        	string(object);
+        } else if (object instanceof Character) {
+        	string(object);
+        } else if (object instanceof Map) {
+        	map((Map<?, ?>) object);
+        } else if (object.getClass().isArray()) {
+        	array(object);
+        } else if (object instanceof Iterable) {
+        	array(((Iterable<?>) object).iterator());
+        } else {
+        	bean(object);
+        }
     }
 
     private void bean(Object object) {
@@ -97,7 +109,7 @@ public class JSONWriter {
                 addedSomething = true;
         }
         } catch (Exception e) { 
-            this.log.error(e);
+            lOG.error(e);
         }
         add("}");
         this.calls.pop();
