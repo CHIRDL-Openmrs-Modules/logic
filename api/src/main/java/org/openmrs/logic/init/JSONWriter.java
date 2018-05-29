@@ -12,7 +12,12 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
+
 public class JSONWriter {
+	
+	private Log log = LogFactory.getLog(this.getClass());
 
     private StringBuffer buf = new StringBuffer();
     private Stack<Object> calls = new Stack<Object>();
@@ -94,7 +99,7 @@ public class JSONWriter {
                 addedSomething = true;
         }
         } catch (Exception e) { 
-            e.printStackTrace(); 
+            this.log.error(e);
         }
         add("}");
         calls.pop();
