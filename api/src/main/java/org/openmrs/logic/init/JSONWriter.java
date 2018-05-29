@@ -17,7 +17,7 @@ import org.apache.commons.logging.LogFactory;
 
 public class JSONWriter {
 
-	private static final Log lOG = LogFactory.getLog(JSONWriter.class);
+	private static final Log LOG = LogFactory.getLog(JSONWriter.class);
 	
     private StringBuffer buf = new StringBuffer();
     private Stack<Object> calls = new Stack<>();
@@ -109,7 +109,7 @@ public class JSONWriter {
                 addedSomething = true;
         }
         } catch (Exception e) { 
-            lOG.error(e);
+            LOG.error(e);
         }
         add("}");
         this.calls.pop();
