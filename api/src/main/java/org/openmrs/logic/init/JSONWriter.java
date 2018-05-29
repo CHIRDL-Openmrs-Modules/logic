@@ -19,7 +19,7 @@ public class JSONWriter {
 
 	private Log log = LogFactory.getLog(this.getClass());
     private StringBuffer buf = new StringBuffer();
-    private Stack<Object> calls = new Stack<Object>();
+    private Stack<Object> calls = new Stack<>();
     boolean emitClassName = true;
     
     public JSONWriter(boolean emitClassName) {
@@ -31,9 +31,9 @@ public class JSONWriter {
     }
 
     public String write(Object object) {
-        buf.setLength(0);
+        this.buf.setLength(0);
         value(object);
-        return buf.toString();
+        return this.buf.toString();
     }
 
     public String write(long n) {
@@ -52,7 +52,6 @@ public class JSONWriter {
         return String.valueOf(b);
     }
 
-    @SuppressWarnings("unchecked")
 	private void value(Object object) {
         if (object == null) add("null");
         else if (object instanceof Class) string(object);
@@ -60,18 +59,18 @@ public class JSONWriter {
         else if (object instanceof Number) add(object);
         else if (object instanceof String) string(object);
         else if (object instanceof Character) string(object);
-        else if (object instanceof Map) map((Map) object);
+        else if (object instanceof Map) map((Map<?, ?>) object);
         else if (object.getClass().isArray()) array(object);
-        else if (object instanceof Iterable) array(((Iterable) object).iterator());
+        else if (object instanceof Iterable) array(((Iterable<?>) object).iterator());
         else bean(object);
     }
 
     private void bean(Object object) {
-        if (calls.contains(object)) {
+        if (this.calls.contains(object)) {
             add(null);
             return;
         }
-        calls.push(object);
+        this.calls.push(object);
 
         add("{");
         BeanInfo info;
@@ -83,7 +82,7 @@ public class JSONWriter {
                 PropertyDescriptor prop = props[i];
                 String name = prop.getName();
                 Method accessor = prop.getReadMethod();
-                if ((emitClassName==true || !"class".equals(name)) && accessor != null) {
+                if ((this.emitClassName==true || !"class".equals(name)) && accessor != null) {
                     Object value = accessor.invoke(object, (Object[])null);
                     if (addedSomething) add(',');
                     add(name, value);
@@ -101,7 +100,7 @@ public class JSONWriter {
             this.log.error(e);
         }
         add("}");
-        calls.pop();
+        this.calls.pop();
     }
 
     private void add(String name, Object value) {
@@ -111,10 +110,10 @@ public class JSONWriter {
         value(value);
     }
 
-    @SuppressWarnings("unchecked")
-	private void map(Map map) {
+    @SuppressWarnings("rawtypes")
+	private void map(Map<?, ?> map) {
         add("{");
-        Iterator it = map.entrySet().iterator();
+        Iterator<?> it = map.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry e = (Map.Entry) it.next();
             value(e.getKey());
@@ -125,8 +124,7 @@ public class JSONWriter {
         add("}");
     }
     
-    @SuppressWarnings("unchecked")
-	private void array(Iterator it) {
+    private void array(Iterator<?> it) {
         add("[");
         while (it.hasNext()) {
             value(it.next());
@@ -171,11 +169,11 @@ public class JSONWriter {
     }
 
     private void add(Object obj) {
-        buf.append(obj);
+        this.buf.append(obj);
     }
 
     private void add(char c) {
-        buf.append(c);
+        this.buf.append(c);
     }
 
     static char[] hex = "0123456789ABCDEF".toCharArray();
