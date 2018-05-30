@@ -23,7 +23,7 @@ public class JSONWriter {
     private static final Log LOG = LogFactory.getLog(JSONWriter.class);
     private static char[] hex = "0123456789ABCDEF".toCharArray();
 
-    private StringBuilder buf = new StringBuilder();
+    private StringBuffer buf = new StringBuffer();
     private Deque<Object> calls = new ArrayDeque<>();
     boolean emitClassName = true;
     
