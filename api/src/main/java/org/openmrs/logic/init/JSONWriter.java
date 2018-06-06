@@ -8,14 +8,23 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
+import java.util.ArrayDeque;
+import java.util.Deque;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Stack;
+
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 
 public class JSONWriter {
 
+    private static final int TWELVE = 12;
+    private static final int FOUR = 4;
+    private static final Log LOG = LogFactory.getLog(JSONWriter.class);
+    private static char[] hex = "0123456789ABCDEF".toCharArray();
+
     private StringBuffer buf = new StringBuffer();
-    private Stack<Object> calls = new Stack<Object>();
+    private Deque<Object> calls = new ArrayDeque<>();
     boolean emitClassName = true;
     
     public JSONWriter(boolean emitClassName) {
@@ -27,9 +36,9 @@ public class JSONWriter {
     }
 
     public String write(Object object) {
-        buf.setLength(0);
+        this.buf.setLength(0);
         value(object);
-        return buf.toString();
+        return this.buf.toString();
     }
 
     public String write(long n) {
@@ -48,26 +57,36 @@ public class JSONWriter {
         return String.valueOf(b);
     }
 
-    @SuppressWarnings("unchecked")
-	private void value(Object object) {
-        if (object == null) add("null");
-        else if (object instanceof Class) string(object);
-        else if (object instanceof Boolean) bool(((Boolean) object).booleanValue());
-        else if (object instanceof Number) add(object);
-        else if (object instanceof String) string(object);
-        else if (object instanceof Character) string(object);
-        else if (object instanceof Map) map((Map) object);
-        else if (object.getClass().isArray()) array(object);
-        else if (object instanceof Iterable) array(((Iterable) object).iterator());
-        else bean(object);
+    private void value(Object object) {
+        if (object == null) {
+            add("null");
+        } else if (object instanceof Class) {
+            string(object);
+        } else if (object instanceof Boolean) {
+            bool(((Boolean) object).booleanValue());
+        } else if (object instanceof Number) {
+            add(object);
+        } else if (object instanceof String) {
+            string(object);
+        } else if (object instanceof Character) {
+            string(object);
+        } else if (object instanceof Map) {
+            map((Map<?, ?>) object);
+        } else if (object.getClass().isArray()) {
+            array(object);
+        } else if (object instanceof Iterable) {
+            array(((Iterable<?>) object).iterator());
+        } else {
+            bean(object);
+        }
     }
 
     private void bean(Object object) {
-        if (calls.contains(object)) {
+        if (this.calls.contains(object)) {
             add(null);
             return;
         }
-        calls.push(object);
+        this.calls.push(object);
 
         add("{");
         BeanInfo info;
@@ -79,9 +98,11 @@ public class JSONWriter {
                 PropertyDescriptor prop = props[i];
                 String name = prop.getName();
                 Method accessor = prop.getReadMethod();
-                if ((emitClassName==true || !"class".equals(name)) && accessor != null) {
+                if ((this.emitClassName || !"class".equals(name)) && accessor != null) {
                     Object value = accessor.invoke(object, (Object[])null);
-                    if (addedSomething) add(',');
+                    if (addedSomething) {
+                        add(',');
+                    }
                     add(name, value);
                     addedSomething = true;
                 }
@@ -89,15 +110,17 @@ public class JSONWriter {
             Field[] ff = object.getClass().getFields();
             for (int i = 0; i < ff.length; ++i) {
                 Field field = ff[i];
-                if (addedSomething) add(',');
+                if (addedSomething) {
+                    add(',');
+                }
                 add(field.getName(), field.get(object));
                 addedSomething = true;
         }
         } catch (Exception e) { 
-            e.printStackTrace(); 
+            LOG.error(e);
         }
         add("}");
-        calls.pop();
+        this.calls.pop();
     }
 
     private void add(String name, Object value) {
@@ -107,26 +130,29 @@ public class JSONWriter {
         value(value);
     }
 
-    @SuppressWarnings("unchecked")
-	private void map(Map map) {
+    @SuppressWarnings("rawtypes")
+    private void map(Map<?, ?> map) {
         add("{");
-        Iterator it = map.entrySet().iterator();
+        Iterator<?> it = map.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry e = (Map.Entry) it.next();
             value(e.getKey());
             add(":");
             value(e.getValue());
-            if (it.hasNext()) add(',');
+            if (it.hasNext()) {
+                add(',');
+            }
         }
         add("}");
     }
     
-    @SuppressWarnings("unchecked")
-	private void array(Iterator it) {
+    private void array(Iterator<?> it) {
         add("[");
         while (it.hasNext()) {
             value(it.next());
-            if (it.hasNext()) add(",");
+            if (it.hasNext()) {
+                add(",");
+            }
         }
         add("]");
     }
@@ -136,7 +162,9 @@ public class JSONWriter {
         int length = Array.getLength(object);
         for (int i = 0; i < length; ++i) {
             value(Array.get(object, i));
-            if (i < length - 1) add(',');
+            if (i < length - 1) {
+                add(',');
+            }
         }
         add("]");
     }
@@ -149,15 +177,23 @@ public class JSONWriter {
         add('"');
         CharacterIterator it = new StringCharacterIterator(obj.toString());
         for (char c = it.first(); c != CharacterIterator.DONE; c = it.next()) {
-            if (c == '"') add("\\\"");
-            else if (c == '\\') add("\\\\");
-            else if (c == '/') add("\\/");
-            else if (c == '\b') add("\\b");
-            else if (c == '\f') add("\\f");
-            else if (c == '\n') add("\\n");
-            else if (c == '\r') add("\\r");
-            else if (c == '\t') add("\\t");
-            else if (Character.isISOControl(c)) {
+            if (c == '"') {
+                add("\\\"");
+            } else if (c == '\\') {
+                add("\\\\");
+            } else if (c == '/') {
+                add("\\/");
+            } else if (c == '\b') {
+                add("\\b");
+            } else if (c == '\f') {
+                add("\\f");
+            } else if (c == '\n') {
+                add("\\n");
+            } else if (c == '\r') {
+                add("\\r");
+            } else if (c == '\t') {
+                add("\\t");
+            } else if (Character.isISOControl(c)) {
                 unicode(c);
             } else {
                 add(c);
@@ -167,22 +203,20 @@ public class JSONWriter {
     }
 
     private void add(Object obj) {
-        buf.append(obj);
+        this.buf.append(obj);
     }
 
     private void add(char c) {
-        buf.append(c);
+        this.buf.append(c);
     }
-
-    static char[] hex = "0123456789ABCDEF".toCharArray();
 
     private void unicode(char c) {
         add("\\u");
         int n = c;
-        for (int i = 0; i < 4; ++i) {
-            int digit = (n & 0xf000) >> 12;
+        for (int i = 0; i < FOUR; ++i) {
+            int digit = (n & 0xf000) >> TWELVE;
             add(hex[digit]);
-            n <<= 4;
+            n <<= FOUR;
         }
     }
 
