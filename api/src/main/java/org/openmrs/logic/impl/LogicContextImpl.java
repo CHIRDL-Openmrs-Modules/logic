@@ -191,7 +191,7 @@ public class LogicContextImpl implements LogicContext {
 						r = ((ReferenceRule) rule).eval(this, currPatientId, criteria);
 					} else {
 						r = rule.eval(this, currPatientId, parameters);
-						r = applyCriteria(r, criteria);
+						applyCriteria(r, criteria);
 					}
 					
 					resultMap.put(currPatientId, r);

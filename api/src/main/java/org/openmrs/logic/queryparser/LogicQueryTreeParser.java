@@ -63,84 +63,99 @@ public LogicQueryTreeParser() {
 		try {      // for error handling
 			{
 			{
-			if (_t==null) _t=ASTNULL;
-			switch ( _t.getType()) {
-			case LAST:
-			case FIRST:
-			case EARLIEST:
-			case LATEST:
-			case EXIST:
-			case EXISTS:
-			{
-				transform=of_from_AST(_t);
-				_t = _retTree;
-				break;
+			if (_t==null) {
+			    _t=ASTNULL;
 			}
-			case ID:
-			case INTLIT:
-			case STRING_LITERAL:
-			{
-				break;
-			}
-			default:
-			{
-				throw new NoViableAltException(_t);
-			}
-			}
-			}
-			{
-			if (_t==null) _t=ASTNULL;
-			switch ( _t.getType()) {
-			case ID:
-			{
-				AST __t124 = _t;
-				ift = _t==ASTNULL ? null :(AST)_t;
-				match(_t,ID);
-				_t = _t.getFirstChild();
-				a = ift.getText(); //System.err.println("text = " + a);
-								  				      	
-								
-				_t = __t124;
-				_t = _t.getNextSibling();
-				break;
-			}
-			case STRING_LITERAL:
-			{
-				AST __t125 = _t;
-				ifst = _t==ASTNULL ? null :(AST)_t;
-				match(_t,STRING_LITERAL);
-				_t = _t.getFirstChild();
-				a = ifst.getText(); //System.err.println("text = " + a);
-								      	
-								
-				_t = __t125;
-				_t = _t.getNextSibling();
-				break;
-			}
-			case INTLIT:
-			{
-				AST __t126 = _t;
-				val = _t==ASTNULL ? null :(AST)_t;
-				match(_t,INTLIT);
-				_t = _t.getFirstChild();
-				a = val.getText(); //System.err.println("text = " + a);
-								      	// This is an error on LHS of an expr
-								
-				_t = __t126;
-				_t = _t.getNextSibling();
-				break;
-			}
-			default:
-			{
-				throw new NoViableAltException(_t);
-			}
+			if (_t != null) {
+    			switch ( _t.getType()) {
+    			case LAST:
+    			case FIRST:
+    			case EARLIEST:
+    			case LATEST:
+    			case EXIST:
+    			case EXISTS:
+    			{
+    				transform=of_from_AST(_t);
+    				_t = _retTree;
+    				break;
+    			}
+    			case ID:
+    			case INTLIT:
+    			case STRING_LITERAL:
+    			{
+    				break;
+    			}
+    			default:
+    			{
+    				throw new NoViableAltException(_t);
+    			}
+    			}
 			}
 			}
 			{
-			if (_t==null) _t=ASTNULL;
-			if ((_tokenSet_0.member(_t.getType()))) {
+			if (_t==null) {
+			    _t=ASTNULL;
+			}
+			if(_t != null) {
+    			switch ( _t.getType()) {
+    			case ID:
+    			{
+    				AST __t124 = _t;
+    				ift = _t==ASTNULL ? null :(AST)_t;
+    				match(_t,ID);
+    				_t = _t.getFirstChild();
+    				if (ift != null) {
+    				    a = ift.getText(); //System.err.println("text = " + a);
+    				}
+    								  				      	
+    								
+    				_t = __t124;
+    				_t = _t.getNextSibling();
+    				break;
+    			}
+    			case STRING_LITERAL:
+    			{
+    				AST __t125 = _t;
+    				ifst = _t==ASTNULL ? null :(AST)_t;
+    				match(_t,STRING_LITERAL);
+    				_t = _t.getFirstChild();
+    				if (ifst != null) {
+    				    a = ifst.getText(); //System.err.println("text = " + a);
+    				}
+    								      	
+    								
+    				_t = __t125;
+    				_t = _t.getNextSibling();
+    				break;
+    			}
+    			case INTLIT:
+    			{
+    				AST __t126 = _t;
+    				val = _t==ASTNULL ? null :(AST)_t;
+    				match(_t,INTLIT);
+    				_t = _t.getFirstChild();
+    				if (val != null) {
+    				    a = val.getText(); //System.err.println("text = " + a);
+    								      	// This is an error on LHS of an expr
+    				}
+    								
+    				_t = __t126;
+    				_t = _t.getNextSibling();
+    				break;
+    			}
+    			default:
+    			{
+    				throw new NoViableAltException(_t);
+    			}
+    			}
+			}
+			}
+			{
+			if (_t==null) {
+			    _t=ASTNULL;
+			}
+			if ((_t != null) && (_tokenSet_0.member(_t.getType()))) {
 				{
-				if (_t==null) _t=ASTNULL;
 				switch ( _t.getType()) {
 				case EQUALS:
 				case LT:
@@ -159,11 +174,13 @@ public LogicQueryTreeParser() {
 						idt = _t==ASTNULL ? null :(AST)_t;
 						match(_t,ID);
 						_t = _t.getFirstChild();
-						b += idt.getText(); //System.err.println("text = " + b);
-											      	lc = new LogicCriteriaImpl(null,a);
-									 				lc.appendExpression(comp_op, b);
-									 				//lc_return = lc.applyTransform(transform);
-									 				lcFormed = true;
+						if (idt != null) {
+						    b += idt.getText(); //System.err.println("text = " + b);
+						}
+				      	lc = new LogicCriteriaImpl(null,a);
+		 				lc.appendExpression(comp_op, b);
+		 				//lc_return = lc.applyTransform(transform);
+		 				lcFormed = true;
 											
 						_t = __t130;
 						_t = _t.getNextSibling();
@@ -175,11 +192,13 @@ public LogicQueryTreeParser() {
 						idstr = _t==ASTNULL ? null :(AST)_t;
 						match(_t,STRING_LITERAL);
 						_t = _t.getFirstChild();
-						b += idstr.getText(); //System.err.println("text = " + b);
-												  	lc = new LogicCriteriaImpl(null,a);
-												 	lc.appendExpression(comp_op, b);
-									 				//lc_return = lc.applyTransform(transform);
-													lcFormed = true;
+						if (idstr != null) {
+						    b += idstr.getText(); //System.err.println("text = " + b);
+						}
+					  	lc = new LogicCriteriaImpl(null,a);
+					 	lc.appendExpression(comp_op, b);
+		 				//lc_return = lc.applyTransform(transform);
+						lcFormed = true;
 												
 						_t = __t131;
 						_t = _t.getNextSibling();
@@ -191,15 +210,17 @@ public LogicQueryTreeParser() {
 						valstr = _t==ASTNULL ? null :(AST)_t;
 						match(_t,INTLIT);
 						_t = _t.getFirstChild();
-						b += valstr.getText(); //System.err.println("text = " + b);
-												  	Integer i = null;
-												
-												  	i = Integer.parseInt(b);
-												  	lc = new LogicCriteriaImpl(null,a);
-									 				
-										  			lc.appendExpression(comp_op, i);
-									 				//lc_return = lc.applyTransform(transform);
-									 				lcFormed = true;
+						if (valstr != null) {
+						    b += valstr.getText(); //System.err.println("text = " + b);
+						}
+					  	Integer i = null;
+					
+					  	i = Integer.parseInt(b);
+					  	lc = new LogicCriteriaImpl(null,a);
+		 				
+			  			lc.appendExpression(comp_op, i);
+		 				//lc_return = lc.applyTransform(transform);
+		 				lcFormed = true;
 												
 						_t = __t132;
 						_t = _t.getNextSibling();
@@ -289,9 +310,8 @@ public LogicQueryTreeParser() {
 				}
 				}
 			}
-			else if ((_t.getType()==3||_t.getType()==BEFORE||_t.getType()==AFTER)) {
+			else if ((_t != null) && (_t.getType()==3||_t.getType()==BEFORE||_t.getType()==AFTER)) {
 				{
-				if (_t==null) _t=ASTNULL;
 				switch ( _t.getType()) {
 				case BEFORE:
 				case AFTER:
@@ -351,106 +371,107 @@ public LogicQueryTreeParser() {
 		AST of_from_AST_AST_in = (_t == ASTNULL) ? null : (AST)_t;
 		
 		try {      // for error handling
-			if (_t==null) _t=ASTNULL;
-			switch ( _t.getType()) {
-			case LAST:
-			case LATEST:
-			{
-				{
-				{
-				if (_t==null) _t=ASTNULL;
-				switch ( _t.getType()) {
-				case LAST:
-				{
-					AST tmp241_AST_in = (AST)_t;
-					match(_t,LAST);
-					_t = _t.getNextSibling();
-					break;
-				}
-				case LATEST:
-				{
-					AST tmp242_AST_in = (AST)_t;
-					match(_t,LATEST);
-					_t = _t.getNextSibling();
-					break;
-				}
-				default:
-				{
-					throw new NoViableAltException(_t);
-				}
-				}
-				}
-				s = Operator.LAST;
-				}
-				break;
+			if (_t==null) {
+			    _t=ASTNULL;
 			}
-			case FIRST:
-			case EARLIEST:
-			{
-				{
-				{
-				if (_t==null) _t=ASTNULL;
-				switch ( _t.getType()) {
-				case FIRST:
-				{
-					AST tmp243_AST_in = (AST)_t;
-					match(_t,FIRST);
-					_t = _t.getNextSibling();
-					break;
-				}
-				case EARLIEST:
-				{
-					AST tmp244_AST_in = (AST)_t;
-					match(_t,EARLIEST);
-					_t = _t.getNextSibling();
-					break;
-				}
-				default:
-				{
-					throw new NoViableAltException(_t);
-				}
-				}
-				}
-				s = Operator.FIRST;
-				}
-				break;
-			}
-			case EXIST:
-			case EXISTS:
-			{
-				{
-				{
-				if (_t==null) _t=ASTNULL;
-				switch ( _t.getType()) {
-				case EXIST:
-				{
-					AST tmp245_AST_in = (AST)_t;
-					match(_t,EXIST);
-					_t = _t.getNextSibling();
-					break;
-				}
-				case EXISTS:
-				{
-					AST tmp246_AST_in = (AST)_t;
-					match(_t,EXISTS);
-					_t = _t.getNextSibling();
-					break;
-				}
-				default:
-				{
-					throw new NoViableAltException(_t);
-				}
-				}
-				}
-				s = Operator.EXISTS;
-				}
-				break;
-			}
-			default:
-			{
-				throw new NoViableAltException(_t);
-			}
-			}
+			if (_t != null) {
+    			switch ( _t.getType()) {
+    			case LAST:
+    			case LATEST:
+    			{
+    				{
+    				{
+    				switch ( _t.getType()) {
+    				case LAST:
+    				{
+    					AST tmp241_AST_in = (AST)_t;
+    					match(_t,LAST);
+    					_t = _t.getNextSibling();
+    					break;
+    				}
+    				case LATEST:
+    				{
+    					AST tmp242_AST_in = (AST)_t;
+    					match(_t,LATEST);
+    					_t = _t.getNextSibling();
+    					break;
+    				}
+    				default:
+    				{
+    					throw new NoViableAltException(_t);
+    				}
+    				}
+    				}
+    				s = Operator.LAST;
+    				}
+    				break;
+    			}
+    			case FIRST:
+    			case EARLIEST:
+    			{
+    				{
+    				{
+    				switch ( _t.getType()) {
+    				case FIRST:
+    				{
+    					AST tmp243_AST_in = (AST)_t;
+    					match(_t,FIRST);
+    					_t = _t.getNextSibling();
+    					break;
+    				}
+    				case EARLIEST:
+    				{
+    					AST tmp244_AST_in = (AST)_t;
+    					match(_t,EARLIEST);
+    					_t = _t.getNextSibling();
+    					break;
+    				}
+    				default:
+    				{
+    					throw new NoViableAltException(_t);
+    				}
+    				}
+    				}
+    				s = Operator.FIRST;
+    				}
+    				break;
+    			}
+    			case EXIST:
+    			case EXISTS:
+    			{
+    				{
+    				{
+    				switch ( _t.getType()) {
+    				case EXIST:
+    				{
+    					AST tmp245_AST_in = (AST)_t;
+    					match(_t,EXIST);
+    					_t = _t.getNextSibling();
+    					break;
+    				}
+    				case EXISTS:
+    				{
+    					AST tmp246_AST_in = (AST)_t;
+    					match(_t,EXISTS);
+    					_t = _t.getNextSibling();
+    					break;
+    				}
+    				default:
+    				{
+    					throw new NoViableAltException(_t);
+    				}
+    				}
+    				}
+    				s = Operator.EXISTS;
+    				}
+    				break;
+    			}
+    			default:
+    			{
+    				throw new NoViableAltException(_t);
+    			}
+    			}
+		    }
 		}
 		catch (RecognitionException ex) {
 			reportError(ex);
@@ -468,93 +489,97 @@ public LogicQueryTreeParser() {
 		
 		try {      // for error handling
 			{
-			if (_t==null) _t=ASTNULL;
-			switch ( _t.getType()) {
-			case EQUALS:
-			{
-				AST __t146 = _t;
-				AST tmp247_AST_in = (AST)_t;
-				match(_t,EQUALS);
-				_t = _t.getFirstChild();
-				
-								//System.err.println("Found = ");
-								s = Operator.EQUALS;
-							
-				_t = __t146;
-				_t = _t.getNextSibling();
-				break;
+			if (_t==null) {
+			    _t=ASTNULL;
 			}
-			case GTE:
-			{
-				AST __t147 = _t;
-				AST tmp248_AST_in = (AST)_t;
-				match(_t,GTE);
-				_t = _t.getFirstChild();
-				
-								//System.err.println("Found >= ");
-								s = Operator.GTE;
-							
-				_t = __t147;
-				_t = _t.getNextSibling();
-				break;
-			}
-			case GT:
-			{
-				AST __t148 = _t;
-				AST tmp249_AST_in = (AST)_t;
-				match(_t,GT);
-				_t = _t.getFirstChild();
-				
-								//System.err.println("Found > ");
-								s = Operator.GT; 
-							
-				_t = __t148;
-				_t = _t.getNextSibling();
-				break;
-			}
-			case LT:
-			{
-				AST __t149 = _t;
-				AST tmp250_AST_in = (AST)_t;
-				match(_t,LT);
-				_t = _t.getFirstChild();
-				
-								//System.err.println("Found < ");
-								s = Operator.LT;
-								 
-							
-				_t = __t149;
-				_t = _t.getNextSibling();
-				break;
-			}
-			case LTE:
-			{
-				AST __t150 = _t;
-				AST tmp251_AST_in = (AST)_t;
-				match(_t,LTE);
-				_t = _t.getFirstChild();
-				
-								//System.err.println("Found <= ");
-								s = Operator.LTE; 
-							
-				_t = __t150;
-				_t = _t.getNextSibling();
-				AST __t151 = _t;
-				AST tmp252_AST_in = (AST)_t;
-				match(_t,NE);
-				_t = _t.getFirstChild();
-				
-								//System.err.println("Found <> ");
-								s = Operator.NOT_EXISTS; 
-							
-				_t = __t151;
-				_t = _t.getNextSibling();
-				break;
-			}
-			default:
-			{
-				throw new NoViableAltException(_t);
-			}
+			if (_t != null) {
+    			switch ( _t.getType()) {
+    			case EQUALS:
+    			{
+    				AST __t146 = _t;
+    				AST tmp247_AST_in = (AST)_t;
+    				match(_t,EQUALS);
+    				_t = _t.getFirstChild();
+    				
+    								//System.err.println("Found = ");
+    								s = Operator.EQUALS;
+    							
+    				_t = __t146;
+    				_t = _t.getNextSibling();
+    				break;
+    			}
+    			case GTE:
+    			{
+    				AST __t147 = _t;
+    				AST tmp248_AST_in = (AST)_t;
+    				match(_t,GTE);
+    				_t = _t.getFirstChild();
+    				
+    								//System.err.println("Found >= ");
+    								s = Operator.GTE;
+    							
+    				_t = __t147;
+    				_t = _t.getNextSibling();
+    				break;
+    			}
+    			case GT:
+    			{
+    				AST __t148 = _t;
+    				AST tmp249_AST_in = (AST)_t;
+    				match(_t,GT);
+    				_t = _t.getFirstChild();
+    				
+    								//System.err.println("Found > ");
+    								s = Operator.GT; 
+    							
+    				_t = __t148;
+    				_t = _t.getNextSibling();
+    				break;
+    			}
+    			case LT:
+    			{
+    				AST __t149 = _t;
+    				AST tmp250_AST_in = (AST)_t;
+    				match(_t,LT);
+    				_t = _t.getFirstChild();
+    				
+    								//System.err.println("Found < ");
+    								s = Operator.LT;
+    								 
+    							
+    				_t = __t149;
+    				_t = _t.getNextSibling();
+    				break;
+    			}
+    			case LTE:
+    			{
+    				AST __t150 = _t;
+    				AST tmp251_AST_in = (AST)_t;
+    				match(_t,LTE);
+    				_t = _t.getFirstChild();
+    				
+    								//System.err.println("Found <= ");
+    								s = Operator.LTE; 
+    							
+    				_t = __t150;
+    				_t = _t.getNextSibling();
+    				AST __t151 = _t;
+    				AST tmp252_AST_in = (AST)_t;
+    				match(_t,NE);
+    				_t = _t.getFirstChild();
+    				
+    								//System.err.println("Found <> ");
+    								s = Operator.NOT_EXISTS; 
+    							
+    				_t = __t151;
+    				_t = _t.getNextSibling();
+    				break;
+    			}
+    			default:
+    			{
+    				throw new NoViableAltException(_t);
+    			}
+    			}
 			}
 			}
 		}
@@ -574,40 +599,44 @@ public LogicQueryTreeParser() {
 		
 		try {      // for error handling
 			{
-			if (_t==null) _t=ASTNULL;
-			switch ( _t.getType()) {
-			case BEFORE:
-			{
-				AST __t154 = _t;
-				AST tmp253_AST_in = (AST)_t;
-				match(_t,BEFORE);
-				_t = _t.getFirstChild();
-				
-								//System.err.println("Found BEFORE ");
-								s = Operator.BEFORE;
-							
-				_t = __t154;
-				_t = _t.getNextSibling();
-				break;
+			if (_t==null) {
+			    _t=ASTNULL;
 			}
-			case AFTER:
-			{
-				AST __t155 = _t;
-				AST tmp254_AST_in = (AST)_t;
-				match(_t,AFTER);
-				_t = _t.getFirstChild();
-				
-								//System.err.println("Found AFTER ");
-								s = Operator.AFTER;
-							
-				_t = __t155;
-				_t = _t.getNextSibling();
-				break;
-			}
-			default:
-			{
-				throw new NoViableAltException(_t);
-			}
+			if (_t != null) {
+    			switch ( _t.getType()) {
+    			case BEFORE:
+    			{
+    				AST __t154 = _t;
+    				AST tmp253_AST_in = (AST)_t;
+    				match(_t,BEFORE);
+    				_t = _t.getFirstChild();
+    				
+    								//System.err.println("Found BEFORE ");
+    								s = Operator.BEFORE;
+    							
+    				_t = __t154;
+    				_t = _t.getNextSibling();
+    				break;
+    			}
+    			case AFTER:
+    			{
+    				AST __t155 = _t;
+    				AST tmp254_AST_in = (AST)_t;
+    				match(_t,AFTER);
+    				_t = _t.getFirstChild();
+    				
+    								//System.err.println("Found AFTER ");
+    								s = Operator.AFTER;
+    							
+    				_t = __t155;
+    				_t = _t.getNextSibling();
+    				break;
+    			}
+    			default:
+    			{
+    				throw new NoViableAltException(_t);
+    			}
+    			}
 			}
 			}
 		}
@@ -707,7 +736,7 @@ public LogicQueryTreeParser() {
 	}
 	
 	
-	public static final String[] _tokenNames = {
+	protected static final String[] _tokenNames = {
 		"<0>",
 		"EOF",
 		"<2>",
