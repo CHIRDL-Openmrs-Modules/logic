@@ -353,8 +353,10 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
      * @return
      */
 	private RuleProvider getRuleProvider(TokenRegistration tokenRegistration) {
+	    String tokenRegProviderClassName = tokenRegistration.getProviderClassName();
 	    for (RuleProvider provider : ruleProviders) {
-	    	if (provider.getClass().getName().equals(tokenRegistration.getProviderClassName())) {
+	        String providerClassName = provider.getClass().getName();
+	    	if (providerClassName.equals(tokenRegProviderClassName)) {
 	    		return provider;
 	    	}
 	    }

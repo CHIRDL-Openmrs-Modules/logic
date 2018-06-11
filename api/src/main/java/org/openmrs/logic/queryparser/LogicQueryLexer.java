@@ -393,10 +393,6 @@ tryAgain:
 						mGT(true);
 						theRetToken=_returnToken;
 					}
-					else if ((LA(1)=='\'') && (true)) {
-						mSINGLE_QUOTE(true);
-						theRetToken=_returnToken;
-					}
 					else {
 						mINTLIT(true);
 						theRetToken=_returnToken;

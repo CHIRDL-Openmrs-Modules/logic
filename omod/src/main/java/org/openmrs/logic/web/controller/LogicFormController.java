@@ -93,7 +93,7 @@ public class LogicFormController {
 				modelMap.addAttribute("detail", exception2String(e));
 			}
 			
-			modelMap.addAttribute("patientId", patientId.intValue());
+			modelMap.addAttribute("patientId", patientId);
 			modelMap.addAttribute("patientIdentifier", patientIdentifier);
 			modelMap.addAttribute("patientName", patientName);
 			
