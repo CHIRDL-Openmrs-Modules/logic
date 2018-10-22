@@ -70,16 +70,15 @@ public class CompilingClassLoader extends ClassLoader {
 		byte raw[] = new byte[(int) len];
 		
 		// Open the file
-		FileInputStream fin = new FileInputStream(file);
+		try (FileInputStream fin = new FileInputStream(file)) {
 		
-		// Read all of it into the array; if we don't get all,
-		// then it's an error.
-		int r = fin.read(raw);
-		if (r != len)
-			throw new IOException("Can't read all bytes from java file, " + r + " != " + len);
-		
-		// Don't forget to close the file!
-		fin.close();
+    		// Read all of it into the array; if we don't get all,
+    		// then it's an error.
+    		int r = fin.read(raw);
+    		if (r != len) {
+    			throw new IOException("Can't read all bytes from java file, " + r + " != " + len);
+    		}
+		}
 		
 		// And finally return the file contents as an array
 		return raw;

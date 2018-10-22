@@ -61,10 +61,9 @@ public class JavaLanguageHandler extends CompilableLanguageHandler {
 		
 		// only compile when the java file is not exist or the concept derived is updated after the source file last modified
 		if (!javaFile.exists() || modifiedDate.after(new Date(javaFile.lastModified()))) {
-			try {
-				BufferedWriter writer = new BufferedWriter(new FileWriter(javaFile));
+			try (BufferedWriter writer = new BufferedWriter(new FileWriter(javaFile))) {
+				
 				writer.write(logicRule.getRuleContent());
-				writer.close();
 			}
 			catch (IOException e) {
 				log.error("Failed saving java rule file ...", e);

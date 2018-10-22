@@ -1605,44 +1605,6 @@ public LogicQueryBaseParser(ParserSharedInputState state) {
 			match(THAN);
 			binary_comp_op_AST = (AST)currentAST.root;
 		}
-		else if ((LA(1)==GREATER)) {
-			AST tmp144_AST = null;
-			tmp144_AST = astFactory.create(LT(1));
-			astFactory.makeASTRoot(currentAST, tmp144_AST);
-			match(GREATER);
-			AST tmp145_AST = null;
-			tmp145_AST = astFactory.create(LT(1));
-			astFactory.addASTChild(currentAST, tmp145_AST);
-			match(THAN);
-			AST tmp146_AST = null;
-			tmp146_AST = astFactory.create(LT(1));
-			astFactory.addASTChild(currentAST, tmp146_AST);
-			match(OR);
-			AST tmp147_AST = null;
-			tmp147_AST = astFactory.create(LT(1));
-			astFactory.addASTChild(currentAST, tmp147_AST);
-			match(EQUAL);
-			binary_comp_op_AST = (AST)currentAST.root;
-		}
-		else if ((LA(1)==LESS)) {
-			AST tmp148_AST = null;
-			tmp148_AST = astFactory.create(LT(1));
-			astFactory.makeASTRoot(currentAST, tmp148_AST);
-			match(LESS);
-			AST tmp149_AST = null;
-			tmp149_AST = astFactory.create(LT(1));
-			astFactory.addASTChild(currentAST, tmp149_AST);
-			match(THAN);
-			AST tmp150_AST = null;
-			tmp150_AST = astFactory.create(LT(1));
-			astFactory.addASTChild(currentAST, tmp150_AST);
-			match(OR);
-			AST tmp151_AST = null;
-			tmp151_AST = astFactory.create(LT(1));
-			astFactory.addASTChild(currentAST, tmp151_AST);
-			match(EQUAL);
-			binary_comp_op_AST = (AST)currentAST.root;
-		}
 		else if ((LA(1)==IN)) {
 			AST tmp152_AST = null;
 			tmp152_AST = astFactory.create(LT(1));
@@ -2222,9 +2184,6 @@ public LogicQueryBaseParser(ParserSharedInputState state) {
 			{
 			if ((LA(1)==LITERAL_OCCURRED)) {
 				match(LITERAL_OCCURRED);
-			}
-			else if ((LA(1)==LITERAL_Occurred)) {
-				match(LITERAL_Occurred);
 			}
 			else if ((LA(1)==LITERAL_Occurred)) {
 				match(LITERAL_Occurred);
@@ -3444,7 +3403,7 @@ public LogicQueryBaseParser(ParserSharedInputState state) {
 	}
 	
 	
-	public static final String[] _tokenNames = {
+	protected static final String[] _tokenNames = {
 		"<0>",
 		"EOF",
 		"<2>",

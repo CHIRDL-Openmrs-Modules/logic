@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>logic</artifactId>
-		<version>0.5.4</version>
+		<version>0.5.5</version>
 	</parent>
 	<artifactId>logic-api</artifactId>
 	<packaging>jar</packaging>
@@ -38,10 +38,15 @@
 			<type>pom</type>
 		</dependency>
 		<dependency>
-				<groupId>org.openmrs.module</groupId>
-				<artifactId>legacyui-omod</artifactId>
-				<type>jar</type>
-			</dependency>
+			<groupId>org.openmrs.module</groupId>
+			<artifactId>legacyui-omod</artifactId>
+			<type>jar</type>
+		</dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>    
+            <type>jar</type>      
+        </dependency>
 	</dependencies>
 	
 	<build>

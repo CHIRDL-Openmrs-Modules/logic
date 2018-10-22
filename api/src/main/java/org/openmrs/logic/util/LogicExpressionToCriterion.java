@@ -42,7 +42,7 @@ import org.openmrs.logic.op.Operator;
  */
 public class LogicExpressionToCriterion {
 	
-	public static final Map<String, String> map = new HashMap<String, String>();
+	protected static final Map<String, String> map = new HashMap<String, String>();
 	
 	public List<Criterion> evaluateBefore(String leftItem, Operand leftOperand, Operand rightOperand, Operator operator,
 	                                      Date indexDate, List<Criterion> c, Criteria criteria) throws LogicException {
@@ -120,8 +120,8 @@ public class LogicExpressionToCriterion {
 		if (!(rightOperand instanceof OperandDate))
 			throw new LogicException("'asof' is not a valid operator on " + leftItem + " and " + rightOperand);
 		
-		indexDate = (Date) rightOperand;
-		nullSafeCriterionAdd(c, Restrictions.le(mapHelper(leftItem), indexDate));
+		Date newIndexDate = (Date) rightOperand;
+		nullSafeCriterionAdd(c, Restrictions.le(mapHelper(leftItem), newIndexDate));
 		return c;
 	}
 	
