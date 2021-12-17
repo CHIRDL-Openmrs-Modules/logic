@@ -15,16 +15,15 @@ package org.openmrs.logic;
 
 import java.util.Map;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Cohort;
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.ReferenceRule;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 
 /**
  * TODO Add more tests here
@@ -73,8 +72,8 @@ public class LogicEvalTest extends BaseModuleContextSensitiveTest {
 		//long l = System.currentTimeMillis();
 		//System.out.println(new Date());
 		Map<Integer, Result> m = Context.getLogicService().eval(cohort, "\"TEMPERATURE (C)\"");
-		Assert.assertNotNull(m);
-		Assert.assertTrue(m.size() > 0);
+		Assertions.assertNotNull(m);
+		Assertions.assertTrue(m.size() > 0);
 		//System.out.println(m.toString());
 		//System.out.println(System.currentTimeMillis() - l);
 		

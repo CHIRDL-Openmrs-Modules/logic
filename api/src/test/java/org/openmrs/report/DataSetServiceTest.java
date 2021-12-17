@@ -17,14 +17,10 @@ import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Cohort;
-//import org.openmrs.api.DataSetService;
-import org.openmrs.api.context.Context;
 import org.openmrs.logic.result.Result;
-//import org.openmrs.reporting.PatientCharacteristicFilter;
-//import org.openmrs.reporting.PatientSearch;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 
 /**
  * Test class that tries to run a portion of the
