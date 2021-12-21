@@ -15,8 +15,8 @@ package org.openmrs.logic.datasource;
 
 import java.util.Map;
 
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openmrs.Cohort;
 import org.openmrs.Encounter;
@@ -41,7 +41,7 @@ public class EncounterDataSourceTest extends BaseModuleContextSensitiveTest {
 	/**
 	 * Run before each test to get the logic source
 	 */
-	@Before
+	@BeforeEach
 	public void doSetup() {
 		dataSource = Context.getLogicService().getLogicDataSource("encounter");
 	}

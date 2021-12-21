@@ -3,8 +3,8 @@ package org.openmrs.logic.impl;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openmrs.Patient;
 import org.openmrs.annotation.Authorized;
@@ -19,7 +19,7 @@ import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 
 public class LogicServiceImplTest extends BaseModuleContextSensitiveTest {
 	
-	@Before
+	@BeforeEach
 	public void prepareData() throws Exception {
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/logic/include/LogicTests-patients.xml");

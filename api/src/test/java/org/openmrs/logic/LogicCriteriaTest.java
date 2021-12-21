@@ -15,8 +15,8 @@ package org.openmrs.logic;
 
 import java.util.Calendar;
 
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openmrs.logic.impl.LogicCriteriaImpl;
 import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
@@ -31,7 +31,7 @@ public class LogicCriteriaTest extends BaseModuleContextSensitiveTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Before
+	@BeforeEach
 	public void runBeforeEachTest() throws Exception {
 		executeDataSet("org/openmrs/logic/include/LogicStandardDatasets.xml");
 	}

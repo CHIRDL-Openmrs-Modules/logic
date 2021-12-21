@@ -16,9 +16,9 @@ package org.openmrs.logic;
 import java.util.ArrayList;
 import java.util.Map;
 
-import org.junit.Ignore;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
@@ -116,7 +116,7 @@ public class LogicBasicTest extends BaseModuleContextSensitiveTest {
 	 * @throws Exception
 	 */
 	@Test
-	@Ignore
+	@Disabled
 	//until we have an OrderDataSource
 	public void shouldFilterUsingComposition() throws Exception {
 		executeDataSet("org/openmrs/logic/include/LogicBasicTest.concepts.xml");

@@ -1,7 +1,7 @@
 package org.openmrs.logic.datasource;
 
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
@@ -15,7 +15,7 @@ import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 
 public class PatientDataSourceTest extends BaseModuleContextSensitiveTest {
 	
-	@Before
+	@BeforeEach
 	public void prepareData() throws Exception {
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/logic/include/LogicTests-patients.xml");

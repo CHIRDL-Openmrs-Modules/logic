@@ -4,8 +4,8 @@ package org.openmrs.logic.token;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openmrs.annotation.Authorized;
 import org.openmrs.api.context.Context;
@@ -19,7 +19,7 @@ public class TokenServiceTest extends BaseModuleContextSensitiveTest {
 	
 	private TokenService service;
 	
-	@Before
+	@BeforeEach
 	public void before() {
 		this.service = Context.getService(TokenService.class);
 	}

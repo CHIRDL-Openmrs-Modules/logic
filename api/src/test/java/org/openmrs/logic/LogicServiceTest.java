@@ -21,8 +21,8 @@ import java.util.Set;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.junit.Before;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
@@ -45,7 +45,7 @@ public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 	/**
 	 * @see org.springframework.test.AbstractTransactionalSpringContextTests#onSetUpInTransaction()
 	 */
-	@Before
+	@BeforeEach
 	public void runBeforeEachTest() throws Exception {
 		executeDataSet("org/openmrs/logic/include/LogicStandardDatasets.xml");
 		executeDataSet("org/openmrs/logic/include/LogicTests-patients.xml");
