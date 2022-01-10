@@ -1,8 +1,8 @@
 package org.openmrs.logic.datasource;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
@@ -11,13 +11,12 @@ import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.impl.LogicContextImpl;
 import org.openmrs.logic.impl.LogicCriteriaImpl;
 import org.openmrs.logic.result.Result;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
-import org.openmrs.test.Verifies;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 
 public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 	
-	@Before
+	@BeforeEach
 	public void prepareData() throws Exception {
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/logic/include/LogicTests-patients.xml");
@@ -38,7 +37,7 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("BIRTHDATE");
 		Result result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertEquals(Context.getDateFormat().parse("01/01/2000"), result.toDatetime());
+		Assertions.assertEquals(Context.getDateFormat().parse("01/01/2000"), result.toDatetime());
 	}
 	
 	/**
@@ -54,7 +53,7 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("BIRTHDATE ESTIMATED");
 		Result result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertEquals(false, result.toBoolean());
+		Assertions.assertEquals(false, result.toBoolean());
 	}
 	
 	/**
@@ -70,7 +69,7 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("GENDER");
 		Result result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertEquals("M", result.toString());
+		Assertions.assertEquals("M", result.toString());
 	}
 	
 	/**
@@ -86,11 +85,11 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("GENDER").equalTo("M");
 		Result result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertTrue(result.toBoolean());
+		Assertions.assertTrue(result.toBoolean());
 		
 		criteria = new LogicCriteriaImpl("GENDER").equalTo("F");
 		result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertFalse(result.toBoolean());
+		Assertions.assertFalse(result.toBoolean());
 	}
 	
 	/**
@@ -106,12 +105,12 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("CAUSE OF DEATH");
 		Result result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertEquals("ASPIRIN", result.toString());
+		Assertions.assertEquals("ASPIRIN", result.toString());
 		
 		who = Context.getPatientService().getPatient(2);
 		context = new LogicContextImpl(who.getPatientId());
 		result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertTrue(result.isEmpty());
+		Assertions.assertTrue(result.isEmpty());
 	}
 	
 	/**
@@ -127,12 +126,12 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("DEAD");
 		Result result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertTrue(result.toBoolean());
+		Assertions.assertTrue(result.toBoolean());
 		
 		who = Context.getPatientService().getPatient(2);
 		context = new LogicContextImpl(who.getPatientId());
 		result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertTrue(result.isEmpty());
+		Assertions.assertTrue(result.isEmpty());
 	}
 	
 	/**
@@ -148,19 +147,18 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 		
 		LogicCriteria criteria = new LogicCriteriaImpl("DEATH DATE");
 		Result result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertEquals(Context.getDateFormat().parse("07/11/2008"), result.toDatetime());
+		Assertions.assertEquals(Context.getDateFormat().parse("07/11/2008"), result.toDatetime());
 		
 		who = Context.getPatientService().getPatient(2);
 		context = new LogicContextImpl(who.getPatientId());
 		result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertTrue(result.isEmpty());
+		Assertions.assertTrue(result.isEmpty());
 	}
 	
 	/**
 	 * @see {@link PersonDataSource#read(LogicContext,Cohort,LogicCriteria)}
 	 */
 	@Test
-	@Verifies(value = "should get family name", method = "read(LogicContext,Cohort,LogicCriteria)")
 	public void read_shouldGetFamilyName() throws Exception {
 		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
 		Patient who = Context.getPatientService().getPatient(4);
@@ -168,20 +166,19 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who.getPatientId());
 		LogicCriteria criteria = new LogicCriteriaImpl("FAMILY NAME").equalTo("Doe");
 		Result result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertEquals("Doe", result.toString());
+		Assertions.assertEquals("Doe", result.toString());
 		
 		who = Context.getPatientService().getPatient(2);
 		context = new LogicContextImpl(who.getPatientId());
 		criteria = new LogicCriteriaImpl("FAMILY NAME").equalTo("Does");
 		result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertTrue(result.isEmpty());
+		Assertions.assertTrue(result.isEmpty());
 	}
 	
 	/**
 	 * @see {@link PersonDataSource#read(LogicContext,Cohort,LogicCriteria)}
 	 */
 	@Test
-	@Verifies(value = "should get family name2", method = "read(LogicContext,Cohort,LogicCriteria)")
 	public void read_shouldGetFamilyName2() throws Exception {
 		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
 		Patient who = Context.getPatientService().getPatient(2);
@@ -189,19 +186,18 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who.getPatientId());
 		LogicCriteria criteria = new LogicCriteriaImpl("FAMILY NAME2").equalTo("Jr.");
 		Result result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertEquals("Jr.", result.toString());
+		Assertions.assertEquals("Jr.", result.toString());
 		
 		who = Context.getPatientService().getPatient(4);
 		context = new LogicContextImpl(who.getPatientId());
 		result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertTrue(result.isEmpty());
+		Assertions.assertTrue(result.isEmpty());
 	}
 	
 	/**
 	 * @see {@link PersonDataSource#read(LogicContext,Cohort,LogicCriteria)}
 	 */
 	@Test
-	@Verifies(value = "should get first name", method = "read(LogicContext,Cohort,LogicCriteria)")
 	public void read_shouldGetFirstName() throws Exception {
 		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
 		Patient who = Context.getPatientService().getPatient(3);
@@ -209,19 +205,18 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who.getPatientId());
 		LogicCriteria criteria = new LogicCriteriaImpl("GIVEN NAME").equalTo("Other John");
 		Result result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertEquals("Other John", result.toString());
+		Assertions.assertEquals("Other John", result.toString());
 		
 		who = Context.getPatientService().getPatient(4);
 		context = new LogicContextImpl(who.getPatientId());
 		result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertTrue(result.isEmpty());
+		Assertions.assertTrue(result.isEmpty());
 	}
 	
 	/**
 	 * @see {@link PersonDataSource#read(LogicContext,Cohort,LogicCriteria)}
 	 */
 	@Test
-	@Verifies(value = "should get middle name", method = "read(LogicContext,Cohort,LogicCriteria)")
 	public void read_shouldGetMiddleName() throws Exception {
 		LogicDataSource lds = Context.getLogicService().getLogicDataSource("person");
 		Patient who = Context.getPatientService().getPatient(4);
@@ -229,11 +224,11 @@ public class PersonDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who.getPatientId());
 		LogicCriteria criteria = new LogicCriteriaImpl("MIDDLE NAME").equalTo("Ugly");
 		Result result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertEquals("Ugly", result.toString());
+		Assertions.assertEquals("Ugly", result.toString());
 		
 		who = Context.getPatientService().getPatient(2);
 		context = new LogicContextImpl(who.getPatientId());
 		result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertTrue(result.isEmpty());
+		Assertions.assertTrue(result.isEmpty());
 	}
 }

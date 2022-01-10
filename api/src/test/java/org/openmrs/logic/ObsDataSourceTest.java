@@ -13,23 +13,21 @@
  */
 package org.openmrs.logic;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-
 import java.util.Map;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Cohort;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.impl.LogicContextImpl;
 import org.openmrs.logic.impl.LogicCriteriaImpl;
 import org.openmrs.logic.result.Result;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 
 /**
  * Tests the ObsDataSource functionality
@@ -39,7 +37,7 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 	@SuppressWarnings("unused")
 	private final Log log = LogFactory.getLog(this.getClass());
 	
-	@Before
+	@BeforeEach
 	public void runBeforeEachTest() throws Exception {
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/logic/include/LogicStandardDatasets.xml");
@@ -59,12 +57,12 @@ public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
 		patients.addMember(2);
 		patients.addMember(3);
 		
-		assertEquals(2, patients.getSize());
+		Assertions.assertEquals(2, patients.size());
 		LogicContextImpl context = new LogicContextImpl(patients);
 		Map<Integer, Result> result = lds.read(context, patients, new LogicCriteriaImpl("CD4 COUNT"));
 		context = null;
 		
-		assertNotNull(result);
-		assertEquals(2, result.size());
+		Assertions.assertNotNull(result);
+		Assertions.assertEquals(2, result.size());
 	}
 }

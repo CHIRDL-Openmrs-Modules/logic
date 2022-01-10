@@ -3,9 +3,9 @@ package org.openmrs.logic.impl;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Patient;
 import org.openmrs.annotation.Authorized;
 import org.openmrs.api.context.Context;
@@ -14,13 +14,12 @@ import org.openmrs.logic.LogicService;
 import org.openmrs.logic.Rule;
 import org.openmrs.logic.datasource.ObsDataSource;
 import org.openmrs.logic.result.Result;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
-import org.openmrs.test.Verifies;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 
 public class LogicServiceImplTest extends BaseModuleContextSensitiveTest {
 	
-	@Before
+	@BeforeEach
 	public void prepareData() throws Exception {
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/logic/include/LogicTests-patients.xml");
@@ -36,7 +35,6 @@ public class LogicServiceImplTest extends BaseModuleContextSensitiveTest {
 	 */
 	@Test
 	@SkipBaseSetup
-	@Verifies(value = "should correctly parse expression with only aggregator and token", method = "parse(String)")
 	public void parseString_shouldCorrectlyParseExpressionWithOnlyAggregatorAndToken() throws Exception {
 		
 		ObsDataSource obsDataSource = (ObsDataSource) Context.getLogicService().getLogicDataSource("obs");
@@ -44,17 +42,17 @@ public class LogicServiceImplTest extends BaseModuleContextSensitiveTest {
 		
 		LogicCriteria criteria = Context.getLogicService().parse("\"WEIGHT (KG)\"");
 		Result result = Context.getLogicService().eval(new Patient(3).getPatientId(), criteria); // CHICA-1151 pass in patientId instead of patient
-		Assert.assertEquals(2, result.size());
+		Assertions.assertEquals(2, result.size());
 		
 		LogicCriteria lastCriteria = Context.getLogicService().parse("LAST \"WEIGHT (KG)\"");
 		Result lastResult = Context.getLogicService().eval(new Patient(3).getPatientId(), lastCriteria); // CHICA-1151 pass in patientId instead of patient
-		Assert.assertEquals(1, lastResult.size());
-		Assert.assertEquals(70.0d, lastResult.toNumber().doubleValue(), 0);
+		Assertions.assertEquals(1, lastResult.size());
+		Assertions.assertEquals(70.0d, lastResult.toNumber().doubleValue(), 0);
 		
 		LogicCriteria firstCriteria = Context.getLogicService().parse("FIRST \"WEIGHT (KG)\"");
 		Result firstResult = Context.getLogicService().eval(new Patient(3).getPatientId(), firstCriteria); // CHICA-1151 pass in patientId instead of patient
-		Assert.assertEquals(firstResult.size(), 1);
-		Assert.assertEquals(60.0d, firstResult.toNumber().doubleValue(), 0);
+		Assertions.assertEquals(firstResult.size(), 1);
+		Assertions.assertEquals(60.0d, firstResult.toNumber().doubleValue(), 0);
 	}
 	
 	/**
@@ -62,11 +60,10 @@ public class LogicServiceImplTest extends BaseModuleContextSensitiveTest {
 	 */
 	@Test
 	@SkipBaseSetup
-	@Verifies(value = "should return ReferenceRule when the token are already registered", method = "getRule(String)")
 	public void getRule_shouldReturnReferenceRuleWhenTheTokenAreAlreadyRegistered() throws Exception {
 		LogicService logicService = Context.getLogicService();
 		Rule rule = logicService.getRule("CD4 COUNT");
-		Assert.assertNotNull(rule);
+		Assertions.assertNotNull(rule);
 	}
 	
 	/**
@@ -74,11 +71,10 @@ public class LogicServiceImplTest extends BaseModuleContextSensitiveTest {
 	 */
 	@Test
 	@SkipBaseSetup
-	@Verifies(value = "should return new ReferenceRule when the special string token are passed", method = "getRule(String)")
 	public void getRule_shouldReturnNewReferenceRuleWhenTheSpecialStringTokenArePassed() throws Exception {
 		LogicService logicService = Context.getLogicService();
 		Rule rule = logicService.getRule("%%obs.CD4 COUNT");
-		Assert.assertNotNull(rule);
+		Assertions.assertNotNull(rule);
 	}
 	
 	@Test
@@ -88,7 +84,7 @@ public class LogicServiceImplTest extends BaseModuleContextSensitiveTest {
 		for (Method method : allMethods) {
 		    if (Modifier.isPublic(method.getModifiers())) {
 		        Authorized authorized = method.getAnnotation(Authorized.class);
-		        Assert.assertNotNull("Authorized annotation not found on method " + method.getName(), authorized);
+		        Assertions.assertNotNull(authorized, "Authorized annotation not found on method " + method.getName());
 		    }
 		}
 	}
