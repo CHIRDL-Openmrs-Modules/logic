@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
  */
 public class LogicServiceTest extends BaseModuleContextSensitiveTest {
 	
-	private Log log = LogFactory.getLog(this.getClass());
+    private static final Logger log = LoggerFactory.getLogger(LogicServiceTest.class);
 	
 	/**
 	 * @see org.springframework.test.AbstractTransactionalSpringContextTests#onSetUpInTransaction()

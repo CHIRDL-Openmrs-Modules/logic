@@ -15,8 +15,6 @@ package org.openmrs.logic;
 
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -33,9 +31,6 @@ import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
  * Tests the ObsDataSource functionality
  */
 public class ObsDataSourceTest extends BaseModuleContextSensitiveTest {
-	
-	@SuppressWarnings("unused")
-	private final Log log = LogFactory.getLog(this.getClass());
 	
 	@BeforeEach
 	public void runBeforeEachTest() throws Exception {

@@ -16,9 +16,8 @@ package org.openmrs.logic.rule;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
-import org.openmrs.Patient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
@@ -34,7 +33,7 @@ import org.openmrs.logic.result.Result.Datatype;
  */
 public class ReferenceRule implements StatefulRule {
 	
-	protected final Log log = LogFactory.getLog(getClass());
+    private static final Logger log = LoggerFactory.getLogger(ReferenceRule.class);
 	
 	private LogicDataSource dataSource;
 	
@@ -52,7 +51,7 @@ public class ReferenceRule implements StatefulRule {
 	
 	private void parse(String reference) throws InvalidReferenceRuleException {
 		
-		log.info("Parsing reference string " + reference);
+		log.info("Parsing reference string {}", reference);
 		int firstDotIndex = reference.indexOf('.');
 		if (firstDotIndex == -1)
 			throw new InvalidReferenceRuleException("Missing dot notation");
@@ -76,7 +75,7 @@ public class ReferenceRule implements StatefulRule {
 	 */
 	public Result eval(LogicContext context, Integer patientId, Map<String, Object> parameters) throws LogicException {
 		
-		log.info("Evaluating " + key + " ... ");
+		log.info("Evaluating {} ... ", key);
 		return context.read(patientId, dataSource, new LogicCriteriaImpl(key));
 	}
 	
