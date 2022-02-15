@@ -117,7 +117,7 @@ public class JSONWriter {
                 addedSomething = true;
             }
         } catch (Exception e) { 
-            LOG.error(e.getMessage());
+            LOG.error("Error writing bean: ", e);
         }
         add("}");
         this.calls.pop();
