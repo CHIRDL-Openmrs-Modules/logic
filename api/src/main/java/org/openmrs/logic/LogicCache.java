@@ -17,8 +17,8 @@ import java.util.Date;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.logic.datasource.LogicDataSource;
 import org.openmrs.logic.result.Result;
 
@@ -28,7 +28,7 @@ import org.openmrs.logic.result.Result;
  */
 public class LogicCache {
 	
-	private static Log log = LogFactory.getLog(LogicCache.class);
+    private static final Logger log = LoggerFactory.getLogger(LogicCache.class);
 	
 	// TODO: implement the cache -- currently no caching is performed
 	
@@ -62,7 +62,9 @@ public class LogicCache {
 	
 	private Result get(LogicCacheEntryKey key, Integer patientId) {
 		Map<Integer, Result> entry = getCache().get(key);
-		log.debug("Logic cache: " + (entry == null ? "NOT FOUND" : "FOUND"));
+		String entryResult = entry == null ? "NOT FOUND" : "FOUND";
+		log.debug("Logic cache: {}", entryResult);
+
 		if (entry == null)
 			return null;
 		Result r = entry.get(patientId);
@@ -73,7 +75,7 @@ public class LogicCache {
 	
 	private void put(LogicCacheEntryKey key, Map<Integer, Result> value) {
 		if (log.isDebugEnabled())
-			log.debug("Adding to logic cache: " + key.toString());
+			log.debug("Adding to logic cache: {}", key);
 		getCache().put(key, value);
 	}
 	
@@ -95,9 +97,9 @@ public class LogicCache {
 	
 	private void logCacheContents() {
 		if (log.isDebugEnabled()) {
-			log.debug("Logic Cache - " + getCache().size() + " entries");
+			log.debug("Logic Cache - {} entries", getCache().size());
 			for (LogicCacheEntryKey key : getCache().keySet())
-				log.debug("  " + key.toString() + " - " + getCache().get(key));
+				log.debug("  {} - {}", key, getCache().get(key));
 		}
 	}
 }

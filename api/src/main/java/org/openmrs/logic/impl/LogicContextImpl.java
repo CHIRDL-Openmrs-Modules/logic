@@ -20,8 +20,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
@@ -51,7 +51,7 @@ import org.openmrs.util.OpenmrsUtil;
  */
 public class LogicContextImpl implements LogicContext {
 	
-	protected final Log log = LogFactory.getLog(getClass());
+    private static final Logger log = LoggerFactory.getLogger(LogicContextImpl.class);
 	
 	/**
 	 * Hold the index date for this context, representing the value for "today" and thereby allowing
@@ -259,9 +259,10 @@ public class LogicContextImpl implements LogicContext {
 	 */
 	public Result read(Integer patientId, LogicDataSource dataSource, LogicCriteria criteria) throws LogicException {
 		Result result = getCache().get(patientId, dataSource, criteria);
+		String resultVal = null;
 		if (log.isDebugEnabled())
-			log.debug("Reading from data source: " + criteria.getRootToken() + " (" + (result == null ? "NOT" : "")
-		                + " cached)");
+		    resultVal = result == null ? "NOT" : "";
+			log.debug("Reading from data source: {} ({} cached)", criteria.getRootToken(), resultVal);
 		if (result == null) {
 			Map<Integer, Result> resultMap = dataSource.read(this, patients, criteria);
 			getCache().put(dataSource, criteria, resultMap);

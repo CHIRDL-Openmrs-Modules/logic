@@ -16,18 +16,13 @@ package org.openmrs.logic;
 import java.util.Date;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.logic.datasource.LogicDataSource;
-import org.openmrs.logic.LogicCriteria;
 
 /**
  * Logic cache composite key. Keys can be created for rules or data elements. Keys contain
  * information about when the entry was last updated and when the entry expires.
  */
 class LogicCacheEntryKey {
-	
-	protected final Log log = LogFactory.getLog(getClass());
 	
 	public enum LogicCacheEntryType {
 		RULE, DATA_ELEMENT

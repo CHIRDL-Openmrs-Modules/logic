@@ -15,8 +15,8 @@ package org.openmrs.report;
 
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.junit.jupiter.api.Test;
 import org.openmrs.Cohort;
 import org.openmrs.logic.result.Result;
@@ -27,7 +27,7 @@ import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
  */
 public class DataSetServiceTest extends BaseModuleContextSensitiveTest {
 	
-	private static Log log = LogFactory.getLog(DataSetServiceTest.class);
+    private static final Logger log = LoggerFactory.getLogger(DataSetServiceTest.class);
 	
 	/**
    	 * 
@@ -50,14 +50,14 @@ public class DataSetServiceTest extends BaseModuleContextSensitiveTest {
 	@Test
 	public void shouldLogicCriteriaBuilder() throws Exception {
 		
-		for (int i = 0; i < expressions.length; i++) {
-			log.info("Expression: " + expressions[i]);
-			String expression = expressions[i];
+		for (int i = 0; i < this.expressions.length; i++) {
+			log.info("Expression: {}", this.expressions[i]);
+			String expression = this.expressions[i];
 			String[] criterion = expression.split("\\.");
 			String token = criterion[0];
 			String operatorOperand = criterion[1];
-			log.info("Token: " + token);
-			log.info("Operand: " + operatorOperand);
+			log.info("Token: {}", token);
+			log.info("Operand: {}", operatorOperand);
 		}
 	}
 	
@@ -109,11 +109,11 @@ public class DataSetServiceTest extends BaseModuleContextSensitiveTest {
 	 */
 	public void printResults(Map<Integer, Result> results) {
 		
-		log.error("Results: " + results);
+		log.error("Results: {}", results);
 		
 		for (Integer id : results.keySet()) {
 			Result result = results.get(id);
-			log.info("Id: " + id + " " + result.get(id) + " " + result.getDatatype());
+			log.info("Id: {} {} {}", id, result.get(id), result.getDatatype());
 		}
 	}
 	

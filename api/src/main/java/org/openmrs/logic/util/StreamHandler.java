@@ -18,8 +18,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class that will be used to write log entries when forking a new process on the operating system. 
@@ -28,7 +28,7 @@ import org.apache.commons.logging.LogFactory;
  */
 class StreamHandler implements Runnable {
 	
-	private static final Log log = LogFactory.getLog(StreamHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(StreamHandler.class);
 	
 	private final InputStream stream;
 	
@@ -47,7 +47,7 @@ class StreamHandler implements Runnable {
 			BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
 			String line = null;
 			while ((line = reader.readLine()) != null)
-				log.info(source + ": " + line);
+				log.info("{}: {}", this.source, line);
 			reader.close();
 		}
 		catch (IOException e) {
