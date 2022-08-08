@@ -23,8 +23,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
@@ -32,9 +30,9 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.openmrs.Cohort;
 import org.openmrs.Encounter;
+import org.openmrs.logic.Duration;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
-import org.openmrs.logic.Duration;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.LogicExpression;
 import org.openmrs.logic.LogicExpressionBinary;
@@ -55,8 +53,6 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public class HibernateLogicEncounterDAO extends LogicExpressionToCriterion implements LogicEncounterDAO {
-	
-	protected final Log log = LogFactory.getLog(getClass());
 	
 	/**
 	 * Hibernate session factory

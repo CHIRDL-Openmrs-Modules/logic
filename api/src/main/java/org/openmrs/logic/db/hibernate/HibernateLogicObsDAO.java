@@ -19,8 +19,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SessionFactory;
@@ -62,7 +62,7 @@ public class HibernateLogicObsDAO extends LogicExpressionToCriterion implements 
 	
 	private static final String COMPONENT_OBS_DATETIME = "obsDatetime";
 	
-	protected final Log log = LogFactory.getLog(getClass());
+	private static final Logger log = LoggerFactory.getLogger(HibernateLogicObsDAO.class);
 	
 	/**
 	 * Hibernate session factory

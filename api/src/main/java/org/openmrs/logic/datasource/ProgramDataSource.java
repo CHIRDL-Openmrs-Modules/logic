@@ -18,8 +18,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.PatientProgram;
 import org.openmrs.Program;
@@ -32,7 +30,8 @@ import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.provider.RuleProvider;
 import org.openmrs.logic.rule.provider.SimpleDataSourceRuleProvider;
 import org.openmrs.logic.util.LogicUtil;
-import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -61,7 +60,7 @@ public class ProgramDataSource extends SimpleDataSourceRuleProvider implements L
 	
 	public static final String NAME = "program";
 	
-	private Log log = LogFactory.getLog(ProgramDataSource.class);
+	private static final Logger log = LoggerFactory.getLogger(ProgramDataSource.class);
 	
 	private static final Collection<String> keys = new ArrayList<String>();
 	
@@ -84,18 +83,17 @@ public class ProgramDataSource extends SimpleDataSourceRuleProvider implements L
 	public Map<Integer, Result> read(LogicContext context, Cohort patients, LogicCriteria criteria) {
 		
 		if (log.isInfoEnabled())
-			log.info("read patient programs for " + patients.size() + " patients, criteria " + criteria);
+		    log.info("read patient programs for {} patients, criteria {}",patients.size(), criteria);
 		
 		Map<Integer, Result> resultSet = new HashMap<Integer, Result>();
 		
 		Collection<PatientProgram> patientPrograms = getPatientPrograms(patients, criteria);
 		
 		if (log.isDebugEnabled())
-			log.debug("found " + patientPrograms.size() + " patient programs");
+			log.debug("found {} patient programs", patientPrograms.size());
 		
 		// loop over all the patient programs and create Result objects for it
 		for (PatientProgram patientProgram : patientPrograms) {
-			//log.info("PatientProgram: " + patientProgram.getDateEnrolled());
 			String token = criteria.getRootToken();
 			Integer personId = patientProgram.getPatient().getPersonId();
 			
@@ -113,7 +111,7 @@ public class ProgramDataSource extends SimpleDataSourceRuleProvider implements L
 			}
 			
 			if (result != null) {
-				log.info("Add result to result set: " + result);
+				log.info("Add result to result set: {}", result);
 				if (!resultSet.containsKey(personId)) {
 					resultSet.put(personId, result);
 				} else {

@@ -13,24 +13,20 @@
  */
 package org.openmrs.logic;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-
 import java.util.ArrayList;
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.impl.LogicCriteriaImpl;
 import org.openmrs.logic.result.Result;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 
 /**
  * TODO add more tests
@@ -43,7 +39,7 @@ public class LogicBasicTest extends BaseModuleContextSensitiveTest {
 	 * 
 	 * @throws Exception
 	 */
-	@Before
+	@BeforeEach
 	public void runBeforeEachTest() throws Exception {
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/logic/include/LogicStandardDatasets.xml");
@@ -65,7 +61,7 @@ public class LogicBasicTest extends BaseModuleContextSensitiveTest {
 		Result result = Context.getLogicService().eval(patient.getPatientId(),
 		    new LogicCriteriaImpl("CD4 COUNT").within(Duration.months(6)).exists()); // CHICA-1151 pass in patientId instead of patient
 		
-		assertFalse(result.exists());
+		Assertions.assertFalse(result.exists());
 	}
 	
 	/**
@@ -79,8 +75,8 @@ public class LogicBasicTest extends BaseModuleContextSensitiveTest {
 		// Result = LAST CD4 COUNT < 350
 		Patient patient = Context.getPatientService().getPatient(3);
 		Result result = Context.getLogicService().eval(patient.getPatientId(), new LogicCriteriaImpl("CD4 COUNT").last().lt(350)); // CHICA-1151 pass in patientId instead of patient
-		assertTrue(result.exists());
-		assertEquals(100.0, result.toNumber(), 0);
+		Assertions.assertTrue(result.exists());
+		Assertions.assertEquals(100.0, result.toNumber(), 0);
 	}
 	
 	/**
@@ -95,8 +91,8 @@ public class LogicBasicTest extends BaseModuleContextSensitiveTest {
 		// Result = LAST CD4 COUNT < 350
 		Patient patient = Context.getPatientService().getPatient(3);
 		Result result = Context.getLogicService().eval(patient.getPatientId(), new LogicCriteriaImpl("CD4 COUNT").last().lt(350)); // CHICA-1151 pass in patientId instead of patient
-		assertTrue("A result should exist", result.exists());
-		assertEquals(100.0, result.toNumber().doubleValue(), 0);
+		Assertions.assertTrue(result.exists(), "A result should exist");
+		Assertions.assertEquals(100.0, result.toNumber().doubleValue(), 0);
 	}
 	
 	/**
@@ -111,7 +107,7 @@ public class LogicBasicTest extends BaseModuleContextSensitiveTest {
 		Patient patient = Context.getPatientService().getPatient(2);
 		Result result = Context.getLogicService().eval(patient.getPatientId(),
 		    new LogicCriteriaImpl("CURRENT ANTIRETROVIRAL DRUGS USED FOR TREATMENT")); // CHICA-1151 pass in patientId instead of patient
-		Assert.assertTrue(result.exists());
+		Assertions.assertTrue(result.exists());
 	}
 	
 	/**
@@ -120,7 +116,7 @@ public class LogicBasicTest extends BaseModuleContextSensitiveTest {
 	 * @throws Exception
 	 */
 	@Test
-	@Ignore
+	@Disabled
 	//until we have an OrderDataSource
 	public void shouldFilterUsingComposition() throws Exception {
 		executeDataSet("org/openmrs/logic/include/LogicBasicTest.concepts.xml");
@@ -131,7 +127,7 @@ public class LogicBasicTest extends BaseModuleContextSensitiveTest {
 		            patient.getPatientId(),
 		            new LogicCriteriaImpl("CD4 COUNT").last().lt(350).and(
 		                new LogicCriteriaImpl("%%orders.ACTIVE MEDS").notExists())); // CHICA-1151 pass in patientId instead of patient
-		Assert.assertTrue(result.exists());
+		Assertions.assertTrue(result.exists());
 	}
 	
 	/**
@@ -154,8 +150,8 @@ public class LogicBasicTest extends BaseModuleContextSensitiveTest {
 		//System.out.println(new Date());
 		LogicService ls = Context.getLogicService();
 		Map<Integer, Result> m = ls.eval(cohort, "\"WEIGHT (KG)\"");
-		Assert.assertNotNull(m);
-		Assert.assertTrue(m.size() > 0);
+		Assertions.assertNotNull(m);
+		Assertions.assertTrue(m.size() > 0);
 		//System.out.println(m.toString());
 		//System.out.println(String.valueOf(System.currentTimeMillis() - l) + " milliseconds");
 		
