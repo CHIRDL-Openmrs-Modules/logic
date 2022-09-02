@@ -13,7 +13,7 @@
  */
 package org.openmrs.logic.rule.provider;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.Rule;
