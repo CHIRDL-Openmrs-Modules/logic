@@ -20,8 +20,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
@@ -55,8 +53,6 @@ public class HibernateLogicPersonDAO extends LogicExpressionToCriterion implemen
 		map.put("FAMILY NAME", "name.familyName");
 		map.put("FAMILY NAME2", "name.familyName2");
 	}
-	
-	protected final Log log = LogFactory.getLog(getClass());
 	
 	/**
 	 * Hibernate session factory

@@ -4,9 +4,9 @@ package org.openmrs.logic.impl;
 import java.util.Calendar;
 import java.util.Map;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicCriteria;
@@ -16,12 +16,11 @@ import org.openmrs.logic.result.Result;
 import org.openmrs.logic.rule.AbstractRule;
 import org.openmrs.logic.rule.provider.ClassRuleProvider;
 import org.openmrs.logic.token.TokenService;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
-import org.openmrs.test.Verifies;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 
 public class LogicContextImplTest extends BaseModuleContextSensitiveTest {
 	
-	@Before
+	@BeforeEach
 	public void runBeforeEachTest() throws Exception {
 		executeDataSet("org/openmrs/logic/include/LogicStandardDatasets.xml");
 		executeDataSet("org/openmrs/logic/include/LogicTests-patients.xml");
@@ -33,11 +32,10 @@ public class LogicContextImplTest extends BaseModuleContextSensitiveTest {
 	 * @see {@link LogicContextImpl#eval(Integer,LogicCriteria,Map<String,Object>)}
 	 */
 	@Test
-	@Verifies(value = "should evaluate a rule that requires a new index date in a new logic context", method = "eval(Integer,LogicCriteria,Map<QString;QObject;>)")
 	public void eval_shouldEvaluateARuleThatRequiresANewIndexDateInANewLogicContext() throws Exception {
 		Rule rule = new AgeAtFirstEncounter();
 		Result result = rule.eval(new LogicContextImpl(7), 7, null);
-		Assert.assertEquals(Double.valueOf(31), result.toNumber());
+		Assertions.assertEquals(Double.valueOf(31), result.toNumber());
 	}
 	
 	private class AgeAtFirstEncounter extends AbstractRule {
@@ -47,7 +45,7 @@ public class LogicContextImplTest extends BaseModuleContextSensitiveTest {
         		LogicCriteria ageCriteria = new LogicCriteriaImpl("age");
         		LogicCriteria firstEncounter = new LogicCriteriaImpl("encounter").first();
         		Result result = context.read(patientId, context.getLogicDataSource("encounter"), firstEncounter);
-        		Assert.assertTrue(result.exists());
+        		Assertions.assertTrue(result.exists());
         		ageCriteria.asOf(result.getResultDate());
         		return context.eval(patientId, ageCriteria, parameters);
         	} catch (Exception ex) {
@@ -65,7 +63,7 @@ public class LogicContextImplTest extends BaseModuleContextSensitiveTest {
 		Context.getService(TokenService.class).registerToken("another", new ClassRuleProvider(), RuleThatCallsAge.class.getName());
 		Rule rule = new ParentRuleThatCallsAge();
 		Result result = rule.eval(new LogicContextImpl(7), 7, null);
-		Assert.assertEquals(Double.valueOf(7), result.toNumber());
+		Assertions.assertEquals(Double.valueOf(7), result.toNumber());
 	}
 	
 	private class ParentRuleThatCallsAge extends AbstractRule {

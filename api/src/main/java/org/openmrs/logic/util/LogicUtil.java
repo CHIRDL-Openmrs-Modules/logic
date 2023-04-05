@@ -21,8 +21,8 @@ import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.Cohort;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.LogicCriteria;
@@ -46,7 +46,7 @@ import org.openmrs.util.PrivilegeConstants;
  */
 public class LogicUtil {
 	
-	private static final Log log = LogFactory.getLog(LogicUtil.class);
+    private static final Logger log = LoggerFactory.getLogger(LogicUtil.class);
 	
 	/**
 	 * Programmatically applies aggregators like COUNT, AVERAGE, etc
@@ -145,7 +145,7 @@ public class LogicUtil {
 			executorService.execute(outputHandler);
 			
 			int exitValue = process.waitFor();
-			log.info("Process execution completed with exit value: " + exitValue + " ...");
+			log.info("Process execution completed with exit value: {} ...", exitValue);
 			
 			executed = true;
 		}

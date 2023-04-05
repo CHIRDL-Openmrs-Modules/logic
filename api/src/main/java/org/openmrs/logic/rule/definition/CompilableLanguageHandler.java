@@ -13,8 +13,8 @@
  */
 package org.openmrs.logic.rule.definition;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.logic.CompilingClassLoader;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.Rule;
@@ -26,7 +26,7 @@ import org.openmrs.logic.Rule;
  */
 public abstract class CompilableLanguageHandler implements LanguageHandler {
 	
-	protected static final Log log = LogFactory.getLog(CompilableLanguageHandler.class);
+    protected static final Logger log = LoggerFactory.getLogger(CompilableLanguageHandler.class);
 	
 	protected static final String JAVA_EXTENSION = ".java";
 	

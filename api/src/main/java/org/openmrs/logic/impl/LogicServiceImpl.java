@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
@@ -56,8 +54,6 @@ import antlr.BaseAST;
  * @see org.openmrs.logic.LogicService
  */
 public class LogicServiceImpl implements LogicService {
-	
-	protected final Log log = LogFactory.getLog(getClass());
 	
 	@Autowired
 	private List<LogicDataSource> allLogicDataSources;

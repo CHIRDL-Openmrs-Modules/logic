@@ -1,8 +1,8 @@
 package org.openmrs.logic.datasource;
 
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
@@ -11,12 +11,11 @@ import org.openmrs.logic.LogicCriteria;
 import org.openmrs.logic.impl.LogicContextImpl;
 import org.openmrs.logic.impl.LogicCriteriaImpl;
 import org.openmrs.logic.result.Result;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
-import org.openmrs.test.Verifies;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 
 public class PatientDataSourceTest extends BaseModuleContextSensitiveTest {
 	
-	@Before
+	@BeforeEach
 	public void prepareData() throws Exception {
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/logic/include/LogicTests-patients.xml");
@@ -28,7 +27,6 @@ public class PatientDataSourceTest extends BaseModuleContextSensitiveTest {
 	 * @see {@link PatientDataSource#read(LogicContext,Cohort,LogicCriteria)}
 	 */
 	@Test
-	@Verifies(value = "should read identifier", method = "read(LogicContext,Cohort,LogicCriteria)")
 	public void read_shouldReadIdentifier() throws Exception {
 		LogicDataSource lds = Context.getLogicService().getLogicDataSource("patient");
 		Patient who = Context.getPatientService().getPatient(4);
@@ -36,11 +34,11 @@ public class PatientDataSourceTest extends BaseModuleContextSensitiveTest {
 		LogicContext context = new LogicContextImpl(who.getPatientId());
 		LogicCriteria criteria = new LogicCriteriaImpl("IDENTIFIER").equalTo("123456");
 		Result result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertEquals("123456", result.toString());
+		Assertions.assertEquals("123456", result.toString());
 		
 		who = Context.getPatientService().getPatient(2);
 		context = new LogicContextImpl(who.getPatientId());
 		result = context.read(who.getPatientId(), lds, criteria);
-		Assert.assertTrue(result.isEmpty());
+		Assertions.assertTrue(result.isEmpty());
 	}
 }

@@ -16,8 +16,6 @@ package org.openmrs.logic.rule.definition.impl;
 import java.util.Collections;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.logic.rule.definition.LanguageHandler;
@@ -33,8 +31,6 @@ import org.springframework.beans.factory.annotation.Autowired;
  * Provides access to user-specified LogicRules
  */
 public class RuleDefinitionServiceImpl extends BaseOpenmrsService implements RuleDefinitionService {
-	
-	protected final Log log = LogFactory.getLog(getClass());
 	
 	private RuleDefinitionDAO dao;
 	

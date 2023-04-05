@@ -20,8 +20,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.hibernate.Criteria;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Criterion;
@@ -46,8 +44,6 @@ public class HibernateLogicPatientDAO extends LogicExpressionToCriterion impleme
 	static {
 		map.put("IDENTIFIER", "identifier.identifier");
 	}
-	
-	protected final Log log = LogFactory.getLog(getClass());
 	
 	/**
 	 * Hibernate session factory

@@ -21,8 +21,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.api.impl.BaseOpenmrsService;
 import org.openmrs.logic.LogicException;
@@ -40,7 +40,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class TokenServiceImpl extends BaseOpenmrsService implements TokenService {
 	
-	private final Log log = LogFactory.getLog(getClass());
+    private static final Logger log = LoggerFactory.getLogger(TokenServiceImpl.class);
 	
 	@Autowired
 	private List<RuleProvider> ruleProviders;
@@ -84,9 +84,9 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 			Method m = Class.forName("org.openmrs.api.context.Daemon").getMethod("runInNewDaemonThread");
 			m.invoke(null, new Runnable() {
 				public void run() {
-					log.debug("Starting " + provider.getClass());
+					log.debug("Starting {}", provider.getClass());
 					provider.afterStartup();
-					log.debug("Finished starting " + provider.getClass());
+					log.debug("Finished starting {}", provider.getClass());
 				};
 			});
 		} catch (IllegalAccessException ex) {
@@ -98,7 +98,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 		} catch (NoSuchMethodException ex) {
 			startupProviderWithoutDaemon(provider);
 		} catch (InvocationTargetException ex) {
-			log.error("Error starting " + provider.getClass(), ex.getCause());
+			log.error("Error starting {}", provider.getClass(), ex.getCause());
 		}
     }
 
@@ -111,7 +111,7 @@ public class TokenServiceImpl extends BaseOpenmrsService implements TokenService
 	    try {
 	    	provider.afterStartup();
 	    } catch (Exception ex) {
-	    	log.error("Error starting " + provider.getClass(), ex);
+	    	log.error("Error starting {}", provider.getClass(), ex);
 	    }
     }
 

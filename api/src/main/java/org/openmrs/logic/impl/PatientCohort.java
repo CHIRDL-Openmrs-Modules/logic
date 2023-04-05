@@ -16,8 +16,8 @@ package org.openmrs.logic.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.Cohort;
 import org.openmrs.Patient;
 import org.openmrs.api.PatientService;
@@ -33,7 +33,7 @@ public class PatientCohort extends Cohort {
 
 	public static final long serialVersionUID = 1L;
 	
-	private static final Log log = LogFactory.getLog(Cohort.class);
+	private static final Logger log = LoggerFactory.getLogger(PatientCohort.class);
 	
 	private transient Map<Integer, Patient> patients;
 	

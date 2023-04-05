@@ -13,14 +13,14 @@ import java.util.Deque;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class JSONWriter {
 
     private static final int TWELVE = 12;
     private static final int FOUR = 4;
-    private static final Log LOG = LogFactory.getLog(JSONWriter.class);
+    private static final Logger LOG = LoggerFactory.getLogger(JSONWriter.class);
     private static char[] hex = "0123456789ABCDEF".toCharArray();
 
     private StringBuffer buf = new StringBuffer();
@@ -115,9 +115,9 @@ public class JSONWriter {
                 }
                 add(field.getName(), field.get(object));
                 addedSomething = true;
-        }
+            }
         } catch (Exception e) { 
-            LOG.error(e);
+            LOG.error("Error writing bean: ", e);
         }
         add("}");
         this.calls.pop();

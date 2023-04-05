@@ -16,8 +16,6 @@ package org.openmrs.logic.rule;
 import java.util.Map;
 import java.util.Set;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.openmrs.logic.LogicContext;
 import org.openmrs.logic.LogicException;
 import org.openmrs.logic.Rule;
@@ -29,9 +27,6 @@ import org.openmrs.logic.result.Result.Datatype;
  * 
  */
 public class HIVPositiveRule implements Rule {
-	
-	@SuppressWarnings("unused")
-	private Log log = LogFactory.getLog(this.getClass());
 	
 	/**
 	 * @see org.openmrs.logic.Rule#eval(org.openmrs.logic.LogicContext, java.lang.Integer,

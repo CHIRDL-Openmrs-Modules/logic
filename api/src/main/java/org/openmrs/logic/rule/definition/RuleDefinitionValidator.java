@@ -13,7 +13,7 @@
  */
 package org.openmrs.logic.rule.definition;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 

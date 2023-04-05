@@ -33,9 +33,9 @@ import javax.tools.StandardLocation;
 import javax.tools.ToolProvider;
 import javax.tools.JavaCompiler.CompilationTask;
 
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.openmrs.api.context.Context;
 import org.openmrs.logic.util.LogicUtil;
 import org.openmrs.module.ModuleClassLoader;
@@ -54,7 +54,7 @@ import org.openmrs.util.OpenmrsUtil;
  */
 public class CompilingClassLoader extends ClassLoader {
 	
-	protected Log log = LogFactory.getLog(CompilingClassLoader.class);
+    private static final Logger log = LoggerFactory.getLogger(CompilingClassLoader.class);
 	
 	// This class only deal with the rule java and class file. Processing from arden to java will be performed
 	// using ArdenService from the core OpenMRS
@@ -119,7 +119,7 @@ public class CompilingClassLoader extends ClassLoader {
 		String ruleClassDir = Context.getAdministrationService().getGlobalProperty(LogicConstants.RULE_DEFAULT_CLASS_FOLDER);
 		String ruleJavaDir = Context.getAdministrationService().getGlobalProperty(LogicConstants.RULE_DEFAULT_SOURCE_FOLDER);
 		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-		log.info("JavaCompiler is null: " + compiler == null);
+		log.info("JavaCompiler is null: {}", compiler == null);
 		if (compiler != null) {
 			// java compiler only available on JDK. This part of "IF" will not get executed when we run JUnit test
 			File outputFolder = OpenmrsUtil.getDirectoryInApplicationDataDirectory(ruleClassDir);
@@ -130,7 +130,7 @@ public class CompilingClassLoader extends ClassLoader {
 			// create compiling classpath
 			String stringProperties = System.getProperty("java.class.path");
 			if (log.isDebugEnabled())
-				log.debug("Compiler classpath: " + stringProperties);
+				log.debug("Compiler classpath: {}", stringProperties);
 			String[] properties = StringUtils.split(stringProperties, File.pathSeparator);
 			List<File> classpathFiles = new ArrayList<File>();
 			for (String property : properties) {
@@ -144,8 +144,8 @@ public class CompilingClassLoader extends ClassLoader {
 			CompilationTask compilationTask = compiler.getTask(null, fileManager, diagnosticCollector, Arrays.asList(options), null, fileManager.getJavaFileObjects(javaFile));
 			compiled = compilationTask.call();
 			for (Diagnostic<?> diagnostic : diagnosticCollector.getDiagnostics()) {
-				log.error("Error line: " + diagnostic.getLineNumber());
-				log.error("Error message: " + diagnostic.getMessage(Context.getLocale()));
+				log.error("Error line: {}", diagnostic.getLineNumber());
+				log.error("Error message: {}", diagnostic.getMessage(Context.getLocale()));
 			}
 			fileManager.close();
 		} else {
