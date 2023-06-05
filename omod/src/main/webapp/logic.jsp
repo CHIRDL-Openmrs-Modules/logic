@@ -7,8 +7,8 @@
 
 <openmrs:htmlInclude file="/scripts/dojo/dojo.js" />
 <openmrs:htmlInclude file="/scripts/jquery/jquery.min.js" />
-<openmrs:htmlInclude file="/scripts/jquery-ui/jquery-ui.min.js" />
-<openmrs:htmlInclude file="/scripts/jquery-ui/css/redmond/jquery-ui-1.7.2.custom.css" />
+<openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui.min.js" />
+<openmrs:htmlInclude file="/scripts/jquery-ui/css/redmond/jquery-ui.custom.css" />
 <script type="text/javascript">
 	var $j = jQuery.noConflict();
 </script>
@@ -24,6 +24,7 @@
 	var patientId = 0;
 	var patientIdentifier;
 	var patientName;
+	
 
 	dojo.require("dojo.widget.openmrs.PatientSearch");
 	
@@ -54,7 +55,7 @@
 		
 		searchWidget.inputNode.select();
 		//changeClassProperty("description", "display", "none");
-
+        jQuery.browser = {};
 		$j("#logicRuleField").autocomplete('tokens.form', {
 			multiple: false,
 			minChars: 2,
