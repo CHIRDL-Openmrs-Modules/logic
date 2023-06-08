@@ -4,6 +4,7 @@
 <openmrs:require privilege="Manage LOGIC" otherwise="/login.htm" redirect="/admin/index.htm" />
 
 <%@ include file="localHeader.jsp"%>
+
 <openmrs:htmlInclude file="/scripts/jquery/jquery.min.js" />
 <script type="text/javascript">
 	var $j = jQuery.noConflict();
