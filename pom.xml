@@ -4,7 +4,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>logic</artifactId>
-	<version>0.5.5</version>
+	<version>0.5.6</version>
 	<packaging>pom</packaging>
 	<name>Logic Module</name>
 	<description>Parent project for Logic Module</description>
@@ -62,7 +62,7 @@
 			<dependency>
 				<groupId>org.openmrs.module</groupId>
 				<artifactId>legacyui-omod</artifactId>
-				<version>1.3.1</version>
+				<version>1.3.2</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
@@ -75,7 +75,7 @@
 	</dependencyManagement>
 
 	<properties>
-		<openMRSVersion>2.4.2.1</openMRSVersion>
+		<openMRSVersion>2.4.3.0</openMRSVersion>
 	</properties>
 
 	<build>
