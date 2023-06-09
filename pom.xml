@@ -62,7 +62,7 @@
 			<dependency>
 				<groupId>org.openmrs.module</groupId>
 				<artifactId>legacyui-omod</artifactId>
-				<version>1.3.2</version>
+				<version>1.3.1.1</version>
 				<scope>provided</scope>
 			</dependency>
 			<dependency>
@@ -75,7 +75,7 @@
 	</dependencyManagement>
 
 	<properties>
-		<openMRSVersion>2.4.3.0</openMRSVersion>
+		<openMRSVersion>2.4.2.2</openMRSVersion>
 	</properties>
 
 	<build>
