@@ -6,10 +6,9 @@
 <%@ include file="localHeader.jsp"%>
 
 <openmrs:htmlInclude file="/scripts/dojo/dojo.js" />
-<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js" />
-
-<openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui-1.7.2.custom.min.js" />
-<openmrs:htmlInclude file="/scripts/jquery-ui/css/redmond/jquery-ui-1.7.2.custom.css" />
+<openmrs:htmlInclude file="/scripts/jquery/jquery.min.js" />
+<openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui.min.js" />
+<openmrs:htmlInclude file="/scripts/jquery-ui/css/redmond/jquery-ui.custom.css" />
 <script type="text/javascript">
 	var $j = jQuery.noConflict();
 </script>
@@ -18,8 +17,6 @@
     .defaultTextActive { color: #a1a1a1; font-style: italic; }
 </style>
 
-<openmrs:htmlInclude file="${pageContext.request.contextPath}/moduleResources/logic/css/jquery.autocomplete.css"/>
-<openmrs:htmlInclude file="${pageContext.request.contextPath}/moduleResources/logic/js/jquery.autocomplete.pack.js"/>
 
 <script type="text/javascript">
 	var patientId = 0;
@@ -55,18 +52,15 @@
 		
 		searchWidget.inputNode.select();
 		//changeClassProperty("description", "display", "none");
-
-		$j("#logicRuleField").autocomplete('tokens.form', {
-			multiple: false,
-			minChars: 2,
-			mustMatch: false,
-			selectFirst: true,
-			max: 100,
-			delay: 10,
-			formatResult: function (data, position, cnt) {
-				return '"' + data + '"';
-			}
-		});
+		
+		//tokens.form has requestParameter named q
+        $j("#logicRuleField").autocomplete({
+        	  source: function(request, response) {
+        		      $j.getJSON("tokens.form", {q: $j("#logicRuleField").val() },  response);
+        		     },
+        	minLength: 2,
+        	select: function() {$j("#logicRuleField").val()}
+        });
 
 		<c:choose>
 			<c:when test="${not empty patient}">
@@ -148,7 +142,7 @@
 <form action="run.form" method="post" onsubmit="return validate();">
 	<br/>
 	<h3><spring:message code="logic.tester.step2.title"/></h3>	
-	<input type="text" name="logicRule" id="logicRuleField" class="defaultText" title="<spring:message code="logic.tester.step2.hint"/>" autocomplete="off" style="width: 405px; margin-left: 20px;" <c:if test="${not empty token}">value="${ token }"</c:if>/>
+	<input type="text" name="logicRule" id="logicRuleField" class="defaultText ui-autocomplete-input " title="<spring:message code="logic.tester.step2.hint"/>" autocomplete="off" style="width: 405px; margin-left: 20px;" <c:if test="${not empty token}">value="${ token }"</c:if>/>
 	<span class="error" id="logicRuleError" style="display: none;"><spring:message code="error.required" arguments="Logic Rule Token" /></span>
 	
 	<br/><br/>

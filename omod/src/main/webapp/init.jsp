@@ -5,13 +5,13 @@
 
 <%@ include file="localHeader.jsp"%>
 
-<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js" />
+<openmrs:htmlInclude file="/scripts/jquery/jquery.min.js" />
 <script type="text/javascript">
 	var $j = jQuery.noConflict();
 </script>
 
-<openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui-1.7.2.custom.min.js" />
-<openmrs:htmlInclude file="/scripts/jquery-ui/css/redmond/jquery-ui-1.7.2.custom.css" />
+<openmrs:htmlInclude file="/scripts/jquery-ui/js/jquery-ui.min.js" />
+<openmrs:htmlInclude file="/scripts/jquery-ui/css/redmond/jquery-ui-custom.css" />
 
 <script type="text/javascript">
 	var isRunning = false;
