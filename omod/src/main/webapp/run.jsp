@@ -2,7 +2,7 @@
 <%@ include file="/WEB-INF/template/header.jsp"%>
 
 <openmrs:require privilege="Manage LOGIC" otherwise="/login.htm" redirect="/module/logic/run.form" />
-<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js" />
+<openmrs:htmlInclude file="/scripts/jquery/jquery.min.js" />
 <script type="text/javascript">
 	var $j = jQuery.noConflict();
 

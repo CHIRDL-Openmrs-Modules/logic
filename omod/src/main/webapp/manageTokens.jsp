@@ -6,7 +6,7 @@
 <%@ include file="localHeader.jsp"%>
 
 <openmrs:htmlInclude file="/moduleResources/logic/css/datatables.css" />
-<openmrs:htmlInclude file="/scripts/jquery/jquery-1.3.2.min.js" />
+<openmrs:htmlInclude file="/scripts/jquery/jquery.min.js" />
 <openmrs:htmlInclude file="/moduleResources/logic/js/jquery.dataTables.min.js" />
 
 <script>
