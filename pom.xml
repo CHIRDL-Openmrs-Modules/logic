@@ -12,8 +12,8 @@
 	<url>http://openmrs.org</url>
 
 	<scm>
-		<connection>git@github.com:CHIRDL-Openmrs-Modules/logic.git</connection>
-		<developerConnection>git@github.com:CHIRDL-Openmrs-Modules/logic.git</developerConnection>
+		<connection>scm:git:git@github.com:CHIRDL-Openmrs-Modules/logic.git</connection>
+		<developerConnection>scm:git:git@github.com:CHIRDL-Openmrs-Modules/logic.git</developerConnection>
 		<url>https://github.com/CHIRDL-Openmrs-Modules/logic</url>
 	</scm>
 
