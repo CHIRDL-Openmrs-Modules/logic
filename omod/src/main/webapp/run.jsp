@@ -24,7 +24,7 @@
 
 <c:choose>
 	<c:when test="${not empty error}">
-		<spring:message code="Hl7inQueue.queueList.errorMessage.header"/>: ${error} 
+		<spring:message code="logic.tester.error.header"/>: ${error} 
 		<c:if test="${not empty detail}" >
 			<a id="showErrorDetails" href="#"><spring:message code="logic.tester.error.details"/></a>
 			<br/><br/><div id="errorDetails" style="display: none; font-size: 10px;">${detail}</div>
